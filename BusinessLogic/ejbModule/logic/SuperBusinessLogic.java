@@ -30,7 +30,7 @@ import javax.persistence.criteria.Root;
 
 public class SuperBusinessLogic {
 
-	private String applicationName = "Hospital";
+	private String applicationName = "Garden";
 	private EntityManager entityManager;
 	
 	public EntityManager entityManager() throws Exception{
