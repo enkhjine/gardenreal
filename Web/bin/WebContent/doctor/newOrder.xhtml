@@ -1,0 +1,1030 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" template="register-new.xhtml">
+	<ui:define name="module">
+	<p:remoteCommand name="showLastInspection" action="#{inspectionController.showLastInspection()}" />
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-12" style="min-height:800px; display: block; overflow: auto; ">
+				<p:layout style="width: calc(100%-2px); min-height:750px; max-height: 500px; display: block; overflow: auto; border: 0px !important; margin: 0px !important; padding: 0px !important; margin: 1px;">
+				    <p:layoutUnit position="west" resizable="true" size="300" minSize="20" maxSize="400">
+				        <p:panel header="Жор сонгох" styleClass="panel-style">
+							<p:tabView>
+								<p:tab title="Өмнөх жор">
+									<div class="row">
+										<div class="col-md-6">
+											<p:calendar pattern="yyyy-MM-dd" styleClass="dcalendar" value="#{inspectionController.fillterDateBegin}" />
+										</div>
+										<div class="col-md-6">
+											<p:calendar pattern="yyyy-MM-dd" styleClass="dcalendar" value="#{inspectionController.fillterDateEnd}" />
+										</div>
+										<div class="col-md-12">
+											<p:selectOneMenu onchange="changeSubOrganization();" style="width:100%;" value="#{inspectionController.selectedSubOrganizationPkId}">
+												<f:selectItem itemValue="0" itemLabel="Бүх кабинет" />
+												<f:selectItems value="#{inspectionController.subOrganizations}" var="subOrg" itemLabel="#{subOrg.name}" itemValue="#{subOrg.pkId}" />
+											</p:selectOneMenu>
+										</div>
+										<p:remoteCommand name="changeSubOrganization" aactionListener="#{inspectionController.listEmployees()}" update="@(.listEmployee)" oncomplete="changeEmployee();" />
+										<div class="col-md-12">
+											<p:selectOneMenu onchange="changeEmployee();" styleClass="listEmployee" style="width:100%;" value="#{inspectionController.selectedEmployeePkId}">
+												<f:selectItem itemValue="0" itemLabel="Бүх эмч" />
+												<f:selectItems value="#{inspectionController.listEmployee}" var="empl" itemLabel="#{empl.lastName} #{empl.firstName}" itemValue="#{empl.pkId}" />
+											</p:selectOneMenu>
+										</div>
+										<p:remoteCommand name="changeEmployee" actionListener="#{inspectionController.setInspections(null)}" update="@(.inspectionTable)" />
+										<div class="col-md-12">
+											<p:dataTable value="#{inspectionController.inspections}" var="ins" selectionMode="single" rowKey="#{ins.pkId}" selection="#{inspectionController.selInspection}">
+												<p:ajax event="rowDblselect" listener="#{inspectionController.setListLog()}" />
+												<p:column headerText="Кабинет">#{ins.subOrgaName}</p:column>
+												<p:column headerText="Эмч">#{ins.employeeName}</p:column>
+											</p:dataTable>
+										</div>
+									</div>
+								</p:tab>
+								<p:tab title="Set Order">
+									<p:panel header="Эмнэлэг" styleClass="panel-style" style="display: block; overflow: auto; height: 300px;">
+										<p:selectOneMenu id="conditionalPrescriptionOrgId" value="#{inspectionController.conditionalPrescriptionOrgPkId}" onchange="setConditionalPrescriptions();" filter="true">
+											<f:selectItems value="#{inspectionController.organizationTypes}" var="org" itemLabel="#{org.name}" itemValue="#{org.pkId}"></f:selectItems>
+										</p:selectOneMenu>
+										<p:remoteCommand process="@this conditionalPrescriptionOrgId" name="setConditionalPrescriptions" actionListener="#{inspectionController.conditionalPrescriptionsNull()}" update="@(.conditionalPrescriptions)" />
+										<p:dataTable styleClass="conditionalPrescriptions" value="#{inspectionController.conditionalPrescriptions}" var="dc" selectionMode="single" rowKey="#{dc.pkId}" selection="#{inspectionController.selConditionalPrescription}">
+											<p:ajax event="rowDblselect" listener="#{inspectionController.setConditionalPrescription()}" />
+											<p:column headerText="Код">#{dc.id}</p:column>
+											<p:column headerText="Онош">#{dc.name}</p:column>
+										</p:dataTable>
+									</p:panel>
+									<p:remoteCommand name="updateDoctorRecipe" update="@(.doctorRecipe)" />
+									<p:panel header="Өөрийн" styleClass="panel-style">
+										<p:dataTable value="#{inspectionController.doctorRecipes}" styleClass="doctorRecipe" id="doctorRecipe" var="dc" rowKey="#{dc.pkId}" selectionMode="single" selection="#{inspectionController.selDoctorRecipe}">
+											<p:ajax event="rowDblselect" listener="#{inspectionController.setDoctorRecipes()}" />
+											<p:column headerText="Нэр">#{dc.name}</p:column>
+										</p:dataTable>
+									</p:panel>
+								</p:tab>
+							</p:tabView>
+						</p:panel>
+				    </p:layoutUnit>
+				 
+				    <p:layoutUnit position="center">
+				        <p:panel header="Шинэ захиалга" styleClass="panel-style">
+							<div class="row">
+								<div class="col-md-3">
+									Захиалгын төрөл / Outpatient department : 
+								</div>
+								<div class="col-md-3">
+									Кабинет / #{inspectionController.currentSubOrganization.name} 
+								</div>
+								<div class="col-md-3">
+									Эмч / #{inspectionController.currentEmployee.lastName} #{inspectionController.currentEmployee.firstName}
+								</div>
+								<div class="col-md-3">
+									Жор бичсэн огноо / #{inspectionController.dateToStr(null)}
+								</div>
+							</div>
+							<div class="row table-title-border" >
+								<div class="col-md-12">
+									<img src="#{applicationController.path}images/icons/helpbutton.png" style="width: 70px;height: 30px;padding-right: 20px;" />
+									<p:commandLink actionListener="#{inspectionController.getMedListFromDb()}" value="Эм" styleClass="ui-commandlink ui-widget btn" />
+									<p:commandLink actionListener="#{inspectionController.getExaTypeFromDb()}" value="Шинжилгээ" styleClass="ui-commandlink ui-widget btn" />
+									<p:commandLink actionListener="#{inspectionController.getXrayTypesFromDb()}" value="Оношилгоо" styleClass="ui-commandlink ui-widget btn" />
+									<p:commandLink actionListener="#{inspectionController.getSurgeryTypeFromDb()}" value="Мэс засал" styleClass="ui-commandlink ui-widget btn" />
+									<p:commandLink onclick="PF('treatmentList').show()" value="Эмчилгээ" styleClass="ui-commandlink ui-widget btn" />
+									Төлбөрийн нийт дүн : <pe:inputNumber styleClass="listTable" disabled="true" value="#{inspectionController.ocsSumAmount}" />
+									<p:commandLink style="float: right;" process="form:nose-accordion:listTable1 form:nose-accordion:listTable2 form:nose-accordion:listTable3 form:nose-accordion:listTable4 form:nose-accordion:listTable5" styleClass="btn" onstart="showLoader();" onsuccess="hideLoader();" onerror="hideLoader();" value="OCS Хадгалах" rendered="#{inspectionController.currentEmployeeRequest.mood != 2}" update="form:doctorRecipeReg" oncomplete="PF('doctorRecipeReg').show()" />
+								</div>
+								<p:remoteCommand name="updateTable" actionListener="#{inspectionController.loadLists()}" update="@(.listTable)" oncomplete="drawChosen();" />
+								<div class="col-md-12">
+									<p:accordionPanel id="nose-accordion" styleClass="no-padding listTable" multiple="true" activeIndex="#{inspectionController.listTmpTabStr}">
+									<p:tab title="Захиалсан эм: (#{inspectionController.listMedicineTmp.size() - 1})">
+									<p:dataTable id="listTable1" value="#{inspectionController.listMedicineTmp}" styleClass="listTable" var="medicine" rowIndexVar="index" emptyMessage="Хоосон байна.">
+										<p:column width="100px" headerText="Код" style="text-align: left; min-width: 100px !important; overflow: visible;">
+											<p:autoComplete style="width: 100px !important;#{medicine.displayStr2}" value="#{medicine.id}" completeMethod="#{inspectionController.getLstMedicineStr}" valueChangeListener="autoFillmedicine1();">
+												<p:ajax event="itemSelect" process="@this listTable1" listener="#{inspectionController.onLstMedicineStrSelect}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{medicine.status ne 'Last'}" value="#{medicine.id}" styleClass="medicineclass" onchange="autoFillmedicine1();" style="width: 100px;#{medicine.displayStr1}" />
+											<p:remoteCommand name="autoFillmedicine1" process=":form:nose-accordion:listTable1" actionListener="#{inspectionController.autoFillCustomerMedicine1()}" update="@(.listTable)" oncomplete="drawChosen();" />
+										</p:column>
+										<p:column headerText="Олон улсын нэршил" style="text-align: left; min-width: 100px !important;">
+											<p:autoComplete style="width: 100px !important;#{medicine.displayStr2}" value="#{medicine.name}" completeMethod="#{inspectionController.getLstMedicineStr1}" valueChangeListener="autoFillmedicine2();">
+												<p:ajax event="itemSelect" process="@this listTable1" listener="#{inspectionController.onLstMedicineStrSelect1}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{medicine.status ne 'Last'}" onchange="autoFillmedicine2();" style="width: 100%;min-width: 100px;#{medicine.displayStr1}" value="#{medicine.name}" />
+											<p:remoteCommand name="autoFillmedicine2" process=":form:nose-accordion:listTable1" actionListener="#{inspectionController.autoFillCustomerMedicine2()}" update="@(.listTable)" oncomplete="drawChosen();" />
+										</p:column>
+										<p:column headerText="Худалдааны нэршил">
+											<p:autoComplete style="width: 100px !important;#{medicine.displayStr2}" value="#{medicine.iName}" completeMethod="#{inspectionController.getLstMedicineStr2}">
+												<p:ajax event="itemSelect" process="@this listTable1" listener="#{inspectionController.onLstMedicineStrSelect2}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText style="width: 100%;#{medicine.displayStr1}" disabled="true" value="#{medicine.iName}" />
+										</p:column>
+										<p:column headerText="Савлалт">
+											#{medicine.drugDose}
+										</p:column>
+										<p:column headerText="Хэлбэр" >#{medicine.medicineType}</p:column>
+										
+										<p:column headerText="Insur" rendered="false" ></p:column>
+										<p:column width="20px" rendered="false" headerText="Stat" ><p:selectBooleanCheckbox /></p:column>
+										
+										<p:column headerText="Тун">
+											<p:inputText style="width: 100%; min-width: 100px; text-align: right;" value="#{medicine.dose}" />
+										</p:column>
+										<p:column headerText="Давтамж">
+											<pe:inputNumber id="daaInde1" onchange="daaCalcMM#{index}();daaCalcMMM#{index}();" decimalPlaces="0" onfocus="clearInput1(#{index})" style="text-align: right; width: 50px;" value="#{medicine.time}" />
+											<p:remoteCommand name="daaCalcMM#{index}" actionListener="#{medicine.calcRepeatCountByTimeDay()}" update="@(.daaInde3)" />
+											<p:remoteCommand name="daaCalcMMM#{index}" actionListener="#{medicine.calcMDEN()}" update="@(.daaIndeMDEN)" />
+										</p:column>
+										<p:column headerText="m" ><p:selectBooleanCheckbox styleClass="daaIndeMDEN" value="#{medicine.selectM}" /></p:column>
+										<p:column headerText="d" ><p:selectBooleanCheckbox styleClass="daaIndeMDEN" value="#{medicine.selectD}" /></p:column>
+										<p:column headerText="e" ><p:selectBooleanCheckbox styleClass="daaIndeMDEN" value="#{medicine.selectE}" /></p:column>
+										<p:column headerText="n" ><p:selectBooleanCheckbox styleClass="daaIndeMDEN" value="#{medicine.selectN}" /></p:column>
+										<p:column headerText="Заавар"><p:inputText value="#{medicine.medicineDescription}" /></p:column>
+										<p:column headerText="Хугацаа(Өдөр)">
+											<pe:inputNumber id="daaInde2" onchange="daaCalcMM#{index}();" decimalPlaces="0" onfocus="clearInput2(#{index})" style="text-align: right; width: 50px;" value="#{medicine.day}" />
+										</p:column>
+										<p:column headerText="Нийт хэмжээ">
+											<pe:inputNumber styleClass="daaInde3" id="daaInde3" decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.repeatCount}" />
+										</p:column>
+										<p:column headerText="Type" rendered="false" >OD</p:column>
+										<p:column headerText="Status" rendered="false" >Paid</p:column>
+										<p:column width="3%" headerText="">
+											<p:commandLink rendered="#{medicine.status ne 'Last'}" onclick="PF('confirmDialogDeleteMedicine').show()" action="#{inspectionController.setIndex(index)}" styleClass="fa fa-fw fa-times color-red" />
+										</p:column>
+									</p:dataTable>
+									</p:tab>
+									<p:tab title="Захиалсан лабораторийн шинжилгээ: (#{inspectionController.listExaminationTmp.size() - 1})">
+									<p:treeTable styleClass="listTable listTable1" id="listTable2" value="#{inspectionController.listExaminationTmpTree}" rowIndexVar="index" var="examination" emptyMessage="Хоосон байна.">
+										<p:column width="150px" headerText="Код" style="text-align: left; width: 150px !important; overflow: visible; padding-right: 20px; ">
+											<p:autoComplete style="width: 80px !important;#{examination.displayStr2}" value="#{examination.id}" completeMethod="#{inspectionController.getLstExaminationStr}" valueChangeListener="autoFillExamination1();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstExaminationStr}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText rendered="#{examination.ocsListType eq 'INSPECTION'}" disabled="#{examination.status ne 'Last'}" styleClass="examinationclass" onchange="autoFillExamination1();" style="width: 100%;#{examination.displayStr1}" value="#{examination.id}" />
+											<p:remoteCommand name="autoFillExamination1" process=":form:nose-accordion:listTable2" actionListener="#{inspectionController.autoFillExamination1()}" update="@(.listTable)" oncomplete="drawChosen();" />	
+										</p:column>
+										<p:column headerText="Нэр" style="width: 150px !important;text-align: left;">
+											<p:autoComplete style="width: 150px !important;#{examination.displayStr2}" value="#{examination.name}" completeMethod="#{inspectionController.getLstExaminationStr1}" valueChangeListener="autoFillExamination2();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstExaminationStr1}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText rendered="#{examination.ocsListType eq 'INSPECTION'}" disabled="#{examination.status ne 'Last'}" onchange="autoFillExamination2();" style="width: 100%;#{examination.displayStr1}" value="#{examination.name}" />
+											<p:inputText rendered="#{examination.ocsListType eq 'EXAMINATION'}" value="#{examination.name}" />
+											<p:remoteCommand name="autoFillExamination2" process=":form:nose-accordion:listTable2" actionListener="#{inspectionController.autoFillExamination2()}" update="@(.listTable)" />
+										</p:column>
+										<p:column>
+											<p:outputLabel rendered="#{examination.ocsListType eq 'INSPECTION'}" value="#{examination.examinationDtlsSumPrice}₮" />
+											<p:outputLabel rendered="#{examination.ocsListType eq 'EXAMINATION'}" value="#{examination.price}₮" />
+										</p:column>
+										<p:column width="200px" headerText="Тэмдэглэл" style="text-align: left; width: 200px !important;">
+											<p:inputText rendered="#{examination.ocsListType eq 'INSPECTION'}" disabled="#{examination.status eq 'Last'}" style="width: 100%;" value="#{examination.description}" />
+										</p:column>
+										<p:column width="10%" style="width: 50px;" headerText="Огноо">
+											<p:calendar rendered="#{examination.ocsListType eq 'INSPECTION'}" />
+										</p:column>
+										<p:column width="5%" headerText="cito" >
+											<p:selectBooleanCheckbox rendered="#{examination.ocsListType eq 'INSPECTION'}" value="#{examination.done}" />
+										</p:column>
+										<p:column width="3%" headerText="" >
+											<p:commandLink style="#{examination.ocsListType eq 'INSPECTION' ? '' : 'display: none;'}" rendered="#{examination.status ne 'Last'}" onclick="PF('confirmDialogDeleteTreatment').show()" action="#{inspectionController.setCurrentExaminationInspectionDtl(examination)}" styleClass="fa fa-fw fa-times color-red" />
+										</p:column>
+									</p:treeTable>
+									</p:tab>
+									<p:tab title="Захиалсан дүрс оношилгоо: (#{inspectionController.listXrayTmp.size() - 1})">
+									<p:dataTable id="listTable3" styleClass="listTable" value="#{inspectionController.listXrayTmp}" var="xray" rowIndexVar="index" emptyMessage="Хоосон байна.">
+										<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+											<p:autoComplete style="width: 100% !important;#{xray.displayStr2}" value="#{xray.id}" completeMethod="#{inspectionController.getLstXrayStr}" valueChangeListener="autoFillxray1();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstXrayStr}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{xray.status ne 'Last'}" styleClass="xrayclass" onchange="autoFillxray1();" style="width: 100%;#{xray.displayStr1}" value="#{xray.id}" />
+											<p:remoteCommand name="autoFillxray1" process=":form:nose-accordion:listTable3" actionListener="#{inspectionController.autoFillXray1()}" update="@(.listTable)" oncomplete="drawChosen();" />
+										</p:column>
+										<p:column headerText="Нэр" style="text-align: left;">
+											<p:autoComplete style="width: 100px !important;#{xray.displayStr2}" value="#{xray.name}" completeMethod="#{inspectionController.getLstXrayStr1}" valueChangeListener="autoFillxray2();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstXrayStr1}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{xray.status ne 'Last'}" onchange="autoFillxray2();" style="width: 100%;#{xray.displayStr1}" value="#{xray.name}" />
+											<p:remoteCommand name="autoFillxray2" process=":form:nose-accordion:listTable3" actionListener="#{inspectionController.autoFillXray2()}" update="@(.listTable)" />
+										</p:column>
+										<p:column width="10%" headerText="" style="text-align: left;">
+											<p:outputLabel value="#{xray.cost}₮" />
+										</p:column>
+										<p:column width="20%" headerText="Тэмдэглэл" style="text-align: left;">
+											<p:inputText disabled="#{xray.status eq 'Last'}" style="width: 100%;" value="#{xray.description}" />
+										</p:column>
+										<p:column width="5%" headerText="cito" >
+											<p:selectBooleanCheckbox value="#{xray.done}" />
+										</p:column>
+										<p:column width="3%" headerText="" >
+											<p:commandLink rendered="#{xray.status ne 'Last'}" process="@this" onclick="PF('confirmDialogDeleteTreatment').show()" action="#{inspectionController.setCurrentInspectionDtl(xray)}" styleClass="fa fa-fw fa-times color-red" />
+										</p:column>
+									</p:dataTable>
+									</p:tab>
+									<p:tab title="Захиалсан мэс засал: (#{inspectionController.listSurgeryTmp.size() - 1})">
+									<p:dataTable id="listTable4" styleClass="listTable" value="#{inspectionController.listSurgeryTmp}" var="surgery" rowIndexVar="index" emptyMessage="Хоосон байна.">
+										<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+											<p:autoComplete style="width: 100px !important;#{surgery.displayStr2}" value="#{surgery.id}" completeMethod="#{inspectionController.getLstSurgeryStr}" valueChangeListener="autoFillsurgery2();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstSurgeryStr}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{surgery.status ne 'Last'}" styleClass="surgeryclass" onchange="autoFillsurgery2();" style="width: 100%;#{surgery.displayStr1}" value="#{surgery.name}" />
+											<p:remoteCommand name="autoFillsurgery2" process=":form:nose-accordion:listTable4" actionListener="#{inspectionController.autoFillSurgery2()}" update="@(.listTable)" oncomplete="drawChosen();" />
+										</p:column>
+										<p:column headerText="Нэр" style="text-align: left;">
+											<p:autoComplete style="width: 100px !important;#{surgery.displayStr2}" value="#{surgery.name}" completeMethod="#{inspectionController.getLstSurgeryStr1}" valueChangeListener="autoFillsurgery2();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstSurgeryStr1}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{surgery.status ne 'Last'}" onchange="autoFillsurgery2();" style="width: 100%;#{surgery.displayStr1}" value="#{surgery.name}" />
+											<p:remoteCommand name="autoFillsurgery2" process=":form:nose-accordion:listTable4" actionListener="#{inspectionController.autoFillSurgery2()}" update="@(.listTable)" />
+										</p:column>
+										<p:column width="10%" headerText="" style="text-align: left;">
+											<p:outputLabel value="#{surgery.cost}₮" />
+										</p:column>
+										<p:column width="5%" headerText="Stat" >
+											<p:selectBooleanCheckbox value="#{surgery.done}" />
+										</p:column>
+										<p:column width="3%" headerText="" >
+											<p:commandLink rendered="#{surgery.status ne 'Last'}" onclick="PF('confirmDialogDeleteTreatment').show()" action="#{inspectionController.setCurrentInspectionDtl(surgery)}" styleClass="fa fa-fw fa-times color-red" />
+										</p:column>
+									</p:dataTable>
+									</p:tab>
+									<p:tab title="Захиалсан эмчилгээ: (#{inspectionController.listTreatmentTmp.size() - 1})" toggleable="true" styleClass="panel-style">
+									<p:dataTable id="listTable5" styleClass="listTable" value="#{inspectionController.listTreatmentTmp}" var="treatment" rowIndexVar="index" emptyMessage="Хоосон байна.">
+										<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+											<p:autoComplete style="width: 100px !important;#{treatment.displayStr2}" value="#{treatment.id}" completeMethod="#{inspectionController.getLstTreatmentStr}" valueChangeListener="autoFilltreatment1();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstTreatmentStr}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{treatment.status ne 'Last'}" styleClass="treatmentclass" onchange="autoFilltreatment1();" style="width: 100%;#{treatment.displayStr1}" value="#{treatment.id}" />
+											<p:remoteCommand name="autoFilltreatment1" process=":form:nose-accordion:listTable5" actionListener="#{inspectionController.autoFillTreatment1()}" update="@(.listTable)" oncomplete="drawChosen();" />
+										</p:column>
+										<p:column width="10%" headerText="Нэр" style="text-align: left;">
+											<p:autoComplete style="width: 100px !important;#{treatment.displayStr2}" value="#{treatment.id}" completeMethod="#{inspectionController.getLstTreatmentStr1}" valueChangeListener="autoFilltreatment2();">
+												<p:ajax event="itemSelect" listener="#{inspectionController.onLstTreatmentStr1}" update="@(.listTable)" oncomplete="drawChosen();" />
+											</p:autoComplete>
+											<p:inputText disabled="#{treatment.status ne 'Last'}" onchange="autoFilltreatment2();" style="width: 100%;#{treatment.displayStr1}" value="#{treatment.name}" />
+											<p:remoteCommand name="autoFilltreatment2" process=":form:nose-accordion:listTable5" actionListener="#{inspectionController.autoFillTreatment2()}" update="@(.listTable)" />
+										</p:column>
+										<p:column headerText="" style="text-align: left;">
+											<p:outputLabel value="#{treatment.cost}₮" />
+										</p:column>
+										<p:column headerText="Ямар эрхтэнд" >
+											<p:selectOneMenu>
+												<f:selectItems value="#{inspectionController.organList}" var="str" itemValue="#{str}" itemLabel="#{str}" />
+											</p:selectOneMenu>
+										</p:column>
+										<p:column headerText="Тун" width="10%"><p:inputText style="width: 100%; text-align: right;" value="#{treatment.qty}" /></p:column>
+										<p:column headerText="Хугацаа" width="10%"><pe:inputNumber decimalPlaces="0"  style="width: 100%; text-align: right;" value="#{treatment.times}" /></p:column>
+										<p:column headerText="Заалт" ><p:inputText style="width: 100%;" value="#{treatment.description}" /></p:column>
+										<p:column width="10%" headerText="Тоо хэмжээ" ><pe:inputNumber decimalPlaces="0" style="width: 100%; text-align: right;" value="#{treatment.dayLength}" /></p:column>
+										<p:column width="5%" headerText="Stat" >
+											<p:selectBooleanCheckbox value="#{treatment.done}" />
+										</p:column>
+										<p:column width="3%" headerText="">
+											<p:commandLink rendered="#{treatment.status ne 'Last'}" onclick="PF('confirmDialogDeleteTreatment').show()" action="#{inspectionController.setCurrentInspectionDtl(treatment)}" styleClass="fa fa-fw fa-times color-red" />
+										</p:column>
+									</p:dataTable>
+									</p:tab>
+								</p:accordionPanel>
+									<p:dataTable style="display: none;" widgetVar="ssss" value="#{applicationController.inspectionDtlTreatmentList}" var="tr">
+										<p:column filterBy="#{tr.id}" filterMatchMode="contains" headerText="Id">#{tr.id}</p:column>
+										<p:column filterBy="#{tr.name}" filterMatchMode="contains" headerText="Нэр">#{tr.name}</p:column>
+										<p:column filterBy="#{tr.cost}" filterMatchMode="contains" headerText="Fee">#{tr.cost}</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</p:panel>
+				    </p:layoutUnit>
+				</p:layout>
+				
+			</div>
+			<div style="display: none;" class="col-md-3">
+				
+			</div>
+			<div style="display: none;" class="col-md-9">
+				
+			</div>
+		</div>
+	</div>
+		<p:dialog styleClass="confirmDialog" id="confirmDialog" widgetVar="confirmDialogDeleteTreatment" modal="true"
+			resizable="false" width="300">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						Та #{inspectionController.currentInspectionDtl.name} -г хасахдаа итгэлтэй байна уу?
+					</td>
+				</tr>
+			</table>
+			<div class="row">
+				<div class="col-md-1"/>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn "
+						actionListener="#{inspectionController.removeInspectionDtl}" update="@(.listTable)" process="@this"
+						oncomplete="PF('confirmDialogDeleteTreatment').hide();">
+						<i class="fa fa-fw fa-check"/> Устгах</p:commandLink>
+				</div>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn redBtn"
+						oncomplete="PF('confirmDialogDeleteTreatment').hide();">
+						<i class="fa fa-fw fa-times"/>Болих </p:commandLink>
+				</div>
+				<div class="col-md-1"/>
+			</div>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" id="confirmDialogMedicine" widgetVar="confirmDialogDeleteMedicine" modal="true"
+			resizable="false" width="300">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						Та эмийг хасахдаа итгэлтэй байна уу?
+					</td>
+				</tr>
+			</table>
+			<div class="row">
+				<div class="col-md-1"/>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn "
+						actionListener="#{inspectionController.removeMedicine}" process="@this" update="@(.listTable)"
+						oncomplete="PF('confirmDialogDeleteMedicine').hide();">
+						<i class="fa fa-fw fa-check"/> Устгах</p:commandLink>
+				</div>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn redBtn"
+						oncomplete="PF('confirmDialogDeleteMedicine').hide();">
+						<i class="fa fa-fw fa-times"/>Болих </p:commandLink>
+				</div>
+				<div class="col-md-1"/>
+			</div>
+		</p:dialog>
+		<p:dialog header="" id="cancelOrder" widgetVar="cancelOrder" modal="true" resizable="false" width="300">
+			 <table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						Та захиалгийг устгахдаа итгэлтэй байна уу?
+					</td>
+				</tr>
+			</table>
+			<div class="row">
+				<div class="col-md-1"/>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn " actionListener="#{inspectionController.removeOrder()}" process="@this"
+						oncomplete="PF('cancelOrder').hide();">
+						<i class="fa fa-fw fa-check"/> Устгах</p:commandLink>
+				</div>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn redBtn" 
+					oncomplete="PF('cancelOrder').hide();">
+						<i class="fa fa-fw fa-times"/>Болих </p:commandLink>
+				</div>
+				<div class="col-md-1"/>
+			</div>
+		</p:dialog>
+		<p:dialog id="doctorRecipeReg" widgetVar="doctorRecipeReg" modal="true"
+			resizable="false" width="900" height="500">
+			<div class="row margin-bottom flex-container" style="height: 400px; display: block; overflow: auto;">
+				<div class="col-md-12">
+					Захиалсан эм:<br/>
+					<p:dataTable id="listTable11" value="#{inspectionController.medicineTmp}" styleClass="listTable" var="medicine" rowIndexVar="index" emptyMessage="Хоосон байна.">
+						<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+							<p:inputText disabled="true" value="#{medicine.id}" styleClass="medicineclass" />
+						</p:column>
+						<p:column width="100px" headerText="Олон улсын нэршил" style="text-align: left; width: 100px !important; overflow: visible;">
+							<p:inputText disabled="true" value="#{medicine.name}" styleClass="medicineclass" />
+						</p:column>
+						<p:column headerText="Худалдааны нэршил">
+							<p:inputText style="width: 100%" disabled="true" value="#{medicine.iName}" />
+						</p:column>
+						<p:column headerText="Савлалт">
+							#{medicine.drugDose}
+						</p:column>
+						<p:column headerText="Хэлбэр" >#{medicine.medicineType}</p:column>
+						
+						<p:column headerText="Insur" rendered="false" ></p:column>
+						<p:column width="20px" rendered="false" headerText="Stat" ><p:selectBooleanCheckbox /></p:column>
+						
+						<p:column headerText="Тун">
+							<p:inputText style="width: 100%; min-width: 50px;" disabled="true" value="#{medicine.dose}" />
+						</p:column>
+						<p:column headerText="Давтамж">
+							<pe:inputNumber disabled="true" decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.time}" />
+						</p:column>
+						<p:column headerText="m" ><p:selectBooleanCheckbox disabled="true" value="#{medicine.selectM}" /></p:column>
+						<p:column headerText="d" ><p:selectBooleanCheckbox disabled="true" value="#{medicine.selectD}" /></p:column>
+						<p:column headerText="e" ><p:selectBooleanCheckbox disabled="true" value="#{medicine.selectE}" /></p:column>
+						<p:column headerText="n" ><p:selectBooleanCheckbox disabled="true" value="#{medicine.selectN}" /></p:column>
+						<p:column headerText="Заавар"><p:inputText disabled="true" value="#{medicine.medicineDescription}" /></p:column>
+						<p:column headerText="Хугацаа(Өдөр)">
+							<pe:inputNumber disabled="true" decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.day}" />
+						</p:column>
+						<p:column headerText="Нийт">
+							<pe:inputNumber disabled="true" decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.repeatCount}" />
+						</p:column>
+					</p:dataTable>
+					Захиалсан лабораторийн шинжилгээ:<br/>
+					<p:dataTable styleClass="listTable" id="listTable21" value="#{inspectionController.examinationTmp}" rowIndexVar="index" var="examination" emptyMessage="Хоосон байна.">
+						<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+							<p:inputText disabled="true" styleClass="examinationclass" style="width: 100%;" value="#{examination.id}" />	
+						</p:column>
+						<p:column headerText="Нэр" style="text-align: left;">
+							<p:inputText disabled="true" style="width: 100%;" value="#{examination.name}" />
+						</p:column>
+						<p:column width="20%" headerText="Тэмдэглэл" style="text-align: left;">
+							<p:inputText disabled="true" style="width: 100%;" value="#{examination.description}" />
+						</p:column>
+						<p:column width="10%" headerText="Давтамж" >
+							<p:selectOneMenu style="width: 100%;">
+								<f:selectItem itemValue="0" itemLabel="Өдөр" />
+								<f:selectItem itemValue="1" itemLabel="Долоо хоног" />
+								<f:selectItem itemValue="2" itemLabel="Сар" />
+								<f:selectItem itemValue="3" itemLabel="Улирал" />
+								<f:selectItem itemValue="4" itemLabel="Жил" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column width="5%" headerText="cito" >
+							<p:selectBooleanCheckbox disabled="true" value="#{examination.done}" />
+						</p:column>
+					</p:dataTable>
+					Захиалсан дүрс оношилгоо:<br/>
+					<p:dataTable id="listTable31" styleClass="listTable" value="#{inspectionController.xrayTmp}" var="xray" rowIndexVar="index" emptyMessage="Хоосон байна.">
+						<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+							<p:inputText disabled="true" styleClass="xrayclass" style="width: 100%;" value="#{xray.id}" />
+						</p:column>
+						<p:column headerText="Нэр" style="text-align: left;">
+							<p:inputText disabled="true" style="width: 100%;" value="#{xray.name}" />
+						</p:column>
+						<p:column width="20%" headerText="Тэмдэглэл" style="text-align: left;">
+							<p:inputText disabled="true" style="width: 100%;" value="#{xray.description}" />
+						</p:column>
+						<p:column width="5%" headerText="cito" >
+							<p:selectBooleanCheckbox disabled="true" value="#{xray.done}" />
+						</p:column>
+					</p:dataTable>
+					Захиалсан мэс засал:<br/>
+					<p:dataTable id="listTable41" styleClass="listTable" value="#{inspectionController.surgeryTmp}" var="surgery" rowIndexVar="index" emptyMessage="Хоосон байна.">
+						<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+							<p:inputText disabled="true" styleClass="surgeryclass" style="width: 100%;" value="#{surgery.name}" />
+						</p:column>
+						<p:column headerText="Нэр" style="text-align: left;">
+							<p:inputText disabled="true" style="width: 100%;" value="#{surgery.name}" />
+						</p:column>
+						<p:column width="5%" headerText="Stat" >
+							<p:selectBooleanCheckbox disabled="true" value="#{surgery.done}" />
+						</p:column>
+					</p:dataTable>
+					Захиалсан эмчилгээ:<br/>
+					<p:dataTable id="listTable51" styleClass="listTable" value="#{inspectionController.treatmentTmp}" var="treatment" rowIndexVar="index" emptyMessage="Хоосон байна.">
+						<p:column width="100px" headerText="Код" style="text-align: left; width: 100px !important; overflow: visible;">
+							<p:inputText disabled="true" styleClass="treatmentclass" style="width: 100%;" value="#{treatment.id}" />
+						</p:column>
+						<p:column width="10%" headerText="Нэр" style="text-align: left;">
+							<p:inputText disabled="true" style="width: 100%;" value="#{treatment.name}" />
+						</p:column>
+						<p:column headerText="Ямар эрхтэнд" >
+							<p:selectOneMenu disabled="true">
+								<f:selectItems value="#{inspectionController.organList}" var="str" itemValue="#{str}" itemLabel="#{str}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column headerText="Тун" ><p:inputText style="width: 100%; text-align: right;" value="#{treatment.qty}" /></p:column>
+						<p:column headerText="Хугацаа" ><pe:inputNumber decimalPlaces="0" style="width: 100%; text-align: right;" value="#{treatment.times}" /></p:column>
+						<p:column headerText="Заалт" ><p:inputText value="#{treatment.description}" /></p:column>
+						<p:column width="10%" headerText="Тоо хэмжээ" ><pe:inputNumber decimalPlaces="0" style="width: 100%; text-align: right;" value="#{treatment.dayLength}" /></p:column>
+						<p:column width="5%" headerText="Stat" >
+							<p:selectBooleanCheckbox disabled="true" value="#{treatment.done}" />
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<div class="row margin-top">
+				<div class="col-md-3 flex-center-self">
+					<label style="float: right;">Загвар болгох эсэх:</label>
+				</div>
+				<div class="col-md-3 flex-center-self">
+					<p:selectBooleanCheckbox style="float: left;" value="#{inspectionController.recipe.selected}" onchange="recipeSelected();" />
+					<p:remoteCommand name="recipeSelected" update=":form:recipeSelected" />
+				</div>
+				<div class="col-md-3 flex-center-self">
+					<label style="float: right;">Нэр:</label>
+				</div>
+				<div class="col-md-3">
+					<p:inputText id="recipeSelected" disabled="#{inspectionController.recipe.selected == false}" style="float: left;" value="#{inspectionController.recipe.name}" />
+				</div>
+			</div>
+			<div class="row margin-top">
+				<div class="col-md-12 text-right">
+					<p:commandLink styleClass="btn "
+						actionListener="#{inspectionController.saveNewOrder}" onclick="showLoader();"
+						oncomplete="PF('doctorRecipeReg').hide();hideLoader();">
+						<i class="fa fa-fw fa-check"/> Хадгалах</p:commandLink>
+					<p:commandLink styleClass="btn redBtn"
+						oncomplete="PF('doctorRecipeReg').hide();">
+						<i class="fa fa-fw fa-times"/>Болих </p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="regExa" header="Шинжилгээ сонгох" modal="true"
+			id="regExa" resizable="false" styleClass="dialog-scroll" width="1000" onHide="updateTable();"
+			height="450">
+			<div class="row" style="display: none;">
+				<div class = "col-md-4"></div>
+				<div class = "col-md-4" style="    padding-left: 7px;">
+					<p:inputText value="#{inspectionController.examinationSearchString}" style="width: 80%;" />
+					<p:commandLink action="#{inspectionController.examinationSearchString()}" update="@(.myTable)" styleClass="ui-commandlink ui-widget btn fa fa-search" />
+				</div>
+				<div class = "col-md-4"></div>
+			</div>
+			<div>
+				<div class="col-md-3">
+					<p:dataTable styleClass="myTable" id="exaTypeList"
+						emptyMessage="Хоосон байна" value="#{inspectionController.exaTypes}"
+						var="et" selectionMode="single" rowKey="#{et.pkId}"
+						selection="#{inspectionController.chosenExaType}">
+						<p:ajax event="rowSelect"
+							listener="#{inspectionController.chooseExaType()}" process="@this" />
+						<p:column headerText="Шинжилгээний төрлийн нэр" styleClass="text">
+							#{et.name}
+						</p:column>
+
+					</p:dataTable>
+				</div>
+				<div class="col-md-5">
+					<p:treeTable selectionMode="single" selection="#{inspectionController.selectedExaminationTreeNode}" styleClass="myTable" id="exaList" emptyMessage="Хоосон байна" value="#{inspectionController.examinationTreeRoot}" var="exa">
+						<p:column headerText="Шинжилгээний нэр" styleClass="text">
+							#{exa.name}
+						</p:column>
+						<p:column headerText="Үнэ" styleClass="amount">
+							#{exa.price}
+						</p:column>
+						<p:column>
+							<p:commandLink action="#{inspectionController.chooseExamination(exa)}" styleClass="fa fa-arrow-circle-right"></p:commandLink>
+						</p:column>
+					</p:treeTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:treeTable  styleClass="myTable" id="tempExaList" emptyMessage="Хоосон байна" value="#{inspectionController.exaTempListRoot}" var="tempExa">
+						<p:column headerText="Шинжилгээний нэр" styleClass="text">
+							#{tempExa.name}
+						</p:column>
+						<p:column headerText="Үнэ" styleClass="amount">
+							#{tempExa.price}
+						</p:column>
+						<p:column>
+							<p:commandLink action="#{inspectionController.selDlExa(tempExa)}" styleClass="fa fa-fw fa-remove color-red" ></p:commandLink>
+						</p:column>
+					</p:treeTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{inspectionController.insertExaminationToList()}">
+						Сонгох
+					</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="regMed" header="Эм сонгох" modal="true"
+			id="regMed" resizable="false" width="900" onHide="updateTable();"
+			styleClass="dialog-scroll">
+			<div>
+				<div class="col-md-8" style="    display: block;    overflow: auto;    height: 500px;">
+					<p:dataTable styleClass="myTable" id="medList"
+						value="#{inspectionController.medicines}" var="medTemp"
+						selectionMode="single" selection="#{inspectionController.chosenMedicine}"
+						rowKey="#{medTemp.pkId}" emptyMessage="Хоосон байна"
+						paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+						rowsPerPageTemplate="5,10,15" rows="10" paginatorPosition="bottom"
+						>
+						<p:ajax event="rowDblselect"
+							listener="#{inspectionController.chooseMedicine()}" process="@this" />
+						<p:column filterBy="#{medTemp.id}" filterMatchMode="contains" headerText="Код" styleClass="text"> 
+							#{medTemp.id} 
+						</p:column>
+						<p:column filterBy="#{medTemp.name}" filterMatchMode="contains" headerText="ОУ/Нэр" styleClass="text"> 
+							#{medTemp.name} 
+						</p:column>
+						<p:column filterBy="#{medTemp.iName}" filterMatchMode="contains" headerText="Х/нэр" styleClass="text"> 
+							#{medTemp.iName} 
+						</p:column>
+						<p:column filterMatchMode="contains" headerText="Тун" styleClass="text"> 
+							#{medTemp.drugDose} 
+						</p:column>
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+						value="#{inspectionController.medTempList}" var="medy" id="tempMedList"
+						rowIndexVar="index">
+						<p:column headerText="Эмийн нэр" styleClass="text">
+						#{medy.name}
+						</p:column>
+						<p:column headerText="Хасах" styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								actionListener="#{inspectionController.removeFromMedTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{inspectionController.insertMedicineToList()}">
+						Сонгох
+					</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="regXray" header="Оношилгоо сонгох" modal="true"
+			id="regXray" resizable="false" width="800" height="350" onHide="updateTable();"
+			styleClass="dialog-scroll">
+			<div class="row">
+				<div class = "col-md-4"></div>
+				<div class = "col-md-4" style="    padding-left: 7px;">
+					<p:inputText value="#{inspectionController.xraySearchString}" style="width: 80%;" />
+					<p:commandLink action="#{inspectionController.xraySearchString()}" update="@(.myTable)" styleClass="ui-commandlink ui-widget btn fa fa-search" />
+				</div>
+				<div class = "col-md-4"></div>
+			</div>
+			<div>
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="xrayTypeList"
+						emptyMessage="Хоосон байна" value="#{inspectionController.xrayTypes}"
+						var="xt" selectionMode="single" rowKey="#{xt.pkId}"
+						selection="#{inspectionController.chosenXrayType}">
+						<p:ajax event="rowSelect"
+							listener="#{inspectionController.chooseXrayType()}" />
+						<p:column headerText="Оношилгооны төрөл" styleClass="text">
+							#{xt.name}
+						</p:column>
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="xrayList"
+						value="#{inspectionController.xrays}" var="xray" selectionMode="single"
+						selection="#{inspectionController.chosenXray}" rowKey="#{xray.pkId}"
+						emptyMessage="Хоосон байна">
+						<p:ajax event="rowDblselect"
+							listener="#{inspectionController.chooseXray()}" />
+						<p:column headerText="Оношилгоо" styleClass="text">
+							#{xray.name}
+						</p:column>
+						<p:column headerText="Үнэ" styleClass="amount">
+							#{xray.priceIn}
+						</p:column>
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="tempXrayList"
+						emptyMessage="Хоосон байна" value="#{inspectionController.xrayTempList}"
+						var="xrayTemp" rowIndexVar="index">
+						<p:column headerText="Оношилгоо" styleClass="text">
+							#{xrayTemp.name}
+						</p:column>
+						<p:column headerText="Үнэ" styleClass="amount">
+							#{xrayTemp.priceIn}
+						</p:column>
+						<p:column headerText="Хасах" styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								actionListener="#{inspectionController.removeFromXrayTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{inspectionController.insertXrayToList()}">
+						Сонгох
+					</p:commandLink>
+				</div>
+
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="regSurgery" header="Хагалгаа сонгох" modal="true"
+			id="regSurgery" resizable="false" width="900" height="500" onHide="updateTable();" 
+			styleClass="dialog-scroll">
+			<div class="row">
+				<div class = "col-md-4"></div>
+				<div class = "col-md-4" style="    padding-left: 7px;">
+					<p:inputText value="#{inspectionController.surgerySearchString}" style="width: 80%;" />
+					<p:commandLink action="#{inspectionController.surgerySearchString()}" update="@(.myTable)" styleClass="ui-commandlink ui-widget btn fa fa-search" />
+				</div>
+				<div class = "col-md-4"></div>
+			</div>
+			<div>
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="surgeryTypeList" 
+						emptyMessage="Хоосон байна" value="#{inspectionController.surgeryTypes}"
+						var="type" selectionMode="single" rowKey="#{type.pkId}"
+						selection="#{inspectionController.chosenSurgeryType}">
+						<p:ajax event="rowSelect"
+							listener="#{inspectionController.chooseSurgeryType()}" />
+						<p:column headerText="Хагалгааны төрөл" styleClass="text">
+							#{type.name}
+						</p:column>
+					</p:dataTable>
+				</div>
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="surgeryList"
+						value="#{inspectionController.surgeries}" var="surgery" selectionMode="single"
+						selection="#{inspectionController.chosenSurgery}" rowKey="#{surgery.pkId}"
+						paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+						rowsPerPageTemplate="5,10,15" rows="10" paginatorPosition="bottom"
+						emptyMessage="Хоосон байна">
+						<p:ajax event="rowDblselect"
+							listener="#{inspectionController.chooseSurgery()}" />
+						<p:column headerText="Хагалгаа" styleClass="text">
+							#{surgery.name}
+						</p:column>
+						<p:column headerText="Үнэ" styleClass="amount">
+							#{surgery.price}
+						</p:column>
+					</p:dataTable>
+				</div>
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="tempSurgeryList"
+						emptyMessage="Хоосон байна" value="#{inspectionController.surgeryTempList}"
+						var="surgeryTemp" rowIndexVar="index">
+						<p:column headerText="Оношилгоо" styleClass="text">
+							#{surgeryTemp.name}
+						</p:column>
+						<p:column headerText="Үнэ" styleClass="amount">
+							<h:outputLabel value="#{surgeryTemp.price}">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputLabel>
+						</p:column>
+						<p:column headerText="Хасах" styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								actionListener="#{inspectionController.removeFromSurgeryTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{inspectionController.insertSurgeryToList()}">
+						Сонгох
+					</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="treatmentList" id="treatmentList" modal="true" resizable="false" onShow="generateSlimScroll();"  
+			width="1000" styleClass = "bububu" header="Эмчилгээ сонгох" onHide="updateTable()" >
+			<div class="row">
+				<div class = "col-md-3"></div>
+				<div class = "col-md-3"></div>
+				<div class = "col-md-3">
+					<p:inputText value="#{inspectionController.treatmentSearchString}" style="width: 80%;" />
+					<p:commandLink action="#{inspectionController.treatmentSearchString()}" update="@(.myTable)" styleClass="ui-commandlink ui-widget btn fa fa-search" />
+				</div>
+				<div class = "col-md-3"></div>
+			</div>
+			<p:panel id = "qq" styleClass = "borderlessPanel">
+			<div class = "content">
+			<div class = "row">
+			
+			<div class = "col-md-3">
+			<center> <label> Кабинетын төрөл </label></center>
+				<div class="btn-group slim-scroll">
+					<ui:repeat var="o" value="#{treatmentController.subOrganizationTypes}">
+						<p:commandLink styleClass="btn btn-block bg-olive btn-xs" value = "#{o.name}" style="font-size: 12px;" actionListener = "#{inspectionController.sortTreatmentTypeBySot(o.pkId)}" update=":form:qq " oncomplete="generateSlimScroll();" />
+   					</ui:repeat>
+   				</div>
+			</div>		
+			
+			
+			<div class = "col-md-3">
+				<center> <label> Эмчилгээний төрөл </label></center>
+				<div class="btn-group slim-scroll">
+				<ui:repeat var="o" value="#{inspectionController.treatmentTypes}">
+					<p:commandLink styleClass="btn btn-block bg-olive btn-xs" value = "#{o.name}" actionListener="#{inspectionController.sortTreatmentByType(o.pkId)}" style="font-size: 12px;"  update=":form:qq " oncomplete="generateSlimScroll();"/>
+  					</ui:repeat>
+  					</div>
+  				</div>
+   				
+   			<div class = "col-md-3">
+				<center> <label> Эмчилгээ </label></center>
+				<p:dataTable styleClass="myTable slim-scroll" id="treatmentTable" value="#{inspectionController.ttt}" var="treatment" selectionMode="single" selection="#{inspectionController.cursorTreatment}" rowKey="#{treatment.pkId}" emptyMessage="Хоосон байна">
+					<p:ajax event="rowDblselect" listener="#{inspectionController.choseTreatment()}"   process = "@this"   />
+					<p:column styleClass="text" headerText="Эмчилгээний нэр"> #{treatment.name} </p:column>
+					<p:column styleClass="amount" headerText="Үнэ">  <h:outputLabel value="#{treatment.price}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+				</p:dataTable>	
+			</div>
+			<div class = "col-md-3">	
+				<center> <label> Сонгогдсон эмчилгээ </label></center>
+				<p:dataTable styleClass="myTable slim-scroll" id = "treatmentTable1" value="#{inspectionController.chosenTreatments}" var="treatment" selectionMode="single" rowKey="#{treatment.pkId}" emptyMessage="Хоосон байна">
+					<p:ajax event="rowSelect"  process="@this"/>
+					<p:column styleClass="text" headerText="Эмчилгээний нэр"> #{treatment.name} </p:column>
+					<p:column styleClass="amount" headerText="Үнэ">  <h:outputLabel value="#{treatment.price}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+					<p:column styleClass="button-icon" ><p:commandLink styleClass="fa fa-remove color-red" actionListener="#{inspectionController.removeTreatment(treatment)}"></p:commandLink></p:column>
+				</p:dataTable>
+				<p:commandLink styleClass="btn pull-right margin-top" actionListener = "#{inspectionController.selectedTreatment}">
+				<i class="fa fa-check"/> Сонгох
+				</p:commandLink>						
+			</div>
+			
+			</div>
+			</div>
+			</p:panel>
+		</p:dialog>
+		
+		<p:dialog id="inspectionDtlDialog" onHide="updateTable();" widgetVar="inspectionDtlDialog" header="#{inspectionController.inspectionDtlDialogTitle}" width="1000px" height="400px" modal="true" style="display: block; overflow: auto !important;">
+			<p:panel styleClass="no-style-panel" style="height: 400px; display: block; overflow: auto !important;">
+				<p:panel header="Эм" styleClass="panel-style">
+					<p:dataTable value="#{inspectionController.listMedicineLog}" rowIndexVar="index" var="medicine" emptyMessage="сонгоогүй байна." >
+						<p:column headerText="" width="2%;"><p:selectBooleanCheckbox value="#{medicine.select}" /></p:column>
+						<p:column headerText="Код">#{medicine.id}</p:column>
+						<p:column headerText="Олон улсын нэршил">#{medicine.name}</p:column>
+						<p:column headerText="Худалдааны нэршил">
+							#{medicine.iName}
+						</p:column>
+						<p:column headerText="Савлалт">
+							#{medicine.drugDose}
+						</p:column>
+						<p:column headerText="Хэлбэр" >#{medicine.medicineType}</p:column>
+						<p:column headerText="Тун">
+							<p:inputText style="width: 100%; min-width: 50px;" value="#{medicine.dose}" />
+						</p:column>
+						<p:column headerText="Давтамж">
+							<pe:inputNumber decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.time}" />
+						</p:column>
+						<p:column headerText="m" ><p:selectBooleanCheckbox value="#{medicine.selectM}" /></p:column>
+						<p:column headerText="d" ><p:selectBooleanCheckbox value="#{medicine.selectD}" /></p:column>
+						<p:column headerText="e" ><p:selectBooleanCheckbox value="#{medicine.selectE}" /></p:column>
+						<p:column headerText="n" ><p:selectBooleanCheckbox value="#{medicine.selectN}" /></p:column>
+						<p:column headerText="Заавар" ><p:inputText value="#{medicine.medicineDescription}" /></p:column>
+						<p:column headerText="Хугацаа(Өдөр)">
+							<pe:inputNumber decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.day}" />
+						</p:column>
+						<p:column headerText="Нийт">
+							<pe:inputNumber decimalPlaces="0" style="text-align: right; width: 50px;" value="#{medicine.repeatCount}" />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:panel header="Шинжилгээ" styleClass="panel-style">
+					<p:dataTable value="#{inspectionController.listExaminationLog}" rowIndexVar="index" var="examination" emptyMessage="сонгоогүй байна.">
+						<p:column headerText="" width="2%;"><p:selectBooleanCheckbox value="#{examination.select}" /></p:column>
+						<p:column headerText="№" width="2%;">#{index + 1}</p:column>
+						<p:column headerText="Код" width="15%;">#{examination.id}</p:column>
+						<p:column headerText="Нэр" width="15%;">#{examination.name}</p:column>
+						<p:column>
+							<p:outputLabel value="#{examination.examinationDtlsSumPrice}₮" />
+						</p:column>
+						<p:column width="20%" headerText="Тэмдэглэл" style="text-align: left;">
+							<p:inputText disabled="#{examination.status eq 'Last'}" style="width: 100%;" value="#{examination.description}" />
+						</p:column>
+						<p:column width="10%" headerText="Огноо" >
+							<p:calendar />
+						</p:column>
+						<p:column width="5%" headerText="cito" >
+							<p:selectBooleanCheckbox value="#{examination.done}" />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:panel header="Оншилгоо" styleClass="panel-style">
+					<p:dataTable value="#{inspectionController.listXrayLog}" rowIndexVar="index" var="ray" emptyMessage="сонгоогүй байна.">
+						<p:column headerText="" width="2%;"><p:selectBooleanCheckbox value="#{ray.select}" /></p:column>
+						<p:column headerText="№" width="2%;">#{index + 1}</p:column>
+						<p:column headerText="Код" width="15%;">#{ray.id}</p:column>
+						<p:column headerText="Нэр" width="15%;">#{ray.name}</p:column>
+						<p:column width="10%" headerText="" style="text-align: left;">
+							<p:outputLabel value="#{ray.cost}₮" />
+						</p:column>
+						<p:column headerText="Тэмдэглэл"><p:inputText value="#{ray.description}" /></p:column>
+						<p:column headerText="cito"><p:selectBooleanCheckbox value="#{ray.done}" /></p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:panel header="Мэс засал" styleClass="panel-style">
+					<p:dataTable value="#{inspectionController.listSurgeryLog}" rowIndexVar="index" var="sur" emptyMessage="сонгоогүй байна.">
+						<p:column headerText="" width="2%;"><p:selectBooleanCheckbox value="#{sur.select}" /></p:column>
+						<p:column headerText="№" width="2%;">#{index + 1}</p:column>
+						<p:column headerText="Код" width="15%;">#{sur.id}</p:column>
+						<p:column headerText="Нэр" width="15%;">#{sur.name}</p:column>
+						<p:column width="10%" headerText="" style="text-align: left;">
+							<p:outputLabel value="#{sur.cost}₮" />
+						</p:column>
+						<p:column headerText="Stat"><p:inputText value="#{sur.done}" /></p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:panel header="Эмчилгээ" styleClass="panel-style">
+					<p:dataTable value="#{inspectionController.listTreatmentLog}" rowIndexVar="index" var="tr" emptyMessage="сонгоогүй байна.">
+						<p:column headerText="" width="2%;"><p:selectBooleanCheckbox value="#{tr.select}" /></p:column>
+						<p:column headerText="№" width="2%;">#{index + 1}</p:column>
+						<p:column headerText="Код" width="15%;">#{tr.id}</p:column>
+						<p:column headerText="Нэр" width="15%;">#{tr.name}</p:column>
+						<p:column headerText="" style="text-align: left;">
+							<p:outputLabel value="#{tr.cost}₮" />
+						</p:column>
+						<p:column headerText="Ямар эрхтэнд">
+							
+						</p:column>
+						<p:column headerText="Тун">#{tr.qty}</p:column>
+						<p:column headerText="Хугацаа">#{tr.times}</p:column>
+						<p:column headerText="Заалт" ><p:inputText value="#{tr.description}" /></p:column>
+						<p:column headerText="Тоо хэмжээ">#{tr.dayLength}</p:column>
+						<p:column headerText="Stat">
+							<p:selectBooleanCheckbox disabled="true" value="#{tr.done}" />
+						</p:column>
+						<p:column headerText=""></p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:commandLink action="#{inspectionController.setListRecLog()}" styleClass="ui-commandlink ui-widget ui-commandlink ui-widget ui-commandlink ui-widget btn" value="сонгох" style="float: right;"  />
+			</p:panel>
+		</p:dialog>
+		
+		<script>
+	     	//<![CDATA[
+	     	           
+	     	
+
+	     	function dmcxaxa_chosen_input(e){
+	     		console.log('daa' + e.keyCode);
+	     	}
+	     	           
+	     	function dmcxaxa1(){
+	     		c=document.getElementsByClassName("medicineclass");
+	     		var e = document.getElementById("dmcxaxa");
+	     		last_element = c[c.length - 1];
+	     		last_element.value = $("#dmcxaxa_chosen .search-choice").text();
+	     		autoFillmedicine1();
+	     	}
+	     	           
+	     	function examxaxa1(){
+	     		c=document.getElementsByClassName("examinationclass");
+	     		var e = document.getElementById("examxaxa");
+	     		last_element = c[c.length - 1];
+	     		last_element.value = $("#examxaxa_chosen .search-choice").text();
+	     		autoFillExamination1();
+	     	}
+	     	
+	     	function xrayxaxa1(){
+	     		c=document.getElementsByClassName("xrayclass");
+	     		var e = document.getElementById("xrayxaxa");
+	     		last_element = c[c.length - 1];
+	     		last_element.value = $("#xrayxaxa_chosen .search-choice").text();
+	     		autoFillxray1();
+	     	}
+	     	
+	     	function surgeryxaxa1(){
+	     		c=document.getElementsByClassName("surgeryclass");
+	     		var e = document.getElementById("surgeryxaxa");
+	     		last_element = c[c.length - 1];
+	     		last_element.value = $("#surgeryxaxa_chosen .search-choice").text();
+	     		autoFillsurgery2();
+	     	}
+	     	
+	     	function treatmentxaxa1(){
+	     		c=document.getElementsByClassName("treatmentclass");
+	     		var e = document.getElementById("treatmentxaxa");
+	     		last_element = c[c.length - 1];
+	     		last_element.value = $("#treatmentxaxa_chosen .search-choice").text();
+	     		autoFilltreatment1();
+	     	}
+	     	
+			$(document).ready(function(){
+				var firstVisit = #{inspectionController.firstVisit};
+				if(firstVisit == true) showLastInspection();
+				
+				$("body").addClass("sidebar-collapse");			
+				
+// 				$('.slim-scroll-allergy').slimScroll({
+// 			        height: '44px',
+// 			        wheelStep: 1,
+// 			        railVisible: true,
+// 			        alwaysVisible: true,
+// 			        size: '4px'
+// 			    });
+			});
+			var generateSlimScroll = function(){
+				$(".slim-scroll").slimScroll({
+					height: '215px'
+				});
+			}
+			
+			var delay = (function() {
+			    var timer = 0;
+			    return function(callback, ms) {
+			        clearTimeout (timer);
+			        timer = setTimeout(callback, ms);
+			    };
+			})();
+
+			var filterDiagnose = function() {
+			    delay(function() { getApprovedDiagnoseData(); }, 500);
+			}
+			var filterPreDiagnose = function() {
+			    delay(function() { getPreDiagnoseData(); }, 500);
+			}
+			
+			function clearInput1(id){
+				if(document.getElementById('form:nose-accordion:listTable1:'+id+':daaInde1_input') != null){
+					document.getElementById('form:nose-accordion:listTable1:'+id+':daaInde1_input').value = '';
+				}
+			}
+			
+			function clearInput2(id){
+				if(document.getElementById('form:nose-accordion:listTable1:'+id+':daaInde2_input') != null){
+					document.getElementById('form:nose-accordion:listTable1:'+id+':daaInde2_input').value = '';
+				}
+			}
+			
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

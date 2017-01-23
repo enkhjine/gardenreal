@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Болзолт жор</h1>
+		<p:commandLink styleClass="btn" actionListener="#{cpController.newConditionalPresciption()}"
+			onclick="PF('registerCp').show(); ">
+			<i class="fa fa-fw fa-plus-square" />  #{i18n['register_con_pre']}
+		</p:commandLink>
+
+		<ol class="breadcrumb">
+			<li class="active">Болзолт жор</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<p:dataTable id="cpGroups" styleClass="myTable" rowIndexVar="index"
+					emptyMessage="#{i18n['empty']}"
+					value="#{cpController.conditionalPrescriptions}" var="cp">
+					<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+					<p:column styleClass="text" headerText="#{i18n['con_pre_number']}">#{cp.id}</p:column>
+					<p:column styleClass="text" headerText="#{i18n['con_pre_name']}">#{cp.name}</p:column>
+					<p:column styleClass="button-icon" headerText="#{i18n['element']}">
+						<p:commandLink value="#{cp.dtlCount}"
+							onclick="PF('cpDtl').show();"
+							actionListener="#{cpController.showDetail(cp.pkId)}"></p:commandLink>
+					</p:column>
+					<p:column styleClass="date" headerText="#{i18n['reg_date']}">#{cp.getDateString(cp.createdDate)}</p:column>
+					<p:column styleClass="date" headerText="#{i18n['changed_date']}">#{cp.getDateString(cp.updatedDate)}</p:column>
+					<p:column styleClass="date" headerText="#{i18n['active_date']}">#{cp.getDateString(cp.usageDate)}</p:column>
+					<p:column styleClass="button-icon" headerText="#{i18n['edit']}">
+						<p:commandLink styleClass="fa fa-fw fa-edit color-blue"
+							actionListener="#{cpController.modifyCp(cp)}"
+							oncomplete="PF('registerCp').show(); " />
+					</p:column>
+					<p:column styleClass="button-icon" headerText="#{i18n['delete']}">
+						<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+							actionListener="#{cpController.deleteCp(cp)}"
+							onclick="PF('confirmDialogDelete').show();" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="registerCp" header="#{i18n['register_con_pre']}"
+			modal="true" id="registerCp" resizable="false" width="800"
+			height="500" styleClass="dialog-scroll" closeOnEscape="true">
+			<p:panel styleClass="no-style-panel" id="ddd">
+				<div class="row flex-container">
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self">
+						<label for=""> #{i18n['con_pre_number']}:</label>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText value="#{cpController.currentCp.id}" />
+						<p:outputLabel />
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self">
+						<label class = "label-asterisk">#{i18n['con_pre_name']}:</label>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText value="#{cpController.currentCp.name}"></p:inputText>
+					</div>
+				</div>
+
+				<div class="row flex-container">
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+						<label class = "label-asterisk" for="">#{i18n['order_number']}:</label>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+						<p:inputText value="#{cpController.currentCp.statementId}"></p:inputText>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+						<label class = "label-asterisk" for="">#{i18n['active_date']}:</label>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+						<p:calendar styleClass="date-control" id="usageDate" value="#{cpController.currentCp.usageDate}"></p:calendar>
+					</div>
+				</div>
+
+				<div class="row flex-container">
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+						<label class = "label-asterisk" for="">#{i18n['ward']}: </label>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+						<p:selectCheckboxMenu id="sos" value="#{cpController.soPkIds}"
+							label="Тасаг" style="width: 100%;" onchange="changed(event)"
+							filter="true" filterMatchMode="startsWith"
+							panelStyle="width:250px">
+							<f:selectItems value="#{cpController.sos}" var="so"
+								itemLabel="#{so.name}" itemValue="#{so.pkId}" />
+						</p:selectCheckboxMenu>
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+					</div>
+					<div
+						class="col-md-3 flex-container col-xs-12 col-sm-12 flex-center-self ">
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-12">
+						<p:tabView id="dtlTab" >
+							<p:tab title="#{i18n['diagnose']}" id="diagnoseTab">
+								<p:dataTable styleClass="myTable" emptyMessage="#{i18n['empty']}"
+									value="#{cpController.diagnoseList}" var="diagnose"
+									id="cpDiagnoseList" rowIndexVar="index">
+									<p:column headerText="ICD-10" styleClass="text">
+										<p:inputText value="#{diagnose.diagnoseIcd}"
+											styleClass="form-control input-sm"
+											onclick="PF('regDiagnose').show();"
+											disabled="#{!diagnose.status.equals('Last')}" />
+									</p:column>
+									<p:column headerText="#{i18n['diagnose_name']} /Mn/" styleClass="text"
+										rendered="#{!diagnose.status.equals('Last')}">
+										#{diagnose.diagnoseNameMn}
+									</p:column>
+									<p:column headerText="#{i18n['diagnose_name']} /En/" styleClass="text"
+										rendered="#{!diagnose.status.equals('Last')}">
+										#{diagnose.diagnoseNameEn}
+									</p:column>
+									<p:column headerText="#{i18n['diagnose_name']} /Ru/" styleClass="text"
+										rendered="#{!diagnose.status.equals('Last')}">
+										#{diagnose.diagnoseNameRu}
+									</p:column>
+									<p:column headerText="#{i18n['remove']}" styleClass="button-icon"
+										rendered="#{!diagnose.status.equals('Last')}">
+										<p:commandLink rendered="#{!med.status.equals('Last')}"
+											action="#{cpController.removeFromDiagnoseList(index)}"
+											styleClass="glyphicon glyphicon-remove color-red"></p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+							<p:tab title="#{i18n['medicine_recipe']}" id="medicineTab"  >
+								<p:dataTable styleClass="myTable cpMedList1" emptyMessage="#{i18n['empty']}"
+									value="#{cpController.medList}" var="med" id="cpMedList"
+									rowIndexVar="index">
+									<p:column headerText="#{i18n['medicine_name']}" styleClass="text">
+											 <p:inputText disabled="#{med.status ne 'Last'}" value="#{med.medName}" styleClass="medicineclass" 
+											 			  onchange="autoFillmedicine1();"  
+											 			  style="width: 100px;#{med.displayStr1}"  />
+											<p:autoComplete value="#{cpController.text1}"
+														styleClass="form-control input-sm" style="#{med.displayStr2}" 
+														disabled="#{!med.status.equals('Last')}"
+														completeMethod="#{cpController.completeText}">
+											<p:ajax  event="itemSelect" listener="#{cpController.onLstMedicineStrSelect}" 
+													process="@this cpMedList"	update="@(.cpMedList1)" />
+											 </p:autoComplete>
+											 <p:remoteCommand name="autoFillmedicine1" update="@(.cpMedList1)" actionListener="#{cpController.autoFillmedicine()}"/>
+											<a onclick="loadMedicines();" style="color:blue">сонгох</a>
+										<p:remoteCommand name="loadMedicines"
+											actionListener="#{cpController.getMedListFromDb}"
+											></p:remoteCommand>
+									</p:column>
+									<p:column headerText="#{i18n['code']}" styleClass="text"
+										rendered="#{!med.status.equals('Last')}">
+										#{med.medId}										
+									</p:column>
+									<p:column headerText="#{i18n['unit']}" styleClass="text"
+										rendered="#{!med.status.equals('Last')}">
+										#{med.medTypeName}
+									</p:column>
+									<p:column headerText="#{i18n['frequency_type']}" styleClass="text"
+										rendered="#{!med.status.equals('Last')}">
+										<p:selectOneMenu value="#{med.repeatType}"
+											styleClass="form-control input-sm">
+											<f:selectItem itemLabel="Сонгох" itemValue="0" />
+											<f:selectItem itemLabel="Өдөрт" itemValue="1" />
+											<f:selectItem itemLabel="7 хоногт" itemValue="2" />
+											<f:selectItem itemLabel="Сард" itemValue="3" />
+											<f:selectItem itemLabel="Улиралд" itemValue="4" />
+											<f:selectItem itemLabel="Жилд" itemValue="5" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column headerText="#{i18n['frequency']}" styleClass="number-control"
+										rendered="#{!med.status.equals('Last')}">
+										<p:inputText value="#{med.repeatCount}"
+											styleClass="form-control input-sm" />
+									</p:column>
+									<p:column headerText="M" styleClass="number-control"
+										rendered="#{!med.status.equals('Last')}">
+										<p:selectBooleanCheckbox value="#{med.selectM}" />
+									</p:column>
+									<p:column headerText="D" styleClass="number-control"
+										rendered="#{!med.status.equals('Last')}">
+										<p:selectBooleanCheckbox value="#{med.selectD}" />
+									</p:column>
+									<p:column headerText="E" styleClass="number-control"
+										rendered="#{!med.status.equals('Last')}">
+										<p:selectBooleanCheckbox value="#{med.selectE}" />
+									</p:column>
+									<p:column headerText="N" styleClass="number-control"
+										rendered="#{!med.status.equals('Last')}">
+										<p:selectBooleanCheckbox value="#{med.selectN}" />
+									</p:column>
+									<p:column headerText="#{i18n['dose']}" styleClass="number-control"
+										rendered="#{!med.status.equals('Last')}">
+										<p:inputText value="#{med.dose}"
+											styleClass="form-control input-sm" />
+									</p:column>
+									<p:column headerText="#{i18n['period']}" styleClass="text"
+										rendered="#{!med.status.equals('Last')}">
+										<p:inputText value="#{med.expireDay}"
+											styleClass="form-control input-sm" />
+									</p:column>
+
+									<p:column headerText="#{i18n['recipe']}" styleClass="text"
+										rendered="#{!med.status.equals('Last')}">
+										<p:inputText value="#{med.description}"
+											styleClass="form-control input-sm" />
+									</p:column>
+									<p:column headerText="#{i18n['remove']}" styleClass="button-icon"
+										rendered="#{!med.status.equals('Last')}">
+										<p:commandLink
+											action="#{cpController.removeFromMedList(index)}"
+											styleClass="fa fa-remove color-red"></p:commandLink>
+									</p:column>
+
+								</p:dataTable>
+							</p:tab>							
+							<p:tab title="#{i18n['examination']}" id="exaTab">
+								<p:dataTable styleClass="myTable cpExaList1" emptyMessage="#{i18n['empty']}"
+											value="#{cpController.exaList}" var="exa" id="cpExaList"
+											rowIndexVar="index">
+									<p:column headerText="#{i18n['examination_name']}" styleClass="text">
+									       <p:inputText disabled="#{exa.status ne 'Last'}" value="#{exa.exaName}" styleClass="medicineclass" 
+											 			  onchange="autoFillexamination1();"  
+											 			  style="width: 100px;#{exa.displayStr1}"  />
+											<p:autoComplete 
+														styleClass="form-control input-sm" style="#{exa.displayStr2}" 
+														disabled="#{!exa.status.equals('Last')}"
+														completeMethod="#{cpController.completeExamination}">
+											<p:ajax  event="itemSelect" listener="#{cpController.onLstExaminationStrSelect}" 
+													process="@this cpExaList"  update="@(.cpExaList1)" />
+											 </p:autoComplete>
+											 <p:remoteCommand name="autoFillexamination1" update="@(.cpExaList1)" 
+											 				  actionListener="#{cpController.autoFillexamination1()}"/>
+												<a onclick="loadExas();" style="color:blue">сонгох</a>
+											<p:remoteCommand name="loadExas"
+											actionListener="#{cpController.getExaTypeFromDb()}" />
+
+									</p:column>
+									<p:column headerText="#{i18n['price']}" styleClass="amount"
+										rendered="#{!exa.status.equals('Last')}">
+										#{exa.cost}
+										</p:column>
+									<p:column headerText="#{i18n['remove']}" styleClass="button-icon"
+										rendered="#{!exa.status.equals('Last')}">
+										<p:commandLink rendered="#{!med.status.equals('Last')}"
+											action="#{cpController.removeFromExaList(index)}"
+											styleClass="fa fa-remove color-red"></p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+							
+							<p:tab title="#{i18n['xray']}" id="xrayTab">
+								<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+									value="#{cpController.xrayList}" var="xray" id="cpXrayList"
+									rowIndexVar="index">
+									<p:column headerText="#{i18n['xray_name']} /монгол/"
+										styleClass="text">
+										<p:inputText value="#{xray.xrayName}"
+											styleClass="form-control input-sm" onclick="loadXrayTypes();"
+											disabled="#{!xray.status.equals('Last')}" />
+										<p:remoteCommand name="loadXrayTypes"
+											actionListener="#{cpController.getXrayTypesFromDb()}" />
+									</p:column>
+									<p:column headerText="#{i18n['price']}" styleClass="amount"
+										rendered="#{!xray.status.equals('Last')}">
+									#{xray.cost}	
+									</p:column>
+									<p:column headerText="#{i18n['remove']}" styleClass="button-icon"
+										rendered="#{!xray.status.equals('Last')}">
+										<p:commandLink
+											action="#{cpController.removeFromXrayList(index)}"
+											styleClass="fa fa-remove color-red"></p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+							<p:tab title="Эмчилгээ" id="treatmentTab">
+								<p:dataTable styleClass="myTable treatmentsId1" emptyMessage="#{i18n['empty']}"
+									value="#{cpController.treaList}" var="treat" id="treatmentsId"
+									rowIndexVar="index">
+									<p:column headerText="Эмчилгээний нэр" styleClass="text">
+										<p:inputText value="#{treat.treatmentName}"
+											styleClass="form-control input-sm" 
+											disabled="#{!treat.status.equals('Last')}" style="#{treat.displayStr1}" onchange="autoFillTreatment();" />
+											<p:autoComplete style="#{treat.displayStr2}" disabled="#{!treat.status.equals('Last')}"
+															completeMethod="#{cpController.completeTreatment}" > 
+												<p:ajax event="itemSelect"  listener="#{cpController.onSelectTreatment}"
+														process="@this treatmentsId" update="@(.treatmentsId1)" />
+												</p:autoComplete>
+										<a onclick="treatmentClick()">Сонгох</a>
+										<p:remoteCommand name="treatmentClick" actionListener="#{cpController.getTreatmentFromDb()}"
+														update="@(.treatmentsId1)"/>
+										<p:remoteCommand name="autoFillTreatment" actionListener="#{cpController.autoFillTreatment()}"></p:remoteCommand>
+									</p:column>
+									<p:column headerText="Код" styleClass="amount"
+										rendered="#{!treat.status.equals('Last')}">
+										<p:inputText value="#{treat.id}"/>
+										</p:column>
+									<p:column headerText="Ямар  эрхтэнд" styleClass="amount"
+										rendered="#{!treat.status.equals('Last')}">
+										
+										</p:column>
+									<p:column headerText="Тун" styleClass="amount"
+										rendered="#{!treat.status.equals('Last')}">
+										<p:inputText />
+										</p:column>
+									<p:column headerText="Хугацаа" styleClass="amount"
+										rendered="#{!treat.status.equals('Last')}">
+										<p:inputText />
+										</p:column>	
+									<p:column headerText="Заалт" styleClass="amount"
+										rendered="#{!treat.status.equals('Last')}">
+										<p:inputText />
+										</p:column>
+									<p:column headerText="Тоо хэмжээ" styleClass="amount"
+										rendered="#{!treat.status.equals('Last')}">
+										<p:inputText />
+										</p:column>
+									<p:column headerText="#{i18n['remove']}" styleClass="button-icon"
+										rendered="#{!treat.status.equals('Last')}">
+										<p:commandLink styleClass="fa fa-remove color-red"  actionListener="#{cpController.removeFromTreatmentList(index)}"/>
+									</p:column>
+								</p:dataTable>
+							</p:tab>							
+						</p:tabView>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div
+						class="col-md-9 flex-container col-xs-12 col-sm-12 flex-center-self"></div>
+					<div
+						class="col-md-3  col-xs-12 col-sm-12 flex-center-self pull-right">
+						<p:inputText styleClass="number-control"
+							value="#{cpController.currentCp.cost}" id="allCost"
+							disabled="true">
+						</p:inputText>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div
+						class="col-md-9 flex-container col-xs-12 col-sm-12 flex-center-self"></div>
+					<div class="col-md-3  col-xs-12 col-sm-12 text-right">
+						<p:commandLink styleClass="btn"
+							actionListener="#{cpController.saveCp()}"
+							oncomplete="PF('registerCp').hide();">
+								#{i18n['save']}
+						</p:commandLink>
+					</div>
+				</div>
+			</p:panel>
+		</p:dialog>
+		<p:dialog widgetVar="regMed" header="#{i18n['select_medicine']}" modal="true"
+			id="regMed" resizable="false" width="950" height="350"
+			styleClass="dialog-scroll" closeOnEscape="true">
+			<div class="row">
+				<div class="col-md-8">
+					<p:dataTable styleClass="myTable" id="medList"
+						value="#{cpController.medicines}" var="medTemp" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						paginatorPosition="bottom"  paginator="true" rows="10"
+						 rowsPerPageTemplate="5,10,20,30,40,50,60,100,1000"
+						selectionMode="single" selection="#{cpController.chosenMedicine}"
+						rowKey="#{medTemp.pkId}" emptyMessage="#{i18n['empty']}">
+						<p:ajax event="rowDblselect"
+							listener="#{cpController.chooseMedicine()}" process="@this" />
+						<p:column styleClass="text" filterBy="#{medTemp.name} " headerText="#{i18n['medicine_name']}"> 
+							#{medTemp.name} 
+						</p:column>
+						<p:column styleClass="text" filterBy="#{medTemp.iName} " headerText="О/У нэршил"> 
+							#{medTemp.iName} 
+						</p:column>
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" emptyMessage="#{i18n['empty']}"
+						value="#{cpController.medTempList}" var="medy" id="tempMedList"
+						rowIndexVar="index">
+						<p:column headerText="#{i18n['medicine_name']}" styleClass="text">
+						#{medy.medName}
+						</p:column>
+						<p:column headerText="ОУ нэршил" styleClass="text">
+						#{medy.iName}
+						</p:column>
+						<p:column headerText="Савлалт" styleClass="text">
+						#{medy.drugDose}
+						</p:column>
+						<p:column headerText="#{i18n['remove']}" styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								actionListener="#{cpController.removeFromMedTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{cpController.insertMedicineToList()}">
+						#{i18n['select']}
+					</p:commandLink>
+				</div>
+			</div>
+
+
+		</p:dialog>
+		<p:dialog widgetVar="regExa" header="#{i18n['select_examination']}" modal="true"
+			id="regExa" resizable="false" styleClass="dialog-scroll" width="800"
+			height="450" closeOnEscape="true">
+			<div class="row">
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="exaTypeList"
+						emptyMessage="#{i18n['empty']}" value="#{cpController.exaTypes}"
+						var="et" selectionMode="single" rowKey="#{et.pkId}"
+						selection="#{cpController.chosenExaType}">
+						<p:ajax event="rowSelect"
+							listener="#{cpController.chooseExaType()}" process="@this" />
+						<p:column headerText="#{i18n['examination_type']}" styleClass="text">
+						#{et.name}
+					</p:column>
+
+					</p:dataTable>
+				</div>
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="exaList"
+						emptyMessage="#{i18n['empty']}" value="#{cpController.examinations}"
+						var="exa" selectionMode="single" rowKey="#{exa.pkId}"
+						selection="#{cpController.chosenExamination}">
+						<p:ajax event="rowDblselect"
+							listener="#{cpController.chooseExamination}" process="@this" />
+						<p:column headerText="#{i18n['examination_name']}" styleClass="text">
+							#{exa.name}
+						</p:column>
+						<p:column headerText="#{i18n['price']}" styleClass="amount">
+							#{exa.price}
+						</p:column>
+
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="tempExaList"
+						emptyMessage="#{i18n['empty']}" value="#{cpController.exaTempList}"
+						var="tempExa" rowKey="#{tempExa.pkId}" rowIndexVar="index">
+						<p:column headerText="#{i18n['examination_name']}" styleClass="text">
+							#{tempExa.exaName}
+						</p:column>
+						<p:column headerText="#{i18n['price']}" styleClass="amount">
+							#{tempExa.cost}
+						</p:column>
+						<p:column headerText="#{i18n['remove']}" styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								action="#{cpController.removeFromExaTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{cpController.insertExaminationToList()}">
+						#{i18n['select']}
+					</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+
+		<p:dialog widgetVar="regXray" header="#{i18n['select_xray']}" modal="true"
+			id="regXray" resizable="false" width="800" height="350"
+			styleClass="dialog-scroll" closeOnEscape="true">
+			<div class="row">
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="xrayTypeList"
+						emptyMessage="#{i18n['empty']}" value="#{cpController.xrayTypes}"
+						var="xt" selectionMode="single" rowKey="#{xt.pkId}"
+						selection="#{cpController.chosenXrayType}">
+						<p:ajax event="rowSelect"
+							listener="#{cpController.chooseXrayType()}" />
+						<p:column headerText="#{i18n['xray_type']}" styleClass="text">
+							#{xt.name}
+						</p:column>
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="xrayList"
+						value="#{cpController.xrays}" var="xray" selectionMode="single"
+						selection="#{cpController.chosenXray}" rowKey="#{xray.pkId}"
+						emptyMessage="#{i18n['empty']}">
+						<p:ajax event="rowDblselect"
+							listener="#{cpController.chooseXray()}" />
+						<p:column headerText="#{i18n['xray']}" styleClass="text">
+							#{xray.name}
+						</p:column>
+						<p:column headerText="#{i18n['price']}" styleClass="amount">
+							#{xray.priceIn}
+						</p:column>
+					</p:dataTable>
+				</div>
+
+				<div class="col-md-4">
+					<p:dataTable styleClass="myTable" id="tempXrayList"
+						emptyMessage="#{i18n['empty']}" value="#{cpController.xrayTempList}"
+						var="xrayTemp" rowIndexVar="index">
+						<p:column headerText="#{i18n['xray']}" styleClass="text">
+							#{xrayTemp.xrayName}
+						</p:column>
+						<p:column headerText="#{i18n['price']}" styleClass="amount">
+							#{xrayTemp.cost}
+						</p:column>
+						<p:column headerText="#{i18n['remove']}" styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								actionListener="#{cpController.removeFromXrayTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{cpController.insertXrayToList()}">
+						#{i18n['select']}
+				</p:commandLink>
+				</div>
+
+			</div>
+		</p:dialog>
+
+		<p:dialog widgetVar="regDiagnose" header="#{i18n['select_diagnose']}" modal="true"
+			id="regDiagnose" resizable="false" styleClass="dialog-scroll"
+			width="800" height="350" closeOnEscape="true">
+
+			<div class="row">
+				<div class="col-md-2">
+					<label> #{i18n['search']} : </label>
+				</div>
+				<div class="col-md-6">
+					<p:remoteCommand name="filterDiagnose"
+						actionListener="#{cpController.getDiagnoseFromDb()}"
+						update="form:diagnoseList" />
+					<p:inputText value="#{cpController.diagnoseFilterKey}"
+						onkeyup="filterDiagnose();">
+					</p:inputText>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-7">
+					<p:dataTable styleClass="myTable" id="diagnoseList"
+						value="#{cpController.diagnoses}" var="diagnose"
+						selectionMode="single" selection="#{cpController.chosenDiagnose}"
+						rowKey="#{diagnose.pkId}" emptyMessage="#{i18n['empty']}">
+						<p:ajax event="rowDblselect"
+							listener="#{cpController.chooseDiagnose()}" />
+						<p:column headerText="ICD-10" styleClass="text">
+							#{diagnose.id}						
+						</p:column>
+						<p:column headerText="#{i18n['name']}/mn/" styleClass="text">
+							#{diagnose.nameMn}						
+						</p:column>
+						<p:column headerText="#{i18n['name']}/en/" styleClass="text">
+							#{diagnose.nameEn}
+						</p:column>
+						<p:column headerText="#{i18n['name']}/ru/" styleClass="text">
+							#{diagnose.nameRu}
+						</p:column>
+					</p:dataTable>
+				</div>
+				<div class="col-md-5">
+					<p:dataTable styleClass="myTable" id="tempDiagnoseList"
+						emptyMessage="#{i18n['empty']}"
+						value="#{cpController.diagnoseTempList}" var="diagnoseTemp"
+						rowIndexVar="index">
+						<p:column headerText="ICD-10" styleClass="text">
+							#{diagnoseTemp.diagnoseIcd}
+						</p:column>
+						<p:column styleClass="button-icon">
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								actionListener="#{cpController.removeFromDiagnoseTempList(index)}" />
+						</p:column>
+					</p:dataTable>
+					<p:commandLink styleClass="btn pull-right margin-top"
+						actionListener="#{cpController.insertDiagnoseToList()}">
+							#{i18n['select']}
+						</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" widgetVar="confirmDialogDelete"
+			modal="true" resizable="false" width="300" closeOnEscape="true">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">#{i18n['sure_to_delete']}</td>
+				</tr>
+			</table>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-1" />
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn"
+							action="#{cpController.deleteCp()}">
+							<i class="fa fa-fw fa-check" />#{i18n['delete']}</p:commandLink>
+					</div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn redBtn"
+							oncomplete="PF('confirmDialogDelete').hide();">
+							<i class="fa fa-fw fa-times" />#{i18n['cancel']}</p:commandLink>
+					</div>
+					<div class="col-md-1" />
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="cpDtl" header="#{i18n['con_pre_detail']}"
+			modal="true" id="cpDtl" resizable="false" styleClass="dialog-scroll"
+			width="600" height="350" closeOnEscape="true">
+			<p:dataTable styleClass="myTable" id="diii" rowIndexVar="index"
+				emptyMessage="Хоосон байна"
+				value="#{cpController.conditionalPrescriptionDtls}" var="cpDtl">
+				<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+				<p:column styleClass="text" headerText="#{i18n['diagnose']}">#{cpDtl.diagnoseIcd}</p:column>
+				<p:column styleClass="text" headerText="#{i18n['examination']}">#{cpDtl.exaName}</p:column>
+				<p:column styleClass="text" headerText="#{i18n['xray']}">#{cpDtl.xrayName}</p:column>
+				<p:column styleClass="text" headerText="#{i18n['medicine']}">#{cpDtl.medName}</p:column>
+				<p:column styleClass="amount" headerText="#{i18n['price']}">#{cpDtl.cost}</p:column>
+			</p:dataTable>
+		</p:dialog>
+	<p:dialog widgetVar="treatmentList" header="Эмчилгээ сонгох" onShow="generateSlimScroll();"  
+				modal="true" resizable="false" >
+	 <p:panel id="treatmentPanel" styleClass="no-style-panel">
+	 <div class = "content">
+	 <div class="row">
+	  <div class="col-md-12">
+	    <div class="col-md-3">
+	    <div class="btn-group slim-scroll">
+	     <ui:repeat var="sb" value="#{cpController.subOrganizationTypes1}">
+	     <p:commandLink styleClass="btn btn-block bg-olive btn-xs" 
+	     				actionListener="#{cpController.sortTreatmentTypeBySot(sb.pkId)}" 
+	     				update=":form:treatmentPanel" oncomplete="generateSlimScroll();">
+	     				#{sb.name}</p:commandLink>
+	     </ui:repeat>	     
+	     </div>
+	     </div>
+	     <div class="col-md-3">
+	     <div class="btn-group slim-scroll">
+	      <ui:repeat var="t" value="#{cpController.listTreatmentType}">
+	        <p:commandLink styleClass="btn btn-block bg-olive btn-xs" 
+	        			   oncomplete="generateSlimScroll();"
+	        			   actionListener="#{cpController.sortByTreatmentType(t.pkId)}"
+	        			   update=":form:treatmentPanel">
+	        			   #{t.name}</p:commandLink>
+	        </ui:repeat>
+	        </div>
+	       </div>
+	       <div class="col-md-3">
+	       	 <p:dataTable value="#{cpController.listTreatment}" var="ltr"
+	       	  			  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+	       	  			  paginator="true" rows="5" paginatorPosition="bottom"
+	       	  			  selectionMode="single"  rowKey="#{ltr.pkId}" emptyMessage="Хоосон байна" 
+	       	  			  selection="#{cpController.chosenTreatment}"  >
+	       	  			  <p:ajax  event="rowDblselect" listener="#{cpController.chooseTreatment()}" process="@this"/>
+	       	  <p:column filterBy="#{ltr.name}" headerText="эмчилгээний нэр">#{ltr.name}</p:column>
+	       	   </p:dataTable>
+	       	</div>
+	       	<div class="col-md-3">
+	       	 <p:dataTable var="cp" value="#{cpController.treatTempList}" id="tempTreatment" rowIndexVar="index" >
+	       	  <p:column headerText="Нэр">#{cp.treatmentName}</p:column>
+	       	  <p:column headerText="Устгах">
+	       	  		<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+	       	  						actionListener="#{cpController.removeTreatmentTemp(index)}">
+	       	  						</p:commandLink>
+	       	  								 </p:column>
+	       	  </p:dataTable>
+	       	  <p:commandLink  styleClass="btn pull-right margin-top" value="Сонгох" actionListener="#{cpController.insertTreatment()}"  />
+	       	  </div>
+	    </div>
+	  </div>
+	  </div>
+    </p:panel>
+	 </p:dialog>
+		<p:remoteCommand name="loadData"
+			actionListener="#{cpController.loadData()}"></p:remoteCommand>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$(document).ready(function() {
+				loadData();
+			});
+			var generateSlimScroll = function(){
+				$(".slim-scroll").slimScroll({
+					height: '215px'
+				});
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

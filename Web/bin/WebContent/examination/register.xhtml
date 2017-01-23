@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content">
+		<div class="content">
+			<div class="box">
+				<div class="box-body">
+					<div class="row flex-container">
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label class="label-asterisk" for="form:exaType">
+								#{i18n['examination_type']}: </label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectOneMenu id="exaType"
+								value="#{examinationController.currentExamination.examinationTypePkId}"
+								styleClass="pull-left"
+								style="width: calc(100% - 48px);display: inline-block"
+								filter="true">
+								<f:selectItem itemLabel="Сонгох" itemValue="0" />
+								<f:selectItems value="#{examinationController.examinationTypes}"
+									var="examinationType" itemLabel="#{examinationType.name}"
+									itemValue="#{examinationType.pkId}"></f:selectItems>
+							</p:selectOneMenu>
+							<p:commandLink styleClass="btn"
+								onclick="PF('dlgRegExamType').show();"
+								style="margin-left: 5px !important;padding: 4px 9px !important">
+								<i class="fa fa-fw fa-plus" />
+							</p:commandLink>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label class="label-asterisk" for="form:exaName">
+								#{i18n['examination_name']}: </label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:inputText id="exaName"
+								value="#{examinationController.currentExamination.name}"
+								style="min-width: 100%;" />
+						</div>
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label class="label-asterisk" for="form:examinationId">#{i18n['examination_number']}:
+							</label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:inputText id="examinationId"
+								value="#{examinationController.currentExamination.id}"
+								style="min-width: 100%;">
+							</p:inputText>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self hasDtl">
+							<label for="form:roomNumba">#{i18n['room_number']}:</label>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self hasDtl">
+							<p:inputText id="roomNumba"
+								value="#{examinationController.currentExamination.roomNumber}"
+								style="width:100%">
+							</p:inputText>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self hasDtl">
+							<label for="form:active" style="float: left; margin-right: 10px;">#{i18n['is_active']}:</label>
+							<p:selectBooleanCheckbox id="active"
+								value="#{examinationController.currentExamination.active}"
+								style="float: left;">
+							</p:selectBooleanCheckbox>
+						</div>
+
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<label for="form:exaElementReg">#{i18n['check_if_reg_element']}:</label>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectBooleanCheckbox id="hasExaElementReg"
+								value="#{examinationController.currentExamination.hasDtl}"
+								styleClass="minimal" style="float: left;"
+								onchange="changeHasDtl()" />
+							<p:remoteCommand name="changeHasDtl" oncomplete="toggleHasDtl();"
+								process="form:hasExaElementReg" update="@(.tablePanel)"></p:remoteCommand>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label for="">#{i18n['examination_template']}</label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<label for=""><p:selectOneMenu
+									value="#{examinationController.currentExamination.examinationTemplatePkId}"
+									filter="true">
+									<f:selectItems value="#{examinationController.templates}"
+										var="temp" itemValue="#{temp.pkId}" itemLabel="#{temp.name}"></f:selectItems>
+									<p:ajax event="change"
+										listener="#{examinationController.fillExaDtls()}" />
+								</p:selectOneMenu> </label>
+						</div>
+					</div>
+					<div class="clearfix" />
+					<p:panel styleClass="margin-vertical tablePanel no-style-panel"
+						style="margin: 10px 0px !important">
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable id="tableExaDtl" styleClass="myTable"
+									rendered="#{examinationController.currentExamination.hasDtl}"
+									emptyMessage="Хоосон байна."
+									value="#{examinationController.examinationDtls}" var="item"
+									selection="#{examinationController.currentExaminationDtl}"
+									rowIndexVar="index">
+									<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+									<p:column headerText="#{i18n['status']}" style="width: 120px;">
+										<p:selectOneMenu id="exaStatus" value="#{item.isActive}"
+											style="min-width: 100%;">
+											<f:selectItem itemLabel="#{i18n['active']}" itemValue="1"></f:selectItem>
+											<f:selectItem itemLabel="#{i18n['inactive']}" itemValue="0"></f:selectItem>
+										</p:selectOneMenu>
+									</p:column>
+									<p:column headerText="#{i18n['element_name_mn']}">
+										<p:inputText value="#{item.elementNameMn}"
+											onfocus="handleBlur#{index}();" id="elementNameMn" >
+										</p:inputText>
+										<p:remoteCommand name="handleBlur#{index}"
+											actionListener="#{examinationController.handleBlur(item, index)}" />
+									</p:column>
+									<p:column headerText="#{i18n['element_name_en']}">
+										<p:inputText value="#{item.elementNameEn}" onfocus="handleBlur#{index}();" id="elementNameEn">
+										</p:inputText>
+									</p:column>
+									<p:column styleClass="amount"
+										headerText="#{i18n['minimum_value']}" width="100">
+										<p:inputText value="#{item.minValue}" />
+									</p:column>
+									<p:column styleClass="amount"
+										headerText="#{i18n['maximum_value']}" width="100">
+										<p:inputText value="#{item.maxValue}" />
+									</p:column>
+									<p:column styleClass="short-text"
+										headerText="#{i18n['measurement']}" width="150">
+										<p:selectOneMenu id="measurements"
+											value="#{item.measurementPkId}"
+											style="width: calc(100% - 37px);display: inline-block">
+											<f:selectItems itemLabel="Согнох" />
+											<f:selectItems
+												value="#{examinationController.measurementList}"
+												var="measurement" itemLabel="#{measurement.name}"
+												itemValue="#{measurement.pkId}"></f:selectItems>
+										</p:selectOneMenu>
+									</p:column>
+									<p:column styleClass="amount" headerText="#{i18n['price']}"
+										width="100">
+										<p:inputText value="#{item.price}"
+											styleClass="form-control selectioninput number-control" />
+									</p:column>
+									<p:column styleClass="button-icon"
+										headerText="#{i18n['delete']}">
+										<p:commandLink rendered="#{!item.status.equals('Last')}"
+											styleClass="glyphicon glyphicon-remove color-red"
+											action="#{examinationController.removeItem(index)}"></p:commandLink>
+											<p:commandLink rendered="#{item.status.equals('Last')}"
+											styleClass="glyphicon glyphicon-add color-blue"
+											action="#{examinationController.addLastItem()}"></p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</p:panel>
+					<div class="row flex-container hasDtl">
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label class="label-asterisk" for="form:exaPrice">#{i18n['price']}:</label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:inputText type="number" styleClass="number-control"
+								id="exaPrice"
+								value="#{examinationController.currentExaminationPrice.price}"
+								style="min-width: 100%;" />
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label for="form:exaStartDate">#{i18n['price_use_date']}:</label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:calendar styleClass="date-control" pattern="yyyy-MM-dd"
+								value="#{examinationController.currentExaminationPrice.beginDate}"></p:calendar>
+						</div>
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label for="form:laborant">#{i18n['laborant']}:</label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectCheckboxMenu id="laborant"
+								value="#{examinationController.examinationLaborants}"
+								label="Лаборант" style="width: 100%;" onchange="changed(event)"
+								filter="true" filterMatchMode="contains"
+								panelStyle="width:250px">
+								<f:selectItems
+									value="#{examinationController.laborantEmployees}"
+									var="employee" itemLabel="#{employee.firstName}"
+									itemValue="#{employee.pkId}" />
+							</p:selectCheckboxMenu>
+						</div>
+						<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+							<label for="form:doctor">#{i18n['laborator_doctor']}:</label>
+						</div>
+						<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectCheckboxMenu id="doctor"
+								value="#{examinationController.examinationDoctors}"
+								label="Лабораторын эмч" style="width: 100%;" filter="true"
+								filterMatchMode="startsWith" panelStyle="width:250px">
+								<f:selectItems
+									value="#{examinationController.laboratorEmployees}"
+									var="employee" itemLabel="#{employee.firstName}"
+									itemValue="#{employee.pkId}" />
+							</p:selectCheckboxMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 text-right">
+							<p:commandLink styleClass="btn"
+								action="#{examinationController.saveExamination}">
+								<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="dlgRegExamType"
+			header="#{i18n['register_examination_type']}" modal="true"
+			id="dlgRegExamType" resizable="false" width="350"
+			closeOnEscape="true">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="label-asterisk" for="form:examTypeName">#{i18n['examination_type']}</label>
+					<p:inputText styleClass="form-control" id="examTypeName"
+						value="#{examinationController.examinationType.name}"
+						style="min-width: 100%;" />
+				</div>
+			</div>
+			<div class="col-md-12 text-right">
+				<p:commandLink styleClass="btn"
+					actionListener="#{examinationController.saveExaminationType()}"
+					update="form:exaType form:examTypeName"
+					oncomplete="PF('dlgRegExamType').hide();">
+					<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+			</div>
+		</p:dialog>
+		<p:remoteCommand name="loadData"
+			actionListener="#{examinationController.loadData}"
+			update="form:laborant form:doctor form:exaType form:tableExaDtl:measurements" />
+
+		<datalist id="mnList"> 
+			<ui:repeat value="#{examinationController.elementNameMn}" var="mn">
+				<option>#{mn}</option>
+			</ui:repeat> 
+		</datalist>
+
+		<datalist id="enList"> 
+			<ui:repeat value="#{examinationController.elementNameEn}" var="en">
+				<option>#{en}</option>
+			</ui:repeat> 
+		</datalist>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+     	//<![CDATA[
+     	$(document).ready(function(){
+     		loadData();
+     		toggleHasDtl();
+     	});
+     	var toggleHasDtl = function(){
+     		debugger;
+     		if(document.getElementById('form:hasExaElementReg').checked == true) {
+     			$(".hasDtl").hide();
+     		} else {
+     			$(".hasDtl").show();
+     		}
+     	}
+     	
+		$('body').on('keydown', 'input, select, textarea', function(e) {
+		    var self = $(this)
+		      , form = self.parents('form:eq(0)')
+		      , focusable
+		      , next
+		      ;
+		    if (e.keyCode == 13) {
+		        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+		        next = focusable.eq(focusable.index(this)+1);
+		        if (next.length) {
+		            next.focus();
+		        } else {
+		            form.submit();
+		        }
+		        return false;
+		    }
+		});
+		//]]>
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,673 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:l="http://www.lapis.com/jsf/exporter"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content">
+		<div class="row margin-bottom">
+			<div class="col-md-6">
+				<!-- dashboard1 ehlel -->
+				<p:panel id = "barChartArea" styleClass = "no-style-panel">
+				<div class="box box-danger">
+               		<div class="box-header with-border">
+                 		<center><h3 class="box-title" style="color: #067CD9;">Орлогын мэдээ/сараар/ </h3></center>
+                 		<div class="row flex-container margin-vertical">
+                 			<div class = "col-md-2 col-xs-12 col-sm-12 flex-center-self">
+               				  	<label for="form:yearSelector">
+               				  		Он сонгох:
+               				  	</label>
+               				</div>
+               				<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+               					<p:selectOneMenu value = "#{dashboardController.cursorYearChart1}" id="yearSelector" filter="true">
+               						<f:selectItems value = "#{dashboardController.yearList}" var ="year" itemLabel="#{year}" itemValue="#{year}"></f:selectItems>
+               						<p:ajax event="change" update = "form:barChartScript" listener = "#{dashboardController.yearSelectedChart1()}" process="@this" oncomplete="drawBarChart();" />
+               					</p:selectOneMenu>
+               				</div>
+							<div class = "col-md-2 col-xs-12 col-sm-12 flex-center-self">
+               				  	<label for="form:monthSelector">
+               				  		Сар сонгох:
+               				  	</label>
+               				</div>
+               				<div class = "col-md-2 col-xs-12 col-sm-12 flex-center-self">
+								<p:selectOneMenu id="monthSelector" value = "#{dashboardController.month}" filter="true">
+									<f:selectItem itemLabel = "1" itemValue = "1" />
+									<f:selectItem itemLabel = "2" itemValue = "2" />
+									<f:selectItem itemLabel = "3" itemValue = "3" />
+									<f:selectItem itemLabel = "4" itemValue = "4" />
+									<f:selectItem itemLabel = "5" itemValue = "5" />
+									<f:selectItem itemLabel = "6" itemValue = "6" />
+									<f:selectItem itemLabel = "7" itemValue = "7" />
+									<f:selectItem itemLabel = "8" itemValue = "8" />
+									<f:selectItem itemLabel = "9" itemValue = "9" />
+									<f:selectItem itemLabel = "10" itemValue = "10" />
+									<f:selectItem itemLabel = "11" itemValue = "11" />
+									<f:selectItem itemLabel = "12" itemValue = "12" />
+									<p:ajax event="change" update = "form:barChartScript" listener = "#{dashboardController.createAreaChart()}" process="@this" />									
+								</p:selectOneMenu>          				
+                 			</div>     
+               				<div class = "col-md-4 col-xs-12 col-sm-12 flex-center-self text-right">
+                				<p:commandLink onclick = "PF('customizePlan').show();" styleClass="btn" update="form:message">
+									<i class="fa fa-cog"/> Төлөвлөгөө тохируулах
+								</p:commandLink>
+               				</div>            				
+                 		</div>
+                 		<div id="chart1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+               		</div><!-- /.box-header -->
+	               	<div class="box-body no-padding">
+	               	</div>
+              	 	<div class="box-footer text-center">
+               		</div>
+            	</div>
+            	</p:panel>
+				<!-- dashboard1 tugsgul -->
+			</div>
+			<div class="col-md-6">
+				<p:panel id = "barLineScript" styleClass = "no-style-panel">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<center><h3 class="box-title" style="color: #067CD9;">Орлогын мэдээ /жилээр/</h3></center>
+	                 		<div style="height: 15px;"></div>
+	                 		<div class="row flex-container margin-vertical">
+	                 			<div class = "col-md-3 col-xs-12 col-sm-12 flex-center-self" style="font-size:12px; font-family:Times New Roman;">
+	                 				<label for="form:yearSelector">Жил сонгох : </label>
+	                 			</div>
+	                 			<div class = "col-md-3 col-xs-12 col-sm-12 flex-center-self">
+	                 				<p:selectOneMenu value = "#{dashboardController.cursorYear2}">
+	                 					<f:selectItems value = "#{dashboardController.yearList}" var ="year" itemLabel="#{year}" itemValue="#{year}"></f:selectItems>
+	                 					<p:ajax event = "change" update= "form:subBarLineScript"  listener="#{dashboardController.createSubOrgaLineChart()}" process="@this" oncomplete="drawSubBarLineScript();"></p:ajax>
+	                 				</p:selectOneMenu> 
+	                 			</div>
+	                 		</div>
+	                 	<div id="chart5" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+						</div>
+					</div>
+	    	    </p:panel>
+			</div>
+		</div>
+		<div class="row">	
+			<div class="col-md-6">
+				<!-- dashboard2 ehlel -->
+				<p:panel id = "lineChart" styleClass = "no-style-panel">
+				<div class="box box-danger">
+               		<div class="box-header with-border">
+                 		<center><h3 class="box-title" style="color: #067CD9;">Орлогын мэдээ /эмч бүрээр/</h3></center>
+                 		<div class="row flex-container margin-vertical">                 		
+                 			<div class = "col-md-12 flex-center-self ">
+                 				<p:selectOneMenu value = "#{dashboardController.cursorYear}">
+                 					<f:selectItem itemLabel="Жил" itemValue="2015"> </f:selectItem>
+                 					<f:selectItems value = "#{dashboardController.yearList}" var ="year" itemLabel="#{year}" itemValue="#{year}"></f:selectItems>
+                 					
+                 					<p:ajax event = "change" update= "form:lineChartScript"  listener="#{dashboardController.yearSelected()}" process="@this" oncomplete="drawLineChart();"></p:ajax>
+                 				</p:selectOneMenu>
+                 				<p:selectOneMenu value = "#{dashboardController.cursorSeason}">
+                 					<f:selectItem itemLabel="Бүх улирал" itemValue="6"> </f:selectItem>
+                 					<f:selectItems value = "#{dashboardController.seasonList}" var ="season" itemLabel="#{season}-р улирал" itemValue="#{season}"></f:selectItems>
+                 					<p:ajax event = "change" update= "form:lineChartScript"  listener="#{dashboardController.seasonSelected()}" process="@this" oncomplete="drawLineChart();" ></p:ajax>
+                 				</p:selectOneMenu>
+                 				<p:selectOneMenu value = "#{dashboardController.cursorMonth}">
+                 					<f:selectItems value = "#{dashboardController.monthList}" var ="month" itemLabel="#{month}-р сар" itemValue="#{month}"></f:selectItems>
+                 					<p:ajax event = "change" update= "form:lineChartScript"  listener="#{dashboardController.monthSelected()}" process="@this" oncomplete="drawLineChart();"></p:ajax>
+                 				</p:selectOneMenu>
+                 				<p:selectOneMenu value = "#{dashboardController.cursorWeek}">
+                 					<f:selectItem itemLabel="Бүх долоо хоног" itemValue="6" />
+                 					<f:selectItems value = "#{dashboardController.weekList}" var ="week" itemLabel="#{week}-р долоо хоног" itemValue="#{week}"></f:selectItems>
+                 					<p:ajax event = "change" update= "form:lineChartScript"  listener="#{dashboardController.weekSelected()}" process="@this" oncomplete="drawLineChart();"></p:ajax>
+                 				</p:selectOneMenu>
+                 				<p:selectOneMenu id = "soSelector" value = "#{dashboardController.cursorSubOrganization.pkId}">
+                 					<f:selectItems value = "#{dashboardController.subOrganizations}" var = "s" itemLabel="#{s.name}" itemValue="#{s.pkId}"  > 
+                 					</f:selectItems>
+                 					<p:ajax event = "change" update= "form:lineChartScript"  listener="#{dashboardController.subOrganizationSelected()}" process="@this" oncomplete="drawLineChart();"></p:ajax>
+                 				</p:selectOneMenu>
+                 			</div>
+                 				
+                 				
+                 				
+                 		</div>
+                 		<div id="chart2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+               		</div><!-- /.box-header -->
+	               	<div class="box-body no-padding">
+	                 	
+	               	</div><!-- /.box-body -->
+              	 	<div class="box-footer text-center">
+                 		
+               		</div>
+            	</div>
+				<!-- dashboard2 tugsgul -->
+				</p:panel>
+			</div>
+			<div class="col-md-6">
+				<!-- dashboard5 ehlel -->
+				<div class="box box-danger">
+               		<div class="box-header with-border">
+                 		<center><h3 class="box-title" style="color: #067CD9;">Хамгийн их үйлчилгээ хийсэн</h3></center>
+                 		<div style="height: 15px;"></div>
+                 	<div class="flex-container">
+							<label class="flex-center-self">Огноо :</label>
+							<p:calendar style="margin:0px 10px !important;" onchange="dateChangeHandler1();" pattern="yyyy-MM-dd"
+							styleClass="flex-center-self date-control" value = "#{dashboardController.beginDate}" navigator="true" id="be_date"> 
+								<p:ajax event="dateSelect" oncomplete="dateChangeHandler1();" update = "twicc" />
+							</p:calendar>
+							<label class="flex-center-self" style="margin-right: 10px !important;">-</label>
+							<p:calendar pattern="yyyy-MM-dd" styleClass="flex-center-self date-control" id="en_date"
+							value = "#{dashboardController.endDate}" onchange="dateChangeHandler1();"> 
+						 		<p:ajax event="dateSelect" oncomplete="dateChangeHandler1();" update="twicc"/>
+						 	</p:calendar>
+						 	<label class="flex-center-self" style="padding-top:5px; padding-left:10px; padding-right:5px;">Тасаг :</label>
+						 	<p:selectOneMenu value="#{dashboardController.subOrgaSelectOne}">
+						 		<f:selectItem itemValue="EXAMINATION" itemLabel="Шинжилгээ"></f:selectItem>
+								<f:selectItem itemValue="XRAY" itemLabel="Дүрс оношлогоо"></f:selectItem>
+								<f:selectItem itemValue="INSPECTIONPAYMENT" itemLabel="Эмчийн үзлэг"></f:selectItem>
+								<f:selectItem itemValue="SURGERY" itemLabel="Хагалгаа"></f:selectItem>	
+								<f:selectItem itemValue="TREATMENT" itemLabel="Эмчилгээ"></f:selectItem>
+								<f:selectItem itemValue="totalCost" itemLabel="Нийт"></f:selectItem>
+						 		<p:ajax event="change" listener="#{dashboardController.filterPaymentDtlType()}" update="form:twicc"> </p:ajax>	
+						 	</p:selectOneMenu>
+						 	<div style="margin-left: 140px;">
+						 		<p:commandButton onclick="tableToExcel('twics','Хамгийн их үйлчилгээ хийсэн');" value="EXCEL" />
+					 		</div>
+					 </div>
+					 	<p:remoteCommand name = "dateChangeHandler1" 
+					 	actionListener = "#{dashboardController.filterPaymentDtlType()}" update = "twicc"> 
+					 	</p:remoteCommand>
+                 		<div style="height: 15px;"></div>
+                 	<p:panel id="twicc" styleClass="no-style-panel">
+                 		<table width="630" id="twics">
+                 			<tr height="30">
+                 				<td colspan="3" style="font-size:16px; font-weight: 700; text-align: center;">Хамгийн их үйлчилгээ хийсэн</td>
+                 			</tr>
+                 			<tr>
+                 				<td colspan="3" style="text-align:right;">Байгууллагын нэр : #{userController.loggedInfo.organization.name}</td>
+                 			</tr>
+                 			<tr>
+                 				<td colspan="3" style="text-align:right;">Хугацаа : #{dashboardController.beginDateStr} - #{dashboardController.endDateStr}</td>
+                 			</tr>
+                 			<tr height="30">
+                 				<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Үйлчилгээний нэр</td>
+                 				<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Үйлчлүүлэгчдийн тоо</td>
+                 				<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Орлого</td>
+                 			</tr>
+                 		<ui:repeat var="item" value="#{dashboardController.paymentDtlType}" rowIndexVar="index">
+                 			<tr height="30">
+                 				<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{item.serviceName}</td>
+                 				<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{item.totalCustomer}</td>
+                 				<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{item.totalPayment}</td>
+                 			</tr>
+                 		</ui:repeat>
+                 		<ui:repeat var="items" value="#{dashboardController.paymentTotal}">
+                 			<tfoot>
+                 				<tr height="30">
+                 					<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">Нийт</td>
+                 					<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{items.totalCustomerNumber}</td>
+                 					<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{items.totalPaymentNumber}</td>
+                 				</tr>
+                 			</tfoot>
+                 		</ui:repeat>
+                 		</table>
+                 	</p:panel>
+               		</div><!-- /.box-header -->
+	               	<div class="box-body no-padding">
+	                 	
+	               	</div><!-- /.box-body -->
+              	 	<div class="box-footer text-center">
+                 		
+               		</div>
+            	</div>
+				<!-- dashboard5 tugsgul -->
+			</div>
+		</div>
+		<div class="row" style="height: 100%;">	
+			<div class="col-md-12">
+				<!-- dashboard5 ehlel -->
+				<div class="box box-danger">
+               		<div class="box-header with-border">
+                 		<center><h3 class="box-title" style="color: #067CD9;">Хамгийн их үзлэг хийсэн</h3></center>
+                 	<div class="flex-container" style="margin-top:20px;">
+							<label class="flex-center-self">Огноо:</label>
+							<p:calendar style="margin:0px 10px !important;" styleClass="flex-center-self date-control" id = "b_date" value = "#{dashboardController.monthBeginDate}"  onchange="dateChangeHandler();" pattern="yyyy-MM-dd"> 
+								<p:ajax event="dateSelect" oncomplete="dateChangeHandler();" update = "form:treeTable form:ewicc" />
+							</p:calendar>
+							<label class="flex-center-self" style="margin-right: 10px !important;">-</label>
+							<p:calendar id = "e_date" styleClass="flex-center-self date-control" value = "#{dashboardController.endDate}"  onchange="dateChangeHandler();" pattern="yyyy-MM-dd"> 
+						 		<p:ajax event="dateSelect" oncomplete="dateChangeHandler();" update = "form:treeTable form:ewicc"  />
+						 	</p:calendar>
+						 	<div style="margin-top:2px; margin-left:5px;">
+						 		<p:commandLink onclick = "PF('inspectionPrint').show();" styleClass="btn" update="form:message">
+									<i class="fa fa-download"/> Татах
+								</p:commandLink>
+						 	</div>
+					 </div>
+					 <p:remoteCommand name = "dateChangeHandler" action="#{dashboardController.employeeRequest()}" actionListener = "#{dashboardController.filterTreeTable()}" update = "form:ewicc form:treeTable" />
+					 <div style="height: 15px;"></div>
+                 		<p:treeTable value="#{dashboardController.treeDashboard}" var="tree" id="treeTable" emptyMessage="#{i18n['empty']}">
+							<p:column headerText="Кабинет / Эмчийн нэр">
+								<h:outputText value="#{tree.subOrganizationName}" />
+							</p:column>
+							<p:column headerText="Нийт">
+								<p:outputLabel value="#{tree.total()}" />
+							</p:column>
+							<p:column headerText="Төлбөрт">
+								<p:outputLabel value="#{tree.notInsurance()}" />
+							</p:column>
+							<p:column headerText="Төлбөргүй">
+								<p:outputLabel value="#{tree.isInsurance()}" />
+							</p:column>
+							<p:column headerText="Урьдчилсан">
+								<p:outputLabel value="#{tree.premilanary()}" />
+							</p:column>
+							<p:column headerText="Шууд">
+								<p:outputLabel value="#{tree.live()}" />
+							</p:column>
+							<p:column headerText="Яаралтай">
+								<p:outputLabel value="#{tree.express()}" />
+							</p:column>
+							<p:column headerText="Орох">
+								<p:outputLabel value="#{tree.inMood()}" />
+							</p:column>
+							<p:column headerText="Түр хадгалсан">
+								<p:outputLabel value="#{tree.saveMood()}" />
+							</p:column>
+							<p:column headerText="Орсон">
+								<p:outputLabel value="#{tree.outMood()}" />
+							</p:column>
+							<p:column headerText="Анхан">
+								<p:outputLabel value="#{tree.inspection()}" />
+							</p:column>
+							<p:column headerText="Давтан">
+								<p:outputLabel value="#{tree.reInspection()}" />
+							</p:column>
+						</p:treeTable>
+               		</div><!-- /.box-header -->
+	               	<div class="box-body no-padding">
+	                 	
+	               	</div><!-- /.box-body -->
+              	 	<div class="box-footer text-center">
+                 		
+               		</div>
+            	</div>
+				<!-- dashboard5 tugsgul -->
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="inspectionPrint" header="Хамгийн их үзлэг хийсэн" modal="true" styleClass="dialog-scroll" closeOnEscape="true" width="800" height="auto">
+			<p:panel styleClass="no-style-panel downloadTable" id="ewicc">
+               	<table width="630" id="ewics" >
+                	<tr height="30">
+                		<td colspan="13" style="font-size:16px; font-weight: 700; text-align: center;">Хамгийн их үзлэг хийсэн</td>
+                	</tr>
+                	<tr>
+                		<td colspan="13" style="text-align:right;">Байгууллагын нэр : #{userController.loggedInfo.organization.name}</td>
+                	</tr>
+                	<tr>
+                		<td colspan="13" style="text-align:right;">Хугацаа : #{dashboardController.monthBeginDateStr} - #{dashboardController.endDateStr}</td>
+                	</tr>
+                	<tr height="30">
+                		<td rowspan="2" style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Кабинет</td>
+                		<td rowspan="2" style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Эмчийн нэр</td>
+                		<td colspan="3" style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Нийт захиалга</td>
+                		<td colspan="3" style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Захиалгын төлөв</td>
+                		<td colspan="3" style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Үзлэгт</td>
+                		<td colspan="2" style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Үзлэгийн төлөв</td>
+                	</tr>
+                	<tr height="30">
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Нийт</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Төлбөрт</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Төлбөргүй</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Урьдчилсан</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Шууд</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Яаралтай</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Орох</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Түр хадгалсан</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Орсон</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Анхан</td>
+                		<td style="font-size: 13px; color:#F1F6F9; text-align:center; border: 1px solid #bce8f1; background-color:#33AFDE;">Давтан</td>
+                	</tr>
+                	<ui:repeat var="ewic" value="#{dashboardController.employeeRequestCount}">
+                	<tr height="30">
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.subOrganizationName}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.employeeFirstName}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.total}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.notInsurance}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.isInsurance}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.preliminary}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.live}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.express}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.inMood}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.saveMood}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.outMood}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.inspection}</td>
+                		<td style="font-size: 13px; text-align:center; border: 1px solid #bce8f1;">#{ewic.reInspection}</td>
+                	</tr>
+                	</ui:repeat>
+                </table>
+                <a class="btn btn-app" href="javascript:void()"
+					onclick="print1('ewics');"> <i
+					class="fa fa-print color-blue" /> ХЭВЛЭХ
+				</a>
+				<a class="btn btn-app"
+					onclick="tableToExcel('ewics','Хамгийн их үзлэг хийсэн');"
+					href="javascript:void(0)"> <i
+					class="fa fa-file-excel-o color-green"></i> XLS
+				</a>
+           	</p:panel>
+		</p:dialog>
+		<p:dialog widgetVar="customizePlan" header="Кабинетийн төлөвлөгөө тохируулах" modal="true" id="cpbd" styleClass = "dialog-scroll" resizable="false" width="500" height="300" closeOnEscape="true">
+		<p:panel id = "cp" styleClass = "no-style-panel">
+			<div class = "row flex-container">
+				<div class = "col-md-4 col-xs-12 col-sm-12 flex-center-self "><label>Кабинет: </label> </div>
+				<div class = "col-md-8 col-xs-12 col-sm-12 flex-center-self ">
+					<p:selectOneMenu style="width:100%;" value="#{dashboardController.cursorPriceHistory.subOrganizationPkId}" >  
+						<f:selectItems value="#{dashboardController.subOrganizations}" var="s" itemLabel="#{s.name}" itemValue="#{s.pkId}"/>
+						<p:ajax event="change" update = "form:priceList" process="@this" listener="#{dashboardController.updatePriceList()}" /> 
+					</p:selectOneMenu>
+			</div>
+		</div>
+		<div class = "row flex-container">
+			<div class = "col-md-4 col-xs-12 col-sm-12 flex-center-self "><label >Шинэ төлөвлөгөө:</label></div>			
+			<div class = "col-md-4 col-xs-12 col-sm-12 flex-center-self text-right">
+				<p:inputText id = "cursorPrice" value = "#{dashboardController.cursorPriceHistory.price}" style="width:100%;" type="number"
+				 	styleClass="text-right"> 
+					<f:convertNumber pattern="###,###,###.00"/>
+				</p:inputText>
+			</div>
+			<div class = "col-md-4 col-xs-12 col-sm-12 flex-center-self text-align-right"> 
+				<p:commandLink action="#{dashboardController.saveCursorPriceHistory}" styleClass="btn" 
+					update="form:message form:cursorPrice form:priceList">
+					<i class="fa fa-check"/> Хадгалах 
+				</p:commandLink>
+			</div>
+		</div>
+		<div class = "row flex-container">
+			<p:dataTable id="priceList" styleClass="myTable table-highlighted"							
+							value="#{dashboardController.monthlyPlan}" var="info"
+							rowIndexVar="index" 
+							emptyMessage="Хоосон байна">	
+				<p:column headerText="№" styleClass = "text-align-center" >#{index + 1}</p:column>			
+				<p:column  headerText="Төлөвлөгөөт орлого" styleClass = "text-align-center"> <p:outputLabel value = "#{info.price}"> <f:convertNumber pattern="###,###,###.00"></f:convertNumber></p:outputLabel></p:column>				
+				<p:column  headerText="Тохиргоо хийсэн огноо" styleClass = "text-align-center">#{info.getDateString(info.createdDate)}</p:column>
+			</p:dataTable>
+		</div>
+		</p:panel>
+		</p:dialog>
+		
+		<p:remoteCommand name = "loadData" actionListener = "#{dashboardController.loadData()}" update="form:treeTable"/>
+	</ui:define>
+	<ui:define name="script">
+	<script src="#{applicationController.path}js/highcharts/highcharts.js"></script>
+	<script src="#{applicationController.path}js/highcharts/exporting.js"></script>
+	<script>
+	//<![CDATA[
+		     $(document).ready(function () {
+		        	loadData();
+		        	drawLineChart();
+		        	drawBarChart();
+		        	drawSubOrgaLineChart();
+		        	drawSubBarLineScript();
+		        	dateChangeHandler();
+		        	dateChangeHandler1();
+		           });
+
+		   //]]>
+		   		</script>
+		           
+	<p:panel style="display:none;" id="lineChartScript">
+	<script>
+	//<![CDATA[					
+		var drawLineChart = function () {
+   			$('#chart2').highcharts({
+    			credits: {
+  	      		enabled: false
+  	  			},
+       		 title: {
+            	text: 'Орлогын мэдээ /эмч бүрээр/',
+//             	text: '',
+            	x: -20 //center
+        		},
+       		 lang:  {
+        		downloadJPEG: "JPEG Зургаар татах",
+        		downloadPNG : "PNG Зургаар татах",
+        		downloadSVG : "SVG татах",
+        		downloadPDF : "PDF татах",
+        		printChart  : "Чарыг хэвлэх", 
+        	},       
+        
+        yAxis: {
+            title: {
+                	text: ''
+            	},
+              
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '₮'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+       #{dashboardController.createLineChart()}
+    });
+}		
+
+//]]>
+		</script>
+		</p:panel>
+		
+		<p:panel style="display:none;" id="barChartScript">
+				<script>
+		//<![CDATA[		
+	var colors = Highcharts.getOptions().colors;
+	#{dashboardController.createAreaChart()}
+	var barChart;
+	var setChart = function(name, categories, data, color) {
+        barChart.xAxis[0].setCategories(categories);
+        while (barChart.series.length > 0){
+        	barChart.series[0].remove(true);
+        }
+        for (var i = 0; i < data.length; i++) {
+        	barChart.addSeries({
+                name: name[i],
+                data: data[i],
+        		color: colors[i]
+            });
+        }
+    }
+	var seriesName = ['Бодит орлого','Төлөвлөгөөт орлого'];
+	
+	var drawBarChart = function () {
+		
+		   barChart = new Highcharts.Chart({
+		    	credits: {
+		    	      enabled: false
+		    	  },
+		        chart: {
+		        	renderTo: 'chart1',
+		            type: 'column'
+		        },
+		        title: {
+// 		            text: 'Орлогын мэдээ / #{dashboardController.month} -р сар/'
+		            text: ''
+		        },
+		        subtitle: {
+		            text: ''
+		        },
+		  	  lang:
+	        	{
+	        		downloadJPEG: "JPEG Зургаар татах",
+	        		downloadPNG : "PNG Зургаар татах",
+	        		downloadSVG : "SVG татах",
+	        		downloadPDF : "PDF татах",
+	        		printChart  : "Чартыг хэвлэх", 
+	        	},
+		       	xAxis: {
+		       		categories: categories1
+		       	},
+		        yAxis: {
+		            title: {
+		                text: '',
+		                align: 'high'
+		            },
+		            labels: {
+		                overflow: 'justify'
+		            }
+		        },
+		        tooltip: {
+		            valueSuffix: 'төгрөг'
+		        },
+		        plotOptions: {
+		            bar: {
+		                dataLabels: {
+		                    enabled: true
+		                }
+		            },
+		            column: {
+		            	cursor: 'pointer',
+		            	point: {
+		            		events: {
+		            			click: function(){
+		            				var drilldown = this.drilldown;
+
+		                            if (drilldown) { // drill down
+		                                setChart(drilldown.name, drilldown.categories, [drilldown.data], drilldown.color);
+
+		                            } else { // restore
+		                                setChart(seriesName, categories1, [barChartData, barChartData2], 'white');
+
+		                            }
+		            			}
+		            		}
+		            	}
+		            }
+		        },		
+		        series: [
+		        	{
+		        		name: seriesName[0],
+		        		data: barChartData,
+		        		color: colors[0]
+		        	},{
+		        		name: seriesName[1],
+		        		data: barChartData2,
+		        		color: colors[1]
+		        	}
+		        ],
+		        exporting: {
+		        	chartOptions: {
+		        		title: {
+		        			text: 'Орлогын мэдээ / #{dashboardController.month} -р сар/'
+		        		}
+		        	}
+		        }
+		    });		    
+		}
+		//]]>
+		</script>
+		</p:panel>
+		<p:panel style="display:none;" id="subOrgaLineChartScript">
+			<script>
+//<![CDATA[		
+		var drawSubOrgaLineChart = function () {
+   			$('#chart3').highcharts({
+    			credits: {
+  	      		enabled: false
+  	  			},
+	       		 title: {
+// 	            	text: 'Орлогын мэдээ /эмч бүрээр/',
+	            	text: '',
+	        		},
+	       		 lang:  {
+	        		downloadJPEG: "JPEG Зургаар татах",
+	        		downloadPNG : "PNG Зургаар татах",
+	        		downloadSVG : "SVG татах",
+	        		downloadPDF : "PDF татах",
+	        		printChart  : "Чарыг хэвлэх", 
+	        	},       
+	        
+	        yAxis: {
+	            title: {
+	                	text: ''
+	            	},
+	              
+	            plotLines: [{
+	                value: 0,
+	                width: 1,
+	                color: '#808080'
+	            }]
+	        },
+	        tooltip: {
+	            valueSuffix: '₮'
+	        },
+	        legend: {
+	            layout: 'vertical',
+	            align: 'right',
+	            verticalAlign: 'top',
+	            borderWidth: 0,
+	        },
+	       #{dashboardController.createSubOrgaLineChart()}
+	    });
+	}
+//]]>
+			</script>
+		</p:panel>
+		<p:panel style="display:none;" id="subBarLineScript">
+		<script>
+		//<![CDATA[	
+			var drawSubBarLineScript = function(){
+				$('#chart5').highcharts({
+					credits: {
+		  	      		enabled: false
+		  	  			},
+			       		 title: {
+			            	text: 'Орлогын мэдээ /жилээр/',
+			        		},
+			       		 lang:  {
+			        		downloadJPEG: "JPEG Зургаар татах",
+			        		downloadPNG : "PNG Зургаар татах",
+			        		downloadSVG : "SVG татах",
+			        		downloadPDF : "PDF татах",
+			        		printChart  : "Чарыг хэвлэх", 
+			        	},       
+			        
+			        yAxis: {
+			            title: {
+			                	text: ''
+			            	},
+			              
+			            plotLines: [{
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }]
+			        },
+			        tooltip: {
+			            valueSuffix: '₮'
+			        },
+			        legend: {
+			            layout: 'vertical',
+			            align: 'right',
+			            verticalAlign: 'middle',
+			            borderWidth: 0,
+			        },
+			        xAxis: {
+			        	categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+			        },
+			        #{dashboardController.createSubAmbuLineChart()}
+			        
+				});
+			}
+			//]]>
+		</script>
+		</p:panel>
+		
+		
+	</ui:define>
+</ui:composition>

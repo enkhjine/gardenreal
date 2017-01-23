@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCashDtl" language="groovy" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="50" rightMargin="30" topMargin="30" bottomMargin="30" uuid="23d6739b-d17d-4971-b254-b73f7d34e5f5">
+	<property name="ireport.zoom" value="5.054470284992965"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="559"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\BIS\\Hospital\\Main\\Sources\\Java\\Web\\resource\\bis\\hospital\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="beginDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="printDate" class="java.lang.String"/>
+	<parameter name="userName" class="java.lang.String"/>
+	<parameter name="sumCashDtlMedical" class="java.math.BigDecimal"/>
+	<parameter name="sumCashDtlExamination" class="java.math.BigDecimal"/>
+	<parameter name="sumCashDtlTreatment" class="java.math.BigDecimal"/>
+	<parameter name="sumCashDtlPrescription" class="java.math.BigDecimal"/>
+	<parameter name="sumCashDtlTotal" class="java.math.BigDecimal"/>
+	<field name="departmentName" class="java.lang.String"/>
+	<field name="listFirst" class="java.util.List"/>
+	<field name="departmentSum" class="java.math.BigDecimal"/>
+	<field name="departmentCount" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="67" height="21" backcolor="#FFDAB9" uuid="b9692f97-6ca1-41c3-b2c6-ebc1424dbc88"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Код]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="67" y="20" width="261" height="21" backcolor="#FFDAB9" uuid="abf5ecc7-ed21-4dbf-ac8f-647d4aeac38a"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineWidth="0.0" lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Нэр]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="328" y="20" width="67" height="21" backcolor="#FFDAB9" uuid="b9692f97-6ca1-41c3-b2c6-ebc1424dbc88"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineWidth="0.0" lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Хүний тоо]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="395" y="20" width="120" height="21" backcolor="#FFDAB9" uuid="abf5ecc7-ed21-4dbf-ac8f-647d4aeac38a"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Дүн]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21"/>
+	</columnHeader>
+	<detail>
+		<band height="29"/>
+	</detail>
+	<pageFooter>
+		<band height="36"/>
+	</pageFooter>
+	<summary>
+		<band height="172" splitType="Stretch"/>
+	</summary>
+</jasperReport>

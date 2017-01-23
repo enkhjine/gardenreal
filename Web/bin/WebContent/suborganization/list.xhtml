@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Кабинет</h1>
+		<p:commandLink action="#{userController.url('suborganization_register')}" styleClass="btn" actionListener="#{infoController.newSubOrganization}">
+			<i class="fa fa-fw fa-plus-square" /> #{i18n['suborganization_register']}
+		</p:commandLink>
+		<ol class="breadcrumb">
+			<li class="active">Кабинет</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">#{i18n['list']}</h3>
+					</div>
+					<div class="col-xs-12">
+						<div class="row flex-container">
+							<div class="col-md-1 col-sm-12 col-xs-12 flex-center-self">
+								<label style="" for="asdasd">#{i18n['suborganization']}</label>
+							</div>
+							<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+								<p:selectOneMenu id="type" value="#{infoController.filterKey}" style="min-width: 100%;" filter="true">
+									<f:selectItem itemLabel = "#{i18n['all']}" itemValue = "all" > </f:selectItem>
+									<f:selectItems value = "#{infoController.subOrganizationTypee}" var = "sot" itemLabel="#{sot.name}" itemValue="#{sot.name}" > </f:selectItems>
+									<p:ajax event="change" process="@this" update = "form:subOrganizationList" listener="#{infoController.filterSubOrga(infoController.filterKey)}" />							
+								</p:selectOneMenu>
+							</div>
+						</div>
+					</div>
+					<div class="box-body">
+						<p:dataTable id="subOrganizationList" styleClass="myTable"
+							value="#{infoController.subOrganizations}" var="info"
+							rowIndexVar="index">
+							<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+							<p:column styleClass="text" headerText="#{i18n['suborganization_type']}">#{info.type}</p:column>
+							<p:column styleClass="text" headerText="#{i18n['suborganization_name']}">#{info.name}</p:column>
+							<p:column styleClass="short-number" headerText="#{i18n['room_number']}">#{info.roomNumber} </p:column>
+							<p:column styleClass="short-number" headerText="#{i18n['average_time']}">#{info.inspectionTime}</p:column>
+							<p:column styleClass="button-icon" headerText="#{i18n['edit']}">
+								<p:commandLink styleClass="fa fa-fw fa-edit color-blue"
+									action="#{infoController.modifiedSubOrganization(info)}"
+									 ></p:commandLink>
+							</p:column>
+							<p:column styleClass="button-icon" headerText="#{i18n['delete']}">
+								<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+									action="#{infoController.deleteSubOrganization(info)}"
+									oncomplete="PF('confirmDialogDelete').show();" ></p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="confirmDialogDelete" modal="true"
+			resizable="false" width="300" styleClass="confirmDialog" closeOnEscape="true">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						#{i18n['sure_to_delete']}
+					</td>
+				</tr>
+			</table>
+			<div class="col-xs-12" >
+				<div class="row">
+				<div class="col-md-1"/>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn" action="#{infoController.deleteSubOrganization}" >
+								<i class="fa fa-fw fa-check"/> #{i18n['delete']}</p:commandLink>
+				</div>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn redBtn" oncomplete="PF('confirmDialogDelete').hide();">
+								<i class="fa fa-fw fa-times"/> #{i18n['cancel']}</p:commandLink>
+				</div>
+				<div class="col-md-1"/>
+				</div>
+			</div>
+		</p:dialog>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

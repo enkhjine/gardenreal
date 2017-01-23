@@ -1,0 +1,1138 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:c="http://java.sun.com/jsp/jstl/core"
+		xmlns:p="http://primefaces.org/ui" template="drequesto.xhtml">
+		<ui:define name="modulexray">
+			<div class="row">
+				<div class="display-table col-md-12" style="width: 100%;">
+					<div class="display-table-row">
+						<p:commandLink styleClass="display-table-cell btn blueBtn"
+							onclick="PF('diagnose-dtl-dialog').show()"
+							actionListener="#{inspectionController.fillXrayRequest()}">
+								    		Дүрс оношилгоо
+								    	</p:commandLink>
+						<p:commandLink styleClass="display-table-cell btn blueBtn"
+							oncomplete="PF('examination-dtl-dialog').show()"
+							actionListener="#{inspectionController.getOcsData()}"
+							update="form:doom" process="@this">
+								    		Шинжилгээний хариу
+								    	</p:commandLink>
+						<p:commandLink styleClass="display-table-cell btn blueBtn"
+							onclick="PF('surgery-dtl-dialog').show()"
+							actionListener="#{inspectionController.getCustomerSurgery()}"
+							update="form:customerSurgeryTable">
+								    		Хагалгаа жагсаалт
+								    	</p:commandLink>
+						<p:commandLink styleClass="display-table-cell btn blueBtn"
+							onclick="PF('treatment-dtl-dialog').show()"
+							actionListener="#{inspectionController.getCustomerTreatment()}"
+							update="form:customerTreatmentTable">
+								    		Эмчилгээний  явц
+								    	</p:commandLink>
+					</div>
+				</div>
+			</div>
+			<p:accordionPanel multiple="true" id="xrayInspectionColono">
+			  <p:tab title="Endoscopic findings">
+			  <div class="row">
+			   <div class="col-md-12">
+			    <div class="col-md-2">
+			    <p:panel styleClass="no-style-panel" id="qo">
+									<div class="row">
+										<div class="col-md-12 margin-top">
+											<p:panelGrid columns="2" styleClass="form-table">
+												<p:commandLink styleClass="btn" onclick="uploadImage();"
+													actionListener="#{xrayController.setImageType('colonoScopic')}">
+													<i class="fa fa-fw fa-upload" /> Зураг сонгох
+															</p:commandLink>
+											</p:panelGrid>
+										</div>
+										<div class="col-md-12 margin-top">
+											<p:panel styleClass="no-style-panel no-padding" id="galleria">
+												<ui:repeat var="attachment"
+													value="#{xrayController.xrayColonoAttachmens}">
+													<div
+														style="float: left; text-align: center; position: relative;">
+														<p:graphicImage
+															value="#{xrayController.getColonoDynamicImage(xrayController.getXrayColonoAttachmens().indexOf(attachment))}"
+															cache="false" height="50" onclick="showModalImage(this);"
+															style="margin-right: 5px;" styleClass="zoom">
+															<f:param name="image_id"
+																value="#{xrayController.getXrayColonoAttachmens().indexOf(attachment)}" />
+														</p:graphicImage>
+														<br />
+														<p:commandLink
+															actionListener="#{xrayController.setAttachment(attachment)}"
+															oncomplete="PF('attachment-name').show();">
+															<i class="fa fa-edit color-blue" data-toggle="tooltip"
+																data-placement="bottom" title="Зурганд нэр өгөх" />
+														</p:commandLink>
+														<p:commandLink
+															actionListener="#{inspectionController.deleteFile(xrayController.xrayColonoAttachmens, attachment)}"
+															oncomplete="updateXrayAtt()">
+															<i class="fa fa-trash color-red" data-toggle="tooltip"
+																data-placement="bottom" title="Устгах" />
+														</p:commandLink>
+													</div>
+												</ui:repeat>
+	
+												<p:remoteCommand name="updateXrayAtt" update="qo" />
+												<p:remoteCommand name="provideToggle"  actionListener="#{xrayController.provideToggleListener}"/>
+												<p:remoteCommand name="endoScopicToggle" actionListener="#{xrayController.endoScopicToggleListener}"/>
+											</p:panel>
+										</div>
+										<p:fileUpload id="fileUpload"
+											fileUploadListener="#{xrayController.upload1}"
+											style="display:none;" onstart="showLoader()"
+											oncomplete="hideLoader();" onerror="hideLoader();"
+											sizeLimit="100000000" multiple="true" auto="true"
+											description="#{i18n['choose_image']}" />
+									</div>
+								</p:panel>
+			     </div>
+			    <div class="col-md-10">
+			     <div class="row">
+			     <div class="col-md-12 margin-bottom">
+			    <div class="form-title" style="cursor:pointer" onclick="bToggle('Бэлтгэл')">Бэлтгэл<i id="rash-chevron1" class="pull-right fa fa-chevron-left"></i></div>
+			       <div id="bId" style="display:none">
+			        <div class="col-md-12 margin-bottom">
+			         <div class="col-md-3">
+			          <div class="col-md-4">Эмчилгээ</div>
+			         <div class="col-md-8">
+			          <p:selectOneMenu style="width:120px" value="#{xrayController.customerColonoscopic.treatmentCol}">
+			           <f:selectItem itemLabel="1" itemValue="0"/>
+			           <f:selectItem itemLabel="2" itemValue="1"/>
+			           </p:selectOneMenu>
+			          </div>
+			          </div>
+			         <div class="col-md-3">
+			         <div class="col-md-5">Таниулах  зөвшөөрөл</div>
+			          <div class="col-md-7">
+			           <p:selectOneMenu value="#{xrayController.customerColonoscopic.grantCol}">
+			           <f:selectItem itemLabel="Сонгох" itemValue="0" />
+			           <f:selectItem itemLabel="Авсан" itemValue="1"/>
+			           <f:selectItem itemLabel="Аваагүй" itemValue="2"/>
+			           </p:selectOneMenu>
+			           </div>
+			          </div>
+			          <div class="col-md-3">
+			           <div class="col-md-5">Бэлтгэл  эм  тариа</div>
+			           <div class="col-md-7">
+			           	<p:inputTextarea  rows="2" style="width:100%" 
+			           						value="#{xrayController.customerColonoscopic.medicineCol}"/> </div>
+			           </div>
+			           <div class="col-md-3">
+			            <div class="col-md-5">Унтуулгатай мэдээ алдуулалт</div>
+			           <div class="col-md-6">
+			            <p:selectOneMenu style="width:125px" value="#{xrayController.customerColonoscopic.mazeNews}" >
+			             <f:selectItem itemLabel="1" itemValue="0"/>
+			             <f:selectItem itemLabel="2" itemValue="1"/>
+			             </p:selectOneMenu>
+			            </div>
+			            </div>
+			         </div>
+			         <div class="col-md-12  margin-bottom">
+			           <div class="col-md-3">
+			            <div class="col-md-12 margin-bottom">
+			              <div class="col-md-4">Дурангийн  багаж</div>
+			              <div class="col-md-8"> 
+			              		<p:inputText  style="width:100%"
+			              						value="#{xrayController.customerColonoscopic.microscope}"/> </div>
+			             </div>
+			            </div>
+			            <div class="col-md-3">
+			             <div class="colmd-12 margin-bottom">
+			              <div class="col-md-4">Гэдэс цэвэрлэсэн бодис</div>
+			              <div class="col-md-8">
+			               <p:inputTextarea  rows="3" style="width:100%"
+			               					value="#{xrayController.customerColonoscopic.colonoClean}"></p:inputTextarea>
+			               </div>
+			              </div>
+			            </div>
+			            <div class="col-md-3">
+			             <div class="col-md-12  margin-bottom">
+			              <div class="col-md-4">Дурангийн үргэлжлэх хугацаа</div>
+			              <div class="col-md-8"> 
+			              <p:inputText  type="number" rows="3"  style="100%"
+			              				value="#{xrayController.customerColonoscopic.microscopeTime}"		/> </div>
+			              </div>
+			            </div>
+			          </div>
+			        </div>
+			       </div>
+			    <div class="col-md-12"><div class="form-title" style="cursor:pointer" onclick="endoToggle('Endoscopic findings')">
+			    Endoscopic findings<i id="rash-endo" class="pull-right fa fa-chevron-left"></i></div> </div>
+			   <div id="endoId" style="display:none">
+			   <div class="col-md-12 margin-bottom margin-top">
+			    <div >
+			    <div class="col-md-6">
+			      <div class="col-md-4">Colonoscopy</div>
+			      <div class="col-md-6">
+			       <p:selectOneRadio value="#{xrayController.customerColonoscopic.colonoscopy}" >
+			          <f:selectItem itemLabel="First time" itemValue="0"></f:selectItem>
+			           <f:selectItem itemLabel="Revisit" itemValue="1"></f:selectItem>
+			          </p:selectOneRadio>
+			        </div>
+			        </div>
+			    <div class="col-md-6">
+			     <div class="col-md-2">Preparation</div>
+			      <div class="col-md-4">
+			       <p:selectOneRadio value="#{xrayController.customerColonoscopic.preparation}" >
+			          <f:selectItem itemLabel="Good" itemValue="0"></f:selectItem>
+			           <f:selectItem itemLabel="Mild" itemValue="1"></f:selectItem>
+			            <f:selectItem itemLabel="Poor" itemValue="2"></f:selectItem>
+			          </p:selectOneRadio>
+			        </div>
+			      </div>
+			    
+			    </div>
+			    </div>
+			   <div class="row">
+			     <div class="col-md-12 margin-bottom">
+			     
+			      <div class="col-md-4">
+			        <div class="col-md-4">Vascular pattern </div>
+			        <div class="col-md-6">
+			        <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.vascularPattern}">
+			          <f:selectItem itemLabel="Normal pattern" itemValue="0" />
+			          <f:selectItem itemLabel="Acute cases" itemValue="1" />
+			          <f:selectItem itemLabel="Chronic cases " itemValue="2" />
+	   		          <f:selectItem itemLabel="Less florid cases " itemValue="3" />
+	   		          <p:ajax event="change" update="vascularPatternPanel"/>
+	   		          <p:ajax event="change" update="chronicPatternPanel"/>
+			         </p:selectOneMenu> 
+			         </div>
+		         </div>
+	
+			       <div class="col-md-4">
+			        <div class="col-md-4">Surface </div>
+			        <div class="col-md-6">
+			         <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.surface}">
+			          <f:selectItem itemLabel="Normal pattern" itemValue="0" />
+			          <f:selectItem itemLabel="Granular " itemValue="1" />
+			          <f:selectItem itemLabel="Red colored surface " itemValue="2" />
+	   		          <f:selectItem itemLabel="Erytema of the mucosa " itemValue="3" />
+	   		          <f:selectItem itemLabel="Uneven " itemValue="4" />
+			          <f:selectItem itemLabel="Pseudopolyps  " itemValue="5" />
+			          <f:selectItem itemLabel="Imflammatory hyperplasia " itemValue="6" />
+	   		          <f:selectItem itemLabel="with dispesed ligth reflex  " itemValue="7" />
+	   		          <f:selectItem itemLabel="increased redness " itemValue="8" />
+			         </p:selectOneMenu>
+			         </div>
+			       </div>
+			       <div class="col-md-4">
+			        <div class="col-md-4">Friability  </div>
+			        <div class="col-md-6">
+			        <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.friability}">
+			          <f:selectItem itemLabel="Normal " itemValue="0" />
+			          <f:selectItem itemLabel="Increased with bleeding at the slightest touch  " itemValue="1" />
+			          <f:selectItem itemLabel="Increased friability " itemValue="2" />
+	   		          <f:selectItem itemLabel="often punctiform  " itemValue="3" />
+			         </p:selectOneMenu>
+			         </div>
+			         </div>
+			    <p:panel id="vascularPatternPanel" styleClass="no-style-panel">
+		          <c:if test="#{xrayController.customerColonoscopic.vascularPattern=='1'}">
+		             <div class="col-md-12">
+		              <p:selectOneRadio>
+		               <f:selectItem itemLabel="Absent in acute cases " itemValue="0"/>
+		               <f:selectItem itemLabel="Pale" itemValue="1"/>
+		                </p:selectOneRadio>
+		              </div>
+		            </c:if>
+		          </p:panel>
+		         <p:panel id="chronicPatternPanel" styleClass="no-style-panel">
+		          <c:if test="#{xrayController.customerColonoscopic.vascularPattern=='2'}">
+		             <div class="col-md-12">
+		              <p:selectOneRadio value="#{xrayController.customerColonoscopic.sluredChooseValue}">
+		               <f:selectItem itemLabel="Slured  " itemValue="0"/>
+		               <f:selectItem itemLabel="irregular" itemValue="1"/>
+		                </p:selectOneRadio>
+		              </div>
+		            </c:if>
+		          </p:panel>
+			       </div>
+			    <div class="col-md-12 margin-bottom">
+			        <div class="col-md-4">
+			        <div class="col-md-4">Edema  </div>
+			        <div class="col-md-6">
+			         <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.edema}">
+			          <f:selectItem itemLabel="None" itemValue="0" />
+			          <f:selectItem itemLabel="Folds are theckened" itemValue="1" />
+			          <f:selectItem itemLabel="Colon wall stiffened " itemValue="2" />
+	   		          <f:selectItem itemLabel="Edematous " itemValue="3" />
+			         </p:selectOneMenu>
+			          </div>
+			       </div>
+			       <div class="col-md-4">
+			        <div class="col-md-4"> Secretion</div>
+			        <div class="col-md-6">
+			         <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.secretion}">
+			          <f:selectItem itemLabel="Normal " itemValue="0" />
+			          <f:selectItem itemLabel="Pus " itemValue="1" />
+			          <f:selectItem itemLabel="Pus mixed in stool " itemValue="2" />
+	   		          <f:selectItem itemLabel="Passage of blood " itemValue="3" />
+	   		          <f:selectItem itemLabel="Necrotic mucosa " itemValue="4" />
+			          <f:selectItem itemLabel="Blood mixed in stool  " itemValue="5" />
+			          <f:selectItem itemLabel="Mucus " itemValue="6" />
+			         </p:selectOneMenu>
+			          </div>
+			         </div>
+			        
+			        <div class="col-md-4">
+			        <div class="col-md-4">Ulceration  </div>
+			        <div class="col-md-6">
+			         <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.ulceration}">
+			          <f:selectItem itemLabel="None " itemValue="0" />
+			          <f:selectItem itemLabel="Ulcerative colitis " itemValue="1" />
+			          <f:selectItem itemLabel="Crohn's disease  " itemValue="2" />
+			          <p:ajax event="change"  update="@(.ulcerationPanel)" />
+			          <p:ajax event="change"  update="@(.chDiseasePanel)" />
+			         </p:selectOneMenu>
+			        <p:panel  styleClass="no-style-panel ulcerationPanel">
+			         <c:if test="#{xrayController.customerColonoscopic.ulceration=='1'}">
+			          <div class="col-md-12">
+			           <p:selectOneRadio value="#{xrayController.customerColonoscopic.ulcerationChooseValue}">
+			            <f:selectItem itemLabel="with flat erosions" itemValue="0"/>
+			            <f:selectItem itemLabel="not always present  "  itemValue="1"/>
+			           </p:selectOneRadio>
+			           </div>
+			          </c:if>
+			        </p:panel>
+			        <p:panel  id="chDiseasePanel" styleClass="no-style-panel ulcerationPanel">
+			         <c:if test="#{xrayController.customerColonoscopic.ulceration=='2'}">
+			          <div class="col-md-12">
+			           <p:selectOneMenu style="width:140px;margin-top:5px" value="#{xrayController.customerColonoscopic.crohnChooseValue}">
+			            <f:selectItem itemLabel="none" itemValue="0" />
+			            <f:selectItem itemLabel="with circumscribed " itemValue="1" />
+			            <f:selectItem itemLabel="with solitary ulcers " itemValue="2" />
+			            <f:selectItem itemLabel="with large fissures " itemValue="3" />
+			            <f:selectItem itemLabel="with fistula" itemValue="4" />
+			            <f:selectItem itemLabel="with aphtous ulcer " itemValue="5" />
+			            <f:selectItem itemLabel="with deep longitudinal ulcer  " itemValue="6" />
+			            <f:selectItem itemLabel="with normally appeared altered mucosa" itemValue="7" />
+			            <f:selectItem itemLabel="with minimally altered mucosa " itemValue="8" />
+			             </p:selectOneMenu>
+			           </div>
+			          </c:if>
+			        </p:panel>
+			          </div>
+			       </div>
+			      </div>
+			     <div class="col-md-12 margin-bottom" >
+			       <div class="col-md-4">
+			        <div class="col-md-4">Localisation </div>
+			        <div class="col-md-6">
+			        <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.localisation}">
+			        <f:selectItem itemLabel="none" itemValue="0"/>
+			          <f:selectItem itemLabel="Ulcerative colitis  " itemValue="1" />
+			          <f:selectItem itemLabel="Crohn's disease  " itemValue="2" />
+			          <p:ajax  event="change" update="@(.colitisTwoPanel)"/>
+			         </p:selectOneMenu>
+			         </div>
+			         <p:panel styleClass="no-style-panel colitisTwoPanel">
+			           <div class="col-md-12">
+			             <c:if test="#{xrayController.customerColonoscopic.localisation=='1'}">
+			               <p:selectOneRadio value="#{xrayController.customerColonoscopic.localUlcerativeChooseValue}">
+			                <f:selectItem itemLabel="In rectum" itemValue="0" />
+			                <f:selectItem itemLabel="Associated with other colon " itemValue="1"/>
+			                </p:selectOneRadio>
+			              </c:if>
+			            </div>
+			          </p:panel>
+			          <p:panel styleClass="no-style-panel colitisTwoPanel">
+			           <div class="col-md-12">
+			             <c:if test="#{xrayController.customerColonoscopic.localisation=='2'}">
+			               <p:selectOneMenu style="margin-top:5px" value="#{xrayController.customerColonoscopic.localChoneChooseValue}">
+			                <f:selectItem itemLabel="Rectum often	 not involved"/>
+			                <f:selectItem itemLabel="Proximal colon involved "/>
+			                <f:selectItem itemLabel="Changes in Ileum "/>
+			                </p:selectOneMenu>
+			              </c:if>
+			            </div>
+			          </p:panel>
+			         </div>
+			       <div class="col-md-4">
+			        <div class="col-md-4">Impression </div>
+			         <div class="col-md-6">
+			          <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.impression}">
+			           <f:selectItem itemLabel="none" itemValue="0" />
+			           <f:selectItem itemLabel="Polyps " itemValue="1" />
+			           <f:selectItem itemLabel="Polyposis" itemValue="2" />
+			           <f:selectItem itemLabel="Parasites " itemValue="3"/>
+			           <f:selectItem itemLabel="Diverticulosis " itemValue="4" />
+			           <f:selectItem itemLabel="Tumors " itemValue="5"/>
+			           <f:selectItem itemLabel="Perianal hematoma" itemValue="6"/>
+			           <f:selectItem itemLabel="External hemorrhoids " itemValue="7"/>
+			           <f:selectItem itemLabel="Fistulae " itemValue="8"/>
+			           <f:selectItem itemLabel="Crohn's disease " itemValue="9"/>
+			           <f:selectItem itemLabel="IBD" itemValue="10"/>
+			           <f:selectItem itemLabel="Anastomoses " itemValue="11"/>
+			           <f:selectItem itemLabel="Solitary rectal ulcer " itemValue="12" />
+			           <f:selectItem itemLabel="Anitis " itemValue="13"/>
+			           <f:selectItem itemLabel="Chronic fissure  " itemValue="14"/>
+			           <f:selectItem itemLabel="Bleeeding" itemValue="15"/>
+			           <f:selectItem itemLabel="Foreign bodies " itemValue="16"/>
+			            </p:selectOneMenu> 
+			         </div>
+			         </div>
+			      <div class="col-md-4">
+			       <div class="col-md-4">Recommendation  </div>
+			        <div class="col-md-6">
+			         <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.recommendation}">
+			           <f:selectItem itemLabel="none" itemValue="0" />
+			           <f:selectItem itemLabel="Follow up 2 years later " itemValue="1"/>
+			            </p:selectOneMenu>  </div>
+			         </div>
+			       </div>
+			       <div class="col-md-12  margin-bottom">
+			       <div class="col-md-4">
+			        <div class="col-md-4">Complication </div>
+			        <div class="col-md-6">
+			        <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.complication}">
+			         <f:selectItem itemLabel="none" /> </p:selectOneMenu> 
+			         </div>
+			         </div>
+			       <div class="col-md-4">
+			        <div class="col-md-4">Endoscopic treatment </div>
+			        <div class="col-md-6">
+			         <p:selectOneMenu style="width:150px" value="#{xrayController.customerColonoscopic.endoscopic}">
+			           <f:selectItem itemLabel="none" itemValue="0"/>
+			           <f:selectItem itemLabel="EMR" itemValue="1"/> 
+			           <f:selectItem itemLabel="ESD"  itemValue="2"/> 
+			           <f:selectItem itemLabel="Polypectomy" itemValue="3" /> 
+			           <f:selectItem itemLabel="Stent replacement" itemValue="4"/>
+			           <f:selectItem itemLabel="Hemostasis" itemValue="5"/> 
+			          </p:selectOneMenu>  
+			         </div>
+			       </div>
+			       </div>		       
+			     </div>
+			     </div>
+			    </div>
+			    </div>
+			   </div>
+			   </div>
+			    </p:tab>
+			  </p:accordionPanel>
+			  <div class="row margin-top">
+				<div class="col-md-9"></div>
+				<div class="col-md-1">
+					<p:commandLink value="Түр хадгалах" styleClass="btn blueBtn pull-right"
+						style="min-width:95%;" 
+						actionListener="#{xrayController.saveColonoScopic()}" rendered="#{xrayController.xrayDtlMood.requestSaveMood!=2}" />
+				</div>
+				<div class="col-md-1">
+					<p:commandLink value="Дуусгах"  styleClass="btn blueBtn pull-right"
+						action="#{xrayController.saveColonoScopicComplete()}" rendered="#{xrayController.xrayDtlMood.requestSaveMood!=2}"
+						style="min-width:95%;" 
+						/>
+				</div>
+				<div class="col-md-1">
+					<p:commandLink value="Хэвлэх" styleClass="btn blueBtn pull-right"
+						style="min-width:95%" oncomplete="PF('xrayColonoPrint').show();" 
+						actionListener="#{xrayController.printColono()}" update="form:xrayPrintPanel"/>
+				</div>
+			</div>
+	
+	
+			<p:dialog widgetVar="examination-dtl-dialog"
+				styleClass="dialog-scroll" header="Шинжилгээ" minimizable="true"
+				closeOnEscape="yes" width="750" height="500">
+				<div class="row">
+					<div class="col-md-12 margin-bottom">
+						<p:panel id="doom" styleClass="no-style-panel">
+							<p:commandLink styleClass="btn"
+								onclick="$(PF('allExaTable').jqId).show();$(PF('exaTable').jqId).hide()">
+			    				Бүгд
+			    			</p:commandLink>
+							<ui:repeat var="exam"
+								value="#{inspectionController.customerExaminations}">
+								<p:commandLink styleClass="btn"
+									action="#{inspectionController.getExaminationResults(exam)}"
+									oncomplete="$(PF('allExaTable').jqId).hide();$(PF('exaTable').jqId).show()">
+				    				#{exam.examinationName} (#{exam.count})
+				    			</p:commandLink>
+							</ui:repeat>
+						</p:panel>
+					</div>
+				</div>
+				<p:dataTable styleClass="myTable" id="examination-info"
+					widgetVar="allExaTable" style="display:none;"
+					value="#{inspectionController.listExaminationRequestCompleted}"
+					var="dtl" rowIndexVar="rowIndex" emptyMessage="Хоосон байна">
+					<p:column headerText="№" styleClass="id">
+							#{rowIndex + 1}						
+						</p:column>
+					<p:column headerText="Огноо" styleClass="date-time">
+							#{dtl.getDateString(dtl.getRequestDate())}						
+						</p:column>
+					<p:column headerText="Шинжилгээний нэр" styleClass="text">
+							#{dtl.examinationName}						
+						</p:column>
+					<p:column headerText="Лаборант" styleClass="text">
+							#{dtl.employeeName}
+						</p:column>
+					<p:column headerText="Илгээсэн эмч" styleClass="text">
+							#{dtl.employeeName}
+						</p:column>
+				</p:dataTable>
+				<p:panel styleClass="no-style-panel" widgetVar="exaTable" id="qop">
+					<div class="ui-datatable ui-widget myTable">
+						<div class="ui-datatable-tablewrapper">
+							<table>
+								<thead id="form:examination-info_head">
+									<tr>
+										<th class="ui-state-default id"><span>Элемент</span></th>
+										<th class="ui-state-default id"><span>Лавлах хэмжээ</span></th>
+										<th class="ui-state-default id"><span>Нэгж</span></th>
+										<ui:repeat var="req"
+											value="#{inspectionController.currentCustomerExaminations}">
+											<th class="ui-state-default date-time"><span>#{req.getDateString(req.requestDate)}</span>
+											</th>
+										</ui:repeat>
+									</tr>
+								</thead>
+								<tbody id="form:examination-info_data"
+									class="ui-datatable-data ui-widget-content">
+	
+									<ui:repeat var="result"
+										value="#{inspectionController.examinationResults}">
+	
+										<tr class="ui-widget-content ui-datatable-even">
+											<td class="text">#{result.evqName}</td>
+											<td class="text">#{result.range}</td>
+											<td class="text">#{result.measurement}</td>
+											<ui:repeat var="value" value="#{result.values}">
+												<td class="short-number">#{value}</td>
+											</ui:repeat>
+										</tr>
+	
+									</ui:repeat>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</p:panel>
+			</p:dialog>
+			<p:dialog widgetVar="examinationEquals" header="Дэлгэрэнгүй"
+				width="800" height="500">
+			</p:dialog>
+			<p:dialog widgetVar="exaResultPrint" id="exaResultPrint" height="500"
+				width="800" closeOnEscape="true" resizable="false"
+				styleClass="dialog-scroll" header="Шинжилгээний үзүүлэлтүүд">
+				<p:panel styleClass="no-style-panel" id="dubuQo">
+					<ui:repeat var="e" value="#{customerController.filteredErc}"
+						varStatus="status">
+						<table id="tablePrintFromcl" style="width: 100%;">
+							<tr>
+								<td colspan="4"
+									style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+									АШУҮИС-ийн "ИХ СУРГУУЛИЙН НЭГДСЭН ЭМНЭЛЭГ"</td>
+							</tr>
+							<tr>
+								<td colspan="2"
+									style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; padding: 12px 0px;">
+									Овог, Нэр : #{e.customer.lastName} , #{e.customer.firstName}</td>
+								<td colspan="2"
+									style="font-size: 13px; font-family: Times New Roman; text-align: right; vertical-align: middle; padding: 12px 0px;">
+									Нас, Хүйс : #{e.customer.age} , #{e.customer.genderString}</td>
+							</tr>
+							<tr>
+								<td colspan="4"
+									style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+									#{e.examinationName}</td>
+							</tr>
+							<tr>
+								<td colspan="4"
+									style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; padding-top: 12px;">
+									<table style="border: 0.1px solid black; width: 100%"
+										cellpadding="0" cellspacing="0">
+										<tr>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												№</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Асуумж</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Лавламж</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												Нэгж</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												Хариу</td>
+										</tr>
+										<ui:repeat value="#{e.exaResults}" var="r" varStatus="index">
+											<tr>
+												<td
+													style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+													#{index.index+1}</td>
+												<td
+													style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+													#{r.evqName}</td>
+												<td
+													style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+													#{r.range}</td>
+												<td
+													style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+													#{r.measurement}</td>
+												<td
+													style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+													#{r.value}</td>
+											</tr>
+										</ui:repeat>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2"
+									style="font-size: 12px; font-family: Times New Roman; padding: 12px 0px; text-align: left;">Эмч:
+								</td>
+								<td colspan="2"
+									style="font-size: 12px; font-family: Times New Roman; padding: 12px 60px 0px 0px; text-align: right;">Лаборант:
+								</td>
+							</tr>
+	
+						</table>
+						<!-- <p:panel styleClass = "no-style-panel" rendered="#{!status.last}" > 
+						<div  style = "page-break-before: always;" />
+					</p:panel> -->
+					</ui:repeat>
+					<p
+						style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; text-align: center;">Хэвлэсэн
+						огноо:
+						#{customerController.getDateString(customerController.currentDate)}</p>
+				</p:panel>
+				<a class="btn btn-app" href="javascript:void(0)"
+					onclick="print1('form:dubuQo');"> <i
+					class="fa fa-print color-blue"></i> Хэвлэх
+				</a>
+				<a class="btn btn-app" onclick="printPdf();"
+					href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+					PDF <p:remoteCommand process="@this" name="printToPDF" />
+				</a>
+				<a class="btn btn-app"
+					onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+					href="javascript:void(0)"> <i
+					class="fa fa-file-excel-o color-green"></i> XLS
+				</a>
+			</p:dialog>
+	
+			<p:dialog widgetVar="showImage" modal="false"
+				header="#{i18n['xray_image']}" resizable="true"
+				styleClass="dialog-scroll" width="800" height="550" id="showImage"
+				closeOnEscape="true">
+				<div class="row">
+					<p:graphicImage id="pppp"
+						style="max-width:100%; max-height:100v; position:absolute;"
+						value="#{xrayController.imageRentgen}" cache="false" />
+				</div>
+			</p:dialog>
+	
+			<p:dialog widgetVar="diagnose-dtl-dialog" styleClass="dialog-scroll"
+				header="Оношилгоо" height="400" width="800" minimizable="true">
+				<p:panel styleClass="no-style-panel" id="xrayInfoUpdate">
+					<div class="content">
+						<div class="row" style="margin-top: 10px; margin-botton: 10px;">
+							<div class="col-md-4">
+								<p style="font-weight: 900; float: left;">Овог, Нэр :</p>
+								<p>#{inspectionController.selectedCustomer.lastName} ,
+									#{inspectionController.selectedCustomer.firstName}</p>
+							</div>
+							<div class="col-md-4">
+								<p style="font-weight: 900; float: left;">Нас, Хүйс :</p>
+								<p>#{inspectionController.selectedCustomer.age} ,
+									#{inspectionController.selectedCustomer.genderString}</p>
+							</div>
+							<div class="col-md-4">
+								<p style="font-weight: 900; float: left;">РД :</p>
+								<p>#{inspectionController.selectedCustomer.regNumber}</p>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<p:dataTable id="tableXrayInfo" styleClass="myTable"
+								value="#{inspectionController.xrayRequests}" var="info"
+								rowIndexVar="index" emptyMessage="#{i18n['empty']}"
+								paginator="true" paginatorPosition="bottom">
+								<p:column styleClass="index" headerText="№"> #{index + 1}</p:column>
+								<p:column styleClass="date"
+									headerText="#{i18n['sent_by_doctor']} / #{i18n['date']}">#{info.dateString} <br /> #{info.employeeName}  </p:column>
+								<p:column styleClass="text" headerText="#{i18n['xray_name']}">#{info.xrayName} </p:column>
+								<p:column styleClass="text" headerText="#{i18n['description']}"> #{info.description} </p:column>
+								<p:column styleClass="text" headerText="#{i18n['image']}">
+									<ui:repeat value="#{info.imgList}" var="il" varStatus="index">
+										<h:commandLink value="#{il}"
+											rendered="#{info.image != null and !il.endsWith('jpg')}"
+											actionListener="#{xrayController.showSelectedImage(info, il)}">
+											<p:fileDownload value="#{xrayController.imageRentgen}" />
+										</h:commandLink>
+	
+										<p:commandLink value="#{il}"
+											rendered="#{info.image != null and il.endsWith('jpg')}"
+											actionListener="#{xrayController.showSelectedImage(info, il)}"
+											oncomplete="PF('showImage').show();">
+										</p:commandLink>
+	
+										<br />
+									</ui:repeat>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:panel>
+			</p:dialog>
+			<p:dialog widgetVar="surgery-dtl-dialog" styleClass="dialog-scroll"
+				header="Хагалгаа" minimizable="true">
+				<p:selectOneMenu filter="true"
+					value="#{inspectionController.selectedSurgeryTypePkId}"
+					styleClass="pull-left">
+					<f:selectItem itemLabel="Бүгд" itemValue="0" />
+					<f:selectItems value="#{applicationController.surgeryType}"
+						var="type" itemLabel="#{type.name}" itemValue="#{type.pkId}" />
+				</p:selectOneMenu>
+				<p:calendar navigator="true" pattern="yyyy-MM-dd"
+					value="#{inspectionController.beginDate}"
+					styleClass="date-control pull-left" />
+				<span class="pull-left">-</span>
+				<p:calendar navigator="true" pattern="yyyy-MM-dd"
+					value="#{inspectionController.endDate}"
+					styleClass="date-control pull-left" />
+				<p:inputText id="filterSurgeryName" styleClass="pull-left"
+					value="#{inspectionController.filterSurgeryName}" />
+				<p:watermark for="filterSurgeryName" value="Хагалгааны нэр"></p:watermark>
+	
+				<p:commandButton icon="ui-icon-search" value="Шүүх"
+					actionListener="#{inspectionController.getCustomerSurgery}"
+					ajax="true" update="form:customerSurgeryTable"></p:commandButton>
+				<p:dataTable id="customerSurgeryTable" styleClass="myTable"
+					emptyMessage="Хоосон байна." style="width: 100%;"
+					value="#{inspectionController.listSurgeryInfo}" var="item"
+					rowIndexVar="index" paginator="true" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5">
+					<p:column headerText="Төрөл" styleClass="text">
+							#{item.typeName}
+						</p:column>
+					<p:column headerText="Нэр" styleClass="text">
+							#{item.name}
+						</p:column>
+					<p:column headerText="Үргэлжлэх хугацаа" styleClass="number">
+							#{item.dayLength}
+						</p:column>
+					<p:column headerText="Илгээсэн эмч" styleClass="text">
+							#{item.doctorName}
+						</p:column>
+					<p:column headerText="Огноо" styleClass="date">
+							#{item.getDateString(item.inspectionDate)}
+						</p:column>
+				</p:dataTable>
+			</p:dialog>
+			<p:dialog widgetVar="medicine-dtl-dialog" styleClass="dialog-scroll"
+				header="Эм" minimizable="true">
+				<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+					var="inspectionInfo" style="width: 100%;"
+					value="#{inspectionController.listMedicineInfo}">
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="Нэр" />
+							<p:column headerText="Хэмжих нэгж" />
+							<p:column headerText="Үргэлжлэх хугацаа" />
+							<p:column headerText="1 удаа хэрэглэх хэмжээ" />
+							<p:column headerText="Өдөрт уух тоо" />
+							<p:column headerText="Цагийн интервал" />
+						</p:row>
+					</p:columnGroup>
+					<p:subTable value="#{inspectionInfo.inspectionDtl}" var="dtl">
+						<f:facet name="header">
+				            	Огноо: #{inspectionInfo.getDateString()}
+				                #{inspectionInfo.subOrgaName} - #{inspectionInfo.employeeName}
+				            </f:facet>
+						<p:column styleClass="text">
+							<h:outputText value="#{dtl.name}" />
+						</p:column>
+						<p:column styleClass="short-text">
+							<h:outputText value="#{dtl.measurement}" />
+						</p:column>
+						<p:column styleClass="number">
+							<h:outputText value="#{dtl.expireDay}" />
+						</p:column>
+						<p:column styleClass="number">
+							<h:outputText value="#{dtl.dose}" />
+						</p:column>
+						<p:column styleClass="number">
+							<h:outputText value="#{dtl.repeatCount}" />
+						</p:column>
+						<p:column styleClass="number">
+							<h:outputText value="#{dtl.repeatTime}" />
+						</p:column>
+					</p:subTable>
+				</p:dataTable>
+			</p:dialog>
+			<p:dialog header="Эмчилгээ" widgetVar="treatment-dtl-dialog"
+				styleClass="dialog-scroll" minimizable="true" width="700"
+				height="350" closeOnEscape="true" resizable="false">
+				<p:selectOneMenu filter="true"
+					value="#{inspectionController.selectedTreatmentTypePkId}"
+					styleClass="pull-left">
+					<f:selectItem itemLabel="Бүгд" itemValue="0" />
+					<f:selectItems value="#{applicationController.treatmentType}"
+						var="type" itemLabel="#{type.name}" itemValue="#{type.pkId}" />
+				</p:selectOneMenu>
+				<p:calendar navigator="true" pattern="yyyy-MM-dd"
+					value="#{inspectionController.beginDate}"
+					styleClass="date-control pull-left" />
+				<span class="pull-left">-</span>
+				<p:calendar navigator="true" pattern="yyyy-MM-dd"
+					value="#{inspectionController.endDate}"
+					styleClass="date-control pull-left" />
+				<p:inputText id="filterTreatmentName" styleClass="pull-left"
+					value="#{inspectionController.filterTreatmentName}" />
+				<p:watermark for="filterTreatmentName" value="Эмчилгээний нэр"></p:watermark>
+	
+				<p:commandButton icon="ui-icon-search" value="Шүүх"
+					actionListener="#{inspectionController.getCustomerTreatment}"
+					ajax="true" update="form:customerTreatmentTable"></p:commandButton>
+				<p:dataTable id="customerTreatmentTable" styleClass="myTable"
+					emptyMessage="Хоосон байна" var="treatment" style="width: 100%;"
+					value="#{inspectionController.orderedTreatments}" paginator="true"
+					paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5">
+					<p:column headerText="Төрөл" styleClass="text">
+							#{treatment.ttName}
+						</p:column>
+					<p:column headerText="Нэр" styleClass="text">
+							#{treatment.tname}
+						</p:column>
+	
+					<p:column headerText="Эмчилгээ хийх тоо" styleClass="number">
+							#{treatment.times}
+						</p:column>
+					<p:column headerText="Хийлгэсэн тоо" styleClass="number">
+							#{treatment.doneCount}
+						</p:column>
+					<p:column headerText="Илгээсэн эмч" styleClass="text">
+							#{treatment.employeeName}
+						</p:column>
+					<p:column headerText="Огноо" styleClass="date">
+							#{inspectionController.dateToStr(treatment.orderedDate)}
+						</p:column>
+					<p:column headerText="Явц" styleClass="button-icon">
+						<p:commandLink styleClass="fa fa-fw fa-list color-blue"
+							action="#{inspectionController.getCustomerTreatmentDtl(treatment.pkId, treatment.tname)}" />
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+			
+			<p:dialog header="Явц" widgetVar="charty" styleClass="dialog-scroll"
+				minimizable="true" width="600" height="400" closeOnEscape="true"
+				resizable="false" >
+				<div id="chart1"
+					style="min-width: 550px; height: 400px; margin: 0 auto"></div>
+								<script
+						src="#{applicationController.path}js/highcharts/highcharts.js"></script>
+					<script
+						src="#{applicationController.path}js/highcharts/exporting.js"></script>
+				<p:remoteCommand name="chartUpdate" update="@(.chartUpdate)" />
+				<p:panel style="display:none;" id="singsing" styleClass = "chartUpdate">
+					<script>
+					//<![CDATA[	
+					var lineChart = function() {
+						$('#chart1').highcharts(
+								{
+									title : {
+										text : 'Эмчилгээний явц',
+										x : -20
+									//center
+									},
+									 lang:  {
+							        		downloadJPEG: "JPEG Зургаар татах",
+							        		downloadPNG : "PNG Зургаар татах",
+							        		downloadSVG : "SVG татах",
+							        		downloadPDF : "PDF татах",
+							        		printChart  : "Чарыг хэвлэх", 
+							        	},    
+									yAxis : {
+										title : {
+											text : 'VAS'
+										},
+										plotLines : [ {
+											value : 0,
+											width : 1,
+											color : '#808080'
+										} ]
+									},
+	
+									legend : {
+										layout : 'vertical',
+										align : 'right',
+										verticalAlign : 'middle',
+										borderWidth : 0
+									},
+										
+								#{inspectionController.chartData}
+								});
+					}
+					//]]>
+				</script>
+				</p:panel>
+			</p:dialog>
+	
+			<p:dialog header="Онош" widgetVar="all-diagnose-dialog" modal="true"
+				width="700" resizable="false" minimizable="true">
+				<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+					var="diagnose" style="width: 100%;"
+					value="#{applicationController.lazyDiagnoseList}" paginator="true"
+					lazy="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" rows="5">
+					<p:column headerText="ID" styleClass="text"
+						filterBy="#{diagnose.id}">
+						<p:commandLink
+							actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+							oncomplete="PF('all-diagnose-dialog').hide()">
+								#{diagnose.id}
+							</p:commandLink>
+					</p:column>
+					<p:column headerText="Монгол нэр" styleClass="text"
+						filterBy="#{diagnose.nameMn}">
+						<p:commandLink
+							actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+							oncomplete="PF('all-diagnose-dialog').hide()">
+								#{diagnose.nameMn}
+							</p:commandLink>
+					</p:column>
+					<p:column headerText="Англи нэр" styleClass="number"
+						filterBy="#{diagnose.nameEn}">
+						<p:commandLink
+							actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+							oncomplete="PF('all-diagnose-dialog').hide()">
+								#{diagnose.nameEn}
+							</p:commandLink>
+					</p:column>
+					<p:column headerText="Орос нэр" styleClass="number"
+						filterBy="#{diagnose.nameRu}">
+						<p:commandLink
+							actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+							oncomplete="PF('all-diagnose-dialog').hide()">
+								#{diagnose.nameRu}
+							</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+			<p:dialog widgetVar="xrayColonoPrint"  height="auto"  width="800" >
+			 <p:panel id="xrayPrintPanel" styleClass="no-style-panel">
+			  <table id="xrayPrintTable">
+			    <tr>
+			      <td colspan="2" style="border-bottom:2px solid black"><img src="#{applicationController.path}images/ashuiss.jpg"  width="150" height="50" ></img></td>
+			      <td colspan="10" style="text-align:center;font-family: Times New Roman; border-bottom:2px solid black"> 
+			         <h:outputText value=" АШУҮС ''ИСНЭ'' " style="font-size: 14px; font-weight: 700; " /><br/>
+			         <h:outputText value=" ГАСТРОЭНТЕРОЛОГИ - ДУРАНГИЙН ТАСАГ" style="font-size: 14px; font-weight: 700; " /><br/>
+			         <h:outputText value="Монгол улс, Улаанбаатар хот, Сүхбаатар дүүрэг Чойдогийн гудамж - 3" style="font-size: 12px;" /><br/>
+			         <h:outputText value="Холбооны салбар 48, шуудангийн хайрцаг 111 Утас:70120091 E-mail: medicine@Hsun.edu.mn" style="font-size: 12px;"/>
+			        </td>
+			      </tr>
+			      <tr>
+			      <ui:repeat value="#{xrayController.xrayRequestCustomer}" var="xr">
+			       <td colspan="4" style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; "> РД: #{xr.customerRegNumber} </td>
+			       <td colspan="4" style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; "> Эцэг эхийн нэр :#{xr.customerLastName} </td>
+			       <td colspan="4" style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; "> Нэр: #{xr.customerFirstName}</td>
+			       </ui:repeat>
+			       </tr>
+				<tr>
+				<c:if test="#{xrayController.jsonColono.get('p').size()>0}">
+			       <td colspan="12" style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; border-top:2px  dashed blue" >
+	   	          
+			        <ui:repeat var="pq" value="#{xrayController.jsonColono}">
+			         <ui:repeat var="p" value="#{pq.get('p')}">
+			         <h:outputText rendered="#{!p.get('l').equals('provide')   and !p.get('l').equals('endo')}"
+			         				value="  #{p.get('l')} "/>
+			         <h:outputText rendered="#{p.get('t').equals('select')}" 
+			         				value=" - #{p.get('a').get(p.get('v'))} " escape="false"/>
+			         <h:outputText  rendered="#{!p.get(t).equals('select')}" 
+			         				value="  #{p.get('v')} " escape="false"/>
+			           </ui:repeat>
+			          </ui:repeat>
+			         </td>
+			          </c:if>
+			        </tr>
+			        
+	   		       <tr>
+	   		        <td colspan="12" style="border-top:2px  dashed black; padding-top:5px">
+	   		         <ui:repeat var="attachment" value="#{xrayController.xrayColonoAttachmens}" varStatus="status">
+						<div   style="float: left; text-align: center; position: relative;">
+							<p:graphicImage value="#{xrayController.getColonoDynamicImage(xrayController.getXrayColonoAttachmens().indexOf(attachment))}"
+											cache="false" height="100" width="225" onclick="showModalImage(this);"
+											style="margin-right:3px;margin-bottom:3px;" styleClass="zoom">
+							 <f:param name="image_id"
+								      value="#{xrayController.getXrayColonoAttachmens().indexOf(attachment)}" />
+										 </p:graphicImage>
+										 <br />
+									</div>
+									<h:outputText value="#{xrayController.columnDivide(status.index)}" escape="false" />
+							</ui:repeat>   
+	   		         </td>
+	   		         </tr>
+				   <tr>
+		            <td colspan="12" style="text-align:right; font-size: 13px; font-family: Times New Roman;">
+		                <p:panel styleClass="imageIdsPrint no-style-panel"  style="text-align:right; font-size: 13px; font-family: Times New Roman;"> 
+		                Эмчийн  нэр: 
+		                      <ui:repeat value="#{xrayController.xrayRequestCustomer}" var="xrc">
+		                     <h:graphicImage style="font-size: 12px; font-family: Times New Roman;vertical-align: middle;
+		                     display:#{inspectionController.getrBase64String(xrc.employeeSignature)}"   value="#{inspectionController.getrBase64String(xrc.employeeSignature)}" width="78" height="40">
+		                      </h:graphicImage> 
+		                     <h:outputText style="font-size: 13px; font-family: Times New Roman;vertical-align: middle;" value="/ #{xrc.employeeName} / " />
+		                  </ui:repeat>
+		                  </p:panel>
+		                 
+		                 </td>
+		              </tr>
+		          <tr>
+		           <td colspan="12"  style="text-align:right">
+		            <p:panel styleClass="am29acdmenu no-style-panel" style="display:none">
+		             <h:outputText style="vertical-align: middle;font-size: 13px; font-family: Times New Roman;vertical-align: middle;" 
+		                value="Гарын  үсэг хэвлэх : "/>
+		             <h:selectBooleanCheckbox style="vertical-align: middle;" onclick="rowscount()" value="#{inspectionController.sigNatureSelectCheck}" >
+		                    <p:ajax event="change" update="@(.imageIdsPrint)"></p:ajax>
+		                     </h:selectBooleanCheckbox>
+		               </p:panel>
+		              </td>
+		             </tr>   		        
+	   		       <tr><td colspan="12" style="text-align:right;font-size: 13px; font-family: Times New Roman; ">Үзсэн огноо: #{xrayController.getDateNow()} </td></tr>
+			    </table>
+			   </p:panel>
+			  <a class="btn btn-app" href="javascript:void(0)"
+					onclick="print1('xrayPrintTable');"> <i
+					class="fa fa-print color-blue"></i> Хэвлэх
+				</a>
+				<a class="btn btn-app" onclick="printPdf();"
+					href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+					PDF <p:remoteCommand process="@this" name="printToPDF" />
+				</a>
+				<a class="btn btn-app"
+					onclick="tableToExcel('tablePrint','бүдүүн гэдэс');"
+					href="javascript:void(0)"> <i
+					class="fa fa-file-excel-o color-green"></i> XLS
+				</a>
+			 </p:dialog>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Тийм" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Үгүй" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+			<div id="id-diagnose-overlay" class="diagnose-overlay"
+				style="display: none;">
+				<p:panel id="diagnose-list" styleClass="no-style-panel">
+					<div class="display-table">
+						<ui:repeat var="diagnose"
+							value="#{inspectionController.approvedFilteredDiagnose}">
+							<div class="diagnose-overlay-row">
+								<div class="display-table-cell">
+									<p:commandLink
+										actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}">
+													#{diagnose.id}
+									</p:commandLink>
+								</div>
+								<div class="display-table-cell">
+									<p:commandLink
+										actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}">
+													#{diagnose.nameMn}
+									</p:commandLink>
+								</div>
+							</div>
+						</ui:repeat>
+						<div class="col-md-12 text-center" style="">Таны хайсан онош
+							байхгүй байна</div>
+					</div>
+				</p:panel>
+			</div>
+			<div id="modal-image" class="modal-image" style="display: none;">
+				<div class="modal-image-close" onclick="$('#modal-image').hide()">
+					<i class="fa fa-remove" />
+				</div>
+			</div>
+			<p:remoteCommand name="refreshDiagnoseList"
+				actionListener="#{inspectionController.getFilteredDiagnoses}"
+				process="@form" update="form:diagnose-list" />
+		</ui:define>
+		<ui:define name="additional-script-2">
+			<script
+				src="#{applicationController.path}js/jquery.elevateZoom-3.0.8.min.js"
+				type="text/javascript"></script>
+			<script>
+				//<![CDATA[
+	
+				function uploadImage(id) {
+					$(
+							PrimeFaces
+									.escapeClientId('form:xrayInspectionColono:fileUpload_input'))
+							.click();
+				}
+				function makeZoomable() {
+					// 				$(".zoom").each(function(e){
+					// 					$($(".zoom")[e]).attr("data-zoom-image", $($(".zoom")[e]).attr('src'))
+					// 					$($(".zoom")[e]).elevateZoom({scrollZoom : true,zoomWindowPosition: 10,easing : true});
+					// 				})
+				}
+				function showModalImage(elem) {
+					$("#modal-image img").remove();
+					$("#modal-image").show();
+					var clone = $(elem).clone();
+					$(clone).removeAttr("height");
+					console.log($(clone).height());
+					$(clone).load(function() {
+						if ($(this).height() > 400) {
+							$(this).height(400);
+						}
+					});
+					$(clone).addClass("absolute-center");
+					$(clone).attr("id", "");
+					$("#modal-image").append(clone);
+				}
+	
+				var calcWeightIndex = function() {
+					debugger;
+					var height = $("#form\\:inspection\\:pastHistory\\:height")
+							.val(), weight = $(
+							"#form\\:inspection\\:pastHistory\\:weight").val();
+					if (parseFloat(height) != 0 && parseFloat(weight) != 0) {
+						$("#weightIndex").html(
+								(weight / Math.pow(height / 100, 2)).toFixed(2));
+					}
+				}
+				function endoToggle(el){
+					$('#endoId').toggle('fast','swing');
+					if($('#rash-endo').hasClass('fa-chevron-down')){
+						endoScopicToggle([{name:'endo',value:el}]);
+						$('#rash-endo').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else 
+						{
+						endoScopicToggle([{name:'endo',value:el}]);
+						$('#rash-endo').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+
+						}
+				}
+				function bToggle(el){
+					$('#bId').toggle('fast','swing');
+					if($('#rash-chevron1').hasClass('fa-chevron-left')){
+						$('#rash-chevron1').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+						provideToggle([{name:'provide',value:el}]);
+					}
+					else 
+						{
+						
+						$('#rash-chevron1').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+						}
+				}
+				
+	
+				//]]>
+			</script>
+		</ui:define>
+	</ui:composition>

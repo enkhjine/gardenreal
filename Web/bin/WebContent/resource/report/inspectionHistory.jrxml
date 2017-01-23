@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspectionHistory" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="50" rightMargin="30" topMargin="30" bottomMargin="30" uuid="23d6739b-d17d-4971-b254-b73f7d34e5f5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="org.apache.commons.codec.binary.Base64"/>
+	<import value="org.apache.commons.codec.binary.StringUtils"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\BIS\\Hospital\\Main\\Sources\\Java\\Web\\resource\\bis\\hospital\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="mmm" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="26" width="515" height="20" uuid="d7e1bd38-6252-4699-b8ce-46c2a896038b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Эмчилгээний түүх]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="241" height="15" uuid="fb711c63-ad00-4157-8a9e-18a4b9a83b6c"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Эмчилгээний түүх ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="241" y="0" width="274" height="15" uuid="ccf9f2db-f570-47f7-9e83-7fc843fffec0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement x="241" y="15" width="274" height="15" uuid="2028d73f-4b0e-4151-b5bb-eee26b025e5f"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Нас, хүйс: 35, Эрэгтэй]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="241" height="15" uuid="70084e63-7cc0-4d54-a8bd-9bc539ac136a"/>
+				<text><![CDATA[Регистрийн дугаар: ХА80020554]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="0" width="274" height="15" uuid="219a673f-639e-49fe-b851-6c241477a75a"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Нэр: Магсаржав]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="241" height="15" uuid="b91bad22-03b2-483b-8cda-66b56714a1c2"/>
+				<text><![CDATA[Овог: Хатанбаатар]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="515" height="16" uuid="d72fdf51-23fd-490e-a064-660ef63054ae"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Хугацаа : 2015-09-10 - 2015-09-10]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="328" height="21" backcolor="#FFDAB9" uuid="abf5ecc7-ed21-4dbf-ac8f-647d4aeac38a"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineWidth="0.0" lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Нэр]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="395" y="0" width="120" height="21" backcolor="#FFDAB9" uuid="abf5ecc7-ed21-4dbf-ac8f-647d4aeac38a"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Дүн]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="328" y="0" width="67" height="21" backcolor="#FFDAB9" uuid="b9692f97-6ca1-41c3-b2c6-ebc1424dbc88"/>
+				<box>
+					<pen lineColor="#D2B48C"/>
+					<topPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<leftPen lineWidth="0.0" lineColor="#D2B48C"/>
+					<bottomPen lineWidth="0.5" lineColor="#D2B48C"/>
+					<rightPen lineWidth="0.5" lineColor="#D2B48C"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Тоо хэмжээ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="63">
+			<image>
+				<reportElement x="141" y="5" width="225" height="46" uuid="5f312f43-4a95-4c7a-a3ba-075ddae1fb95"/>
+				<imageExpression><![CDATA[new ByteArrayInputStream(Base64.decodeBase64("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".getBytes()))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="37" y="20" width="100" height="20" uuid="7a95f14f-1c3c-4f0d-a0b6-7ce709c46bb0"/>
+				<textElement>
+					<font pdfEncoding="Cp1250"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="14"/>
+	</pageFooter>
+	<summary>
+		<band height="73" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="30" width="328" height="15" uuid="366877ce-b5a8-4b14-b1a8-0d613f910132"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Тоо хэмжээ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="48" width="328" height="15" uuid="a56d232a-c502-44cf-a041-c50e0b52d4bd"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Хянасан:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="328" y="30" width="187" height="15" uuid="488c884d-7b86-4b75-9e68-a5da2d9f6f82"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[......................................./ Касс/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="328" y="48" width="187" height="15" uuid="037dfaa1-fe8f-478b-bd8b-bd56f1d327a8"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[........................./......................./]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2" width="515" height="15" uuid="f63f144e-ffd0-4dc8-b8c5-29bb9efbf8c8"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Тоо хэмжээ:	510000]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

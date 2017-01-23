@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Хэрэглэгч</h1>
+		<ol class="breadcrumb">
+			<li class="active">Хэрэглэгч</li>
+			<li><p:commandLink action="#{userController.url('user_list')}"
+					value="Хэрэглэгчийн жагсаалт">
+					<i class="fa fa-circle-o"></i>
+				</p:commandLink></li>
+			<li class="active">Бүртгэл</li>
+		</ol>
+		</section>
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="form:parent">#{i18n['organization']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+							<p:selectOneMenu id="parent" value="#{infoController.currentUser.organizationPkId}" style="min-width: 100%;">
+								<f:selectItems value="#{infoController.organizationsByLogeedUser}" var="organization" itemLabel="#{organization.name}" itemValue="#{organization.pkId}"></f:selectItems>
+							</p:selectOneMenu>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="form:name">#{i18n['name']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+							<p:inputText id="name" name = "name" value="#{infoController.currentUser.name}"/>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="form:roles">#{i18n['permission']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+							<p:tree id="roles" selectionMode="checkbox" value="#{infoController.treeRoles}" var="role" selection="#{infoController.selectedNodes}">
+								<p:treeNode>#{role.name}</p:treeNode>
+							</p:tree>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="form:username">#{i18n['username']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+						<p:inputText id="username" name= "username" value="#{infoController.currentUser.id}"/>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="form:password">#{i18n['password']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+					
+						<p:password id="password" name = "password" value="#{infoController.currentUser.password}"/>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="form:confirmPassword">#{i18n['password_repeat']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+						<p:password id="confirmPassword" name = "confirmPassword" value="#{infoController.currentUser.confirmPassword}"/>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label for="id">#{i18n['image']}</label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+						<div class="center-block profile-image-container">
+							<img class="company-logo"
+									src="#{infoController.currentUser.image}"
+									id="form:uploadFileId" alt=""
+									style="max-height: 100px; max-width: 100px;" />
+							<div class="profile-image-bar">
+								<input type="file" style="display: none;" id="form:logo-upload-input" /> 
+								<h:inputHidden id="logo" value="#{infoController.currentUser.image}" /> 
+								<p:commandLink id="logo-upload-button" value="#{i18n['choose_file']}"></p:commandLink>
+								<h:commandLink onclick="$('img.company-logo').attr('src', '');document.getElementById('form:logo').value = ''; return false;" 
+											styleClass="fa fa-fw fa-trash-o"></h:commandLink>
+							</div>							
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4"></div>
+					<div class="col-md-2 text-right">
+						<p:commandLink action="#{infoController.saveUser}" styleClass="btn" update="form:message">
+							<i class="fa fa-check"/> #{i18n['save']}
+						</p:commandLink>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+		//<![CDATA[
+			$(document).ready(function(){
+				debugger;
+				var isPrint = #{infoController.currentUser.isHasPasswordChanged()};
+				if(!isPrint){
+					var password = '#{infoController.currentUser.getPassword()}';
+					document.getElementById('form:password').value = password;
+					document.getElementById('form:confirmPassword').value = password;
+				}
+				
+				$(PrimeFaces.escapeClientId('form:logo-upload-button')).click(function(){
+					$(PrimeFaces.escapeClientId('form:logo-upload-input')).click();
+				});
+				$(PrimeFaces.escapeClientId('form:logo-upload-input')).on('change',function(e){
+					var file = $(this).val();
+					
+					$(PrimeFaces.escapeClientId('form:uploadFileNameId')).val(file.replace(/^.*[\\\/]/, ''));
+				    if(file){
+				        // fix on webkit, and IE
+				        file = file.substr(file.lastIndexOf("\\")+1);
+				        var files = e.target.files;
+				        
+				        $.each(files, function(f){
+				        	
+				        	var validImage = true;				        	
+				        	if(this.size/1024 > 4028)
+			        		{
+				        		validImage = false;
+				        		//alert('Зурагны хэмжээ хэтэрсэн байна !!!');
+				        		showErrorMessage();
+				        		$(this).val('')
+			        		}
+				        	
+				        	if (this.type.match('image.*') && validImage) {
+					        	var reader = new FileReader();
+					        	reader.onload = (function(theFile){
+					        		return function(e){
+					        			$(PrimeFaces.escapeClientId('form:uploadFileId')).val(e.target.result);
+					        			var top = $('img.company-logo').innerHeight()/2;
+					        			if(top <= 60)
+					        				top= 60;
+					        			$('img.company-logo').attr('src',e.target.result)
+					        			document.getElementById('form:logo').value = e.target.result;
+					        		}
+					        	})(this);
+					        	reader.readAsDataURL(this);
+				        	}
+				        });	
+				    };
+				});
+			});
+			
+			$(document).ready(function () {
+				jQuery.validator.setDefaults({
+					  debug: true,
+					  success: "valid"
+					});
+
+			    $('#form').validate({ // initialize the plugin
+			    	rules: {
+			    		'form:name': {
+							required: true,
+							minlength: 2				
+						 },
+						'form:username': {
+								required: true,
+								minlength: 2				
+						},
+						'form:password': {
+							required: true,
+							minlength: 4,							
+						},
+						
+						'form:confirmPassword': {
+							required: true,
+							minlength: 4,							
+						}				
+						
+						
+			        },
+			    	messages: {
+			    		'form:name': {
+							required: "#{i18n['enter_name']}",
+							minlength: "#{i18n['more_characters_2']}"				
+						 },
+						'form:username': {
+								required: "#{i18n['enter_username']}",
+								minlength: "#{i18n['more_characters_2']}"				
+						},
+						'form:password': {
+							required: "#{i18n['enter_password']}",
+							minlength: "#{i18n['more_characters_4']}",							
+						},
+						
+						'form:confirmPassword': {
+							required: "#{i18n['enter_password_repeat']}",
+							minlength: "#{i18n['more_characters_4']}",							
+						}				
+						}
+			    	
+			        
+			          
+			    });
+
+			});
+			
+			$('body').on('keydown', 'input, select, textarea', function(e) {
+			    var self = $(this)
+			      , form = self.parents('form:eq(0)')
+			      , focusable
+			      , next
+			      ;
+			    if (e.keyCode == 13) {
+			        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+			        next = focusable.eq(focusable.index(this)+1);
+			        if (next.length) {
+			            next.focus();
+			        } else {
+			            form.submit();
+			        }
+			        return false;
+			    }
+			});
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

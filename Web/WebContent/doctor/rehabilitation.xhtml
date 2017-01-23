@@ -1,0 +1,3048 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:c="http://java.sun.com/jsp/jstl/core"
+		xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+		<ui:define name="inspection">
+			<p:tab title=" Сэргээн засал- Одоогийн өвчний түүх">
+				<p:accordionPanel id="rehabilitation" multiple="true">
+					<p:tab title="Зовиур" id="distress">
+						
+						<div class="row margin-bottom">
+						 <div class="col-md-12">
+	     					 <p:inputTextarea  rows="3" style="width:100%" value="#{inspectionController.customerRehabilitation.otherPain}" placeholder="Бусад зовиур"/>
+						   </div>
+						  </div>
+					</p:tab>
+					<p:tab title="Асуумж">
+						<div class="row margin-bottom" >
+						  <div class="col-md-12 margin-bottom">
+						    <p:inputTextarea  style="width:100%" rows="3" placeholder="I.Chief complaint" value="#{inspectionController.customerRehabilitation.chiefComplaint}"/>
+						    </div>
+						  <div class="col-md-12 margin-bottom">
+						    <p:inputTextarea  style="width:100%" rows="3" placeholder=" II.	Present illness" value="#{inspectionController.customerRehabilitation.illness}"/>
+						    </div>
+						  <div class="col-md-12 margin-bottom">
+						    <p:inputTextarea  style="width:100%" rows="3" placeholder=" III.	History" value="#{inspectionController.customerRehabilitation.history}"/>
+						    </div>
+						  <div class="col-md-12 margin-bottom">
+						    <p:inputTextarea  style="width:100%" rows="3" placeholder="IV.	Review of system" value="#{inspectionController.customerRehabilitation.reviewSystem}"/>
+						    </div> 
+						</div>
+					</p:tab>
+					<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<p:panelGrid columns="2" styleClass="form-table">
+										<p:outputLabel value="Зураг:" style="width: 60px;" />
+										<p:commandLink styleClass="btn" onclick="uploadImage();"
+											actionListener="#{inspectionController.setImageType('rehabilitation')}">
+											<i class="fa fa-fw fa-upload" /> Зураг сонгох
+												</p:commandLink>
+									</p:panelGrid>
+								</div>
+								<p:panel id="qoHemota" styleClass="no-style-panel">
+								<div class="col-md-12 margin-top">
+									<ui:repeat var="attachment"
+										value="#{inspectionController.listRehabilitationAttachment}">
+										<div style="float:left;text-align: center;">
+											<p:graphicImage
+												value="#{inspectionController.getDynamicNoseImage(inspectionController.getListRehabilitationAttachment().indexOf(attachment), inspectionController.getListRehabilitationAttachment())}"
+												cache="false" height="50" onclick="showModalImage(this);"
+												style="margin-right: 5px;" styleClass="zoom">
+												<f:param name="image_id"
+													value="#{inspectionController.getListRehabilitationAttachment().indexOf(attachment)}" />
+											</p:graphicImage><br/>
+											<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listRehabilitationAttachment, attachment)}"
+												oncomplete="updateHemota()">
+												<i class="fa fa-trash"/> Устгах
+											</p:commandLink>
+										</div>
+									</ui:repeat>
+								</div>
+								</p:panel>
+								<p:remoteCommand  name="updateHemota"  update="qoHemota" />
+							</div>
+						</div>
+				  <div class="row">
+					 <div class="form-title" style="cursor:pointer" onclick="toggleRash('Neurologic examination')">
+					   Neurologic examination<i id="rash-chevron" class="pull-right fa fa-chevron-left"></i>
+					   </div>
+				<div style="display:none" id ="neuro">
+					<div class="col-md-12">
+					  <div class="form-title" style="cursor:pointer" onclick="toggleTouch('Cerebral function')">Cerebral function
+					  		<i id="rash-chevron1" class="pull-right fa fa-chevron-left"></i></div>
+					 <div id="cere" style="display:none">
+					  <div class="row">
+					 <div class="col-md-12 margin-bottom">
+					  <div class="col-md-4">
+					    <div class="row margin-bottom">
+					     <p:selectBooleanCheckbox itemLabel="Mental state" value="#{inspectionController.customerRehabilitation.state}" >
+					       <p:ajax event="change" update="@(.mentalPanel)" />
+					      </p:selectBooleanCheckbox>
+					     </div>
+					     <p:panel styleClass=" no-style-panel mentalPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.state=='true'}">
+					      <div class="col-md-12">
+					        <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.stateChoose}" >
+					          <f:selectItem itemLabel="Alert" itemValue="0"/>
+					          <f:selectItem itemLabel="Confusion" itemValue="1"/>
+					          <f:selectItem itemLabel="Drowsy" itemValue="2"/>
+					          <f:selectItem itemLabel="Stupor" itemValue="3"/>
+					          <f:selectItem itemLabel="Semi coma" itemValue="4"/>
+					          <f:selectItem itemLabel="Coma " itemValue="5"/>
+					         </p:selectOneRadio>
+					       </div>
+					       </c:if>
+					      </p:panel>
+					    </div>
+					    <div class="col-md-4">
+					     <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox itemLabel="Orientation " value="#{inspectionController.customerRehabilitation.orientation}">
+					        <p:ajax event="change" update="@(.orienPanel)" />
+					        </p:selectBooleanCheckbox>
+					      </div>
+					      <p:panel styleClass=" no-style-panel orienPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.orientation=='true'}">
+					        <div class="col-md-12 margin-bottom">
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectBooleanCheckbox itemLabel="time" value="#{inspectionController.customerRehabilitation.time}">
+					             <p:ajax event="change" update="@(.timePanel)"/>
+					           </p:selectBooleanCheckbox>
+					          </div>
+					          <p:panel styleClass=" no-style-panel timePanel">
+					           <c:if test="#{inspectionController.customerRehabilitation.time=='true'}">
+					            <p:selectOneRadio value="#{inspectionController.customerRehabilitation.timeChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </c:if>
+					           </p:panel>
+					        </div>
+					        <div class="col-md-12 margin-bottom">
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectBooleanCheckbox itemLabel="person" value="#{inspectionController.customerRehabilitation.person}">
+					             <p:ajax event="change" update="@(.personPanel)"/>
+					            </p:selectBooleanCheckbox>
+					          </div>
+					          <p:panel styleClass=" no-style-panel personPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.person=='true'}">
+					            <p:selectOneRadio value="#{inspectionController.customerRehabilitation.personChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </c:if>
+					           </p:panel>
+					         </div>
+    				       <div class="col-md-12 margin-bottom"> 
+	  				        <div class="col-md-12 margin-bottom">
+					         <p:selectBooleanCheckbox itemLabel="place " value="#{inspectionController.customerRehabilitation.place}">
+					            <p:ajax event="change" update="@(.placePanel)"/>
+					          </p:selectBooleanCheckbox>
+					        </div>
+					        <p:panel styleClass=" no-style-panel placePanel">
+					         <c:if test="#{inspectionController.customerRehabilitation.place}">
+					            <p:selectOneRadio value="#{inspectionController.customerRehabilitation.placeChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </c:if>
+					           </p:panel>
+					       </div>
+					       </c:if>
+					       </p:panel>
+					    </div>
+					  <div class="col-md-4">
+					    <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox itemLabel="Memory " value="#{inspectionController.customerRehabilitation.memory}">
+					          <p:ajax event="change" update="@(.memoryPanel)" />
+					       </p:selectBooleanCheckbox>
+					     </div>   
+					     <p:panel styleClass=" no-style-panel memoryPanel">
+					      <c:if test="#{inspectionController.customerRehabilitation.memory=='true'}">
+					       <div class="col-md-12 margin-bottom">
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectBooleanCheckbox itemLabel="remote" value="#{inspectionController.customerRehabilitation.remote}">
+					            <p:ajax event="change" update="@(.remotePanel)"/>
+					            </p:selectBooleanCheckbox>
+					          </div>
+					          <p:panel styleClass=" no-style-panel remotePanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.remote=='true'}">
+					            <p:selectOneRadio value="#{inspectionController.customerRehabilitation.remoteChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </c:if>
+					           </p:panel>
+					        </div>
+					        <div class="col-md-12 margin-bottom">
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectBooleanCheckbox itemLabel="recent"  value="#{inspectionController.customerRehabilitation.recent}">
+					             <p:ajax event="change" update="@(.recentPanel)"/>
+					            </p:selectBooleanCheckbox>
+					          </div>
+					          <p:panel styleClass=" no-style-panel recentPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.recent=='true'}">
+					            <p:selectOneRadio  value="#{inspectionController.customerRehabilitation.recentChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					            </c:if>
+					           </p:panel>
+					         </div>
+    				       <div class="col-md-12 margin-bottom"> 
+	  				        <div class="col-md-12 margin-bottom">
+					         <p:selectBooleanCheckbox itemLabel="immediate  "  value="#{inspectionController.customerRehabilitation.immediate}">
+					           <p:ajax event="change" update="@(.immediatePanel)"/>
+					          </p:selectBooleanCheckbox>
+					        </div>
+					        <p:panel styleClass=" no-style-panel immediatePanel">
+					         <c:if test="#{inspectionController.customerRehabilitation.immediate=='true'}">
+					            <p:selectOneRadio value="#{inspectionController.customerRehabilitation.immediateChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </c:if>
+					           </p:panel>
+					       </div>
+					       </c:if>
+					       </p:panel>
+					    </div>
+					 </div>
+					 </div>
+					 <div class="row margin-bottom">
+					  <div class="col-md-12 margin-bottom">
+					   <p:inputTextarea  style="width:100%" rows="3" placeholder="MMSE " value="#{inspectionController.customerRehabilitation.mMSE}"/>
+					   </div>
+					   <div class="col-md-12 margin-bottom">
+					   <p:inputTextarea  style="width:100%" rows="3" placeholder="Follow command" value="#{inspectionController.customerRehabilitation.followCommand}"/>
+					   </div>
+					  </div>
+					  </div>
+					 </div>
+					<div class="col-md-12">
+					 <div class="form-title" style="cursor:pointer" onclick="cerebellar('Cerebellar function')">
+					 	Cerebellar function<i id="rash-chevron2" class="pull-right fa fa-chevron-left"></i></div>
+					 <div class="row" id="cereb" style="display:none">
+					  <div class="col-md-12 margin-bottom">
+					  <div class="col-md-4">
+					    <div class="row margin-bottom">
+					     <p:selectBooleanCheckbox itemLabel="Nystagmus" value="#{inspectionController.customerRehabilitation.nystagmus}">
+					      <p:ajax  event="change" update="@(.nystagmusPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					     <p:panel styleClass="no-style-panel nystagmusPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.nystagmus=='true'}">
+					        <p:selectOneRadio value="#{inspectionController.customerRehabilitation.nystagmusChoose}">
+					          <f:selectItem itemLabel="-" itemValue="0"/>
+					          <f:selectItem itemLabel="+" itemValue="1"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					    <div class="col-md-4">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Tremor intentional" value="#{inspectionController.customerRehabilitation.intentional}">
+					      <p:ajax  event="change" update="@(.intentionalPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel intentionalPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.intentional=='true'}">
+					        <p:selectOneRadio value="#{inspectionController.customerRehabilitation.intentionalChoose}">
+					          <f:selectItem itemLabel="-" itemValue="0"/>
+					          <f:selectItem itemLabel="+" itemValue="1"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					    <div class="col-md-4">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Tandem gait" value="#{inspectionController.customerRehabilitation.tandem}">
+					      <p:ajax  event="change" update="@(.tandemPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel tandemPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.tandem=='true'}">
+					        <p:selectOneRadio  value="#{inspectionController.customerRehabilitation.tandemChoose}">
+					          <f:selectItem itemLabel="-" itemValue="0"/>
+					          <f:selectItem itemLabel="+" itemValue="1"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					 </div>
+					 <div class="col-dm-12">
+					   <div class="col-md-6">
+					     <div class="form-title" style="cursor:pointer" onclick="fingerRToggle('RT')"> 
+					     	RT <i id="rash-flt" class="pull-right fa fa-chevron-left"></i></div>
+					  <div id="frightId" style="display:none">
+					   <div class="col-md-12">
+					   <div class="col-md-12">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Finger to nose tes " 
+					    					value="#{inspectionController.customerRehabilitation.fingerNose}">
+					      <p:ajax  event="change" update="@(.fingerNosePanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel fingerNosePanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.fingerNose=='true'}">
+					        <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.fingerNoseChoose}" >
+					          <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired " itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					    </div>
+					 
+					 
+					 <div class="col-md-12 margin-bottom">
+					    <div class="col-md-12">
+					    <div class="row margin-bottom">
+					     <p:selectBooleanCheckbox itemLabel="Rapid alternative movement" value="#{inspectionController.customerRehabilitation.rapidMovement}">
+					      <p:ajax  event="change" update="@(.rapidMovementPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					     <p:panel styleClass="no-style-panel rapidMovementPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.rapidMovement=='true'}">
+					        <p:selectOneRadio value="#{inspectionController.customerRehabilitation.rapidMovementChoose}">
+					          <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired " itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					     </div>
+					    </div>
+					  <div class="col-md-12 margin-bottom">
+					   <div class="col-md-6">
+					   <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Heel to shin tes" value="#{inspectionController.customerRehabilitation.heel}">
+					      <p:ajax  event="change" update="@(.tesPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel tesPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.heel=='true'}">
+					        <p:selectOneRadio  layout="grid" columns="1" value="#{inspectionController.customerRehabilitation.heelChoose}">
+					         <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired " itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					    <div class="col-md-6">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Romberg" value="#{inspectionController.customerRehabilitation.romberg}">
+					      <p:ajax  event="change" update="@(.rombergPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel rombergPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.romberg=='true'}">
+					        <p:selectOneRadio layout="grid" columns="1" value="#{inspectionController.customerRehabilitation.rombergChoose}">
+					          <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired" itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					 </div>
+			       </div>
+				 </div>
+			   <div class="col-md-6">
+				 <div class="form-title" style="cursor:pointer" onclick="fingerLToggle('LT')"> Finger to nose tes  LT <i id="rash-fingerLT" class="pull-right fa fa-chevron-left"></i></div>
+					    <div id="fingerId" style="display:none">
+					     <div class="col-md-12">
+					   <div class="col-md-12">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Finger to nose tes " 
+					    					value="#{inspectionController.customerRehabilitation.leftFingerNose}">
+					      <p:ajax  event="change" update="@(.leftfingerNosePanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel leftfingerNosePanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.leftFingerNose=='true'}">
+					        <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.leftFingerNoseChoose}">
+					          <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired " itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					    </div>
+					 
+					 
+					 <div class="col-md-12 margin-bottom">
+					    <div class="col-md-12">
+					    <div class="row margin-bottom">
+					     <p:selectBooleanCheckbox itemLabel="Rapid alternative movement" value="#{inspectionController.customerRehabilitation.leftrapidMovement}">
+					      <p:ajax  event="change" update="@(.leftrapidMovementPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					     <p:panel styleClass="no-style-panel leftrapidMovementPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.leftrapidMovement=='true'}">
+					        <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftrapidMovementChoose}">
+					          <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired " itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					     </div>
+					    </div>
+					  <div class="col-md-12 margin-bottom">
+					   <div class="col-md-6">
+					   <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Heel to shin tes" value="#{inspectionController.customerRehabilitation.leftheel}">
+					      <p:ajax  event="change" update="@(.tesPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel tesPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.heel=='true'}">
+					        <p:selectOneRadio  layout="grid" columns="1" value="#{inspectionController.customerRehabilitation.leftheelChoose}">
+					         <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired " itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					    <div class="col-md-6">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Romberg" value="#{inspectionController.customerRehabilitation.leftromberg}">
+					      <p:ajax  event="change" update="@(.leftrombergPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass="no-style-panel leftrombergPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.leftromberg=='true'}">
+					        <p:selectOneRadio layout="grid" columns="1" value="#{inspectionController.customerRehabilitation.leftrombergChose}">
+					          <f:selectItem itemLabel="Uncheckable " itemValue="0"/>
+					          <f:selectItem itemLabel="intact " itemValue="1"/>
+					          <f:selectItem itemLabel="impaired" itemValue="2"/>
+					         </p:selectOneRadio>
+					         </c:if>
+					      </p:panel>
+					    </div>
+					 </div>
+					     </div>
+				  </div>
+				 </div>
+			   </div>
+    		 </div>
+					<div class="col-md-12">
+					 <div class="form-title" style="cursor:pointer" onclick="cranialNerveToggle('Cranial nerve function')">
+					 		Cranial nerve function<i id="rash-chevron3" class="pull-right fa fa-chevron-left"></i></div>
+					 <div style="display:none" id="crania">
+					  <div class="col-md-6">
+					  <div class="form-title" style="cursor:pointer" onclick="rightToggle('RT')">
+					  		 RT<i id="rash-chevron4" class="pull-right fa fa-chevron-left"></i></div>
+					  <div style="display:none" id="rightRt">
+					    <div class="col-md-12 margin-bottom">
+					     <div class=" margin-bottom">
+					      <p:selectBooleanCheckbox itemLabel="CN I Olfaction" value="#{inspectionController.customerRehabilitation.olfaction}">
+					      <p:ajax  event="change" update="@(.olfactionPanel)"/>
+					     </p:selectBooleanCheckbox>
+					    </div>
+					    <p:panel styleClass=" no-style-panel olfactionPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.olfaction=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.olfactionChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					 </div>
+					<div class="col-md-12">
+					   <div class="col-md-12 margin-bottom">
+					   <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="CN 2,Ⅲ Visual acuity" value="#{inspectionController.customerRehabilitation.acuity}">
+					      <p:ajax  event="change" update="@(.acuityPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel acuityPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.acuity=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.acuityChoose}">
+					             <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					  </div>
+					 <div class="col-md-12 margin-bottom" >
+	    			    <div class="col-md-6">
+	    			    <div class="row margin-bottom">
+		    			    <p:selectBooleanCheckbox itemLabel="Light reflex" value="#{inspectionController.customerRehabilitation.reflex}">
+					         <p:ajax  event="change" update="@(.reflexPanel)"/>
+			    		     </p:selectBooleanCheckbox>
+			    		     </div>
+					         <p:panel styleClass=" no-style-panel reflexPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.reflex=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.reflexChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					    <div class="col-md-6">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Visual field defect" value="#{inspectionController.customerRehabilitation.defect}">
+					      <p:ajax  event="change" update="@(.defectPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel defectPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.defect=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.defectChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					  </div>
+					 <div class="col-md-12 margin-bottom">
+	     			    <div class="col-md-12">
+	     			    <div class="row margin-bottom">
+		    			    <p:selectBooleanCheckbox itemLabel="CN 3,Ⅳ,Ⅵ Extraocular movement" value="#{inspectionController.customerRehabilitation.movement}">
+					      <p:ajax  event="change" update="@(.movementPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel movementPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.movement=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.movementChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					 </div>
+					 <div class="col-md-12 margin-bottom">
+					  <div class="col-md-6">
+					  <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Ptosis" value="#{inspectionController.customerRehabilitation.ptosis}">
+					      <p:ajax  event="change" update="@(.ptosisPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel ptosisPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.ptosis=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.ptosisChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					   <div class="col-md-6">
+					   <div class="row margin-bottom">
+					     <p:selectBooleanCheckbox itemLabel="CN 5 Facial sense" value="#{inspectionController.customerRehabilitation.sense}">
+					      <p:ajax  event="change" update="@(.sensePanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel sensePanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.sense=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio layout="grid" columns="1" value="#{inspectionController.customerRehabilitation.senseChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					     </div>
+					  </div>
+					 <div class="col-md-12 margin-bottom">
+					     <div class="col-md-6">
+					      <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox itemLabel="CN 7 Facial motor" value="#{inspectionController.customerRehabilitation.rMotor}">
+					      	 <p:ajax  event="change" update="@(.rMotorPanel)"/>
+					      	</p:selectBooleanCheckbox>
+					      	 </div>
+					         <p:panel styleClass=" no-style-panel rMotorPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.rMotor=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio layout="grid"  columns="1" value="#{inspectionController.customerRehabilitation.rMotorChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					     <div class="col-md-6">
+					      <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox itemLabel="CN 8 Hearing" value="#{inspectionController.customerRehabilitation.rHearing}">
+					       	 <p:ajax  event="change" update="@(.rHearingPanel)"/>
+					       	</p:selectBooleanCheckbox>
+					       	 </div>
+					         <p:panel styleClass=" no-style-panel rHearingPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.rHearing=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio layout="grid"  columns="1" value="#{inspectionController.customerRehabilitation.rHearingChoose}">
+					                <f:selectItem itemLabel="intact " itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					    </div>
+					   <div class="col-md-12 margin-bottom">
+					      <div class="col-md-12">
+					       <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox itemLabel="CN 9,10,Ⅹ Gag reflex" value="#{inspectionController.customerRehabilitation.rGagReflex}">
+					      	<p:ajax  event="change" update="@(.rGagReflexPanel)"/>
+					      	 </p:selectBooleanCheckbox>
+					      	  </div>
+					         <p:panel styleClass=" no-style-panel rGagReflexPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.rGagReflex=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.rGagReflexChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					    </div>
+					    <div class="col-md-12 margin-bottom">
+					     <div class="col-md-12">
+					      <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox itemLabel="CN XII Tongue deviation" value="#{inspectionController.customerRehabilitation.rDeviation}">
+					       	  <p:ajax  event="change" update="@(.rDeviationPanel)"/>
+					       	</p:selectBooleanCheckbox>
+					       	 </div>
+					         <p:panel styleClass=" no-style-panel rDeviationPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.rDeviation=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.rDeviationChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					      </div>
+					   </div>
+					  </div>
+					  <div class="col-md-6">
+					   <div class="form-title" style="cursor:pointer" onclick="leftToggle('LT')">
+					   		LT<i id="rash-chevron5" class="pull-right fa fa-chevron-left"></i></div>
+					   <div id="leftLT" style="display:none">
+					    <div class="col-md-12 margin-bottom">
+					  <div class="col-md-12">
+					   <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="CN I Olfaction"
+					    						value="#{inspectionController.customerRehabilitation.leftolfaction}">
+					      <p:ajax  event="change" update="@(.leftolfactionPanel)"/>
+					     </p:selectBooleanCheckbox>
+					      </div>
+					         <p:panel styleClass=" no-style-panel leftolfactionPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftolfaction=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio  value="#{inspectionController.customerRehabilitation.leftolfactionChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					 </div>
+					 <div class="col-md-12">
+					   <div class="col-md-12 margin-bottom">
+					    <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="CN 2,Ⅲ Visual acuity"
+					    							value="#{inspectionController.customerRehabilitation.leftAcuity}">
+					      <p:ajax  event="change" update="@(.leftAcuityPanel)"/>
+					     </p:selectBooleanCheckbox>
+					      </div>
+					         <p:panel styleClass=" no-style-panel leftAcuityPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftAcuity=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftAcuityChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					  </div>
+					 <div class="col-md-12 margin-bottom">
+	    			    <div class="col-md-6">
+	    			     <div class="row margin-bottom">
+		    			    <p:selectBooleanCheckbox itemLabel="Light reflex"
+		    			    							value="#{inspectionController.customerRehabilitation.leftReflex}">
+					          <p:ajax  event="change" update="@(.leftReflexPanel)"/>
+			    		     </p:selectBooleanCheckbox>
+			    		      </div>
+					         <p:panel styleClass=" no-style-panel leftReflexPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftReflex=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftReflexChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					    <div class="col-md-6">
+					     <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Visual field defect"
+					    							value="#{inspectionController.customerRehabilitation.leftDefect}">
+					      <p:ajax  event="change" update="@(.leftDefectPanel)"/>
+					     </p:selectBooleanCheckbox>
+					      </div>
+					         <p:panel styleClass=" no-style-panel leftDefectPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftDefect=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftDefectChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					  </div>
+					 <div class="col-md-12 margin-bottom">
+	     			    <div class="col-md-12">
+	     			    <div class="row margin-bottom">
+		    			    <p:selectBooleanCheckbox itemLabel="CN 3,Ⅳ,Ⅵ Extraocular movement"
+		    			    							value="#{inspectionController.customerRehabilitation.leftMovement}">
+					      <p:ajax  event="change" update="@(.leftMovementPanel)"/>
+					     </p:selectBooleanCheckbox>
+					      </div>
+					         <p:panel styleClass=" no-style-panel leftMovementPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftMovement=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftMovementChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					 </div>
+					 <div class="col-md-12 margin-bottom">
+					  <div class="col-md-6">
+					   <div class="row margin-bottom">
+					    <p:selectBooleanCheckbox itemLabel="Ptosis"
+					    						value="#{inspectionController.customerRehabilitation.leftPtosis}">
+					      <p:ajax  event="change" update="@(.leftPtosisPanel)"/>
+					     </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel leftPtosisPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftPtosis=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftPtosisChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					    </div>
+					   <div class="col-md-6">
+					    <div class="row margin-bottom">
+					     <p:selectBooleanCheckbox itemLabel="CN 5 Facial sense"
+					     								value="#{inspectionController.customerRehabilitation.leftSense}">
+					        <p:ajax  event="change" update="@(.leftSensePanel)"/>
+					        </p:selectBooleanCheckbox>
+					     </div>
+					         <p:panel styleClass=" no-style-panel leftSensePanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.leftSense=='true'}">
+					            <div class="col-md-12" >
+					             <p:selectOneRadio layout="grid"  columns="1" value="#{inspectionController.customerRehabilitation.leftSenseChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					     </div>
+					  </div>
+					 <div class="col-md-12 margin-bottom">
+					     <div class="col-md-6">
+					     <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox itemLabel="CN 7 Facial motor"
+					      								value="#{inspectionController.customerRehabilitation.motor}">
+					      		<p:ajax  event="change" update="@(.motorPanel)"/>
+					      		</p:selectBooleanCheckbox>
+					      		</div>
+					         <p:panel styleClass=" no-style-panel motorPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.motor=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio layout="grid"  columns="1" value="#{inspectionController.customerRehabilitation.motorChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					     <div class="col-md-6">
+					     <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox itemLabel="CN 8 Hearing"
+					       							value="#{inspectionController.customerRehabilitation.hearing}">
+					       	  <p:ajax  event="change" update="@(.hearingPanel)"/>
+					       	</p:selectBooleanCheckbox>
+					       	</div>
+					         <p:panel styleClass=" no-style-panel hearingPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.hearing=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio layout="grid"  columns="1" value="#{inspectionController.customerRehabilitation.hearingChoose}">
+					              <f:selectItem itemLabel="intact " itemValue="0"/>
+					              <f:selectItem itemLabel="impaired" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					    </div>
+					   <div class="col-md-12 margin-bottom">
+					      <div class="col-md-12">
+					      <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox itemLabel="CN 9,10,Ⅹ Gag reflex"
+					      							value="#{inspectionController.customerRehabilitation.gagReflex}">
+					        <p:ajax  event="change" update="@(.gagReflexPanel)"/>
+					       </p:selectBooleanCheckbox>
+					        </div>
+					         <p:panel styleClass=" no-style-panel gagReflexPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.gagReflex=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.gagReflexChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					    </div>
+					    <div class="col-md-12 margin-bottom">
+					     <div class="col-md-12">
+					        <div class="row margin-bottom">
+					          <p:selectBooleanCheckbox itemLabel="CN XII Tongue deviation"
+					       								value="#{inspectionController.customerRehabilitation.deviation}">
+					       	 <p:ajax  event="change" update="@(.deviationPanel)"/>
+					       	</p:selectBooleanCheckbox>
+					         </div>
+					         <p:panel styleClass=" no-style-panel deviationPanel">
+					          <c:if test="#{inspectionController.customerRehabilitation.deviation=='true'}">
+					            <div class="col-md-12">
+					             <p:selectOneRadio value="#{inspectionController.customerRehabilitation.deviationChoose}">
+					              <f:selectItem itemLabel="+" itemValue="0"/>
+					              <f:selectItem itemLabel="-" itemValue="1"/>
+					             </p:selectOneRadio>
+					             </div>
+					             </c:if> 
+					          </p:panel>
+					      </div>
+					      </div>
+					    </div>
+					   </div>
+					  </div>
+					 </div>
+					 <div class="col-md-12">
+					   <div class="form-title" style="cursor:pointer" onclick="motorToggle('Motor function')">
+					   			Motor function<i id="rash-motor" class="pull-right fa fa-chevron-left"></i></div>
+					   </div>
+					   <div style="display:none" id="motor">
+					    <div class="col-md-12 margin-bottom">
+					     <div class="col-md-4"> 
+					      <div class="col-md-12">
+					       <div class="col-md-7">Limitation of ROM</div>
+					       <div class="col-md-5">
+					        <p:selectOneMenu style="width:85px" value="#{inspectionController.customerRehabilitation.rom}">
+					         <f:selectItem itemLabel="none" itemValue="0"/>
+					         <f:selectItem itemLabel="limit" itemValue="1"/>
+					         </p:selectOneMenu>
+					        </div>
+					       </div>
+					      </div>
+					     <div class="col-md-3">
+					      <div class="col-md-12">
+					       <div class="col-md-4">Tone</div>
+					       <div class="col-md-3">
+					        <p:selectOneMenu style="width:95px" value="#{inspectionController.customerRehabilitation.tone}"> 
+					         <f:selectItem itemLabel="none" itemValue="0"/>
+					         <f:selectItem itemLabel="generally normotonus" itemValue="1"/>
+					         <f:selectItem itemLabel="hypotonus " itemValue="2"/>
+					         <f:selectItem itemLabel="hypertonus" itemValue="3"/>
+					         </p:selectOneMenu>
+					        </div>
+					       </div>
+					      </div>
+					     <div class="col-md-5">
+					      <div class="col-md-12">
+					       <div class="col-md-3">MAS</div>
+					       <div class="col-md-3">
+					        <p:selectOneMenu value="#{inspectionController.customerRehabilitation.mas}">
+					         <f:selectItem itemLabel="none" itemValue="0"/>
+					         <f:selectItem itemLabel="generally normotonus" itemValue="1"/>
+					         <f:selectItem itemLabel="hypotonus " itemValue="2"/>
+					         <f:selectItem itemLabel="hypertonus" itemValue="3"/>
+					         </p:selectOneMenu>
+					        </div>
+					       </div>
+					      </div>
+					     </div>
+					    <div class="col-md-12">
+					     <div class="col-md-6">
+					      <div class="form-title" style="cursor:pointer" onclick="rightMotor('RT')">
+					      		RT<i id="rash-mtRight" class="pull-right fa fa-chevron-left"></i>
+					      		</div>
+					    <div class="col-md-12">
+					     <div id="mtId" style="display:none">
+					       <div class="row" >
+					         <div class="col-md-12 " >
+					          <div class="row">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox  itemLabel="Motor power" value="#{inspectionController.customerRehabilitation.power}">
+					           	<p:ajax event="change" update="@(.powerPanel)"/>
+					           </p:selectBooleanCheckbox>
+					          </div>
+					     <p:panel styleClass="no-style-panel powerPanel" style="padding-top:3px">
+					     <c:if test="#{inspectionController.customerRehabilitation.power=='true'}">
+					       <div class="col-md-12">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Upper extremities"
+					           							value="#{inspectionController.customerRehabilitation.extremities}">
+					           	 <p:ajax event="change" update="@(.upperPanel)"/>
+					           </p:selectBooleanCheckbox>
+					          </div>
+					        <p:panel styleClass="upperPanel no-style-panel">
+					         <c:if test="#{inspectionController.customerRehabilitation.extremities=='true'}">
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 ">
+					           <p:selectBooleanCheckbox itemLabel="Proximal"
+					           							value="#{inspectionController.customerRehabilitation.proximal}">
+					           			<p:ajax event="change" update="@(.prximalPanel)"/>
+					           	</p:selectBooleanCheckbox>
+					            <p:panel styleClass="no-style-panel prximalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.proximal=='true'}">
+					             <div class="col-md-12"> 
+					               <div class="col-md-12">
+					                <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.rtChooseValue}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					              </div>
+					             </div>
+					             </c:if>
+					             </p:panel>
+					           </div>
+					          </div>
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Distal" value="#{inspectionController.customerRehabilitation.distal}">
+					           		 <p:ajax event="change" update="@(.distalPanel)"/>
+					           		</p:selectBooleanCheckbox>
+					            </div>
+					            <p:panel styleClass="no-style-panel distalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.distal=='true'}">
+					              <div class="col-md-12">
+					                 <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.distalChoose}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					                </div>
+					               </c:if>
+					             </p:panel>
+					          </div>
+					          </c:if>
+					          </p:panel>
+					          <div class="col-md-12 margin-bottom lowerPanel">
+					           <p:panel styleClass="lowerPanel no-style-panel">
+					            <p:selectBooleanCheckbox itemLabel="Lower extremities" value="#{inspectionController.customerRehabilitation.lowerExtremities}">
+					             <p:ajax event="change"  update="@(.lowerPanel)"/>
+					            </p:selectBooleanCheckbox>
+					            </p:panel>
+					          </div>
+					        <p:panel styleClass="lowerPanel no-style-panel ">
+					         <c:if test="#{inspectionController.customerRehabilitation.lowerExtremities=='true'}">
+					          <div class="col-md-12 margin-bottom rightprximalPanel">
+					           <div class="col-md-12 ">
+					           <p:selectBooleanCheckbox itemLabel="Proximal"
+					           							value="#{inspectionController.customerRehabilitation.leftProximal}">
+					           			<p:ajax event="change" update="@(.rightprximalPanel)"/>
+					           	</p:selectBooleanCheckbox>
+					            <p:panel styleClass="no-style-panel rightprximalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.leftProximal=='true'}">
+					             <div class="col-md-12"> 
+					               <div class="col-md-12">
+					                <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.leftProximalChoose}">
+					                  <f:selectItem itemLabel=" normal" itemValue="0"/>
+					                  <f:selectItem itemLabel=" good " itemValue="1"/>
+					                  <f:selectItem itemLabel=" fair " itemValue="2"/>
+					                  <f:selectItem itemLabel=" poor " itemValue="3"/>
+					                  <f:selectItem itemLabel=" trace " itemValue="4"/>
+					                  <f:selectItem itemLabel=" zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					              </div>
+					             </div>
+					             </c:if>
+					             </p:panel>
+					           </div>
+					          </div>
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Distal" value="#{inspectionController.customerRehabilitation.leftDistal}">
+					           		 <p:ajax event="change" update="@(.leftdistalPanel)"/>
+					           		</p:selectBooleanCheckbox>
+					            </div>
+					            <p:panel styleClass="no-style-panel leftdistalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.leftDistal=='true'}">
+					              <div class="col-md-12">
+					                 <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.leftDistalChoose}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					                </div>
+					               </c:if>
+					             </p:panel>
+					          </div>
+					          </c:if>
+					          </p:panel>
+					         </div>
+					        </c:if>
+					       </p:panel>
+					          </div>
+					        </div>
+					      </div>
+					      <div class="col-md-12 ">
+					          <div class="row margin-bottom"> 
+					           <p:selectBooleanCheckbox itemLabel="Sensory function" value="#{inspectionController.customerRehabilitation.sensory}">
+					           <p:ajax event="change" update="@(.sensorPanel)"/>
+					          </p:selectBooleanCheckbox>
+					           </div>
+					         <div class="col-md-12">
+					          <p:panel styleClass="no-style-panel sensorPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.sensory=='true'}">
+					          <div class="col-md-12">
+					           <div class="form-title">RT</div>
+					              <div class="col-md-5">Pinprick</div>
+					              <div class="col-md-6">
+					               <p:selectOneMenu style="width:85px" value="#{inspectionController.customerRehabilitation.sensoryChoose}">
+					                <f:selectItem itemLabel="none" itemValue="0"/>
+					                <f:selectItem itemLabel="intact" itemValue="1"/>
+					                <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="3"/>
+					                <p:ajax event="change" update="@(.sPanel)"/>
+					                </p:selectOneMenu>
+					               </div>
+					             <p:panel styleClass="no-style-panel sPanel">
+					              <c:if test="#{inspectionController.customerRehabilitation.sensoryChoose=='1' or inspectionController.customerRehabilitation.sensoryChoose=='2' or
+					                		inspectionController.customerRehabilitation.sensoryChoose=='3'}">
+					               <div class="col-md-12">
+					                <div class="row margin-bottom">
+					                 <p:selectOneRadio value="#{inspectionController.customerRehabilitation.uRightSensoryChoose}" >
+					                  <f:selectItem itemLabel="U/Ex" itemValue="0"/>
+					                  <f:selectItem itemLabel="L/Ex" itemValue="1"/>
+					                  </p:selectOneRadio>
+					                 </div>
+					                </div>
+					               </c:if>
+					              </p:panel>
+					           <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Light touch</div>
+					            <div class="col-md-7">
+					             <p:selectOneMenu style="width:85px">
+					                <f:selectItem itemLabel="intact" itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="2"/>
+					                </p:selectOneMenu>
+					             </div>
+					            </div>
+					            <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Deep touch</div>
+					            <div class="col-md-7">
+					             <p:selectOneMenu style="width:85px">
+					                <f:selectItem itemLabel="intact" itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="2"/>
+					                </p:selectOneMenu>
+					             </div>
+					            </div>
+					            <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Position</div>
+					            <div class="col-md-7">
+					             <p:selectOneMenu style="width:85px">
+					                <f:selectItem itemLabel="intact" itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="2"/>
+					                </p:selectOneMenu>
+					             </div>
+					            </div>
+					           </div>
+					             </c:if>
+					           </p:panel>
+					          </div>
+					       </div>
+					<div class="col-md-12 margin-bottom">
+					           <div class="row">
+					            <p:selectBooleanCheckbox itemLabel="DTR"  value="#{inspectionController.customerRehabilitation.dtr}">
+					             <p:ajax event="change" update="@(.dtrPanel)"/>
+					            </p:selectBooleanCheckbox>
+					         </div>
+					          <div class="col-md-12">
+					            <p:panel styleClass="no-style-panel dtrPanel">
+					             <c:if test="#{inspectionController.customerRehabilitation.dtr=='true'}">
+					              <div class="col-md-12">
+					            <div class="form-title">RT</div>
+					            <p:selectOneRadio layout="grid" columns="4" value="#{inspectionController.customerRehabilitation.dtrChoose}">
+					              <f:selectItem itemLabel="Bj" itemValue="0"/>
+					              <f:selectItem itemLabel="Tj" itemValue="1"/>
+					              <f:selectItem itemLabel="Kj" itemValue="2"/>
+					              <f:selectItem itemLabel="Aj" itemValue="3"/>
+					              </p:selectOneRadio>
+					            </div>
+					          
+					              </c:if>
+					             </p:panel>
+					           </div>
+					           </div>
+					       <div class="col-md-12 margin-bottom">
+					          <div class="row">
+					           <p:selectBooleanCheckbox itemLabel="Pathologic reflex"
+					            							value="#{inspectionController.customerRehabilitation.pathologic}">
+	 					           <p:ajax  event="change" update="@(.pathologicPanel)"/>
+	 					          </p:selectBooleanCheckbox>
+					           </div>
+					           <p:panel styleClass="no-style-panel pathologicPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.pathologic=='true'}">
+					             <div class="col-md-12">
+					              <div class="col-md-12">
+					              <div class="form-title">RT</div>
+					              <div class="col-md-12">
+					              <p:selectOneRadio value="#{inspectionController.customerRehabilitation.pathologicChoose}" layout="grid"  columns="2">
+					              <f:selectItem itemLabel="Ankle clonus " itemValue="0"/>
+					              <f:selectItem itemLabel="Babinski’s sign " itemValue="1"/>
+					              <f:selectItem itemLabel="Hoffman’s sigh " itemValue="2"/>
+					              </p:selectOneRadio>
+					               </div>
+					              </div>
+					            </div>
+					             </c:if>
+					            </p:panel>
+					          </div>
+					          </div>
+					       </div>
+					      </div>
+					      <div class="col-md-6">
+					       <div class="form-title" style="cursor:pointer" onclick="mtleftToggle('LT')">
+					       		LT <i id="rash-mtleft" class="pull-right fa fa-chevron-left"></i></div>
+					        <div id="mtleft" style="display:none">
+					          <div class="row">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox  itemLabel="Motor power" value="#{inspectionController.customerRehabilitation.leftPower}">
+					           	<p:ajax event="change" update="@(.leftpowerPanel)"/>
+					           </p:selectBooleanCheckbox>
+					          </div>
+					     <p:panel styleClass="no-style-panel leftpowerPanel" style="padding-top:3px">
+					     <c:if test="#{inspectionController.customerRehabilitation.leftPower=='true'}">
+					       <div class="col-md-12">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Upper extremities"
+					           							value="#{inspectionController.customerRehabilitation.leftExtremities}">
+					           	 <p:ajax event="change" update="@(.leftupperPanel)"/>
+					           </p:selectBooleanCheckbox>
+					          </div>
+					        <p:panel styleClass="leftupperPanel no-style-panel">
+					         <c:if test="#{inspectionController.customerRehabilitation.leftExtremities=='true'}">
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 ">
+					           <p:selectBooleanCheckbox itemLabel="Proximal"
+					           							value="#{inspectionController.customerRehabilitation.lRightproximal}">
+					           			<p:ajax event="change" update="@(.lRightproximalPanel)"/>
+					           	</p:selectBooleanCheckbox>
+					            <p:panel styleClass="no-style-panel lRightproximalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.lRightproximal=='true'}">
+					             <div class="col-md-12"> 
+					               <div class="col-md-12">
+					                <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.lRightproximalChoose}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					              </div>
+					             </div>
+					             </c:if>
+					             </p:panel>
+					           </div>
+					          </div>
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Distal" value="#{inspectionController.customerRehabilitation.leftRightdistal}">
+					           		 <p:ajax event="change" update="@(.leftRightdistalPanel)"/>
+					           		</p:selectBooleanCheckbox>
+					            </div>
+					            <p:panel styleClass="no-style-panel leftRightdistalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.leftRightdistal=='true'}">
+					              <div class="col-md-12">
+					                 <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.leftRightdistalChoose}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					                </div>
+					               </c:if>
+					             </p:panel>
+					          </div>
+					          </c:if>
+					          </p:panel>
+					          <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Lower extremities" value="#{inspectionController.customerRehabilitation.leftlowerExtremities}">
+					             <p:ajax event="change"  update="@(.leftlowerExtremitiesPanel)"/>
+					            </p:selectBooleanCheckbox>
+					          </div>
+					           <p:panel styleClass="leftlowerExtremitiesPanel no-style-panel">
+					         <c:if test="#{inspectionController.customerRehabilitation.leftlowerExtremities=='true'}">
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 ">
+					           <p:selectBooleanCheckbox itemLabel="Proximal"
+					           							value="#{inspectionController.customerRehabilitation.leftLeftProximal}">
+					           			<p:ajax event="change" update="@(.leftLeftProximalPanel)"/>
+					           	</p:selectBooleanCheckbox>
+					            <p:panel styleClass="no-style-panel leftLeftProximalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.leftLeftProximal=='true'}">
+					             <div class="col-md-12"> 
+					               <div class="col-md-12">
+					                <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.leftLeftProximalChoose}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					              </div>
+					             </div>
+					             </c:if>
+					             </p:panel>
+					           </div>
+					          </div>
+					          <div class="col-md-12 margin-bottom">
+					           <div class="col-md-12 margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Distal" value="#{inspectionController.customerRehabilitation.leftLeftDistal}">
+					           		 <p:ajax event="change" update="@(.leftLeftDistalPanel)"/>
+					           		</p:selectBooleanCheckbox>
+					            </div>
+					            <p:panel styleClass="no-style-panel leftLeftDistalPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.leftLeftDistal=='true'}">
+					              <div class="col-md-12">
+					                 <p:selectOneRadio layout="grid" columns="3" value="#{inspectionController.customerRehabilitation.leftLeftDistalChoose}">
+					                  <f:selectItem itemLabel="normal" itemValue="0"/>
+					                  <f:selectItem itemLabel="good " itemValue="1"/>
+					                  <f:selectItem itemLabel="fair " itemValue="2"/>
+					                  <f:selectItem itemLabel="poor " itemValue="3"/>
+					                  <f:selectItem itemLabel="trace " itemValue="4"/>
+					                  <f:selectItem itemLabel="zero " itemValue="5"/>
+					                 </p:selectOneRadio>
+					                </div>
+					               </c:if>
+					             </p:panel>
+					          </div>
+					          </c:if>
+					          </p:panel>
+					         </div>
+					        </c:if>
+					       </p:panel>
+					     </div>
+					         <div class="col-md-12"> 
+					           <div class="row margin-bottom">
+					            <p:selectBooleanCheckbox itemLabel="Sensory function" value="#{inspectionController.customerRehabilitation.leftsensory}">
+					             <p:ajax event="change"  update="@(.ltSensorPanel)"/>
+					             </p:selectBooleanCheckbox>
+					            </div>
+					          <div>
+						<p:panel styleClass="no-style-panel ltSensorPanel">
+						  <c:if test="#{inspectionController.customerRehabilitation.leftsensory}">
+				           <div class="col-md-12 margin-bottom" >
+ 					           <div class="form-title">LT</div>
+					              <div class="col-md-12">
+					                 <div class="col-md-5">Pinprick</div>
+					              <div class="col-md-6">
+					               <p:selectOneMenu style="width:85px" value="#{inspectionController.customerRehabilitation.leftPinprick}" >
+					                <f:selectItem itemLabel="none" itemValue="0"/>
+					                <f:selectItem itemLabel="intact" itemValue="1"/>
+					                <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="3"/>
+					                <p:ajax  event="change" update="@(.leftPinPanel)"/>
+					                </p:selectOneMenu>
+					               </div>
+					               </div>
+					             <div class="col-md-12 margin-bottom">
+					             <p:panel styleClass="no-style-panel leftPinPanel">
+					              <c:if test="#{inspectionController.customerRehabilitation.leftPinprick=='1'  or 
+					                inspectionController.customerRehabilitation.leftPinprick=='2' or inspectionController.customerRehabilitation.leftPinprick=='3'
+					               }">
+					              <div class="row margin-bottom">
+					               <p:selectOneRadio value="#{inspectionController.customerRehabilitation.uExPinprick}" >
+					                <f:selectItem itemLabel="U/Ex" itemValue="1" />
+					                <f:selectItem itemLabel="L/Ex"  itemValue="0"/>
+					                </p:selectOneRadio>
+					               </div>
+					               </c:if>
+					               </p:panel>
+					              </div>
+					              
+					           <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Light touch</div>
+					            <div class="col-md-7">
+					             <p:selectOneMenu style="width:85px">
+					                <f:selectItem itemLabel="intact" itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="2"/>
+					                </p:selectOneMenu>
+					             </div>
+					            </div>
+					            <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Deep touch</div>
+					            <div class="col-md-7">
+					             <p:selectOneMenu style="width:85px">
+					                <f:selectItem itemLabel="intact" itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="2"/>
+					                </p:selectOneMenu>
+					             </div>
+					            </div>
+					            <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Position</div>
+					            <div class="col-md-7">
+					             <p:selectOneMenu style="width:85px">
+					                <f:selectItem itemLabel="intact" itemValue="0"/>
+					                <f:selectItem itemLabel="impaired" itemValue="1"/>
+					                <f:selectItem itemLabel="uncheck able " itemValue="2"/>
+					                </p:selectOneMenu>
+					             </div>
+					            </div>
+					           </div>
+					           </c:if>
+						      </p:panel>
+					           </div>
+					           </div>
+					            <div class="col-md-12 margin-bottom">
+					           <div class="row">
+					            <p:selectBooleanCheckbox itemLabel="DTR"  value="#{inspectionController.customerRehabilitation.leftDtr}">
+					             <p:ajax event="change" update="@(.dtrPanel)"/>
+					            </p:selectBooleanCheckbox>
+					         </div>
+					          <div class="col-md-12">
+					            <p:panel styleClass="no-style-panel dtrPanel">
+					             <c:if test="#{inspectionController.customerRehabilitation.leftDtr=='true'}">
+					              <div class="col-md-12">
+					            <div class="form-title">LT</div>
+					            <p:selectOneRadio layout="grid" columns="4" value="#{inspectionController.customerRehabilitation.leftDtrChoose}">
+					              <f:selectItem itemLabel="Bj"  itemValue="0"/>
+					              <f:selectItem itemLabel="Tj" itemValue="1"/>
+					              <f:selectItem itemLabel="Kj" itemValue="2"/>
+					              <f:selectItem itemLabel="Aj" itemValue="3"/>
+					              </p:selectOneRadio>
+					               </div>
+					              </c:if>
+					             </p:panel>
+					           </div>
+					           </div>
+					         <div class="col-md-12 margin-bottom">
+					          <div class="row">
+					           <p:selectBooleanCheckbox itemLabel="Pathologic reflex"
+					            							value="#{inspectionController.customerRehabilitation.leftPathologic}">
+	 					           <p:ajax  event="change" update="@(.leftpathologicPanel)"/>
+	 					          </p:selectBooleanCheckbox>
+					           </div>
+					           <p:panel styleClass="no-style-panel leftpathologicPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.leftPathologic=='true'}">
+					             <div class="col-md-12">
+					              <div class="col-md-12">
+					              <div class="form-title">LT</div>
+					              <div class="col-md-12">
+					              <p:selectOneRadio value="#{inspectionController.customerRehabilitation.leftPathologicChoose}" layout="grid"  columns="2">
+					              <f:selectItem itemLabel="Ankle clonus " itemValue="0"/>
+					              <f:selectItem itemLabel="Babinski’s sign " itemValue="1"/>
+					              <f:selectItem itemLabel="Hoffman’s sigh " itemValue="2"/>
+					              </p:selectOneRadio>
+					               </div>
+					              </div>
+					            </div>
+					             </c:if>
+					            </p:panel>
+					          </div>
+					          </div>
+					         <div>
+					        </div>
+					        </div>
+					       </div>
+				            <div class="col-md-12">
+				             <div class="col-md-12 ">
+				              <div class="col-md-12 ">
+					           <div class="row margin-bottom">
+					            <p:selectBooleanCheckbox itemLabel="Swallowing" 
+					           							value="#{inspectionController.customerRehabilitation.swallowing}">
+					           		<p:ajax event="change" update="@(.swallowPanel)"/>
+	 					         </p:selectBooleanCheckbox>
+					            </div>
+					           <p:panel styleClass="no-style-panel swallowPanel">
+					            <c:if test="#{inspectionController.customerRehabilitation.swallowing=='true'}">
+					             <div class="col-md-12 margin-bottom">
+					               <div class="col-md-6">
+					                 <div class="row magin-bottom">
+					                  <p:selectBooleanCheckbox itemLabel="Oral phase lip protrusion " value="#{inspectionController.customerRehabilitation.protrusion}">
+					                     <p:ajax event="change"  update="@(.protrusionPanel)"/>
+					                   </p:selectBooleanCheckbox>
+					                  </div>
+					                  <p:panel styleClass="no-style-panel protrusionPanel">
+					                  <c:if test="#{inspectionController.customerRehabilitation.protrusion}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.protrusionChoose}">
+					                     <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                </div>
+					               <div class="col-md-6">
+					                <div class="row ">
+					                   <p:selectBooleanCheckbox itemLabel="closure" value="#{inspectionController.customerRehabilitation.closure}">
+					                     <p:ajax event="change" update="@(.closurePanel)"/>
+					                   </p:selectBooleanCheckbox>
+					                  </div>
+					                   <p:panel styleClass="no-style-panel closurePanel">
+					                   <c:if test="#{inspectionController.customerRehabilitation.closure=='true'}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.closureChoose}">
+					                     <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                </div>
+					              </div>
+					              <div class="col-md-12 margin-bottom">
+					                <div class="col-md-4">
+					                 <div class="row ">
+					                  <p:selectBooleanCheckbox itemLabel="Tongue protrusion" value="#{inspectionController.customerRehabilitation.tProtrusion}">
+					                 	 <p:ajax event="change"  update="@(.protPanel)"/>
+					                  </p:selectBooleanCheckbox>
+					                  </div>  
+					                  <p:panel styleClass="no-style-panel protPanel">
+					                  <c:if test="#{inspectionController.customerRehabilitation.tProtrusion=='true'}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.tProtrusionChoose}">
+					                     <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                 </div>
+					                <div class="col-md-4">
+					                 <div class="row ">
+					                  <p:selectBooleanCheckbox itemLabel="lateralization" value="#{inspectionController.customerRehabilitation.lateralization}">
+					                   	 <p:ajax event="change"  update="@(.ateralizationPanel)"/>
+					                   </p:selectBooleanCheckbox>
+					                  </div>
+					                 <p:panel styleClass="no-style-panel ateralizationPanel">
+					                 <c:if test="#{inspectionController.customerRehabilitation.lateralization=='true'}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.lateralizationChoose}">
+					                     <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                 </div>
+					                <div class="col-md-4">
+					                 <div class="row ">
+					                   <p:selectBooleanCheckbox itemLabel="elevation" value="#{inspectionController.customerRehabilitation.elevation}">
+					                    	 <p:ajax event="change" update="@(.elevationPnel)" />
+					                    </p:selectBooleanCheckbox>
+					                  </div>
+					                  <p:panel styleClass="no-style-panel elevationPnel" >
+					                  <c:if test="#{inspectionController.customerRehabilitation.elevation=='true'}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.elevationChoose}"> 
+					                      <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                 </div>
+					                </div>
+					                <div class="col-md-12 margin-bottom">
+					                 <div class="col-md-6">
+					                 <div class="row ">
+					                   <p:selectBooleanCheckbox itemLabel="Pharyngeal phase HL excursion" value="#{inspectionController.customerRehabilitation.excursion}">
+					                     	 <p:ajax event="change" update="@(.excursionPnl)"/>
+					                     </p:selectBooleanCheckbox>
+					                  </div>
+					                  <p:panel styleClass="no-style-panel excursionPnl">
+					                  <c:if test="#{inspectionController.customerRehabilitation.excursion=='true'}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.excursionChoose}">
+					                     <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                 </div>
+					                 <div class="col-md-6">
+					                  <div class="row ">
+					                    <p:selectBooleanCheckbox itemLabel="HL promptness " value="#{inspectionController.customerRehabilitation.promptness}">
+					                     	 <p:ajax event="change"  update="@(.promptnessPnl)"/>
+					                     </p:selectBooleanCheckbox>
+					                  </div>
+					                  <p:panel styleClass="no-style-panel promptnessPnl">
+					                  <c:if test="#{inspectionController.customerRehabilitation.promptness=='true'}">
+					                    <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.promptnessChoose}">
+					                     <f:selectItem itemLabel="none" itemValue="0"/>
+					                     <f:selectItem itemLabel="intact" itemValue="1"/>
+					                     <f:selectItem itemLabel="impaired" itemValue="2"/>
+					                     <f:selectItem itemLabel="closure" itemValue="3"/>
+					                     </p:selectOneRadio>
+					                     </c:if>
+					                   </p:panel>
+					                 </div>
+					                </div>
+					             <div class="col-md-12 margin-bottom">
+					             <p:inputTextarea style="width:100%" rows="3" placeholder="Current feeding" value="#{inspectionController.customerRehabilitation.feeding}"/>
+					             </div>
+					             </c:if>
+					            </p:panel>
+					          </div>
+					         </div>
+					    <div class="col-md-12 margin-bottom">
+					          <div class="margin-bottom">
+					           <p:selectBooleanCheckbox itemLabel="Communication" value="#{inspectionController.customerRehabilitation.communication}">
+	 					          <p:ajax event="change" update="@(.commPanel)"/>
+	 					          </p:selectBooleanCheckbox>
+					           </div>
+					           <p:panel styleClass="no-style-panel commPanel">
+					           <c:if test="#{inspectionController.customerRehabilitation.communication=='true'}">
+					            <div class="col-md-7">
+					            <div class="row  margin-bottom">
+					             <div class="form-title">Language</div>
+					             </div>
+					             <p:panel styleClass="no-style-panel">
+					               <div class="col-md-12">
+					                <div class="col-md-6">
+					                 <div class="col-md-12 margin-bottom">
+					                 <div class="col-md-7">
+					                  Frequency
+					                  </div>
+					                   <div class="col-md-5">
+					                    <p:selectOneRadio layout="grid" columns="2">
+					                     <f:selectItem itemLabel="normal "/>
+					                      <f:selectItem itemLabel="impaired"/>
+					                     </p:selectOneRadio>
+					                    </div>
+					                  </div>
+					                <div class="col-md-12 margin-bottom">
+					                 <div class="col-md-7">
+					                  Comprehension
+					                  </div>
+					                   <div class="col-md-5">
+					                    <p:selectOneRadio layout="grid" columns="2">
+					                     <f:selectItem itemLabel="normal "/>
+					                      <f:selectItem itemLabel="impaired"/>
+					                     </p:selectOneRadio>
+					                    </div>
+					                  </div>
+					               <div class="col-md-12 margin-bottom">
+					                 <div class="col-md-7">
+					                  Repetition
+					                  </div>
+					                   <div class="col-md-5">
+					                    <p:selectOneRadio layout="grid" columns="2">
+					                     <f:selectItem itemLabel="normal "/>
+					                      <f:selectItem itemLabel="impaired"/>
+					                     </p:selectOneRadio>
+					                    </div>
+					                  </div>
+					               <div class="col-md-12 margin-bottom">
+					                 <div class="col-md-7">
+					                  Naming
+					                  </div>
+					                   <div class="col-md-5">
+					                    <p:selectOneRadio layout="grid" columns="2">
+					                     <f:selectItem itemLabel="normal "/>
+					                      <f:selectItem itemLabel="impaired"/>
+					                     </p:selectOneRadio>
+					                    </div>
+					                  </div>
+					                </div>
+					                
+					                 </div>
+					              </p:panel>
+					            </div>
+					           <div class="col-md-5">
+					             <div class="form-title">Dysarthria</div>
+					            </div>
+					            </c:if>
+					            </p:panel>
+					          </div>
+					    </div> 
+					  </div>
+					</div>
+					<div class="row">
+					 <div class="col-md-12">
+					    <div class="row margin-bottom">
+					     <div class="col-md-12">
+					     <div class="form-title" style="cursor:pointer" onclick="functionToggle('Functional examination')">
+						    Functional examination<i id="rash-exam" class="pull-right fa fa-chevron-left"></i></div>
+					     </div>
+					     </div>
+					   <div id="examfunc" style="display:none" >
+					    <div class="col-md-6">
+					     <div class="col-md-12">
+					      <div class="form-title" style="cursor:pointer"  onclick="ambulationToggle('Ambulation')">
+					      	Ambulation<i id="rash-amb" class="pull-right fa fa-chevron-left"></i> </div>
+					      </div>
+					  <div style="display:none" id="amb">
+					   <div class="col-md-12 margin-bottom">
+					     <div class="col-md-6">
+					      <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox  itemLabel="Bed rolling" value="#{inspectionController.customerRehabilitation.rollingBed}">
+					          <p:ajax event="change" update="@(.rollingBedPanel)"/>
+					        </p:selectBooleanCheckbox>
+					       </div>
+					       <p:panel styleClass="no-style-panel rollingBedPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.rollingBed=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.rollingBedChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					    <div class="col-md-6">
+					     <div class="row  margin-bottom">
+					      <p:selectBooleanCheckbox  itemLabel="Sit up" value="#{inspectionController.customerRehabilitation.sitUp}">
+					         <p:ajax event="change" update="@(.sitUpPanel)"/>
+					       </p:selectBooleanCheckbox>
+					      </div>
+					     <p:panel styleClass="no-style-panel sitUpPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.sitUp=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.sitUpChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+				     </div>
+				     <div class="col-md-12 margin-bottom">
+				      <div class="col-md-12">
+					     <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox  itemLabel="Static sitting balance" value="#{inspectionController.customerRehabilitation.balanceStatic}" >
+					         <p:ajax event="change" update="@(.balanceStaticPanel)"/>
+					        </p:selectBooleanCheckbox>
+					      </div>
+					      <p:panel styleClass="no-style-panel balanceStaticPanel">
+					      <c:if test="#{inspectionController.customerRehabilitation.balanceStatic=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.balanceStaticChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					           </p:selectOneRadio>
+					          </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+				      </div>
+					     <div class="col-md-12">
+					      <div class="col-md-12 margin-bottom">
+					       <div class="row">
+					        <p:selectBooleanCheckbox  itemLabel="Dynamic sitting balance" value="#{inspectionController.customerRehabilitation.sittingBalance}">
+					           <p:ajax event="change" update="@(.sittingBalancePanel)"/>
+					          </p:selectBooleanCheckbox>
+					        </div>
+					       <p:panel styleClass="no-style-panel sittingBalancePanel">
+					        <c:if test="#{inspectionController.customerRehabilitation.sittingBalance=='true'}">
+					         <div class="col-md-12">
+					         <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.sittingBalanceChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneRadio>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					    </div>
+					   <div class="col-md-12 margin-bottom">
+					      <div class="col-md-6">
+					       <div class="row margin-bottom">
+					        <p:selectBooleanCheckbox  itemLabel="Sit to stand" value="#{inspectionController.customerRehabilitation.sitStand}">
+					           <p:ajax event="change" update="@(.sitStandPanel)"/>
+					         </p:selectBooleanCheckbox>
+					        </div>
+					       <p:panel styleClass="no-style-panel sitStandPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.sitStand}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.sitStandChoose}" >
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					     <div class="col-md-6">
+					     <p:selectBooleanCheckbox  itemLabel="Standing" value="#{inspectionController.customerRehabilitation.standing}" >
+					        <p:ajax event="change" update="@(.standingPanel)"/>
+					       </p:selectBooleanCheckbox>
+					     <p:panel styleClass="no-style-panel standingPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.standing=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.standingChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					          </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					    </div>
+					    <div class="col-md-12">
+					      <div class="col-md-12">
+					       <div class="row  margin-bottom">
+					        <p:selectBooleanCheckbox  itemLabel="Gait" value="#{inspectionController.customerRehabilitation.gait}">
+					          <p:ajax event="change" update="@(.gaitPanel)"/>
+					         </p:selectBooleanCheckbox>
+					        </div>
+					     <p:panel styleClass="no-style-panel gaitPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.gait=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRehabilitation.gaitChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneRadio>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					     </div>
+					   </div>
+					   </div>
+					  <div class="col-md-6">
+					     <div class="col-md-12">
+					      <div class="form-title" style="cursor:pointer" onclick="adlToggle('ADL')">
+					      	ADL <i id="rash-adl" class="pull-right fa fa-chevron-left"></i> </div>
+					      </div>
+					     <div style="display:none" id="adl">
+					      <div class="col-md-12 margin-bottom">
+					     <div class="col-md-6">
+					      <div class="row margin-bottom">
+					       <p:selectBooleanCheckbox  itemLabel="Eating" value="#{inspectionController.customerRehabilitation.eating}">
+					         <p:ajax event="change" update="@(.eatingPanel)"/>
+					        </p:selectBooleanCheckbox>
+					       </div>
+					      <p:panel styleClass="no-style-panel eatingPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.eating=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.eatingChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					    <div class="col-md-6">
+					     <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox  itemLabel="Grooming" value="#{inspectionController.customerRehabilitation.grooming}">
+					         <p:ajax event="change" update="@(.groomingPanel)"/>
+					       </p:selectBooleanCheckbox>
+					      </div>
+					     <p:panel styleClass="no-style-panel groomingPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.grooming=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.groomingChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+				     </div>
+				     <div class="col-md-12 margin-bottom">
+				      <div class="col-md-6">
+					    <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox  itemLabel="Dressing" value="#{inspectionController.customerRehabilitation.dressing}">
+					        <p:ajax event="change" update="@(.dressingPanel)"/>
+					       </p:selectBooleanCheckbox>
+					     </div>
+					     <p:panel styleClass="no-style-panel dressingPanel">
+					     <c:if test="#{inspectionController.customerRehabilitation.dressing=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.dressingChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					        </c:if>
+					        </p:panel>
+					     </div>
+					     <div class="col-md-6">
+					        <div class="row margin-bottom">
+					         <p:selectBooleanCheckbox  itemLabel="Toileting" value="#{inspectionController.customerRehabilitation.toileting}" >
+					              <p:ajax event="change" update="@(.toiletingPanel)"/>
+					           </p:selectBooleanCheckbox>
+					         </div>
+					       <p:panel styleClass="no-style-panel toiletingPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.toileting=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.toiletingChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+				      </div>
+					   <div class="col-md-12 margin-bottom">
+					      <div class="col-md-6">
+					       <div class="row margin-bottom">
+					          <p:selectBooleanCheckbox  itemLabel="Bathing" value="#{inspectionController.customerRehabilitation.bathing}">
+					             <p:ajax event="change" update="@(.bathingPanel)"/>
+					           </p:selectBooleanCheckbox>
+					          </div>
+					       <p:panel styleClass="no-style-panel bathingPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.bathing}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.bathingChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					     <div class="col-md-6">
+					      <div class="row margin-bottom">
+					        <p:selectBooleanCheckbox  itemLabel="Transfer" value="#{inspectionController.customerRehabilitation.transfer}">
+					          <p:ajax event="change" update="@(.transferPanel)"/>
+					          </p:selectBooleanCheckbox>
+					        </div>
+					       <p:panel styleClass="no-style-panel transferPanel">
+					       <c:if test="#{inspectionController.customerRehabilitation.transfer=='true'}">
+					        <div class="col-md-12">
+					         <p:selectOneMenu value="#{inspectionController.customerRehabilitation.transferChoose}">
+					          <f:selectItem itemLabel="independent" itemValue="0"/>
+					          <f:selectItem itemLabel="minimal assist" itemValue="1"/>
+					          <f:selectItem itemLabel="moderate assist" itemValue="2"/>
+					          <f:selectItem itemLabel="maximal assist" itemValue="3"/>
+					          </p:selectOneMenu>
+					         </div>
+					         </c:if>
+					        </p:panel>
+					     </div>
+					    </div>
+					      </div>
+					   </div>
+					   <div class="col-md-12">
+					   <div class="col-md-6">
+					    <div class="form-title" style="cursor:pointer" onclick="bowelToggle('Bowel')">
+					    		Bowel <i id="rash-bowel" class="pull-right fa fa-chevron-left"></i> </div>
+					    <div class="col-md-12  margin-bottom" id="bowel" style="display:none">
+					     <div class="row  margin-bottom">
+					      <p:selectBooleanCheckbox  itemLabel="incontinent " 
+					      							value="#{inspectionController.customerRehabilitation.bowelIncontinent}">
+					      		<p:ajax event="change"  update="@(.bowelPanel)"/>
+					      		</p:selectBooleanCheckbox>
+					      </div>
+					      <p:panel styleClass="no-style-panel bowelPanel">
+					        <c:if test="#{inspectionController.customerRehabilitation.bowelIncontinent=='true'}">
+					         <div class="col-md-12 margin-bottom">
+					          <p:inputTextarea  style="width:100%"  rows="3" placeholder="Passage sense " 
+					          					value="#{inspectionController.customerRehabilitation.passageSense}"/>
+					          </div>
+					         <div class="col-md-12 margin-bottom"  >
+					           <p:inputTextarea  style="width:100%"  rows="3" placeholder="Anal tone "
+					           						value="#{inspectionController.customerRehabilitation.analTone}"/>
+					          </div>
+					          <div class="col-md-12 margin-bottom">
+					             <p:inputTextarea  style="width:100%"  rows="3" placeholder="Voluntary and contraction "
+					             					value="#{inspectionController.customerRehabilitation.volContraction}"/>
+					              </div>
+					           <div class="col-md-12 margin-bottom">
+					             <p:inputTextarea  style="width:100%"  rows="3" placeholder="Defecation method "
+					             					value="#{inspectionController.customerRehabilitation.defMethod}"/>
+					                </div>
+					         </c:if>
+					       </p:panel>
+					     </div>
+					    </div>
+					   <div class="col-md-6">
+					    <div class="form-title" style="cursor:pointer" onclick="bladderToggle('Bladder')">
+					    		Bladder <i id="rash-blad" class="pull-right fa fa-chevron-left"></i>  </div>
+					     <div class="col-md-12  margin-bottom" id="blad" style="display:none">
+					     <div class="row margin-bottom">
+					      <p:selectBooleanCheckbox  itemLabel="incontinent " value="#{inspectionController.customerRehabilitation.bladderIncontinent}">
+					      		<p:ajax  event="change" update="@(.bladderPanel)"/>
+					      		</p:selectBooleanCheckbox>
+					      </div>
+					     <p:panel  styleClass="no-style-panel bladderPanel">
+					      <c:if test="#{inspectionController.customerRehabilitation.bladderIncontinent=='true'}">
+					       <div class="col-md-12 margin-bottom">
+					      <p:inputTextarea  style="width:100%"  rows="3" placeholder="Voiding desire "
+					      						value="#{inspectionController.customerRehabilitation.bladderVoid}"/>
+					      </div>
+					      <div class="col-md-12 margin-bottom"  >
+					      <p:inputTextarea  style="width:100%"  rows="3" placeholder="Fullness sense "
+					      					value="#{inspectionController.customerRehabilitation.bladderFullSense}"/>
+					      </div>
+					      <div class="col-md-12 margin-bottom">
+					      <p:inputTextarea  style="width:100%"  rows="3" placeholder="Passage sense  "
+					      						value="#{inspectionController.customerRehabilitation.bladderPaassage}"/>
+					      </div>
+					      <div class="col-md-12 margin-bottom">
+					      <p:inputTextarea  style="width:100%"  rows="3" placeholder="Voiding method "
+					      									value="#{inspectionController.customerRehabilitation.bladderVoid}"/>
+					      </div>
+					       </c:if>
+					      </p:panel>
+					     </div>
+					     
+					    </div>
+					   </div>
+					 </div>				     
+					  </div>
+					 </div>
+				 <div class="col-md-12">
+				   <div class="row margin-bottom">
+				   <div class="form-title" style="cursor:pointer" onclick="rangeToggle('ROM Range of motion')">
+				   	ROM (Range of motion)<i id="rash-upperLow" class="pull-right fa fa-chevron-left"></i></div>
+				   <div class="col-md-12" style="display:none"  id="upperLow">
+				     <div class="form-title" style="cursor:pointer" onclick="upperToggle('Upper extremity')">
+				     	Upper extremity<i id="rash-upper" class="pull-right fa fa-chevron-left"></i> </div>
+				      <div id="upperId" class="col-md-12" style="display:none">
+				        <div class="col-md-6">
+				          <div class="form-title" style="cursor:pointer" onclick="upperRightToggle('RT')">
+				          	RT <i id="rash-uppereright" class="pull-right fa fa-chevron-left"></i>
+				          	</div>
+				          <div id="upperrightId" style="display:none">
+				           <div class="col-md-12">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Shoulder" value="#{inspectionController.customerRehabilitation.shoulder}">
+				              	 <p:ajax event="change" update="@(.shoulderPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel shoulderPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.shoulder}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Flexion /0-180
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.flexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Extension /0-60
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.extension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Abduction/0-180
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.abduction}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Adduction /0-75/
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.adduction}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	Internal rotation /0-70/
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.internalRotation}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	External rotation /0-90/ 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.externalRotation}"/>
+				              	 	  </div> 
+				              	   </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				          <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Elbow" value="#{inspectionController.customerRehabilitation.elbow}">
+				              	 <p:ajax event="change" update="@(.elowPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel elowPanel">
+				               <c:if test="#{inspectionController.customerRehabilitation.elbow}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-150
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.elbowFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Extension 0-(-10) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.elbowExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Forearm" value="#{inspectionController.customerRehabilitation.forearm}" >
+				              	 <p:ajax event="change" update="@(.forearmPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel forearmPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.forearm}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Pronation 0-90
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.foreamPronation}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Supination 0-90
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.foreamSupination}"/>
+				              	 	  </div> 
+				                   </div>
+				              	 </c:if> 
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Wrist" value="#{inspectionController.customerRehabilitation.wrist}" >
+				              	 <p:ajax event="change" update="@(.wristPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel wristPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.wrist}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-80
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.wristFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Extension 0-70
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.wristExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Ulna deviation 0-30 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.wristUlna}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Radial deviation 0-20
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.wristRadial}"/>
+				              	 	  </div> 
+				              	  </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Hand" value="#{inspectionController.customerRehabilitation.hand}" >
+				              	 <p:ajax event="change" update="@(.hanPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel hanPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.hand}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  MPJ: Fl (0-90) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.handMPJ}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  PIP: Fl (0-100) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.handPip}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  IP: Fl (0-80) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.handFi}"/>
+				              	 	  </div> 
+				              	  </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				           </div>
+				          </div>
+				         <div class="col-md-6">
+				           <div class="form-title" style="cursor:pointer" onclick="upperleftToggle('LT')">
+				           		LT  <i id="rash-upperLeft" class="pull-right fa fa-chevron-left"></i>
+				           		</div>
+				           <div  id="upperLeftId" style="display:none">
+				           <div class="col-md-12">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Shoulder" value="#{inspectionController.customerRehabilitation.leftshoulder}">
+				              	 <p:ajax event="change" update="@(.leftSoulderPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel leftSoulderPanel">
+				               <c:if test="#{inspectionController.customerRehabilitation.leftshoulder}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Flexion /0-180
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Extension /0-60
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Abduction/0-180
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftAbduction}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	  Adduction /0-75/
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftAdductions}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	Internal rotation /0-70/
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftInsternal}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-5">
+				              	 	External rotation /0-90/ 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftExternalRota}"/>
+				              	 	  </div> 
+				              	   </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				          <div class="col-md-12">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Elbow" value="#{inspectionController.customerRehabilitation.leftElbow}">
+				              	 <p:ajax event="change" update="@(.elowleftPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel elowleftPanel">
+				               <c:if test="#{inspectionController.customerRehabilitation.leftElbow}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-150
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftelbowFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Extension 0-(-10) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftElbowExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Forearm" value="#{inspectionController.customerRehabilitation.leftforearm}">
+				              	 <p:ajax event="change" update="@(.leftforearmPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel leftforearmPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.leftforearm}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Pronation 0-90
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftforeamPronation}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Supination 0-90
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftforeamSupination}"/>
+				              	 	  </div> 
+				                   </div>
+				              	 </c:if> 
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Wrist" value="#{inspectionController.customerRehabilitation.leftwrist}">
+				              	 <p:ajax event="change" update="@(.leftwristPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel leftwristPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.leftwrist}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-80
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftWristFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Extension 0-70
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftWristExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Ulna deviation 0-30 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftWristUlna}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Radial deviation 0-20
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2"  value="#{inspectionController.customerRehabilitation.leftWristRadial}"/>
+				              	 	  </div> 
+				              	  </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Hand" value="#{inspectionController.customerRehabilitation.lefthand}">
+				              	 <p:ajax event="change" update="@(.lefthanPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel lefthanPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.lefthand}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  MPJ: Fl (0-90) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftHandmpj}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  PIP: Fl (0-100) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftHandpip}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  IP: Fl (0-80) 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftHandFl}"/>
+				              	 	  </div> 
+				              	  </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				           </div>
+				          </div>
+				       </div>
+ 	     			 <div class="form-title" style="cursor:pointer" onclick="lowToggle('Low  extremity')">
+ 	     			 	Low  extremity <i id="rash-low" class="pull-right fa fa-chevron-left"></i> </div>
+				      <div id="lowId" class="col-md-12" style="display:none">
+				      <div class="col-md-6">
+				          <div class="form-title" style="cursor:pointer" onclick="lowRightToggle('RT')">
+				          	RT  <i id="rash-lowright" class="pull-right fa fa-chevron-left"></i> </div>
+				          <div id="lowrightId" style="display:none">
+				           <div class="col-md-12">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Hip" value="#{inspectionController.customerRehabilitation.hip}" >
+				              	 <p:ajax event="change" update="@(.hipPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel hipPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.hip}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-80
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.hipFlexin}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Extension 0-70
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.hipExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Ulna deviation 0-30 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.hipUlna}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Abduction 0-45
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2"  value="#{inspectionController.customerRehabilitation.hipRadial}"/>
+				              	 	  </div> 
+				              	  </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				          <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Knee" value="#{inspectionController.customerRehabilitation.knee}" >
+				              	 <p:ajax event="change" update="@(.keneePanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel keneePanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.knee}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-135
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.kneeFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	 Extension 0-(-10)
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.kneeExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Ankle" value="#{inspectionController.customerRehabilitation.ankle}" >
+				              	 <p:ajax event="change" update="@(.anklePanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel anklePanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.ankle}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-135
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.ankleFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	 Extension 0-(-10)
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.ankleExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				           </div>
+				          </div>
+				          <div class="col-md-6">
+				          <div class="form-title" style="cursor:pointer" onclick="lowLeftToggle('LT')">
+				          	LT  <i id="rash-lowltId" class="pull-right fa fa-chevron-left"></i> </div>
+				          <div id="lowLeftId" style="display:none">
+				        	 <div class="col-md-12">
+				              <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Hip" value="#{inspectionController.customerRehabilitation.leftHip}">
+				              	 <p:ajax event="change" update="@(.lefthipPanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel lefthipPanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.leftHip}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-80
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftHipFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Extension 0-70
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftHipExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Ulna deviation 0-30 
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftHipUlna}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Radial deviation 0-20
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2"  value="#{inspectionController.customerRehabilitation.leftHipRadial}"/>
+				              	 	  </div> 
+				              	  </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				          <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Knee" value="#{inspectionController.customerRehabilitation.leftKnee}">
+				              	 <p:ajax event="change" update="@(.leftKneePanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				              <p:panel styleClass="no-style-panel leftKneePanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.leftKnee}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-135
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftKneeFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	 Extension 0-(-10)
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftKneeExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				         <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Ankle" value="#{inspectionController.customerRehabilitation.leftAnkle}">
+				              	 <p:ajax event="change" update="@(.leftAnklePanel)"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <p:panel styleClass="no-style-panel leftAnklePanel">
+				              <c:if test="#{inspectionController.customerRehabilitation.leftAnkle}">
+				              	<div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	  Flexion 0-135
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftAnkleFlexion}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 <div class="col-md-12 margin-bottom">
+				              	 	<div class="col-md-6">
+				              	 	 Extension 0-(-10)
+				              	 	  </div>
+				              	 	 <div class="col-md-6">
+				              	 	  <p:inputText style="width:100%" rows="2" value="#{inspectionController.customerRehabilitation.leftAnkleExtension}"/>
+				              	 	  </div> 
+				              	 </div>
+				              	 </c:if>
+				               </p:panel>
+				            </div>
+				           </div>
+				          </div>
+				       </div>
+				    </div>
+				    </div>
+				  </div>
+				  <div class="col-md-12">
+				   <div class="row margin-bottom">
+				   <div class="form-title" style="cursor:pointer" onclick="gaitToggle('Gait')">
+				   	Gait<i id="rash-gait" class="pull-right fa fa-chevron-left"></i></div>
+				   	<div id="gaitId" style="display:none">
+				   	<div class="col-md-12 ">
+				             <div class="col-md-3 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Hemiplegic"  value="#{inspectionController.customerRehabilitation.hemiplegic}">
+				              	 <p:ajax event="change"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <div class="col-md-3 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Ataxia "  value="#{inspectionController.customerRehabilitation.ataxia}" >
+				              	 <p:ajax event="change"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <div class="col-md-3 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Trendelenburg "  value="#{inspectionController.customerRehabilitation.trendelenburg}" >
+				              	 <p:ajax event="change"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				             <div class="col-md-3 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Parkinson "  value="#{inspectionController.customerRehabilitation.parkinson}" >
+				              	 <p:ajax event="change"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				            </div>
+				      <div class="col-md-12 ">
+				             <div class="col-md-12 margin-bottom">
+				              	<p:selectBooleanCheckbox itemLabel="Steppage "  value="#{inspectionController.customerRehabilitation.steppage}" >
+				              	 <p:ajax event="change"/>
+				             	</p:selectBooleanCheckbox>
+				              </div>
+				            </div>
+				   	     </div>
+				   	 </div>
+				   	</div>	 
+				</div>				 
+					</p:tab>
+					<p:tab title="Онош">
+						<p:panel id="dubu" styleClass="no-style-panel">
+							<div class="row margin-bottom">
+								<div class="col-md-3">Үндсэн онош:</div>
+								<div class="col-md-9">
+									<div class="display-table" style="width: 100%;">
+										<div class="display-table-row">
+											<p:inputText style="width: 70px;"
+												value="#{inspectionController.rehabilitationAppDiagnose.id}"
+												styleClass="display-table-cell"
+												onfocus="showDiagnosePick(this,'rehabilitation',1,'false');"
+												onkeyup="callRefreshList(this,'rehabilitation',1,'false')" />
+											<p:inputText
+												value="#{inspectionController.rehabilitationAppDiagnose.nameMn}"
+												style="width: calc(100% - 72px);"
+												styleClass="display-table-cell"
+												onfocus="showDiagnosePick(this,'rehabilitation',1,'true');"
+												onkeyup="callRefreshList(this,'rehabilitation',1,'true');" />
+											<p:commandLink styleClass="btn display-table-cell"
+												onclick="callRefreshList(this,'rehabilitation',1,'true');PF('all-diagnose-dialog').show()"
+												value="Онош" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-3">Урьдчилсан онош:</div>
+								<div class="col-md-9">
+									<div class="display-table" style="width: 100%;">
+										<div class="display-table-row">
+											<p:inputText style="width: 70px;"
+												value="#{inspectionController.preDiagnose.id}"
+												styleClass="display-table-cell"
+												onfocus="showDiagnosePick(this,'rehabilitation',0,'false');"
+												onkeyup="callRefreshList(this,'rehabilitation',0,'false')" />
+											<p:inputText
+												value="#{inspectionController.preDiagnose.nameMn}"
+												style="width: calc(100% - 72px);"
+												styleClass="display-table-cell"
+												onfocus="showDiagnosePick(this,'rehabilitation',0,'true');"
+												onkeyup="callRefreshList(this,'rehabilitation',0,'true');" />
+											<p:commandLink styleClass="btn display-table-cell"
+												onclick="callRefreshList(this,'rehabilitation',0,'true');PF('all-diagnose-dialog').show()"
+												value="Онош" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<div class="col-md-12 margin-top">
+										<p:dataTable value="#{inspectionController.rehabilitationPreDiagnose}"
+											var="diagnose" style="width: 100%;" styleClass="myTable"
+											emptyMessage="#{i18n['empty']}">
+											<p:column headerText="№" styleClass="id" width="50">
+											#{diagnose.id}
+										</p:column>
+											<p:column headerText="Онош" styleClass="text">
+											#{diagnose.nameEn}
+										</p:column>
+											<p:column headerText="Төрөл" styleClass="short-text">
+												<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+												<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+											</p:column>
+											<p:column styleClass="button-icon">
+												<p:commandLink
+													actionListener="#{inspectionController.rehabilitationPreDiagnose.remove(diagnose)}"
+													oncomplete="updateHematoDubu();">
+													<p:confirm header="Баталгаажуулах"
+														message="Та устгахдаа итгэлтэй байна уу ?"
+														icon="ui-icon-alert" />
+													<i class="fa fa-remove" />
+												</p:commandLink>
+											</p:column>
+										</p:dataTable>
+									</div>
+								</div>
+							</div>
+						</p:panel>
+						<p:remoteCommand name="updateHematoDubu" update="dubu" />
+						<p:remoteCommand name="neuroToggle" actionListener="#{inspectionController.neuroToggle}"/>
+						<p:remoteCommand name="toggleFunctionExam" actionListener="#{inspectionController.funcExamToggle}"/>
+						<p:remoteCommand name="cerebalToggle" actionListener="#{inspectionController.cerebalToggle}"/>
+						<p:remoteCommand name="cerebellarToggle" actionListener="#{inspectionController.cerebellarToggle}"/>
+						<p:remoteCommand name="fingerNoseLeftToggle" actionListener="#{inspectionController.fingerNoseLeftToggle}"/>
+						<p:remoteCommand name="fingerRightToggle" actionListener="#{inspectionController.fingerRightToggle}"/>
+						<p:remoteCommand name="cranialNerveToggleAction" actionListener="#{inspectionController.cranialNerveToggleAction}"/>
+						<p:remoteCommand name="cranialNerveRightToggle" actionListener="#{inspectionController.cranialNerveRightToggle}"/>
+						<p:remoteCommand name="crianalLeftToggle" actionListener="#{inspectionController.crianalLeftToggle}"/>
+						<p:remoteCommand name="motorToggleElement" actionListener="#{inspectionController.motorToggleElement}"/>
+						<p:remoteCommand name="motorPowerToggle" actionListener="#{inspectionController.motorPowerToggle}"/>
+						<p:remoteCommand name="motorPowerLeftToggle" actionListener="#{inspectionController.motorPowerLeftToggle}"/>
+						<p:remoteCommand name="romRangeToggle" actionListener="#{inspectionController.romRangeToggle}"/>
+						
+						<p:remoteCommand name="upperExtremityToggle" actionListener="#{inspectionController.upperExtremityToggle}"/>
+						<p:remoteCommand name="upperExtremityRightToggle" actionListener="#{inspectionController.upperExtremityRightToggle}"/>
+						<p:remoteCommand name="upperExtremityLeftToggle" actionListener="#{inspectionController.upperExtremityLeftToggle}"/>
+						
+						<p:remoteCommand name="lowExtremityToggle" actionListener="#{inspectionController.lowExtremityToggle}"/>
+						<p:remoteCommand name="lowExtremityRightToggle " actionListener="#{inspectionController.lowExtremityRightToggle}"/>
+						<p:remoteCommand name="lowExtremityLeftToggle" actionListener="#{inspectionController.lowExtremityLeftToggle}"/>
+						
+						<p:remoteCommand name="gaitToggleAction" actionListener="#{inspectionController.gaitToggleAction}"/>
+						
+						<p:remoteCommand name="ambulationToggleAciton" actionListener="#{inspectionController.ambulationToggleAciton}"/>
+						<p:remoteCommand name="adlToggleAction" actionListener="#{inspectionController.adlToggleAction}"/>
+
+						<p:remoteCommand name="bowelToggleRehab" actionListener="#{inspectionController.bowelToggleRehab}"/>
+						<p:remoteCommand name=" bladderToggleRehab" actionListener="#{inspectionController.bladderToggleRehab}"/>
+						
+						<div class="row margin-bottom">
+						   <div class="col-md-12">
+							  <p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+									value="#{inspectionController.customerRehabilitation.rateText}" placeholder="Үнэлгээ бичих">
+								</p:inputTextarea>
+							</div>
+						</div>
+					</p:tab>
+					<p:tab title="Тѳлѳвлѳгѳѳ">
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<p:inputTextarea  rows="3" autoResize="false" style="width: 100%;"
+											 value="#{inspectionController.customerRehabilitation.advice}" placeholder="Зөвлөгөө бичих">
+								</p:inputTextarea>
+							</div>
+						</div>
+					</p:tab>
+				</p:accordionPanel>
+			</p:tab>
+		</ui:define>
+		<ui:define name="additional-script">
+			<script>
+				//<![CDATA[
+				function  toggleRash(el){
+					$('#neuro').toggle('fast','swing');
+					console.log(el);
+					if($('#rash-chevron').hasClass('fa-chevron-left')){
+						neuroToggle([{name:'neurolog',value:el}]);
+						$('#rash-chevron').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+					}
+					else 
+						{
+						$('#rash-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+						neuroToggle([{name:'neurolog',value:el}]);
+						} 
+						
+				}
+				function toggleTouch(el){
+					console.log(el);
+					$('#cere').toggle('fast','swing');
+					if($('#rash-chevron1').hasClass('fa-chevron-left')){
+						cerebalToggle([{name:'celebralElement',value:el}]);
+						$('#rash-chevron1').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+					}
+					else 
+						{
+						cerebalToggle([{name:'celebralElement',value:el}]);
+						$('#rash-chevron1').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+						console.log(el);
+						}
+				}
+				function cerebellar(el){
+					$('#cereb').toggle('fast','swing');
+					if($('#rash-chevron2').hasClass('fa-chevron-down')){
+						$('#rash-chevron2').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else{
+						cerebellarToggle([{name:'cerebellar',value:el}]);
+						$('#rash-chevron2').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					} 
+				}
+				function cranialNerveToggle(el){
+					$('#crania').toggle('fast','swing');
+					if($('#rash-chevron3').hasClass('fa-chevron-down')){
+						$('#rash-chevron3').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						cranialNerveToggleAction([{name:'cranialNerve',value:el}]);
+						$('#rash-chevron3').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function rightToggle(el){
+					$('#rightRt').toggle('fast','swing');
+					if($('#rash-chevron4').hasClass('fa-chevron-down')){
+						
+						$('#rash-chevron4').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else 
+						{
+						$('#rash-chevron4').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+						cranialNerveRightToggle([{name:'cranialNerveRight',value:el}]);
+						}
+				}
+				function leftToggle(el){
+					$('#leftLT').toggle('fast','swing');
+					if($('#rash-chevron5').hasClass('fa-chevron-down')){
+						$('#rash-chevron5').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						crianalLeftToggle([{name:'cranialNerveLeft',value:el}])
+						$('#rash-chevron5').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function functionToggle(el){
+					$('#examfunc').toggle('fast','swing');
+					if($('#rash-exam').hasClass('fa-chevron-down')){
+						$('#rash-exam').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+						
+					}
+					else 
+						{
+						toggleFunctionExam([{name:'funcExam',value:el}]);
+						$('#rash-exam').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+						}
+						}
+				function bowelToggle(el){
+					$('#bowel').toggle('fast','swing');
+					if($('#rash-bowel').hasClass('fa-chevron-down')){
+						
+						$('#rash-bowel').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+						
+					}
+					else {
+						bowelToggleRehab([{name:'bowel',value:el}]);
+						$('#rash-bowel').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function bladderToggle(el){
+					$('#blad').toggle('fast','swing');
+					if($('#rash-blad').hasClass('fa-chevron-down')){
+						$('#rash-blad').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						bladderToggleRehab([{name:'bladder',value:el}]);
+						$('#rash-blad').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function ambulationToggle(el){
+					$('#amb').toggle('fast','swing');
+					if($('#rash-amb').hasClass('fa-chevron-down')){
+						$('#rash-amb').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						ambulationToggleAciton([{name:'ambulation',value:el}]);
+						$('#rash-amb').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function adlToggle(el){
+					$('#adl').toggle('fast','swing');
+					if($('#rash-adl').hasClass('fa-chevron-down')){
+						$('#rash-adl').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						adlToggleAction([{name:'adl',value:el}]);
+						$('#rash-adl').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function motorToggle(el){
+					$('#motor').toggle('fast','swing');
+					if($('#rash-motor').hasClass('fa-chevron-down')){
+						$('#rash-motor').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						motorToggleElement([{name:'motor',value:el}]);
+						$('#rash-motor').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function rightMotor(el){
+					$('#mtId').toggle('fast','swing');
+					if($('#rash-mtRight').hasClass('fa-chevron-down')){
+						$('#rash-mtRight').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else 
+						{
+						motorPowerToggle([{name:'rightMotorPower',value:el}]);
+						$('#rash-mtRight').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+						}
+						
+				}
+				
+				function mtleftToggle(el){
+					$('#mtleft').toggle('fast','swing');
+					if($('#rash-mtleft').hasClass('fa-chevron-down')){
+						$('#rash-mtleft').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else
+						{
+						motorPowerLeftToggle([{name:'leftMotorPower',value:el}]);
+						$('#rash-mtleft').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+						}
+						
+				}
+				function rangeToggle(el){
+					$('#upperLow').toggle('fast','swing');
+					if($('#rash-upperLow').hasClass('fa-chevron-down')){
+						$('#rash-upperLow').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						romRangeToggle([{name:'romRange',value:el}]);
+						$('#rash-upperLow').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function upperToggle(el){
+					$('#upperId').toggle('fast','swing');
+					if($('#rash-upper').hasClass('fa-chevron-down')){
+						$('#rash-upper').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						upperExtremityToggle([{name:'upperEx',value:el}]);
+						$('#rash-upper').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				
+				function  lowToggle(el){
+					$('#lowId').toggle('fast','swing');
+					if($('#rash-low').hasClass('fa-chevron-down')){
+						$('#rash-low').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						lowExtremityToggle([{name:'lowExt',value:el}]);
+						$('#rash-low').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function  fingerLToggle(el){
+					$('#fingerId ').toggle('fast','swing');
+					if($('#rash-fingerLT').hasClass('fa-chevron-down')){
+						$('#rash-fingerLT').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						fingerNoseLeftToggle([{name:'fingerNoseLeft',value:el}])
+						$('#rash-fingerLT').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function  fingerRToggle (el){
+					$('#frightId').toggle('fast','swing');
+					if($('#rash-flt').hasClass('fa-chevron-down')){
+						$('#rash-flt').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						fingerRightToggle([{name:'noseTesRight',value:el}]);
+						$('#rash-flt').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				function  gaitToggle(el){
+					$('#gaitId').toggle('fast','swing');
+					if($('#rash-gait').hasClass('fa-chevron-down')){
+						$('#rash-gait').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						gaitToggleAction([{name:'gait',value:el}]);
+						$('#rash-gait').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				
+				function  upperRightToggle(el){
+					$('#upperrightId').toggle('fast','swing');
+					if($('#rash-uppereright').hasClass('fa-chevron-down')){
+						$('#rash-uppereright').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						 upperExtremityRightToggle([{name:'upperRight',value:el}]);
+						$('#rash-uppereright').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				
+				function  upperleftToggle(el){
+					$('#upperLeftId').toggle('fast','swing');
+					if($('#rash-upperLeft').hasClass('fa-chevron-down')){
+						$('#rash-upperLeft').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						upperExtremityLeftToggle([{name:'upperleft',value:el}]);
+						$('#rash-upperLeft').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				
+				function  lowRightToggle(el){
+					$('#lowrightId').toggle('fast','swing');
+					if($('#rash-lowright').hasClass('fa-chevron-down')){
+						$('#rash-lowright').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						lowExtremityRightToggle([{name:'lowExtRight',value:el}]);
+						$('#rash-lowright').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				
+				function  lowLeftToggle(el){
+					$('#lowLeftId').toggle('fast','swing');
+					if($('#rash-lowltId').hasClass('fa-chevron-down')){
+						$('#rash-lowltId').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+					else {
+						lowExtremityLeftToggle([{name:'lowExtleft',value:el}]);
+						$('#rash-lowltId').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				}
+				
+				//]]>
+			</script>
+		</ui:define>
+	</ui:composition>

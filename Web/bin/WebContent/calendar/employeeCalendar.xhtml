@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<p:remoteCommand name="calculateEmployeeCalendar" process="@this" action="#{twoController.calculateEmployeeCalendar()}" />
+		<section class="content-header">
+		</section>
+		<section class="content">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="box">
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-5">
+									<p:commandLink process="@this" styleClass="btn" onclick="PF('economicCalendarDay').show()">
+										<i class="fa fa-fw fa-cog"/> Шинэ
+									</p:commandLink>
+									<p:commandLink process="@this" styleClass="btn" onclick="PF('calendarDay').show()">
+										<i class="fa fa-fw fa-cog"/> Тохиргоонууд
+									</p:commandLink>
+									<p:commandLink process="@this" styleClass="btn" onclick="PF('calendarOneDay').show()">
+										<i class="fa fa-fw fa-cog"/> Нэг удаагаар тохируулах
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="box box-primary">
+		                <div class="box-body no-padding">
+		                  	<div id="calendar"></div>
+		                </div>
+		        	</div>
+				</div>
+			</div>
+		</section>
+	<p:dialog id="calendarOneDay" widgetVar="calendarOneDay" modal="true" width="300" height="200"  header="Эдийн засгийн хуанли нэг удаа тохируулах" resizable="false">
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:calendarOneDay1">Хугацаа сонгох: </label>
+			</div>
+			<div class="col-sm-5">
+				<p:calendar id="calendarOneDay1" pattern="yyyy-MM-dd" styleClass="date-control pull-left" mindate="#{twoController.minDate}" value="#{twoController.economicCalendarHdr.beginDate}" />
+			</div>
+		</div>
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:calendarOneDay21">Эхлэх цаг: </label>
+			</div>
+			<div class="col-sm-5">
+				<pe:timePicker id="calendarOneDay21" value="#{twoController.economicCalendarHdr.beginTime}" />
+			</div>
+		</div>
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:calendarOneDay31">Дуусах цаг: </label>
+			</div>
+			<div class="col-sm-5">
+				<pe:timePicker id="calendarOneDay31" value="#{twoController.economicCalendarHdr.endTime}" />
+			</div>
+		</div>
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:calendarOneDay4">Тайлбар: </label>
+			</div>
+			<div class="col-sm-5">
+				<p:inputText value="#{twoController.economicCalendarHdr.name}" />
+			</div>
+		</div>
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				
+			</div>
+			<div class="col-sm-5">
+				<p:commandLink value="Хадгалах" process="@this form:calendarOneDay" action="#{twoController.saveEconomicCalendarOnlyEmployee()}" />
+			</div>
+		</div>
+	</p:dialog>
+	
+	<p:dialog id="calendarDay" widgetVar="calendarDay" modal="true" width="500" height="400" header="Эдийн засгийн хуанли тохируулсан тохиргоонууд" resizable="false" >
+		<p:dataTable value="#{twoController.calendarHdrs}" var="hdr">
+			<p:column headerText="">#{hdr.name}</p:column>
+			<p:column headerText="эхлэх огноо">#{hdr.getBeginDateStr()}</p:column>
+			<p:column headerText="дуусах огноо">#{hdr.getEndDateStr()}</p:column>
+			<p:column headerText="цаг">#{hdr.getTimeStr()}</p:column>
+			<p:column headerText="Устгах"><p:commandLink styleClass="fa fa-fw fa-remove color-red" action="#{twoController.deletetEmployeeCalendar(hdr.pkId)}" /></p:column>
+		</p:dataTable>
+	</p:dialog>
+	<p:dialog id="economicCalendarHdr" styleClass="economicCalendar" widgetVar="economicCalendarDay" onShow="resize1();document.getElementById('ui-datepicker-div').className = document.getElementById('ui-datepicker-div').className + ' clendar';document.getElementById('form:askjdlas1_input').className = document.getElementById('form:askjdlas1_input').className + ' form-control';document.getElementById('form:askjdlas2_input').className = document.getElementById('form:askjdlas2_input').className + ' form-control';document.getElementById('form:askjdlas1_input').style.background = 'white';document.getElementById('form:askjdlas2_input').style.background = 'white';" modal="true" width="800" header="Эдийн засгийн хуанли өдрөөр тохируулах" resizable="false" >
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:dtl31">Хугацаа хооронд: </label>
+			</div>
+			<div class="col-sm-5">
+				<p:calendar id="askjdlas1" pattern="yyyy-MM-dd" styleClass="date-control pull-left" value="#{twoController.economicCalendarHdr.beginDate}" mindate="#{twoController.minDate}" />
+				<label style="padding: 0px 5px;" class="pull-left">-</label>
+				<p:calendar id="askjdlas2" pattern="yyyy-MM-dd" styleClass="date-control pull-left" value="#{twoController.economicCalendarHdr.endDate}" mindate="#{twoController.minDate}" />
+			</div>
+		</div>
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:employeeStatus">Төлөв:</label>
+			</div>
+			<div class="col-md-9 flex-center-self">
+				<p:selectOneMenu id="employeeStatus" value="#{twoController.economicCalendarHdr.name}" style="min-width: 100%;">
+					<f:selectItem itemLabel="Амрана" itemValue="Амрана"></f:selectItem>
+					<f:selectItem itemLabel="Хувийн ажилтай" itemValue="Хувийн ажилтай"></f:selectItem>
+					<f:selectItem itemLabel="Хичээлтэй" itemValue="Хичээлтэй"></f:selectItem>
+				</p:selectOneMenu>
+			</div>
+		</div>
+		<div class="row flex-container">
+			<div class="col-md-3 flex-center-self">
+				<label for="form:timeRange">Цаг:</label>
+			</div>
+			<div class="col-sm-4 flex-center-self">
+				<label>
+					<pe:timePicker id="timeBeginDate" value="#{twoController.economicCalendarHdr.beginTime}" />
+				</label>
+				<label style="padding: 0px 5px;">-</label>
+				<label>
+					<pe:timePicker id="timeEndDate" value="#{twoController.economicCalendarHdr.endTime}" />
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-1">
+				<label style="float: right;">
+					<p:selectBooleanCheckbox id="allday" value="#{twoController.economicCalendarHdr.rateAll}" onchange="changeRateAll();" styleClass="minimal allday" style="float: right;" />
+					<p:remoteCommand name="changeRateAll" process="form:allday" update="@(.repeat, .panelDtl)" oncomplete="resize1();"></p:remoteCommand>
+				</label>
+			</div>
+			<div class="col-md-3 ">
+				<p:outputLabel for="allday" value="Бүх өдөр" />
+			</div>
+			
+			<div class="col-md-1">
+				<label style="float: right;">
+					<p:selectBooleanCheckbox id="repeat" value="#{twoController.economicCalendarHdr.rateNotAll}" onchange="changeRateNotAll();" styleClass="minimal repeat" style="float: right;" />
+					<p:remoteCommand name="changeRateNotAll" process="form:repeat" oncomplete="resize1();" update="@(.allday, .panelDtl, .panelDtl1, .davaadorjiinhendchheregguiclass)"></p:remoteCommand>
+				</label>
+			</div>
+			<div class="col-md-4">
+				<p:outputLabel for="repeat" value="Давтамж тохируулах" />
+			</div>
+		</div>
+		<p:panel style="border: 0px;" styleClass="panelDtl panelDtl1" id="panelDtl1">
+			<div class="row">
+				<p:panel style="border: 0px;" styleClass="davaadorjiinhendchheregguiclass" rendered="#{twoController.economicCalendarHdr.rateNotAll}">
+					<div class="col-md-3"></div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-1"></div>
+							<div class="col-md-5">
+								<p:selectBooleanCheckbox id="asdasd1" onchange="asdasdassadad1();" value="#{twoController.economicCalendarHdr.configType1}" />
+								<p:remoteCommand process="asdasd1" name="asdasdassadad1" update="@(.davaadorjiinhendchheregguiclass)" oncomplete="resize1();" />
+								<p:outputLabel for="asdasd1" value="Долоо хоног" />
+							</div>
+							<div class="col-md-5">
+								<p:selectBooleanCheckbox id="asdasd2" onchange="asdasdassadad2();" value="#{twoController.economicCalendarHdr.configType2}" />
+								<p:remoteCommand process="asdasd2" name="asdasdassadad2" update="@(.davaadorjiinhendchheregguiclass)" oncomplete="resize1();" />
+								<p:outputLabel for="asdasd2" value="Сараар тохируулах" />
+							</div>
+						</div>
+							<p:panel style="border: 0px;" styleClass="asdasdasdasdasd1" id="asdasdasdasdasd1" rendered="#{twoController.economicCalendarHdr.configType1}">
+								<div class="row" style="margin-bottom: -30px;">
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check1}" />Даваа</label></div>
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check2}" />Мягмар</label></div>
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check3}" />Лхагва</label></div>
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check4}" />Пүрэв</label></div>
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check5}" />Баасан</label></div>
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check6}" />Бямба</label></div>
+									<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.rateAll}" value="#{twoController.economicCalendarHdr.check7}" />Ням</label></div>
+								</div>
+							</p:panel>
+							<p:panel style="border: 0px;" styleClass="asdasdasdasdasd2" id="asdasdasdasdasd2" rendered="#{twoController.economicCalendarHdr.configType2}">
+								<div class="row">
+									<div class="col-md-3">
+										<p:selectBooleanCheckbox id="asdasd" onchange="changechMonth()" value="#{twoController.economicCalendarHdr.chDay}" />
+										<p:remoteCommand process="asdasd" name="changechMonth" update="@(.davaadorjiinhendchheregguiclass)" />
+										<p:outputLabel for="asdasd" value="Өдөр" />
+									</div>
+									<div class="col-md-1"></div>
+									<div class="col-md-4">
+										<p:selectOneMenu disabled="#{twoController.economicCalendarHdr.configCalendarByDay()}" value="#{twoController.economicCalendarHdr.monthBeginDate}" styleClass="form-control" style="width: 40px;font-size: 11px;padding: 0px;padding-top: 5px;padding-bottom: 5px; float: left;" >
+											<f:selectItem itemValue="1" itemLabel="1" />
+											<f:selectItem itemValue="2" itemLabel="2" />
+											<f:selectItem itemValue="3" itemLabel="3" />
+											<f:selectItem itemValue="4" itemLabel="4" />
+											<f:selectItem itemValue="5" itemLabel="5" />
+											<f:selectItem itemValue="6" itemLabel="6" />
+											<f:selectItem itemValue="7" itemLabel="7" />
+											<f:selectItem itemValue="8" itemLabel="8" />
+											<f:selectItem itemValue="9" itemLabel="9" />
+											<f:selectItem itemValue="10" itemLabel="10" />
+											<f:selectItem itemValue="11" itemLabel="11" />
+											<f:selectItem itemValue="12" itemLabel="12" />
+											<f:selectItem itemValue="13" itemLabel="13" />
+											<f:selectItem itemValue="14" itemLabel="14" />
+											<f:selectItem itemValue="15" itemLabel="15" />
+											<f:selectItem itemValue="16" itemLabel="16" />
+											<f:selectItem itemValue="17" itemLabel="17" />
+											<f:selectItem itemValue="18" itemLabel="18" />
+											<f:selectItem itemValue="19" itemLabel="19" />
+											<f:selectItem itemValue="20" itemLabel="20" />
+											<f:selectItem itemValue="21" itemLabel="21" />
+											<f:selectItem itemValue="22" itemLabel="22" />
+											<f:selectItem itemValue="23" itemLabel="23" />
+											<f:selectItem itemValue="24" itemLabel="24" />
+											<f:selectItem itemValue="25" itemLabel="25" />
+											<f:selectItem itemValue="26" itemLabel="26" />
+											<f:selectItem itemValue="27" itemLabel="27" />
+											<f:selectItem itemValue="28" itemLabel="28" />
+											<f:selectItem itemValue="29" itemLabel="29" />
+											<f:selectItem itemValue="20" itemLabel="30" />
+											<f:selectItem itemValue="31" itemLabel="31" />
+										</p:selectOneMenu>
+										<span style="float: left;">-</span>
+										<p:selectOneMenu disabled="#{twoController.economicCalendarHdr.configCalendarByDay()}" value="#{twoController.economicCalendarHdr.monthEndDate}" styleClass="form-control" style="width: 40px;font-size: 11px;padding: 0px;padding-top: 5px;padding-bottom: 5px; float: left;" >
+											<f:selectItem itemValue="1" itemLabel="1" />
+											<f:selectItem itemValue="2" itemLabel="2" />
+											<f:selectItem itemValue="3" itemLabel="3" />
+											<f:selectItem itemValue="4" itemLabel="4" />
+											<f:selectItem itemValue="5" itemLabel="5" />
+											<f:selectItem itemValue="6" itemLabel="6" />
+											<f:selectItem itemValue="7" itemLabel="7" />
+											<f:selectItem itemValue="8" itemLabel="8" />
+											<f:selectItem itemValue="9" itemLabel="9" />
+											<f:selectItem itemValue="10" itemLabel="10" />
+											<f:selectItem itemValue="11" itemLabel="11" />
+											<f:selectItem itemValue="12" itemLabel="12" />
+											<f:selectItem itemValue="13" itemLabel="13" />
+											<f:selectItem itemValue="14" itemLabel="14" />
+											<f:selectItem itemValue="15" itemLabel="15" />
+											<f:selectItem itemValue="16" itemLabel="16" />
+											<f:selectItem itemValue="17" itemLabel="17" />
+											<f:selectItem itemValue="18" itemLabel="18" />
+											<f:selectItem itemValue="19" itemLabel="19" />
+											<f:selectItem itemValue="20" itemLabel="20" />
+											<f:selectItem itemValue="21" itemLabel="21" />
+											<f:selectItem itemValue="22" itemLabel="22" />
+											<f:selectItem itemValue="23" itemLabel="23" />
+											<f:selectItem itemValue="24" itemLabel="24" />
+											<f:selectItem itemValue="25" itemLabel="25" />
+											<f:selectItem itemValue="26" itemLabel="26" />
+											<f:selectItem itemValue="27" itemLabel="27" />
+											<f:selectItem itemValue="28" itemLabel="28" />
+											<f:selectItem itemValue="29" itemLabel="29" />
+											<f:selectItem itemValue="20" itemLabel="30" />
+											<f:selectItem itemValue="31" itemLabel="31" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<p:selectBooleanCheckbox id="asdasdasdas" onchange="changechMonthWeek()" value="#{twoController.economicCalendarHdr.chMonth}" />
+										<p:remoteCommand name="changechMonthWeek" process="asdasdasdas" update="@(.davaadorjiinhendchheregguiclass)" />
+										<p:outputLabel for="asdasdasdas" value="Долоо хоног" />
+									</div>
+									<div class="col-md-5">
+										<p:selectOneMenu disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" styleClass="form-control" style="min-width: 100%;" >
+											<f:selectItem itemValue="1" itemLabel="Нэгдүгээр" />
+											<f:selectItem itemValue="2" itemLabel="Хоёрдугаар" />
+											<f:selectItem itemValue="3" itemLabel="Гуравдугаар" />
+											<f:selectItem itemValue="4" itemLabel="Дөрөвдүгээр" />
+											<f:selectItem itemValue="5" itemLabel="Тавдугаар" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3"></div>
+									<div class="col-md-9">
+										<div class="row">
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch1}" />Даваа</label></div>
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch2}" />Мягмар</label></div>
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch3}" />Лхагва</label></div>
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch4}" />Пүрэв</label></div>
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch5}" />Баасан</label></div>
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch6}" />Бямба</label></div>
+											<div class="col-md-3"><label style="font-size: 12px;"><p:selectBooleanCheckbox disabled="#{twoController.economicCalendarHdr.configCalendarByWeek()}" value="#{twoController.economicCalendarHdr.ch7}" />Ням</label></div>
+										</div>
+									</div>
+								</div>
+							</p:panel>
+					</div>
+				</p:panel>
+			</div>
+		</p:panel>
+		<p:panel style="border: 0px;" styleClass="panelDtl" id="panelDtl">
+		</p:panel>
+		<div class="row">
+			<div class="col-md-9"></div>
+			<div class="col-md-3">
+				<label style="float: right;">
+					<p:commandLink process="@this form:economicCalendarHdr" 
+						action="#{twoController.saveEmployeeCalendarHdrByEmployee()}" styleClass="btn"
+						update="form:message"><i class="fa fa-fw fa-check"/>Хадгалах</p:commandLink>
+				</label>
+			</div>
+		</div>
+	</p:dialog>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$( document ).ready(function() {
+				calculateEmployeeCalendar();
+			});
+
+			function setValues(){
+				document.getElementById('form:dte1').value = document.getElementById('date1').value;
+				document.getElementById('form:dte2').value = document.getElementById('date2').value;
+				document.getElementById('form:dte3').value = document.getElementById('date3').value;
+				document.getElementById('form:dte4').value = document.getElementById('date4').value;
+				document.getElementById('form:dte5').value = document.getElementById('date5').value;
+				document.getElementById('form:dte6').value = document.getElementById('date6').value;
+				document.getElementById('form:dte7').value = document.getElementById('date7').value;
+				document.getElementById('form:dte8').value = document.getElementById('date8').value;
+			}
+			           
+			$(function() {
+				function ini_events(ele) {
+					ele.each(function() {
+						var eventObject = {
+							title : $.trim($(this).text())
+						};
+
+						$(this).data('eventObject', eventObject);
+
+						$(this).draggable({
+							zIndex : 1070,
+							revert : true,
+							revertDuration : 0
+						});
+
+					});
+				}
+				ini_events($('#external-events div.external-event'));
+
+				var date = new Date();
+				var d = date.getDate(), m = date.getMonth(), y = date
+						.getFullYear();
+				$('#calendar').fullCalendar(
+						{
+							header : {
+								left : 'prev,next today',
+								center : 'title',
+								right : 'month,agendaWeek,agendaDay'
+							},
+							buttonText : {
+								today : 'Өнөөдөр',
+								month : 'Сар',
+								week : 'Долоон хоног',
+								day : 'Өдөр'
+							},
+
+							events : [ 
+								
+								#{twoController.employeeCalendarStr}
+								
+							],
+							editable : false,
+							droppable : true,
+							drop : function(date, allDay) {
+
+								var originalEventObject = $(this).data(
+										'eventObject');
+
+								var copiedEventObject = $.extend({},
+										originalEventObject);
+
+								copiedEventObject.start = date;
+								copiedEventObject.allDay = allDay;
+								copiedEventObject.backgroundColor = $(this)
+										.css("background-color");
+								copiedEventObject.borderColor = $(this).css(
+										"border-color");
+
+								$('#calendar').fullCalendar('renderEvent',
+										copiedEventObject, true);
+
+								if ($('#drop-remove').is(':checked')) {
+
+									$(this).remove();
+								}
+
+							}
+						});
+
+				var currColor = "#3c8dbc";
+
+				var colorChooser = $("#color-chooser-btn");
+				$("#color-chooser > li > a").click(function(e) {
+					e.preventDefault();
+
+					currColor = $(this).css("color");
+
+					$('#add-new-event').css({
+						"background-color" : currColor,
+						"border-color" : currColor
+					});
+				});
+				$("#add-new-event").click(function(e) {
+					e.preventDefault();
+
+					var val = $("#new-event").val();
+					if (val.length == 0) {
+						return;
+					}
+
+					var event = $("<div />");
+					event.css({
+						"background-color" : currColor,
+						"border-color" : currColor,
+						"color" : "#fff"
+					}).addClass("external-event");
+					event.html(val);
+					$('#external-events').prepend(event);
+
+					ini_events(event);
+
+					$("#new-event").val("");
+				});
+			});
+			$('#reservation').daterangepicker();
+			$('#daterange-btn').daterangepicker(
+				{
+	            	ranges: {
+	                    'Today': [moment(), moment()],
+	                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+	                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+	                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+	                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+	                	'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+	                },
+	                startDate: moment().subtract('days', 29),
+	                endDate: moment()
+	            },
+		        function (start, end) {
+		        	$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+		        }
+	        );
+			
+			function resize1(){
+// 				if(document.getElementById('form:allday').checked == true){
+// 					document.getElementsByClassName('ui-dialog-content ui-widget-content')[2].style.height = '330px';
+// 				}else if(document.getElementById('form:asdasd1').checked == true){
+// 					document.getElementsByClassName('ui-dialog-content ui-widget-content')[2].style.height = '420px';
+// 				}else {
+// 					document.getElementsByClassName('ui-dialog-content ui-widget-content')[2].style.height = '540px';
+// 				}
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

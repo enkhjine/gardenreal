@@ -1,0 +1,504 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<p:tab title="Зүрх судлал - Одоогийн өвчний түүх">
+			<p:accordionPanel id="cardino" multiple="true">
+				<p:tab title="Зовиур" id="distress">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="cardio_blanch"
+									value="#{inspectionController.customerCardiology.sternumPain}"
+									itemLabel="чээжээр өвднө" style="margin-right: 5px;" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="cardio_weary"
+									value="#{inspectionController.customerCardiology.breathing}"
+									itemLabel="амьсгаадна" style="margin-right: 5px;" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="cardio_bonePain"
+									value="#{inspectionController.customerCardiology.cough}"
+									itemLabel="ханиалгана" style="margin-right: 5px;" />
+							</div>
+
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="cardio_pain"
+									value="#{inspectionController.customerCardiology.blue}"
+									itemLabel="хөхрөнө" style="margin-right: 5px;" />
+							</div>
+
+						</div>
+						<div class="col-md-12" style="margin-top: 3px">
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="jaundice"
+									value="#{inspectionController.customerCardiology.heart}"
+									itemLabel="зүрх дэлснэ" style="margin-right: 5px;" />
+							</div>
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="breathe"
+									value="#{inspectionController.customerCardiology.faintFall}"
+									itemLabel="түр муужирч унана" style="margin-right: 5px;" />
+							</div>
+
+							<div class="col-md-3">
+								<p:selectBooleanCheckbox id="atrophy"
+									value="#{inspectionController.customerCardiology.edema}"
+									itemLabel="хавагнана" style="margin-right: 5px;" />
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:inputTextarea rows="3" style="width:100%;margin-top:5px"
+									value="#{inspectionController.customerCardiology.otherPain}"
+									placeholder="Бусад зовиур">
+								</p:inputTextarea>
+							</div>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="when">одооны өвчний түүх:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="when"
+								value="#{inspectionController.customerCardiology.whenNowPain}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="thisTime">өвдсөн өвчний түүх:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="thisTime"
+								value="#{inspectionController.customerCardiology.painHistory}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="thisTimeReason">амьдралын түүх:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="thisTimeReason"
+								value="#{inspectionController.customerCardiology.lifeHistory}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row  margin-top">
+						<div class="form-title" style="cursor: pointer"
+							onclick="cardiologyToggle('Зүрх судасны эрсдэлт хүчин зүйлс')">
+							Зүрх судасны эрсдэлт хүчин зүйлс <i id="rash-cardId"
+								class="pull-right fa fa-chevron-left" />
+						</div>
+						<div class="row margin-top" id="cardioIds" style="display: none">
+							<div class="col-md-12" style="margin-top: 3px">
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.cook}"
+										itemLabel="Зохисгүй хооллолт" style="margin-right: 5px;" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.physicalInactivity}"
+										itemLabel="Хөдөлгөөний хомсдол" style="margin-right: 5px;" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.stress}"
+										itemLabel="Стресс" style="margin-right: 5px;" />
+								</div>
+							</div>
+							<div class="col-md-12" style="margin-top: 3px">
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.obesity}"
+										itemLabel="Таргалалт" style="margin-right: 5px;" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.smoking}"
+										itemLabel="Тамхидалт" style="margin-right: 5px;" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.noUseAlcohol}"
+										itemLabel="Архины зохисгүй хэрэглээ"
+										style="margin-right: 5px;" />
+								</div>
+							</div>
+							<div class="col-md-12" style="margin-top: 3px">
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.extend}"
+										itemLabel="Удамшил   " style="margin-right: 5px;" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.arterHypertension}"
+										itemLabel="Артерийн гипертензи    " style="margin-right: 5px;" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.gipyerkHol}"
+										itemLabel="Гиперхолестеринеми  " style="margin-right: 5px;" />
+								</div>
+							</div>
+							<div class="col-md-12" style="margin-top: 3px">
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox
+										value="#{inspectionController.customerCardiology.diabetes}"
+										itemLabel="Чихрийн  шижин " style="margin-right: 5px;" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('cardiology')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoHemota" styleClass="no-style-panel">
+								<div class="col-md-12 margin-top">
+									<ui:repeat var="attachment"
+										value="#{inspectionController.listCardioAttachment}">
+										<div style="float: left; text-align: center;">
+											<p:graphicImage
+												value="#{inspectionController.getDynamicNoseImage(inspectionController.getListCardioAttachment().indexOf(attachment), inspectionController.getListCardioAttachment())}"
+												cache="false" height="50" onclick="showModalImage(this);"
+												style="margin-right: 5px;" styleClass="zoom">
+												<f:param name="image_id"
+													value="#{inspectionController.getListCardioAttachment().indexOf(attachment)}" />
+											</p:graphicImage>
+											<br />
+											<p:commandLink
+												actionListener="#{inspectionController.deleteFile(inspectionController.listCardioAttachment, attachment)}"
+												oncomplete="updateHemota()">
+												<i class="fa fa-trash" /> Устгах
+										</p:commandLink>
+										</div>
+									</ui:repeat>
+								</div>
+							</p:panel>
+							<p:remoteCommand name="updateHemota" update="qoHemota" />
+						</div>
+					</div>
+					<div class="row margin-top">
+						<div class="col-md-12" style="cursor: pointer;"
+							onclick="toggleRash('Ажиглалт')">
+							<div class="form-title">
+								Ажиглалт <i id="rash-chevron"
+									class="pull-right fa fa-chevron-left" />
+							</div>
+						</div>
+						<div class="row " id="rash" style="display: none">
+							<div class="col-md-12">
+								<p:inputTextarea rows="3"
+									value="#{inspectionController.customerCardiology.generalfLook}"
+									placeholder="Ерөнхий ажиглалт"
+									style="width: 100%;margin-top:5px" />
+							</div>
+							<div class="col-md-12 margin-top">
+								<div class="col-md-12">
+									<div class="form-title" style="cursor: pointer;"
+										onclick="toggleLocation('Хэсэг газрын ажиглалт')">
+										Хэсэг газрын ажиглалт <i id="rash-chevron1"
+											class="pull-right fa fa-chevron-left" />
+									</div>
+									<div class="row" id="rowId" style="display: none">
+										<div class="col-md-12">
+											<div class="col-md-2">Арьсны хөхрөлт</div>
+											<div class="col-md-10">
+												<p:inputTextarea rows="2"
+													value="#{inspectionController.customerCardiology.skinBlue}"
+													style="width:100%" placeholder="Арьсны хөхрөлт" />
+											</div>
+										</div>
+										<div class="col-md-12" style="margin-top: 3px">
+											<div class="col-md-2">Захын хаван</div>
+											<div class="col-md-10">
+												<p:inputTextarea rows="1" style="width:100%"
+													placeholder="Захын хаван"
+													value="#{inspectionController.customerCardiology.edemaAny}" />
+											</div>
+										</div>
+										<div class="col-md-12" style="margin-top: 3px">
+											<div class="col-md-2">Гүрээний венийн лугшилт</div>
+											<div class="col-md-10">
+												<p:inputTextarea rows="3" style="width:100%"
+													placeholder="Гүрээний венийн лугшилт"
+													value="#{inspectionController.customerCardiology.venousPulse}" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-top">
+						<div class="form-title " style="cursor: pointer;"
+							onclick="toggleTouch('Тэмтрэлт')">
+							Тэмтрэлт <i id="rash-chevron2"
+								class="pull-right fa fa-chevron-left" />
+						</div>
+						<div id="toggleTouchId" style="display: none">
+							<div class="col-md-12 margin-bottom">
+								<div class="col-md-2 ">Зүрхний оройн түлхэлт</div>
+								<div class="col-md-10">
+									<p:inputTextarea rows="2" style="width:100%"
+										value="#{inspectionController.customerCardiology.heartApical}" />
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-2">Шууны артерийн лугшилт</div>
+								<div class="col-md-10">
+									<p:inputTextarea rows="2" style="width:100%"
+										value="#{inspectionController.customerCardiology.arterPulse}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-top">
+						<div class="form-title" style="cursor: pointer;"
+							onclick="togglePatter('Тогшилт')">
+							Тогшилт <i id="rash-chevron3"
+								class="pull-right fa fa-chevron-left" />
+						</div>
+						<div id="patter" style="display: none">
+							<div class="col-md-12">
+								<div class="col-md-2">Зүрхний ( харьцангуй) хил хязгаар</div>
+								<div class="col-md-10">
+									<p:inputTextarea rows="2" style="width:100%"
+										value="#{inspectionController.customerCardiology.heartLimit}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-top">
+						<div class="form-title" style="cursor: pointer;"
+							onclick="toggleListen('Чагналт')">
+							Чагналт <i id="rash-chevron4"
+								class="pull-right fa fa-chevron-left" />
+						</div>
+						<div id="listenId" style="display: none">
+							<div class="col-md-12 margin-bottom">
+								<div class="col-md-2 ">Зүрхний авиа</div>
+								<div class="col-md-10">
+									<p:inputTextarea rows="2" style="width:100%"
+										value="#{inspectionController.customerCardiology.heartAudio}" />
+								</div>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<div class="col-md-2">Зүрхний шуугиан</div>
+								<div class="col-md-10">
+									<p:inputTextarea rows="2" style="width:100%"
+										value="#{inspectionController.customerCardiology.heartDust}" />
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-2">АД хэмжилт</div>
+								<div class="col-md-10">
+									<p:inputTextarea rows="2" style="width:100%"
+										value="#{inspectionController.customerCardiology.aDMeasurement}" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.cordiologyAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'cardiology',1,'false');"
+											onkeyup="callRefreshList(this,'cardiology',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.cordiologyAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'cardiology',1,'true');"
+											onkeyup="callRefreshList(this,'cardiology',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'cardiology',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'cardiology',0,'false');"
+											onkeyup="callRefreshList(this,'cardiology',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'cardiology',0,'true');"
+											onkeyup="callRefreshList(this,'cardiology',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'cardiology',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable
+										value="#{inspectionController.cardiologyPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.cardiologyPreDiagnose.remove(diagnose)}"
+												oncomplete="updateHematoDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateHematoDubu" update="dubu" />
+					<p:remoteCommand name="toggleRashObservation"
+						actionListener="#{inspectionController.cardiologyRashObservation}" />
+					<p:remoteCommand name="toggleCardioLocation"
+						actionListener="#{inspectionController.toggleCardioLocation}" />
+					<p:remoteCommand name="toggleCardioTouch"
+						actionListener="#{inspectionController.toggleCardioTouch}" />
+					<p:remoteCommand name="toggleCardioPatter"
+						actionListener="#{inspectionController.toggleCardioPatter}" />
+					<p:remoteCommand name="toggleCardioListen"
+						actionListener="#{inspectionController.toggleCardioListen}" />
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerCardiology.cardinoRateText}"
+								placeholder="Үнэлгээ бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Тѳлѳвлѳгѳѳ">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerCardiology.advice}"
+								placeholder="Зөвлөгөө бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="additional-script">
+		<script>
+			//<![CDATA[
+			function  toggleRash(el){
+				$('#rash').toggle('fast','swing');
+				if($('#rash-chevron').hasClass('fa-chevron-left')){
+					$('#rash-chevron').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+				}
+				else{
+					toggleRashObservation([{name:'cardiologyObser',value:el}]);
+					$('#rash-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				}
+			}
+			function  toggleLocation(el){
+				$('#rowId').toggle('fast','swing');
+				if ($('#rash-chevron1').hasClass('fa-chevron-left')) {
+					$('#rash-chevron1').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+				}
+				else {
+					toggleCardioLocation([{name:'cardioLocation',value:el}]);
+					$('#rash-chevron1').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+			}
+			function  toggleTouch(el){
+				$('#toggleTouchId').toggle('fast','swing');
+				if ($('#rash-chevron2').hasClass('fa-chevron-left')) {
+					$('#rash-chevron3').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");					}
+				else {
+					toggleCardioTouch([{name:'cardioTouch',value:el}]);
+					$('#rash-chevron2').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+
+				}
+			}
+			function  togglePatter(el){
+				$('#patter').toggle('fast','swing');
+				if ($('#rash-chevron3').hasClass('fa-chevron-left')) {
+					$('#rash-chevron3').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+					}
+				else {
+					toggleCardioPatter([{name:'cardioTab',value:el}]);
+					$('#rash-chevron3').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+			}
+			function toggleListen(el){
+				$('#listenId').toggle('slow','swing');
+				if ($('#rash-chevron4').hasClass('fa-chevron-left')) {
+					$('#rash-chevron4').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");	
+				}
+				else {
+					toggleCardioListen([{name:'cardioListen',value:el}]);
+					$('#rash-chevron4').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+			}
+			function cardiologyToggle(el){
+				$('#cardioIds').toggle('slow','swing');
+				if ($('#rash-cardId').hasClass('fa-chevron-left')) {
+					$('#rash-cardId').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");	
+					}
+				else {
+					$('#rash-cardId').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+					}
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

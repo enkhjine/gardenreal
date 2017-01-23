@@ -1,0 +1,1223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<p:tab title="Үе судлал - Одоогийн өвчний түүх">
+			<p:accordionPanel id="rheumatology" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleGeneral()">
+									<div class="form-title">
+										Ерөнхий <i id="general-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "general">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Нэмсэн жин хэмжээ</div>
+								<div class="col-md-6">
+									<p:inputText style="width:100%" />
+								</div>
+								<div class="col-md-6">Алдсан жин хэмжээ</div>
+								<div class="col-md-6">
+									<p:inputText style="width:100%" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox itemLabel="Ядрана" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox itemLabel="Сульдана" />
+								</div>
+								<div class="col-md-4">
+									<p:selectBooleanCheckbox itemLabel="Халуурна" />
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleEye()">
+									<div class="form-title">
+										Нүд <i id="eye-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id="eye">
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Өвдөнө" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Улайна" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Харааны алдагдал" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Улайна" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Загатнана" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хуурайшилт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Юм орсон мэт санагдана" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хоёрлосон эсвэл бүдэг харагдана" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleEar()">
+									<div class="form-title">
+										Чих-Хамар-Ам-Хоолой <i id="ear-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id="ear">
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Сонсгол алдагдана" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хамраас цус гарна" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Үнэрлэх мэдрэмж алдагдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хамар хуурайшина" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Нус гоожино" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хэлний шархлаа" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Амны шархлаа" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Буйлнаас цус шүүрнэ" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Амтлах мэдрэмж алдагдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Ам хатна" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хоолойн шархлаа" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хоолой сөөнө" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Залгихад хөндүүрлэнэ" />
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleHeart()">
+									<div class="form-title">
+										Зүрх судас <i id="heart-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id="heart">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Цээжээр өвдөнө" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Зүрхний эмгэг хэмнэл" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Зүрхний цохилтын өөрчлөлт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Цусны даралт өндөр" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Зүрхний шуугиан" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleBreath()">
+									<div class="form-title">
+										Амьсгал <i id="breath-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "breath">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Амьсгал богиносоно" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Шөнө амьсгал давчдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Хөл тавхайгаар хавагнана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Ханиана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Ханиахад цус гарна" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Шуухитнана /багтраа/" />
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleDigestion()">
+									<div class="form-title">
+										Хоол боловсруулах <i id="digestion-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "digestion">
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Дотор муухайрана" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Шарлалт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Цусаар эсвэл хүрэн зүйлээр бөөлжинө" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Хоолтноос үүдэлтэй өвдөлт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Өтгөн хатна" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Байнга суулгана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Өтгөнд цус үзэгдэнэ" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Хар баана" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12" style="cursor: pointer;"
+							onclick="togglePee()">
+							<div class="form-title">
+								Шээс бэлгийн зам <i id="pee-chevron" class="pull-right fa fa-chevron-left" />
+							</div>
+						</div>
+					</div>
+					<div style="display: none" id= "pee">
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Шээхэд хүндрэлтэй" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Шээхэд өвдөнө, халуун оргино" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Цустай шээнэ" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Булингартай шээнэ" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Идээтэй шээнэ" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Үтрээ/шодой ялгадастай" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Шөнө шээнэ" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Үтрээний хуурайшил" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Улайлт/шархлаа" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Бэлгийн амьдралын бэрхшээл" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Түрүү булчирхайн асуудал" />
+						</div>
+					</div>
+					</div>
+					<div class="row margin-bottom">
+					<div class="col-md-12">
+						<p:panel rendered="#{inspectionController.selectedCustomer.gender=='0'}" styleClass="no-style-panel">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleWoman()">
+									<div class="form-title">
+										Эмэгтэйчүүд <i id="woman-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "woman">
+							<div class="row margin-bottom">
+								<div class="col-md-3">Анхны сарын тэмдэг</div>
+								<div class="col-md-3">
+									<p:inputText style="width:100%" />
+								</div>
+								<div class="col-md-3">Тогтмол эсэх</div>
+								<div class="col-md-3">
+									<p:selectOneRadio layout="grid" columns="2">
+										<f:selectItem itemLabel = "Тийм" itemValue="0" />
+										<f:selectItem itemLabel = "Үгүй" itemValue="1" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-3">Үргэлжлэх хугацаа</div>
+								<div class="col-md-3">
+									<p:inputText style="width:100%" />
+								</div>
+								<div class="col-md-3">Сүүлийн сарын тэмдэг</div>
+								<div class="col-md-3">
+									<p:inputText style="width:100%" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-3">Сүүлийн ПАП тестийн огноо</div>
+								<div class="col-md-3">
+									<p:inputText style="width:100%" />
+								</div>
+								<div class="col-md-3">Сарын тэмдгийн дараа цус алдалт</div>
+								<div class="col-md-3">
+									<p:selectOneRadio layout="grid" columns="2">
+										<f:selectItem itemLabel = "Үгүй" itemValue="0" />
+										<f:selectItem itemLabel = "Тийм" itemValue="1" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-3">Жирэмслэлтийн тоо</div>
+								<div class="col-md-3">
+									<p:inputText style="width:100%" />
+								</div>
+								<div class="col-md-3">Үр зулбасан тоо</div>
+								<div class="col-md-3">
+									<p:inputText style="width:100%" />
+								</div>
+							</div>
+							</div>
+						</p:panel>
+					</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleBone()">
+									<div class="form-title">
+										Яс булчин <i id="bone-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "bone">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Өглөөний хөшингө" value="#{sss}">
+									<p:ajax event="change" update="morningPanel" />
+									</p:selectBooleanCheckbox>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<p:panel styleClass="no-style-panel" id="morningPanel">
+									<c:if test="#{sss=='true'}">
+										<div class="col-md-6">Үргэлжлэх хугацаа</div>
+										<div class="col-md-6">
+											<p:inputText style="width:100%" />
+										</div>
+									</c:if>
+								</p:panel>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Үений өвдөлт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Булчингийн сулрал" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Булчингийн өвдөлт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Үеэр хавагдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<p:inputTextarea rows="3" placeholder="Сүүлийн 6 сард дээрх шинжүүд илэрсэн үенүүдийн жагсаалт" 
+									autoResize="false" style="width:100%" />
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleSkin()">
+									<div class="form-title">
+										Арьс <i id="skin-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "skin">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Хөхрөлт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Улайлт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Тууралт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Гүвдрүү" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Нарны харшил" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Эмзэглэл" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Зангилаа" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Үс унана" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleNervous()">
+									<div class="form-title">
+										Мэдрэлийн систем <i id="nervous-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "nervous">
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Толгой өвдөнө" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Толгой эргэнэ" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Муужрах" />
+								</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Булчингийн таталт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Ухаан санаа алдагдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Алга, ул өвдөх, мэдрэг болно" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Ой санамж алдагдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Шөнө хөлрөнө" />
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleMentality()">
+									<div class="form-title">
+										Сэтгэц <i id="mentality-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "mentality">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Санаа зовнино" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Нойргүйдэл" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Хурдан уурлана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Сэтгэл гутрал" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Түгшүүр" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Гүн нойрсоход бэрхшээлтэй" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleEndocrine()">
+									<div class="form-title">
+										Дотоод шүүрэл <i id="endocrine-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "endocrine">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Их цангана" />
+								</div>
+							</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleAllergy()">
+									<div class="form-title">
+										Харшил/дархлаа судлал <i id="allergy-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "allergy">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Байнга найтаана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Халдварт өртөмтгий болно" />
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleBlood()">
+									<div class="form-title">
+										Цус/лимф <i id="blood-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "blood">
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Булчирхай хавдана" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Булчирхай хөндүүрлэнэ" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Цус багадалт" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Цус гоожимтгой" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12">
+									<p:selectBooleanCheckbox itemLabel="Цус сэлбэлт" value="#{ddd}">
+									<p:ajax event="change" update="bloodPanel" />
+									</p:selectBooleanCheckbox>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<p:panel id="bloodPanel" styleClass="no-style-panel">
+									<c:if test="#{ddd=='true'}">
+										<div class="col-md-6">Хэзээ</div>
+										<div class="col-md-6">
+											<p:inputText style="width:100%" />
+										</div>
+									</c:if>
+								</p:panel>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад зовиур" />
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-2">Өвчин анх эхэлсэн:</div>
+						<div class="col-md-10">
+							<p:inputText style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">Энэ удаагийн сэдрэл:</div>
+						<div class="col-md-10">
+							<p:inputText style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">Сэдрэлийн шалтгаан:</div>
+						<div class="col-md-10">
+							<p:inputText style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">Хувирч, өөрчлөгдсөн байдал:</div>
+						<div class="col-md-10">
+							<p:inputText style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">Хийсэн эмчилгээ:</div>
+						<div class="col-md-10">
+							<p:inputText style="width: 100%;" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+				<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('hemato')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoHemota" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listHematoAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListHematoAttachment().indexOf(attachment), inspectionController.getListHematoAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListHematoAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listHematoAttachment, attachment)}"
+											oncomplete="updateHemota()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateHemota"  update="qoHemota" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:selectOneRadio layout="grid" columns="2" value="#{aaa}">
+								<f:selectItem itemLabel="Диаграммаас сонгох" itemValue="0" />
+								<f:selectItem itemLabel="Тоог бичих" itemValue="1" />
+								<p:ajax event="change" update="diagram" />
+								<p:ajax event="change" update="score" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<p:remoteCommand name="updateDiagram" update="diagram" />
+					<p:remoteCommand name="updateScore" update="score" />
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:panel styleClass="no-style-panel" id="diagram">
+								<c:if test="#{aaa=='0'}">
+									<div style="height: 280px;width: 220px;display:inline-block;float:left;">
+										<img src="#{applicationController.path}images/das28.jpg" style="position: absolute;"/>
+										<svg height="280" width="220" style="position:absolute;background-color: rgba(0, 0, 0, 0);"
+											class="non-selectable">
+											<!-- Баруун мөр -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="87 69,85 71,83 74,85 80,90 82,94 80,96 76,95 71,92 68" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун тохой -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="78 113,78 117,79 121,82 122,85 120,88 116,89 112,88 109,84 107,80 109"
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун бугалга -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="61 152,61 157,62 162,65 164,69 165,74 162,77 154,75 149,72 146,69 145,65 146" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун эрхий 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="27 186,26 191,28 197,32 202,34 201,36 198,38 188,35 180,32 179,29 183" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун эрхий 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="10 204,9 209,12 213,14 213,18 210,19 207,18 205,15 202" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун долоовор 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="28 223,29 225,32 227,37 223,36 218,33 216,28 218" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун долоовор 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="23 234,22 240,26 242,29 241,31 238,31 233,28 231,25 231" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун дунд 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="38 223,39 228,44 229,47 226,48 223,47 220,44 217,41 218" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун дунд 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="36 239,36 244,39 246,42 245,45 243,45 238,42 235,38 235" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун ядам 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="49 227,51 229,55 229,58 228,59 224,57 220,51 220,49 223" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун ядам 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="48 241,50 246,55 246,56 244,58 241,56 237,54 235,50 236" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун чигчий 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="60 227,61 229,65 229,69 226,68 220,63 218,60 220" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун чигчий 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="61 241,62 244,67 243,70 240,69 234,65 233,62 234,60 238" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Баруун өвдөг -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="96 210,101 212,104 211,108 208,109 200,105 195,102 193,95 198" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн мөр -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="132 69,130 71,129 73,128 77,130 81,133 82,137 82,141 77,141 72,139 70,135 68" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн тохой -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="133 112,137 109,143 109,146 110,147 115,144 121,140 122,136 121,133 115"
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн бугалга -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="145 159,149 165,156 166,160 164,162 157,162 152,159 148,153 147,148 150" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн эрхий 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="183 192,185 201,188 203,192 202,193 198,194 193,194 187,192 180,188 181,186 183,184 189" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн эрхий 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="202 211,203 213,207 216,209 215,212 212,213 208,210 205,207 204,203 207" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн долоовор 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="185 228,188 229,192 227,194 222,191 218,188 218,185 219,183 223" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн долоовор 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="193 244,197 242,199 239,199 235,195 232,192 232,190 234,189 239" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн дунд 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="174 228,176 230,180 230,182 228,183 223,181 220,179 218,176 220,174 224" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн дунд 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="178 247,181 247,184 245,185 241,183 237,179 237,176 239,175 244" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн ядам 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="168 231,170 229,172 226,172 222,170 219,167 220,162 223,163 229" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн ядам 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="163 246,166 249,168 249,171 247,173 243,171 238,165 238,163 242" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн чигчий 1 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="153 230,156 231,162 228,162 223,160 221,157 220,154 221,152 225" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн чигчий 2 -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="152 244,155 246,161 244,162 239,160 236,157 235,155 235,151 239" 
+												style="fill:rgba(0, 0, 0, 0);" />
+											<!-- Зүүн өвдөг -->
+											<polygon onclick="changeColor(this, 'color')"
+												points="112 206,114 210,116 213,121 212,125 209,127 207,128 204,128 200,126 197,120 194,114 197,113 200" 
+												style="fill:rgba(0, 0, 0, 0);" />
+										</svg>
+									</div>
+									<div class="margin-bottom" style="display:inline-block;width:calc(100% - 221px);">
+										<div class="row margin-bottom" style="padding-top: 15px;">
+											<div class="col-md-6">Tender Joint Count :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">Swollen Joint Count :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">VAS :</div>
+											<div class="col-md-6">
+												<p:inputMask mask="999 mm" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">DAS28(CRP) :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">CDAI :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">SDAI :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">MS /+/ /-/ :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+										<div class="row margin-bottom">
+											<div class="col-md-6">Үений хөдөлгөөн хязгаарлалт /+/ /-/ :</div>
+											<div class="col-md-6">
+												<p:inputText disabled="true" />
+											</div>
+										</div>
+									</div>
+								</c:if>
+							</p:panel>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:panel styleClass="no-style-panel" id="score">
+								<c:if test="#{aaa=='1'}">
+								<div class="row margin-bottom">
+									<div class="col-md-3">Tender joint count :</div>
+									<div class="col-md-3">
+										<p:inputText type="number" required="true">
+										</p:inputText>
+									</div>
+									<div class="col-md-3">Swollen joint count :</div>
+									<div class="col-md-3">
+										<p:inputText type="number" required="true" />
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-3">VAS :</div>
+									<div class="col-md-3">
+										<p:inputText type="number" required="true" />
+									</div>
+									<div class="col-md-3">DAS28(CRP) :</div>
+									<div class="col-md-3">
+										<p:inputText disabled="true" />
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-3">CDAI :</div>
+									<div class="col-md-3">
+										<p:inputText disabled="true" />
+									</div>
+									<div class="col-md-3">SDAI :</div>
+									<div class="col-md-3">
+										<p:inputText disabled="true" />
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-3">MS /+/ /-/ :</div>
+									<div class="col-md-3">
+										<p:inputText disabled="true" />
+									</div>
+									<div class="col-md-3">Үений хөдөлгөөн хязгаарлалт /+/ /-/ :</div>
+									<div class="col-md-3">
+										<p:inputText disabled="true" />
+									</div>
+								</div>
+								</c:if>
+							</p:panel>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.hematoAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'hemato',1,'false');"
+											onkeyup="callRefreshList(this,'hemato',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.hematoAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'hemato',1,'true');"
+											onkeyup="callRefreshList(this,'hemato',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'hemato',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'hemato',0,'false');"
+											onkeyup="callRefreshList(this,'hemato',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'hemato',0,'true');"
+											onkeyup="callRefreshList(this,'hemato',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'hemato',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.hematoPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.hematoPreDiagnose.remove(diagnose)}"
+												oncomplete="updateHematoDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateHematoDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerHematology.hematoRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Тѳлѳвлѳгѳѳ">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Төлөвлөгөө:</div>
+						<div class="col-md-9">
+							<p:inputTextarea  rows="3" autoResize="false" style="width: 100%;" value="#{inspectionController.customerHematology.advice}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="additional-script">
+			<script>
+				//<![CDATA[
+				var toggleGeneral = function(){
+					$('#general').toggle('fast','swing');
+					if($('#general-chevron').hasClass('fa-chevron-down'))
+						$('#general-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#general-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleEye = function(){
+					$('#eye').toggle('fast','swing');
+					if($('#eye-chevron').hasClass('fa-chevron-down'))
+						$('#eye-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#eye-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleEar = function(){
+					$('#ear').toggle('fast','swing');
+					if($('#ear-chevron').hasClass('fa-chevron-down'))
+						$('#ear-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#ear-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleHeart = function(){
+					$('#heart').toggle('fast','swing');
+					if($('#heart-chevron').hasClass('fa-chevron-down'))
+						$('#heart-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#heart-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleBreath = function(){
+					$('#breath').toggle('fast','swing');
+					if($('#breath-chevron').hasClass('fa-chevron-down'))
+						$('#breath-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#breath-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleDigestion = function(){
+					$('#digestion').toggle('fast','swing');
+					if($('#digestion-chevron').hasClass('fa-chevron-down'))
+						$('#digestion-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#digestion-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var togglePee = function(){
+					$('#pee').toggle('fast','swing');
+					if($('#pee-chevron').hasClass('fa-chevron-down'))
+						$('#pee-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#pee-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleBone = function(){
+					$('#bone').toggle('fast','swing');
+					if($('#bone-chevron').hasClass('fa-chevron-down'))
+						$('#bone-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#bone-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleSkin = function(){
+					$('#skin').toggle('fast','swing');
+					if($('#skin-chevron').hasClass('fa-chevron-down'))
+						$('#skin-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#skin-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleNervous = function(){
+					$('#nervous').toggle('fast','swing');
+					if($('#nervous-chevron').hasClass('fa-chevron-down'))
+						$('#nervous-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#nervous-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleMentality = function(){
+					$('#mentality').toggle('fast','swing');
+					if($('#mentality-chevron').hasClass('fa-chevron-down'))
+						$('#mentality-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#mentality-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleEndocrine = function(){
+					$('#endocrine').toggle('fast','swing');
+					if($('#endocrine-chevron').hasClass('fa-chevron-down'))
+						$('#endocrine-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#endocrine-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleBlood = function(){
+					$('#blood').toggle('fast','swing');
+					if($('#blood-chevron').hasClass('fa-chevron-down'))
+						$('#blood-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#blood-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleAllergy = function(){
+					$('#allergy').toggle('fast','swing');
+					if($('#allergy-chevron').hasClass('fa-chevron-down'))
+						$('#allergy-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#allergy-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleWoman = function(){
+					$('#woman').toggle('fast','swing');
+					if($('#woman-chevron').hasClass('fa-chevron-down'))
+						$('#woman-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#woman-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var changeColor = function(elem, color) {
+					if($(elem).css('fill') == 'rgba(0, 255, 0, 0.298039)'){
+						$(elem).css('fill','rgba(0, 0, 0, 0)');
+						color = 0;
+					} else {
+						$(elem).css('fill','rgba(0, 255, 0, 0.3)');
+						color = 1;
+					}	
+				}
+				//]]>
+			</script>
+		</ui:define>
+</ui:composition>

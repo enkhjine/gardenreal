@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Эмчилгээ</h1>
+
+		<p:commandLink actionListener="#{infoController.newDiagnose()}"
+			styleClass="btn">
+			<i class="fa fa-fw fa-plus-square" /> #{i18n['register_diagnose']}
+		</p:commandLink>
+
+		<ol class="breadcrumb">
+			<li class="active">Эмчийн үзлэг</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<div class = "row">
+							<div class = "col-md-10">
+								<div id="pagination" style="width: 800px; float: left;"></div>
+							</div>
+							<div class = "col-md-2">
+								<p:inputText value = "#{infoController.filterKey}" onkeyup="diagnoses();"> 
+								</p:inputText>
+								
+							</div>
+						</div>
+					</div>
+					
+					<div class="box-body">
+					
+						<div class="row">
+							<p:dataTable id="doctorInspection" styleClass="myTable col-xs-12"
+								value="#{infoController.listDiagnoses}" var="info"
+								rowIndexVar="index" emptyMessage="#{i18n['empty']}">
+								<p:column styleClass="index" headerText="№" width="2%">#{index + 1}</p:column>
+								<p:column headerText="#{i18n['number']}" width="8%">&nbsp;&nbsp;#{info.id}</p:column>
+								<p:column styleClass="text" headerText="#{i18n['mongolian_name']}" width="30%">#{info.nameMn}</p:column>
+								<p:column styleClass="text" headerText="#{i18n['english_name']}" width="30%">#{info.nameEn}</p:column>
+								<p:column styleClass="text" headerText="#{i18n['russian_name']}" width="30%">#{info.nameRu}</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p:dialog widgetVar="register" width="400" header="#{i18n['register_diagnose']}"
+			modal="true" resizable="false">
+
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-5">
+						<label>#{i18n['number']}:</label>
+					</div>
+					<div class="col-xs-7">
+						<p:inputText />
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-5">
+						<label>#{i18n['mongolian_name']}:</label>
+					</div>
+					<div class="col-xs-7">
+						<p:inputText />
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-5">
+						<label>#{i18n['english_name']}:</label>
+					</div>
+					<div class="col-xs-7">
+						<p:inputText />
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-5">
+						<label>#{i18n['russian_name']}:</label>
+					</div>
+					<div class="col-xs-7">
+						<p:inputText />
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 margin-top">
+				<p:commandLink action="#{infoController.saveDiagnoseGroup()}"
+					style="float: right;" styleClass="btn">
+					<i class="fa fa-checl" />#{i18n['save']}
+				</p:commandLink>
+			</div>
+		</p:dialog> </section>
+		<p:remoteCommand name="diagnoses"
+			actionListener="#{infoController.diagnoses()}"
+			update="form:doctorInspection form:jsPanel" />
+		<link rel="stylesheet" type="text/css"
+			href="#{applicationController.path}paginate/css/style.css"
+			media="screen" />
+		<!-- 		<script type="text/javascript" src="#{applicationController.path}paginate/jquery-1.3.2.js"></script> -->
+		<script type="text/javascript"
+			src="#{applicationController.path}paginate/jquery.paginate.js"></script>
+		<p:panel id="jsPanel" style="display: none;">
+			<script>
+			//<![CDATA[
+	            $(function() {
+					$("#pagination").paginate({
+						count 		: #{infoController.pageCount},
+						start 		: #{infoController.selectedPageNumber},
+						display     : 8,
+						border					: true,
+						border_color			: '#3c8dbc',
+						text_color  			: '#3c8dbc',
+						background_color    	: '#fff',	
+						border_hover_color		: '#fff',
+						text_hover_color  		: '#fff',
+						background_hover_color	: '#3c8dbc', 
+						images					: false,
+						mouse					: 'press'
+					});
+					setEvents();
+				});
+			//]]>
+			</script>
+		</p:panel>
+	</ui:define>
+
+	<ui:define name="script">
+		<h:inputHidden id="selectedPageNumber"
+			value="#{infoController.selectedPageNumber}" />
+		<p:remoteCommand name="selectedPageNumberChanged"
+			actionListener="#{infoController.diagnoses}"
+			update="form:jsPanel form:doctorInspection" onstart="showLoader();"
+			oncomplete="hideLoader();" />
+		<script>
+			//<![CDATA[
+	            $(function() {
+	            	diagnoses();
+				});
+	            
+	            function getEventTarget(e) {
+				    e = e || window.event;
+				    return e.target || e.srcElement; 
+				}
+	            
+	            function setEvents(){
+	            	document.getElementsByClassName('jPag-pages')[0].setAttribute('id', 'test')
+	            	if(document.getElementsByClassName('jPag-pages')[0].hasChildNodes()){
+	            		var ul = document.getElementById('test');
+	            		ul.onclick = function(event) {
+	            		    var target = getEventTarget(event);
+	            		    example(cleanTag(target.innerHTML));
+	            		};
+	            	}
+	            }
+	            
+	            function cleanTag(text){
+	            	if(text.split('>').length > 1){
+	            		return cleanTag(text.split('>')[1]);
+	            	}else if(text.split('<').length > 1){
+	            		return cleanTag(text.split('<')[0]);
+	            	}
+	            	return text;
+	            }
+	            
+	            function example(e){
+	            	document.getElementById('form:selectedPageNumber').value = e;
+	            	selectedPageNumberChanged();
+	            }
+			//]]>
+			</script>
+	</ui:define>
+</ui:composition>

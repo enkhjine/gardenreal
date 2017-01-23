@@ -1,0 +1,3047 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<c:if test="#{inspectionController.pediatricsType=='Jaundice'}">
+		<p:tab title="Нярайн шарлалт">
+			<p:accordionPanel id="jaundice" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Алга ул шарлана</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.palmJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Арьс салст шарлана</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.skinJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Төрсний дараа шууд шарлана</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.afterBirthJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Төрсний дараа 3дахь хоногоос шарлана</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.afterBirth3daysJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шарлалт буурахгүй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceNotDescrease}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">14хоног хоносон</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundice14days}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Тайван бус байна</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceWorried}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нойрондоо муудана</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.badForSleep}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хөхөндөө муудна</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.badForSuckle}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Баасны өнгө цайвар болно</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.poopGettingLight}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шээсний өнгө өөрчлөгдөнө</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.peeColorChanged}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Гэдэс дүүрнэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.gettingFull}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" rows="3" autoResize="false" placeholder="Бусад зовиур"
+							 value="#{inspectionController.customerJaundice.jaundicePainText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Төрөөд шарласан уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.afterBirthHasJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Төрөөд 3хоногоос хойш шарласан уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.afterBirth3daysHasJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шарлалт 14хоногоос илүү үргэлжсэн үү?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceContinued}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Шарлалт ихсээд буураад байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceHasChanged}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шарлалт улам ихсээд байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceHasIncreased}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Алга ул шарласан уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.palmHasJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шарлалт буурч байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceHasDecreased}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Шарлалт улам ихсэж байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jaundiceIsIncreased}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Баас цайвар байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.poopIsLight}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нойрондоо муудаж байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isBadForSleep}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хөхөндөө муудаж байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isBadForSuckle}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Тайван бус байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isWorried}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шээсний өнгө цайвар байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isPeeLight}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Гэдэс дүүрч байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isGettingFull}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Цочромтгой байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isShocked}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Унтахгүй байна уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.isNotSleep}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" rows="3" autoResize="false" placeholder="Бусад асуумж" 
+							 value="#{inspectionController.customerJaundice.jaundiceMedText}"/>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('jaundice')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoJaundice" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listJaundiceAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListJaundiceAttachment().indexOf(attachment), inspectionController.getListJaundiceAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListJaundiceAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listJaundiceAttachment, attachment)}"
+											oncomplete="updateJaundice()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateJaundice"  update="qoJaundice" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьс салст шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.cSkinJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Алга ул шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.cPalmJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Буйл шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.gumJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нүдний склер шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.scleraJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьс ногоон шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.skinGreen}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нүүр шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.faceJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Их бие шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.bodyJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Мөчид шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.jointJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Бүх бие шар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.allBodyJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хэвлий дүүрэнги</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.abdomenJaundice}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хэвлийн венүүд тодорно</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.abdomenVen}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Элэг баруун хавирганы нумаар эмзэглэнэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.liverRightRib}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Элэг баруун хавирганы нумаар том  тэмтрэгдэнэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.liverRightRibTouch}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Дэлүү тэмтрэгдэнэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.spleenTouch}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өтгөн цайвар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.poopLight}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Шээс цайвар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerJaundice.peeLight}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.jaundiceAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'jaundice',1,'false');"
+											onkeyup="callRefreshList(this,'jaundice',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.jaundiceAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'jaundice',1,'true');"
+											onkeyup="callRefreshList(this,'jaundice',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'jaundice',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'jaundice',0,'false');"
+											onkeyup="callRefreshList(this,'jaundice',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'jaundice',0,'true');"
+											onkeyup="callRefreshList(this,'jaundice',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'jaundice',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.jaundicePreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.jaundicePreDiagnose.remove(diagnose)}"
+												oncomplete="updateJaundiceDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateJaundiceDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerJaundice.jaundiceRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerJaundice.jaundiceAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		</c:if>
+		<c:if test="#{inspectionController.pediatricsType=='Rachitis'}">
+		<p:tab title="Рахит">
+			<p:accordionPanel id="rachitis" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleVegatative()">
+									<div class="form-title">
+										Вегататив мэдрэлийн тогтолцооны хам шинж <i id="vegatative-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+						<div style="display: none" id="vegatative">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Цочромтгой</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisPanic}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Нойрондоо муудна</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.badForSleep}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Унтах болон хөхөхдөө хөлрөнө</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.sweatWhenSleepAndSuckle}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Толгойгоо  шөргөөнө</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisHead}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Дагзны үс халцарна</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.nuchaHair}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Тайван бус</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisWorried}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleBone()">
+									<div class="form-title">
+										Ясны тогтолцоонд гарах өөрчлөлт <i id="bone-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+						<div style="display: none" id="bone">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Дух чамархайн ясанд булдруу үүснэ</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.foreHead}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Шүд хожуу ургах, буруу байрлал</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisTooth}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Цээжний хэлбэр өөрчлөгдөнө</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisChest}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Майга болно</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisBandy}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Нуруу муруйна</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisBack}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+							<div class="col-md-12" style="cursor: pointer;"
+								onclick="toggleOther()">
+								<div class="form-title">
+									Бусад шинж <i id="other-chevron" class="pull-right fa fa-chevron-left" />
+								</div>
+							</div>
+						</div>
+					<div style="display: none" id="other">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Шээс үнэртэй болно</div>
+							<div class="col-md-3">
+								<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisPee}">
+									<f:selectItem itemLabel="Тийм" itemValue="1" />
+									<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								</p:selectOneRadio>
+							</div>
+							<div class="col-md-3">Хөл муутай, шургаж унана</div>
+							<div class="col-md-3">
+								<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisFoot}">
+									<f:selectItem itemLabel="Тийм" itemValue="1" />
+									<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								</p:selectOneRadio>
+							</div>
+						</div>
+					</div>
+					<p:inputTextarea style="width:100%" rows="3" autoResize="false" placeholder="Бусад зовиур"
+							 value="#{inspectionController.customerRachitis.rachitisPainText}"></p:inputTextarea>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өвчин яг хэзээнээс эхэлсэн бэ</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%"  value="#{inspectionController.customerRachitis.rachitisWhen}"/>
+						</div>
+						<div class="col-md-3">Д вит ууж байсан уу</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisDVitamin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Одоо Д вит ууж байгаа юу</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.usingDVitamin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Ямар тунгаар ууж байсан бэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.doseDVitamin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хэдий хугацаагаар ууж байсан бэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.howlongDVitamin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Өмнө нь рахитаар оношлогдож, эмчлэгдэж байсан уу</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisBefore}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өдөр бүр агаарт гаргадаг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisAir}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Наранд ээдэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisSun}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хооллолтын байдал</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerRachitis.rachitisFood}">
+								<f:selectItem itemLabel="Хөхөөр" itemValue="2" />
+								<f:selectItem itemLabel="Тэжээвэр" itemValue="1" />
+								<f:selectItem itemLabel="Ердийн" itemValue="0" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">6 сар хүртэл хөхөөр хооллосон уу</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisSuckleFor6months}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Нэмэлт хоолонд хэзээ оруулсан бэ</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%"  value="#{inspectionController.customerRachitis.additionalFood}"/>
+						</div>
+						<div class="col-md-3">Хоолны орц найрлага хэмжээ</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%"  value="#{inspectionController.customerRachitis.foodInc}"/>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өдөрт хэдэн удаа хооллодог вэ?</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%"  value="#{inspectionController.customerRachitis.foodSequence}"/>
+						</div>
+						<div class="col-md-3">Хэдэн настай эхийн, хэд дэх жирэмслэлтийн хэд дэх хүүхэд вэ?</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerRachitis.momChild}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хугацаандаа төрсөн үү?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisBirthOnTime}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Бага жинтэй төрсөн үү?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisBirthWeight}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өсөлт бойжилт хэвийн эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisGrowUp}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Удамшлын өвчин байдаг уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisGeneration}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Харшилтай юу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachitisAllergy}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea rows="3" placeholder="Бусад асуумж" autoResize="false" style="width:100%" 
+								 value="#{inspectionController.customerRachitis.rachitisMedText}"/>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('rachitis')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoRachitis" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listRachitisAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListRachitisAttachment().indexOf(attachment), inspectionController.getListRachitisAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListRachitisAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listRachitisAttachment, attachment)}"
+											oncomplete="updateRachitis()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateRachitis"  update="qoRachitis" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleTmt()">
+									<div class="form-title">
+										ТМТ ба УМТ <i id="tmt-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "tmt">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Тайван биш, цочромтгой</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.worriedPanic}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Нойр хямарсан</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.sleepBad}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Хөлрөмтгий</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.sweatly}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Сэтгэц хөдлөл тогтворгүй</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.emotionBad}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Сэтгэц хөдөлгөөний хөгжил хоцорсон</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.emotionDecrease}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleSkin()">
+									<div class="form-title">
+										Арьс <i id="skin-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "skin">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Дагзны үс халцарсан</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.nuchaHairLoss}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Чийглэг ихэссэн</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.gettingWet}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleMuscle()">
+									<div class="form-title">
+										Булчингийн тогтолцоо <i id="muscle-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "muscle">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Булчингийн тонус суларсан</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.amyotonia}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Баас хатна</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.poopBarken}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Мэлхий гэдэс</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.frogAbdomen}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleStomach()">
+									<div class="form-title">
+										Дотор эрхтний талаас <i id="stomach-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "stomach">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Уушгины үрэвсэл</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.lungInflammation}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Элэг томорсон</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.liverEnlargement}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Дэлүү томорсон</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.spleenEnlargement}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleBlood()">
+									<div class="form-title">
+										Цус багадалт <i id="blood-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "blood">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Цус багадалттай эсэх</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.spanaemia}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleBonechange()">
+									<div class="form-title">
+										Ясны өөрчлөлт <i id="bonechange-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "bonechange">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Зулайн яс зөөлөрсөн</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.parietalBone}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Дагзны овгорууд томорсон</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.nuchaBone}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Шүд ургалт доголдсон</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.dentition}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Цээжний хэнхэрцэг өөрчлөгдсөн</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.pectus}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Нурууны ясны хэлбэр өөрчлөгдсөн</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachides}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-8">
+									<div class="form-title">Үлдэц</div>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Дөрвөлжин толгой</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.squadHead}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Хүнхэр дух</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.hollowForehead}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Эмээл хамар</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.saddleNose}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Цээжний хэнхэрцэг доогуураа дэлбийсэн</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.pectusChanged}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Нуруу багана өөрчлөгдсөн</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.rachidesChange}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Уйтан аарцаг</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.narrowPelvis}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Майга хөл О, Х</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerRachitis.bowlegOX}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleExamination()">
+									<div class="form-title">
+										ТМТ ба УМТ <i id="examination-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+						<div style="display: none" id= "examination">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Ca, P</div>
+							<div class="col-md-3">
+								<p:selectOneMenu style="width:100%" value="#{inspectionController.customerRachitis.caAndP}">
+									<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+									<f:selectItem itemLabel="Буурах" itemValue="1" />
+								</p:selectOneMenu>
+							</div>
+							<div class="col-md-3">Шүлтлэг фосфатаз</div>
+							<div class="col-md-3">
+								<p:selectOneMenu style="width:100%" value="#{inspectionController.customerRachitis.alkalinity}">
+									<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+									<f:selectItem itemLabel="Буурах" itemValue="1" />
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Д витамин</div>
+							<div class="col-md-3">
+								<p:selectOneMenu style="width:100%" value="#{inspectionController.customerRachitis.dVitamin}">
+									<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+									<f:selectItem itemLabel="Буурах" itemValue="1" />
+									<f:selectItem itemLabel="Ихсэх" itemValue="2" />
+								</p:selectOneMenu>
+							</div>
+							<div class="col-md-3">Рентген зураг</div>
+							<div class="col-md-3">
+								<p:selectOneMenu style="width:100%" value="#{inspectionController.customerRachitis.rentgen}">
+									<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="1" />
+									<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="0" />
+								</p:selectOneMenu>
+							</div>
+							</div>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.rachitisAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'rachitis',1,'false');"
+											onkeyup="callRefreshList(this,'rachitis',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.rachitisAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'rachitis',1,'true');"
+											onkeyup="callRefreshList(this,'rachitis',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'rachitis',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'rachitis',0,'false');"
+											onkeyup="callRefreshList(this,'rachitis',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'rachitis',0,'true');"
+											onkeyup="callRefreshList(this,'rachitis',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'rachitis',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.rachitisPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.rachitisPreDiagnose.remove(diagnose)}"
+												oncomplete="updateRachitisDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateRachitisDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								 value="#{inspectionController.customerRachitis.rachitisRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								 value="#{inspectionController.customerRachitis.rachitisAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		</c:if>
+		<c:if test="#{inspectionController.pediatricsType=='Diarrhoea'}">
+		<p:tab title="Суулгалт">
+			<p:accordionPanel id="diarrhoea" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Суулгалт</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Хий дүлүүлнэ" value="#{inspectionController.customerDiarrhoea.keck}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Өдөрт 3-аас олон удаа, шингэн баана" value="#{inspectionController.customerDiarrhoea.slushyDefecate}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Халдвар, хордлогын хам шинж</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Халуурна"  value="#{inspectionController.customerDiarrhoea.hyperpyrexia}"/>
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Дотор муухайрна, бөөлжинө"  value="#{inspectionController.customerDiarrhoea.extroversion}"/>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хэвлийгээр өвдөх хам шинж</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Ходоод өвдөнө"  value="#{inspectionController.customerDiarrhoea.stomachPain}"/>
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Доош тулж өвдөнө"  value="#{inspectionController.customerDiarrhoea.footPain}"/>
+						</div>
+						<div class="col-md-8">
+							<p:selectBooleanCheckbox itemLabel="Хэвлийн зүүн доод хэсэгт мушгирч, базалж өвдөнө" value="#{inspectionController.customerDiarrhoea.abdomenColic}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шингэн алдалтын хам шинж</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Ам цангана"  value="#{inspectionController.customerDiarrhoea.tobeThirsty}"/>
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Арьс хуурайшина"  value="#{inspectionController.customerDiarrhoea.parchmentSkin}"/>
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Зүрх дэлсэнэ" value="#{inspectionController.customerDiarrhoea.heartPain}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Шээсний гарц багасана" value="#{inspectionController.customerDiarrhoea.peeDecrease}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Мэдрэл сульдлын хам шинж</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Бие сулрана" value="#{inspectionController.customerDiarrhoea.exhausted}" />
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Ядрана" value="#{inspectionController.customerDiarrhoea.gettingTired}" />
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Толгой өвдөнө" value="#{inspectionController.customerDiarrhoea.gettingHeadache}" />
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Уйлагнана" value="#{inspectionController.customerDiarrhoea.snivel}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Бусад эрхтэн тогтолцооны эмгэг</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Архаг халдварууд" value="#{inspectionController.customerDiarrhoea.chronicInfection}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Амьсгалын замын халдварууд" value="#{inspectionController.customerDiarrhoea.breathInfection}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Дунд чихний халдвар" value="#{inspectionController.customerDiarrhoea.tympanumInfection}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" rows="3" autoResize="false" placeholder="Бусад зовиур" 
+								value="#{inspectionController.customerDiarrhoea.diarrhoeaPainText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleAdditional()">
+									<div class="form-title">
+										Зовиурыг тодруулан асуух <i id="additional-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "additional">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Хүүхэд суулгаж байна уу?</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="Тийм" value="#{inspectionController.customerDiarrhoea.yes}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Хэрэв суулгасан бол өдөрт хэдэн удаа?</div>
+								<div class="col-md-6">
+									<p:selectBooleanCheckbox itemLabel="3-с олон удаа суулгах" value="#{inspectionController.customerDiarrhoea.threeAndMore}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Хэд хоног суулгаж байна вэ?</div>
+								<div class="col-md-6">
+									<p:selectOneMenu style="width:100%" value="#{inspectionController.customerDiarrhoea.toDiarrhoeaDays}">
+										<f:selectItem itemLabel="14 хүртэлх хоног" itemValue="1" />
+										<f:selectItem itemLabel="14 ба түүнээс олон хоног" itemValue="0" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Суулгалтын 1 удаагийн хэмжээ хэр байна вэ?</div>
+								<div class="col-md-6">
+									<p:selectOneMenu style="width:100%" value="#{inspectionController.customerDiarrhoea.diarrhoeaVolume}">
+										<f:selectItem itemLabel="Их хэмжээтэй" itemValue="2" />
+										<f:selectItem itemLabel="Бага хэмжээтэй" itemValue="1" />
+										<f:selectItem itemLabel="Хэвийн хэмжээтэй" itemValue="0" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Баасны хольц ямар байна вэ? Цустай, хоолны үлдэгдэлтэй, залхагтай байна уу?</div>
+								<div class="col-md-6">
+									<p:selectOneMenu style="width:100%" value="#{inspectionController.customerDiarrhoea.poopImpurity}">
+										<f:selectItem itemLabel="Цустай, залхагтай" itemValue="2" />
+										<f:selectItem itemLabel="Хоолны үлдэгтэлтэй, залхагтай" itemValue="1" />
+										<f:selectItem itemLabel="Хоолны үлдэгдэлтэй, усархаг" itemValue="0" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Баах үед гэдсээр базалж өвдөж байна уу?</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerDiarrhoea.whenPoop}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Баах үед дүлэх зовиур бий юу?</div>
+								<div class="col-md-6">
+									<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerDiarrhoea.whenPoopKeck}">
+										<f:selectItem itemLabel="Тийм" itemValue="1" />
+										<f:selectItem itemLabel="Үгүй" itemValue="0" />
+									</p:selectOneRadio>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row margin-bottom">
+								<div class="col-md-12" style="cursor: pointer;"
+									onclick="toggleNow()">
+									<div class="form-title">
+										Одоогийн өвчний түүх <i id="now-chevron" class="pull-right fa fa-chevron-left" />
+									</div>
+								</div>
+							</div>
+							<div style="display: none" id= "now">
+							<div class="row margin-bottom">
+								<div class="col-md-6">Зовиурууд хэзээнээс эхэлсэн?</div>
+								<div class="col-md-6">
+									<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.whenPain}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Эмчид үзүүлж, шинжилгээ хийлгэсэн эсэх?</div>
+								<div class="col-md-6">
+									<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.doctor}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Гэрээр ямар нэгэн эм тариа хэрэглэсэн эсэх?</div>
+								<div class="col-md-6">
+									<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.usedPharmacy}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-6">Юутай холбоотой гэж бодож байна вэ?</div>
+								<div class="col-md-6">
+									<p:selectOneMenu style="width:100%" value="#{inspectionController.customerDiarrhoea.diarhoeaCause}">
+										<f:selectItem itemLabel="Муудсан хоол хүнс идсэн" itemValue="0" />
+										<f:selectItem itemLabel="Ойр хавьд нь суулгаж байсан хүн байсан" itemValue="1" />
+										<f:selectItem itemLabel="Бусад халдварын шалтгаанууд" itemValue="2" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="row margin-bottom">
+							<div class="col-md-12" style="cursor: pointer;"
+								onclick="toggleLive()">
+								<div class="form-title">
+									Амьдралын түүх <i id="live-chevron" class="pull-right fa fa-chevron-left" />
+								</div>
+							</div>
+						</div>
+					<div style="display: none" id= "live">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Амьдрал ахуйн нөхцөл</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="1" value="#{inspectionController.customerDiarrhoea.livingCondition}">
+								<f:selectItem itemLabel="Тааруу" itemValue="1" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Ам бүл</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="1" value="#{inspectionController.customerDiarrhoea.family}">
+								<f:selectItem itemLabel="Ам бүл олонтой" itemValue="0" />
+								<f:selectItem itemLabel="Цөөнтэй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-8">
+							<div class="form-title">Халдвар судлалын асуумж</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Сүүлийн 6 сарын хугацаанд халдварт өвчтэй хүнтэй ойр байсан эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.withDiarrhoeaLast6Months}" />
+						</div>
+						<div class="col-md-3">Сүүлийн 6 сарын хугацаанд гадагшаа явсан эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.wentOtherCountries}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Сүүлийн 6 сарын хугацаад цус, цусан бүтээгдэхүүн сэлбүүлсэн эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.donorLast6Months}" />
+						</div>
+						<div class="col-md-3">Ойр хавьд гэдэсний халдвараар өвдсөн хүн байгаа эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.haveNearlyDiarrhoea}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Түүхий ус уусан эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.drinkNotFureWater}" />
+						</div>
+						<div class="col-md-3">Гэрт амьтан тэжээдэг эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.havePet}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өөр бусад хүмүүстэй аяга, халбагаа сольж хэрэглэсэн эсэх</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.shareSpoonOrCup}" />
+						</div>
+						<div class="col-md-3">Сүүлд идэж уусан зүйлсийн талаар дэлгэрэнгүй асуух</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerDiarrhoea.lastFood}" />
+						</div>
+					</div>
+					</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад асуумж"
+								 value="#{inspectionController.customerDiarrhoea.diarrhoeaMedText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('diarrhoea')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoDiarrhoea" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listDiarrhoeaAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListDiarrhoeaAttachment().indexOf(attachment), inspectionController.getListDiarrhoeaAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListDiarrhoeaAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listDiarrhoeaAttachment, attachment)}"
+											oncomplete="updateDiarrhoea()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateDiarrhoea"  update="qoDiarrhoea" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Шингэн алдалтын хам шинж</div>
+						<div class="col-md-8">
+							<p:selectBooleanCheckbox itemLabel="Нүүр царайны илрэл ядрангуй, тамирдсан" value="#{inspectionController.customerDiarrhoea.lookTired}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Хөдөлгөөний идэвх сул" value="#{inspectionController.customerDiarrhoea.movementSlow}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Арьс хуурайшина" value="#{inspectionController.customerDiarrhoea.cParchmentSkin}" />
+						</div>
+						<div class="col-md-5 col-md-offset-3">
+							<p:selectBooleanCheckbox itemLabel="Уруул омголтож хатна" value="#{inspectionController.customerDiarrhoea.lipsDry}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хэл хуурай өнгөртэй" value="#{inspectionController.customerDiarrhoea.tongueDry}" />
+						</div>
+						<div class="col-md-5 col-md-offset-3">
+							<p:selectBooleanCheckbox itemLabel="Арьсны хуниас удаан арилна" value="#{inspectionController.customerDiarrhoea.rhagades}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Нярайн зулай татагдсан" value="#{inspectionController.customerDiarrhoea.sinciput}" />
+						</div>
+						<div class="col-md-5 col-md-offset-3">
+							<p:selectBooleanCheckbox itemLabel="Артерийн даралт буурна" value="#{inspectionController.customerDiarrhoea.arterialPressureDecrease}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Нүд хонхойсон" value="#{inspectionController.customerDiarrhoea.sinkEye}" />
+						</div>
+						<div class="col-md-9 col-md-offset-3">
+							<p:selectBooleanCheckbox itemLabel="Зүрхний авиа бүдгэрэх, хэм алдах, оройн цэгт агшилтын шуугиан гарна" value="#{inspectionController.customerDiarrhoea.cardiacArrhythmiasDiarrhoea}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Халдвар, хордлогын хам шинж</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Биеийн халуун 37,9-39 хүрнэ" value="#{inspectionController.customerDiarrhoea.hyperpyrexia37To39}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хэвлийгээр өвдөх хам шинж</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Аюулхайд эмзэглэнэ" value="#{inspectionController.customerDiarrhoea.epigastriumPain}" />
+						</div>
+						<div class="col-md-8">
+							<p:selectBooleanCheckbox itemLabel="Сигма гэдэс тэмтрэхэд эмзэглэлтэй, хатуу, хөдөлгөөн багатай" value="#{inspectionController.customerDiarrhoea.sigmaStomach}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Мэдрэл сульдлын хам шинж</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Тайван бус, цочромтгой" value="#{inspectionController.customerDiarrhoea.getPanic}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Булчингийн хүчдэл суларсан" value="#{inspectionController.customerDiarrhoea.muscleTension}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Бусад эрхтэн тогтолцооны эмгэг</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Зөөлөн тагнай, хүүхэн хэл улайсан" value="#{inspectionController.customerDiarrhoea.diarrhoeaUvula}" />
+						</div>
+						<div class="col-md-8">
+							<p:selectBooleanCheckbox itemLabel="Чихнээс булаг гойжих, чихээр өвдөх, хэнгэргэ цоорхой байна" value="#{inspectionController.customerDiarrhoea.diarrhoeaCerumen}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.diarrhoeaAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'diarrhoea',1,'false');"
+											onkeyup="callRefreshList(this,'diarrhoea',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.diarrhoeaAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'diarrhoea',1,'true');"
+											onkeyup="callRefreshList(this,'diarrhoea',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'diarrhoea',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'diarrhoea',0,'false');"
+											onkeyup="callRefreshList(this,'diarrhoea',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'diarrhoea',0,'true');"
+											onkeyup="callRefreshList(this,'diarrhoea',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'diarrhoea',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.diarrhoeaPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.diarrhoeaPreDiagnose.remove(diagnose)}"
+												oncomplete="updateDiarrhoeaDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateDiarrhoeaDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerDiarrhoea.diarrhoeaRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerDiarrhoea.diarrhoeaAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		</c:if>
+		<c:if test="#{inspectionController.pediatricsType=='PediatricInfection'}">
+		<p:tab title="Нярайн халдвар">
+			<p:accordionPanel id="pediatricInfection" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Халуурна" value="#{inspectionController.customerPediatricInfection.hyperpyrexia}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хүйн шархнаас идээ гарна" value="#{inspectionController.customerPediatricInfection.umbilecalCicatrixPus}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хүйн шарх эдгэрэхгүй удна" value="#{inspectionController.customerPediatricInfection.umbilecalCicatrix}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хүйн цагираг  тойрч улайна" value="#{inspectionController.customerPediatricInfection.umbilicalErubescence}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хүй орчим овойж хавагнана" value="#{inspectionController.customerPediatricInfection.funisSwell}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хөхний булчирхай томорно" value="#{inspectionController.customerPediatricInfection.mammaryGland}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хүйн шархнаас цус гарна" value="#{inspectionController.customerPediatricInfection.bloodFromCicatrix}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Нярайн арьс нурна" value="#{inspectionController.customerPediatricInfection.intertrigo}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Нярайн арьс нурж шархална" value="#{inspectionController.customerPediatricInfection.intertrigoCicatrix}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Нярайн арьс нурж шүүсэрхэг шарх үүснэ" value="#{inspectionController.customerPediatricInfection.cicatrixOnSkin}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Биеэр жижиг хэмжээтэй улаан тууралт гарна" value="#{inspectionController.customerPediatricInfection.rubella}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хөхний булчирхай томорч улайна" value="#{inspectionController.customerPediatricInfection.mammaryGlandErubescence}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Нугалаастай газраар идээрхэг цэврүү гарна" value="#{inspectionController.customerPediatricInfection.bullaOnPlica}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Арьсан дор том хүрэн зангилаа үүснэ" value="#{inspectionController.customerPediatricInfection.papularOnSkin}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хүй орчмын арьс хар хөх болж шархална" value="#{inspectionController.customerPediatricInfection.funisGettingDark}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Толгойн үстэй хэсэг нугалаастай газраар олон жижиг цэврүүнцрүүд гарна" value="#{inspectionController.customerPediatricInfection.bullaOnPlicaAndHair}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Хумсны толионд цэврүү шарх үүснэ" value="#{inspectionController.customerPediatricInfection.bullaOnNail}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox  itemLabel="Нүүрний арьсан дээр идээрхэг зөөлөн цэврүү үүснэ" value="#{inspectionController.customerPediatricInfection.bullaOnFace}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад зовиур"
+							 value="#{inspectionController.customerPediatricInfection.pediatricInfectionPainText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Нярай халуурсан</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.pediatricHyperpyrexia}">
+								<f:selectItem itemLabel="35.5 ба түүнээс бага" itemValue="0" />
+								<f:selectItem itemLabel="35.6-37.4" itemValue="1" />
+								<f:selectItem itemLabel="37.5-38.4" itemValue="2" />
+								<f:selectItem itemLabel="38.5 ба түүнээс их" itemValue="3" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Хүй улайсан</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.funisReveal}">
+								<f:selectItem itemLabel="Улайсан" itemValue="2" />
+								<f:selectItem itemLabel="Хар хөх өнгөтэй болж үхжил үүссэн" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүй идээтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.funisPus}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хүйн улайлт арьс руу тэлсэн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.funisRevealToSkin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүйн шархнаас ялгадас гарсан</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.funisCicatrixDejection}">
+								<f:selectItem itemLabel="Салсархаг ба ялимгүй идээрхэг" itemValue="1" />
+								<f:selectItem itemLabel="Идээрхэг" itemValue="0" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Хүй орчим овойж хавдсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.funisSideDropsically}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүйн судас тэмтрэгднэ</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.funisSphygmusFeel}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хүйн шарх эдгэрэхгүй удсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.funisCicatrixDelay}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүйнээс цус гарсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.bloodFromFunis}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Арьсан дээр тууралт гарсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.eruptionBreakOut}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">Арьсан дээрхи тууралтын байрлалыг заана уу?</div>
+						<div style="height: 270px;width: 154px;display:inline-block;float:left;">
+							<img src="#{applicationController.path}images/homunculus_kid.gif" style="position: absolute;"/>
+						</div>
+						<div class="margin-bottom" style="display:inline-block;width:calc(100% - 155px);">
+							<div class="col-md-6">
+								<br />
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Хуйх" value="#{inspectionController.customerPediatricInfection.eruptionOnScalp}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Нүүр" value="#{inspectionController.customerPediatricInfection.eruptionOnFace}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Хүзүү" value="#{inspectionController.customerPediatricInfection.eruptionOnNeck}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Их бие" value="#{inspectionController.customerPediatricInfection.eruptionOnBody}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Нуруу" value="#{inspectionController.customerPediatricInfection.eruptionOnBack}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Гар" value="#{inspectionController.customerPediatricInfection.eruptionOnArm}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Сарвуу" value="#{inspectionController.customerPediatricInfection.eruptionOnHand}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Бэлэг эрхтэн" value="#{inspectionController.customerPediatricInfection.eruptionOnGenitals}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Хөл" value="#{inspectionController.customerPediatricInfection.eruptionOnFoot}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Тавхай" value="#{inspectionController.customerPediatricInfection.eruptionOnClubfoot}"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьсан дээрхи тууралт хүнд</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.eruptionOnSkinGrave}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Арьсан дээрхи тууралт олон</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.eruptionOnSkinLarge}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьсан дээр тууралт</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.eruptionOnSkin}">
+								<f:selectItem itemLabel="1 хоногийн өмнө" itemValue="0" />
+								<f:selectItem itemLabel="2-4 хоногийн өмнө" itemValue="1" />
+								<f:selectItem itemLabel="5 хоногоос дээш өмнөөс хоногийн гарсан" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Арьсан дээр өмнө нь тууралт гарч байсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.eruptionBefore}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Тууралтын хэмжээ</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.eruptionSize}">
+								<f:selectItem itemLabel="1-3мм" itemValue="0" />
+								<f:selectItem itemLabel="0,5-1см" itemValue="1" />
+								<f:selectItem itemLabel="1-3см" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Тууралтын агууламж</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.eruption}">
+								<f:selectItem itemLabel="Тунгалаг" itemValue="0" />
+								<f:selectItem itemLabel="Булингартай" itemValue="1" />
+								<f:selectItem itemLabel="Идээрхэг" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Тууралт гараад удсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.eruptionLate}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Арьсан дээр шарх үүссэн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.mCicatrixOnSkin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьсан дээр зангилаа үүссэн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.mPapularOnSkin}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Арьсан дээрхи тууралт эмзэглэлтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.eruptionOnSkinPeeve}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүүхдээ өдөр бүр усанд оруулдаг уу?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.isShowerEveryday}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хүүхэд тусдаа усанд орох ваннтай юу ?</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerPediatricInfection.haveSelfBath}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад асуумж"
+								 value="#{inspectionController.customerPediatricInfection.pediatricInfectionMedText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('pediatricInfection')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoPediatricInfection" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listPediatricInfectionAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListPediatricInfectionAttachment().indexOf(attachment), inspectionController.getListPediatricInfectionAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListPediatricInfectionAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listPediatricInfectionAttachment, attachment)}"
+											oncomplete="updatePediatricInfection()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updatePediatricInfection"  update="qoPediatricInfection" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Аюултай ерөнхий шинжийг шалга</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.pernicious}">
+								<f:selectItem itemLabel="Илэрсэн" itemValue="1"/>
+								<f:selectItem itemLabel="Илрээгүй" itemValue="0"/>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Биеийн ерөнхий байдал:</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.patientHood}">
+								<f:selectItem itemLabel="Хөнгөн" itemValue="0"/>
+								<f:selectItem itemLabel="Дунд" itemValue="1"/>
+								<f:selectItem itemLabel="Хүндэвтэр" itemValue="2"/>
+								<f:selectItem itemLabel="Хүнд" itemValue="3"/>
+								<f:selectItem itemLabel="Маш хүнд" itemValue="4"/>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Нярайн халуун</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%"  value="#{inspectionController.customerPediatricInfection.cPediatricHyperpyrexia}"/>
+						</div>
+						<div class="col-md-3">Ухаан санааны байдал</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.mentality}">
+								<f:selectItem itemLabel="Саруул" itemValue="0" />
+								<f:selectItem itemLabel="Бүдгэрсэн" itemValue="1" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Орчны харьцаа</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.environmentRatio}">
+								<f:selectItem itemLabel="Харьцаатай" itemValue="0" />
+								<f:selectItem itemLabel="Харьцаагүй" itemValue="1" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Царай илрэл</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.face}">
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+								<f:selectItem itemLabel="Цонхийсон" itemValue="1" />
+								<f:selectItem itemLabel="Шаналсан" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьсны өнгө</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.race}">
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+								<f:selectItem itemLabel="Цайвар" itemValue="1" />
+								<f:selectItem itemLabel="Улайсан" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Арьсны уян хатан чанар</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.skinFlexible}">
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+								<f:selectItem itemLabel="Буурсан" itemValue="1" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьсны чийглэг байдал</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.skinMoisture}">
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+								<f:selectItem itemLabel="Хуурайшсан" itemValue="1" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Тууралт</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.erysipelas}">
+								<f:selectItem itemLabel="Нурсан" itemValue="0" />
+								<f:selectItem itemLabel="Нурж шархлаа үүссэн" itemValue="1" />
+								<f:selectItem itemLabel="Цэврүүнцэр гарсан" itemValue="2" />
+								<f:selectItem itemLabel="Идээрхэг цэврүү гарсан" itemValue="3" />
+								<f:selectItem itemLabel="Арьс хөхөрч үхэжсэн" itemValue="4" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">Тууралтын байрлал</div>
+						<div style="height: 270px;width: 154px;display:inline-block;float:left;">
+							<img src="#{applicationController.path}images/homunculus_kid.gif" style="position: absolute;"/>
+						</div>
+						<div class="margin-bottom" style="display:inline-block;width:calc(100% - 155px);">
+							<div class="col-md-6">
+								<br />
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Хуйх" value="#{inspectionController.customerPediatricInfection.cEruptionOnScalp}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Нүүр" value="#{inspectionController.customerPediatricInfection.cEruptionOnFace}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Хүзүү" value="#{inspectionController.customerPediatricInfection.cEruptionOnNeck}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Их бие" value="#{inspectionController.customerPediatricInfection.cEruptionOnBody}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Нуруу" value="#{inspectionController.customerPediatricInfection.cEruptionOnBack}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Гар" value="#{inspectionController.customerPediatricInfection.cEruptionOnArm}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Сарвуу" value="#{inspectionController.customerPediatricInfection.cEruptionOnHand}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Бэлэг эрхтэн" value="#{inspectionController.customerPediatricInfection.cEruptionOnGenitals}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Хөл" value="#{inspectionController.customerPediatricInfection.cEruptionOnFoot}"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-8 col-md-offset-4">
+										<p:selectBooleanCheckbox itemLabel="Тавхай" value="#{inspectionController.customerPediatricInfection.cEruptionOnClubfoot}"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Тууралтын тоо</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.erysipelasCombination}">
+								<f:selectItem itemLabel="Цөөн тооны" itemValue="0" />
+								<f:selectItem itemLabel="Олон тооны" itemValue="1" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Тууралтын хэмжээ</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.erysipelasSize}">
+								<f:selectItem itemLabel="1-3мм" itemValue="0" />
+								<f:selectItem itemLabel="0,5-1см" itemValue="1" />
+								<f:selectItem itemLabel="1-3см" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Тууралтын агууламж</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.erysipelasCapacity}">
+								<f:selectItem itemLabel="Тунгалаг" itemValue="0" />
+								<f:selectItem itemLabel="Булингартай" itemValue="1" />
+								<f:selectItem itemLabel="Идээрхэг" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Хүйн шархнаас идээ гарсан" value="#{inspectionController.customerPediatricInfection.pusFromFunisCicatrix}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Хүйн цагираг тойрч улайсан" value="#{inspectionController.customerPediatricInfection.funisAbashed}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Хүй орчим овойж хавагнасан" value="#{inspectionController.customerPediatricInfection.funisEdema}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Хүй орчмын арьс хар хөх болж шархалсан" value="#{inspectionController.customerPediatricInfection.funisDarkInflammation}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Амны хөндийн үзлэг</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.oralCavity}">
+								<f:selectItem itemLabel="Шархлаатай" itemValue="3"/>
+								<f:selectItem itemLabel="Шархлаагүй" itemValue="2"/>
+								<f:selectItem itemLabel="Эмзэглэлтэй" itemValue="1"/>
+								<f:selectItem itemLabel="Эмзэглэлгүй" itemValue="0"/>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Өнгө</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerPediatricInfection.color}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Бусад өвчний хүндрэлийг шалга</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerPediatricInfection.otherDisease}">
+								<f:selectItem itemLabel="Илэрсэн" itemValue="1"/>
+								<f:selectItem itemLabel="Илрээгүй" itemValue="0"/>
+							</p:selectOneMenu>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.pediatricInfectionAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'pediatricInfection',1,'false');"
+											onkeyup="callRefreshList(this,'pediatricInfection',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.pediatricInfectionAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'pediatricInfection',1,'true');"
+											onkeyup="callRefreshList(this,'pediatricInfection',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'pediatricInfection',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'pediatricInfection',0,'false');"
+											onkeyup="callRefreshList(this,'pediatricInfection',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'pediatricInfection',0,'true');"
+											onkeyup="callRefreshList(this,'pediatricInfection',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'pediatricInfection',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.pediatricInfectionPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.pediatricInfectionPreDiagnose.remove(diagnose)}"
+												oncomplete="updatePediatricInfectionDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updatePediatricInfectionDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerPediatricInfection.pediatricInfectionRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerPediatricInfection.pediatricInfectionAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		</c:if>
+		<c:if test="#{inspectionController.pediatricsType=='TubeInflammation'}">
+		<p:tab title="Гуурсан хоолойн үрэвсэл">
+			<p:accordionPanel id="tubeInflammation" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Ханиалгана-Бөгшүүлж" value="#{inspectionController.customerTubeInflammation.hoopCoughLong}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Цэртэй-Хуурай" value="#{inspectionController.customerTubeInflammation.drySpit}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хоолой өвдөнө"  value="#{inspectionController.customerTubeInflammation.soreThroat}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Нус гоожино"  value="#{inspectionController.customerTubeInflammation.haveRunningNose}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хоолой сөөнө" value="#{inspectionController.customerTubeInflammation.hoarsen}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Өвчүүний араар" value="#{inspectionController.customerTubeInflammation.backSternum}"  />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Сэрвэгнэнэ" value="#{inspectionController.customerTubeInflammation.kittle}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хоолой хорсоно" value="#{inspectionController.customerTubeInflammation.throatSpite}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хоолой халуун оргино"  value="#{inspectionController.customerTubeInflammation.throatGettingHot}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Арьс цайна" value="#{inspectionController.customerTubeInflammation.achromoderma}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Халуурахгүй" value="#{inspectionController.customerTubeInflammation.noHyperpyrexia}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Уцаартай болно" value="#{inspectionController.customerTubeInflammation.anger}"  />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хоолонд дургүй болно" value="#{inspectionController.customerTubeInflammation.noAppetite}"  />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Ядарч сульдна" value="#{inspectionController.customerTubeInflammation.tired}"  />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Мэдрэл сульдлын хам шинжтэй"  value="#{inspectionController.customerTubeInflammation.nervousSyndrome}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Халуурна -37,5 ба түүнээс дээш" value="#{inspectionController.customerTubeInflammation.tubeHyperpyrexia}"  />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад зовиур"
+								 value="#{inspectionController.customerTubeInflammation.tubeInflammationPainText}"  />
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ханиалгалт хэдийд ихэсдэг вэ?</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Гүйж харайх" value="#{inspectionController.customerTubeInflammation.whenRun}" />
+						</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Хүйтэн агаараар амьсгалах" value="#{inspectionController.customerTubeInflammation.breathChill}" />
+						</div>
+						<div class="col-md-8">
+							<p:selectBooleanCheckbox itemLabel="Оройд буюу шөнө орондоо ханиалга ихсэнэ" value="#{inspectionController.customerTubeInflammation.nightAndBedHyperpyrexia}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ханиалгалтын шинж чанар ямар вэ?</div>
+						<div class="col-md-5">
+							<p:selectBooleanCheckbox itemLabel="Эхлээд ширүүн хуурай" value="#{inspectionController.customerTubeInflammation.aggressiveDry}" />
+						</div>
+						<div class="col-md-8">
+							<p:selectBooleanCheckbox itemLabel="Үе үе зовууртай бөгшүүлж ханиалгах ба дараа цэртэй болно" 
+									value="#{inspectionController.customerTubeInflammation.coughLongThenSpit}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Цэр</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Хөөсөрхөг" value="#{inspectionController.customerTubeInflammation.foamy}" />
+						</div>
+						<div class="col-md-3">
+							<p:selectBooleanCheckbox itemLabel="Цэр ховхрохгүй" value="#{inspectionController.customerTubeInflammation.noCoughUpPhlegm}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-9 col-md-offset-3">
+							<p:selectBooleanCheckbox itemLabel="Цэхэр, салсархаг цэрний жижиг бөөн гарна" value="#{inspectionController.customerTubeInflammation.whitishSlimy}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Халуурах уу</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.isHyperpyrexia}">
+								<f:selectItem itemLabel="Ялимгүй халуурах" itemValue="1"/>
+								<f:selectItem itemLabel="Халуурахгүй" itemValue="0"/>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Уурлаж уцаарлах уу</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerTubeInflammation.isAngry}">
+								<f:selectItem itemLabel="Тийм" itemValue="1"/>
+								<f:selectItem itemLabel="Үгүй" itemValue="0"/>
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад асуумж"
+								 value="#{inspectionController.customerTubeInflammation.tubeInflammationMedText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('tubeInflammation')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoTubeInflammation" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listTubeInflammationAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListTubeInflammationAttachment().indexOf(attachment), inspectionController.getListTubeInflammationAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListTubeInflammationAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listTubeInflammationAttachment, attachment)}"
+											oncomplete="updateTubeInflammation()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateTubeInflammation"  update="qoTubeInflammation" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Арьс салстын байдал</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.skinHood}">
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+								<f:selectItem itemLabel="Хуурай" itemValue="1" />
+								<f:selectItem itemLabel="Цонхигор хамар уруулын гурвалжин хөхөрсөн" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Хөөмий гүйлсэн булчирхай</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.tonsils}">
+								<f:selectItem itemLabel="Хэвийн" itemValue="0" />
+								<f:selectItem itemLabel="Улайсан" itemValue="1" />
+								<f:selectItem itemLabel="Хөөж хавагнасан" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Амьсгалд туслах булчингууд оролцох</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.breathMuscle}">
+								<f:selectItem itemLabel="Оролцоно" itemValue="0" />
+								<f:selectItem itemLabel="Оролцохгүй" itemValue="1" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-3">Чээж чагнахад</div>
+						<div class="col-md-3">
+							<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.chestAuscultate}">
+								<f:selectItem itemLabel="Ширүүн амьсгалтай" itemValue="0" />
+								<f:selectItem itemLabel="Хуурай хэржигнүүртэй" itemValue="1" />
+								<f:selectItem itemLabel="Нойтон хэржигнүүртэй" itemValue="2" />
+								<p:ajax event="change" update="chestAuscultatePanel"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<p:panel id="chestAuscultatePanel" styleClass="no-style-panel">
+						<c:if test="#{inspectionController.customerTubeInflammation.chestAuscultate=='1'}">
+							<div class="col-md-3 col-md-offset-9">
+								<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.chestAuscultate1}">
+									<f:selectItem itemLabel="Шүнгэнэсэн" itemValue="0"/>
+									<f:selectItem itemLabel="Шажигнасан" itemValue="1"/>
+									<f:selectItem itemLabel="Исгэрсэн" itemValue="2"/>
+								</p:selectOneMenu>
+							</div>
+						</c:if>
+						<c:if test="#{inspectionController.customerTubeInflammation.chestAuscultate=='2'}">
+							<div class="col-md-3 col-md-offset-9">
+								<p:selectOneMenu style="width:100%" value="#{inspectionController.customerTubeInflammation.chestAuscultate2}">
+									<f:selectItem itemLabel="Том хөөслөг" itemValue="0"/>
+									<f:selectItem itemLabel="Дунд хөөслөг" itemValue="1"/>
+									<f:selectItem itemLabel="Сонсогдох байрлал  тогтворгүй" itemValue="2"/>
+								</p:selectOneMenu>
+							</div>
+						</c:if>
+					</p:panel>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Цээж тогшилтоор</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerTubeInflammation.chestKnock}"/>
+						</div>
+						<div class="col-md-3">Хэнгэргэн чимээтэй</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerTubeInflammation.tympanicVoice}"/>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.tubeInflammationAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tubeInflammation',1,'false');"
+											onkeyup="callRefreshList(this,'tubeInflammation',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.tubeInflammationAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tubeInflammation',1,'true');"
+											onkeyup="callRefreshList(this,'tubeInflammation',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'tubeInflammation',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tubeInflammation',0,'false');"
+											onkeyup="callRefreshList(this,'tubeInflammation',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tubeInflammation',0,'true');"
+											onkeyup="callRefreshList(this,'tubeInflammation',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'tubeInflammation',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.tubeInflammationPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.tubeInflammationPreDiagnose.remove(diagnose)}"
+												oncomplete="updateTubeInflammationDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateTubeInflammationDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerTubeInflammation.tubeInflammationRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerTubeInflammation.tubeInflammationAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		</c:if>
+		<c:if test="#{inspectionController.pediatricsType=='Other'}">
+		<p:tab title="Бусад өвчин">
+			<p:accordionPanel id="otherPain" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад зовиур"
+								 value="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherPainText}"  />
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бусад асуумж"
+								 value="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherMedText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('otherPain')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoOtherPain" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listPediatricsOtherPainAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListPediatricsOtherPainAttachment().indexOf(attachment), inspectionController.getListPediatricsOtherPainAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListPediatricsOtherPainAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listPediatricsOtherPainAttachment, attachment)}"
+											oncomplete="updateOtherPain()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateOtherPain"  update="qoOtherPain" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<p:inputTextarea style="width:100%" autoResize="false" rows="3" placeholder="Бодит үзлэг"
+								 value="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherInsText}" />
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.pediatricsOtherPainAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'otherPain',1,'false');"
+											onkeyup="callRefreshList(this,'otherPain',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.pediatricsOtherPainAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'otherPain',1,'true');"
+											onkeyup="callRefreshList(this,'otherPain',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'otherPain',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'otherPain',0,'false');"
+											onkeyup="callRefreshList(this,'otherPain',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'otherPain',0,'true');"
+											onkeyup="callRefreshList(this,'otherPain',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'otherPain',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.pediatricsOtherPainPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.pediatricsOtherPainPreDiagnose.remove(diagnose)}"
+												oncomplete="updateOtherPainDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateOtherPainDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		</c:if>
+	</ui:define>
+	<ui:define name="additional-script">
+			<script>
+				//<![CDATA[
+				var toggleVegatative = function(){
+					$('#vegatative').toggle('fast','swing');
+					if($('#vegatative-chevron').hasClass('fa-chevron-down'))
+						$('#vegatative-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#vegatative-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleBone = function(){
+					$('#bone').toggle('fast','swing');
+					if($('#bone-chevron').hasClass('fa-chevron-down'))
+						$('#bone-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#bone-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleOther = function(){
+					$('#other').toggle('fast','swing');
+					if($('#other-chevron').hasClass('fa-chevron-down'))
+						$('#other-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#other-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleTmt = function(){
+					$('#tmt').toggle('fast','swing');
+					if($('#tmt-chevron').hasClass('fa-chevron-down'))
+						$('#tmt-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#tmt-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleSkin = function(){
+					$('#skin').toggle('fast','swing');
+					if($('#skin-chevron').hasClass('fa-chevron-down'))
+						$('#skin-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#skin-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleMuscle = function(){
+					$('#muscle').toggle('fast','swing');
+					if($('#muscle-chevron').hasClass('fa-chevron-down'))
+						$('#muscle-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#muscle-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleBonechange = function(){
+					$('#bonechange').toggle('fast','swing');
+					if($('#bonechange-chevron').hasClass('fa-chevron-down'))
+						$('#bonechange-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#bonechange-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleStomach = function(){
+					$('#stomach').toggle('fast','swing');
+					if($('#stomach-chevron').hasClass('fa-chevron-down'))
+						$('#stomach-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#stomach-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleBlood = function(){
+					$('#blood').toggle('fast','swing');
+					if($('#blood-chevron').hasClass('fa-chevron-down'))
+						$('#blood-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#blood-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleExamination = function(){
+					$('#examination').toggle('fast','swing');
+					if($('#examination-chevron').hasClass('fa-chevron-down'))
+						$('#examination-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#examination-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleAdditional = function(){
+					$('#additional').toggle('fast','swing');
+					if($('#additional-chevron').hasClass('fa-chevron-down'))
+						$('#additional-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#additional-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleNow = function(){
+					$('#now').toggle('fast','swing');
+					if($('#now-chevron').hasClass('fa-chevron-down'))
+						$('#now-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#now-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				var toggleLive = function(){
+					$('#live').toggle('fast','swing');
+					if($('#live-chevron').hasClass('fa-chevron-down'))
+						$('#live-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					else
+						$('#live-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				//]]>
+			</script>
+		</ui:define>
+</ui:composition>

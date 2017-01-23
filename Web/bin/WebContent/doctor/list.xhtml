@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Эмчилгээ</h1>
+		
+		<ol class="breadcrumb">
+			<li class="active">Эмчийн үзлэг</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">#{i18n['list']}</h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+					<div class = "row">
+					<div class = "col-md-4">
+						<div class="flex-container">
+							<label class="flex-center-self">#{i18n['date']}:</label>
+							<p:calendar pattern="yyyy-MM-dd" style="display:inline-block;margin-left:10px !important;" styleClass="flex-center-self date-control" id = "beginDate" value = "#{inspectionController.filterDate1}" onchange = "changeDate(); " update = ":form:doctorInspection"
+								navigator="true"> 
+								<p:ajax event="dateSelect" listener="#{inspectionController.refreshCustomerRequests()}" update = ":form:doctorInspection :form:filterStatus :form:isguestsearch"  />
+							</p:calendar>
+							<label class="flex-center-self" style="margin-right: 10px !important;">-</label>
+							<p:calendar pattern="yyyy-MM-dd" style="display:inline-block" id = "endDate" styleClass="flex-center-self date-control" value = "#{inspectionController.filterDate2}" onchange = "changeDate(); " update = ":form:doctorInspection"> 
+						 		<p:ajax event="dateSelect" listener="#{inspectionController.refreshCustomerRequests()}" update = ":form:doctorInspection :form:filterStatus :form:isguestsearch" />
+						 	</p:calendar>
+					 	</div>
+					 </div>
+					<div class = "col-md-2">
+						<div class="flex-container">
+							<label class="flex-center-self" style = "    padding-right: 12px;" > #{i18n['search']}: </label>
+							<p:inputText id = "searchInput" value = "#{inspectionController.filterKey1}" onkeyup="changeDate();" style ="width:70%" />
+						</div>
+						<p:watermark for = "form:searchInput" value="#{i18n['search_watermark']}" ></p:watermark>
+					</div>
+					 <div class = "col-md-2">
+						<p:selectOneMenu id = "filterStatus" value = "#{inspectionController.filterKey}">
+							<f:selectItem itemLabel = "#{i18n['all']}" itemValue = "all" > </f:selectItem>
+							<f:selectItem itemValue = "Үзлэгт орсон" itemLabel = "#{i18n['inspection_in']} (#{inspectionController.countDone})" > </f:selectItem>
+							<f:selectItem itemValue = "Үзлэгт орох" itemLabel = "#{i18n['inspection_will']} (#{inspectionController.countYet})" > </f:selectItem>
+							<f:selectItem itemValue = "Түр хадгалсан" itemLabel = "#{i18n['inspection_temp']} (#{inspectionController.tempSave})" > </f:selectItem>
+							<f:selectItem itemValue = "Дахин үзлэг" itemLabel = "#{i18n['inspection_re']} (#{inspectionController.countRepeat})" > </f:selectItem>
+							<p:ajax event = "change"  listener = "#{inspectionController.refreshCustomerRequests()}" update = ":form:doctorInspection" ></p:ajax>
+						</p:selectOneMenu>
+					</div>
+					<div class = "col-md-2">
+					 <p:selectOneMenu id = "piansearch"  value="#{inspectionController.str}">
+							<f:selectItem itemLabel="#{i18n['all']}" itemValue = "all" > </f:selectItem>
+							<f:selectItem itemValue="Өвчний анхан утга" itemLabel = "#{i18n['first_pain']}"> </f:selectItem>
+							<f:selectItem itemValue="Өвчний учир  давтан" itemLabel = "#{i18n['two_pain']} " > </f:selectItem>
+							<f:selectItem itemValue="Урьдчилан сэргийлэх" itemLabel = "#{i18n['previously_pain']}" > </f:selectItem>
+							<f:selectItem itemValue="Гэрийн  хяналт" itemLabel = "#{i18n['home_pain']}" > </f:selectItem>
+							<f:selectItem itemValue="Диспансер  хяналт" itemLabel = "#{i18n['dis_control']}" > </f:selectItem>
+							<p:ajax event = "change"  listener = "#{inspectionController.refreshCustomerRequests()}" update = ":form:doctorInspection" ></p:ajax>
+						</p:selectOneMenu>
+					  </div>
+             <div class = "col-md-1">
+                 <p:selectOneMenu id = "isguestsearch"  value="#{inspectionController.guestsearch}">
+                        <f:selectItem itemLabel="#{i18n['all']}" itemValue="all"/>
+    					<f:selectItem itemLabel="#{i18n['not_arrived']} (#{inspectionController.guestComeAwayCount})" itemValue="away"/>
+	    				<f:selectItem itemLabel="#{i18n['arrived']} (#{inspectionController.guestComecount})" itemValue="guest"/>
+						<p:ajax event = "change"  listener = "#{inspectionController.refreshCustomerRequests()}" update = ":form:doctorInspection :form:isguestsearch" ></p:ajax>
+						</p:selectOneMenu>
+					 </div>
+					<div class = "col-md-1">
+					<p:commandLink actionListener="#{inspectionController.refreshCustomerRequests()}" 
+						styleClass="btn" update = ":form:doctorInspection :form:filterStatus :form:isguestsearch">
+						<i class="fa fa-fw fa-refresh fa-spin"/>
+					</p:commandLink>
+					 </div>
+					<p:remoteCommand name = "changeDate" actionListener = "#{inspectionController.refreshCustomerRequests()}" update = ":form:doctorInspection"></p:remoteCommand>					
+					</div>
+					<div class ="row margin-top">
+					<div class = "row">
+					<div class = "col-md-12"/>
+						<div class = "col-md-1"><div style="width: 13px; height: 13px; background: red; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">#{i18n['emergency']}</p></div>
+						<div class = "col-md-1"><div style="width: 13px; height: 13px; background: yellow; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">#{i18n['immediate']}</p></div>
+						<div class = "col-md-2"><div style="width: 13px; height: 13px; background: green; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">#{i18n['pre_order']}</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px"   class = "fa fa-fw fa-warning color-blue"> </i><p style = "font-size:13px; margin-left: 30px;" >#{i18n['debt_remainder']}</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-check-square color-blue"></i><p style = "font-size:13px;   margin-left: 30px;" >#{i18n['no_debt_remainder']}</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-fw fa-plus color-blue"> </i><p style = "font-size:13px;    margin-left: 30px;" >#{i18n['paid']}</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-minus color-blue"></i><p style = "font-size:13px;          margin-left: 30px;" >#{i18n['not_paid']}</p></div>
+						
+					</div>
+					<p:growl id="msgs" showDetail="true" />
+						<p:remoteCommand name = "qop" action="#{inspectionController.modifiedInspection(inspectionController.currentCustomerRequest.employee, inspectionController.currentCustomerRequest.customer, inspectionController.currentCustomerRequest.employeeRequest)}"></p:remoteCommand>
+					<p:dataTable id="doctorInspection" styleClass="myTable col-md-12" value="#{inspectionController.customerRequests}" var="info" rowIndexVar="index" emptyMessage="#{i18n['empty']}"  selectionMode="single" selection="#{inspectionController.currentCustomerRequest}"  rowKey="#{info.employeeRequest.pkId}">
+						<p:ajax event="rowDblselect" onstart="qop();" />
+						 <p:ajax event = "rowUnselect"  />
+						<p:column styleClass="index" headerText="№"  width="5%"><div style="width: 100%;height: 100v; background: #{info.employeeRequest.bgColor};color:#fff;">#{index + 1}</div></p:column>
+						<p:column styleClass="date" headerText = "#{i18n['order_date']}" width="7%" sortBy="#{info.employeeRequest.dateString}" >#{info.employeeRequest.dateString}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['order_type']}"  width="7%" sortBy="#{info.employeeRequest.requestDateStr}">#{info.employeeRequest.requestDateStr}</p:column>
+						<p:column styleClass="text" headerText = "#{i18n['description']}" sortBy="#{info.employeeRequest.description}" >#{info.employeeRequest.description}</p:column>
+						<p:column styleClass="id" headerText="#{i18n['card_number']}"  width="5%" sortBy="#{info.customer.cardNumber}" >#{info.customer.cardNumber}</p:column>
+						<p:column styleClass="text" headerText="#{i18n['last_name']}"  width="9%" sortBy="#{info.customer.lastName}" >#{info.customer.lastName}</p:column>
+						<p:column styleClass="text" headerText="#{i18n['first_name']}" width="9%" sortBy="#{info.customer.firstName}" >#{info.customer.firstName}</p:column>
+						<p:column styleClass="id" headerText="#{i18n['register_number']}" width="9%" sortBy="#{info.customer.regNumber}" >#{info.customer.regNumber}</p:column>
+						<p:column styleClass="short-number" headerText="#{i18n['age']}" width="4%" sortBy="#{info.customer.age}" >#{info.customer.age}</p:column>
+						<p:column styleClass="short-text" headerText="#{i18n['gender']}" width="7%" sortBy="#{info.customer.getGenderString()}" >#{info.customer.getGenderString()}</p:column>
+						<p:column styleClass="button-icon" headerText="#{i18n['remain']}" > <i style = " font-size: 16px; " class="#{info.customer.uldegdelStatus eq 'yes' ? 'fa fa-fw fa-warning color-blue' : 'fa fa-check-square color-blue'}"> </i> </p:column>
+						<p:column styleClass="text" headerText="#{i18n['arrived_date']}" sortBy="#{info.employeeRequest.getInspectionStatus()}" >
+					    	#{inspectionController.getDateString(info.employeeRequest.arrivedDate)}
+					    </p:column>
+					    <p:column styleClass="button-icon" headerText="#{i18n['paid']}" >
+								<i style="font-size: 16px;display: #{info.employeeRequest.hasPayment == 2 ? 'none' : 'initial'}" 
+									class="#{info.employeeRequest.hasPayment == 1 ? 'fa fa-plus color-blue' : ' fa fa-fw fa-minus color-blue'}"> 
+								</i>
+								<span style="display: #{info.employeeRequest.hasPayment != 2 ? 'none' : 'initial'}">
+								Төлбөргүй
+								</span>
+						</p:column>
+						<p:column styleClass="text" headerText="#{i18n['examined']}" sortBy="#{info.employeeRequest.getInspectionStatus()}" >
+						#{info.employeeRequest.getInspectionStatus()}
+						</p:column>
+						<p:column styleClass="date" headerText="#{i18n['time_examination_started']}" sortBy="#{info.inspection.inspectionStartDate}">#{info.inspection.inspectionStartDate}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['time_examination_finished']}" sortBy="#{info.inspection.inspectionDate}">#{info.inspection.inspectionDate}</p:column>
+						<p:column styleClass="text" headerText="#{i18n['examination_mode']}" sortBy="#{info.inspection.getInspectionStatus()}" >#{info.inspection.getInspectionStatus()}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['diagnose']}"
+						 sortBy="#{info.inspection.inspectionDate}">
+						 <ui:repeat var="d" value="#{info.diagnose}">
+							<h:outputLink id="diagnose">
+							 <h:outputText value="#{d.id}"></h:outputText>
+									</h:outputLink>
+							 <p:tooltip for="diagnose" value="#{d.nameMn}" position="top">
+									</p:tooltip>
+									</ui:repeat>
+						</p:column>
+					</p:dataTable>
+					
+					</div>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+		</section>
+		<p:dialog styleClass="confirmDialog" widgetVar="confirmDialogDelete" modal="true"
+			resizable="false" width="300">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						#{i18n['sure_to_delete']}
+					</td>
+				</tr>
+			</table>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn"
+							action="#{inspectionController.saveTreatment}"><i class="fa fa-fw fa-check"/>#{i18n['delete']}</p:commandLink>
+					</div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn redBtn"
+							oncomplete="PF('confirmDialogDelete').hide();"><i class="fa fa-fw fa-times"/>#{i18n['cancel']}</p:commandLink>
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+		</p:dialog>
+		
+	<p:remoteCommand name = "loadData" actionListener = "#{inspectionController.refreshCustomerRequests()}" update = "form:endDate form:beginDate form:doctorInspection ">
+	</p:remoteCommand>	
+	</ui:define>
+	<ui:define name="script">
+		<script>
+		//<![CDATA[
+            $(document).ready(function () { 	
+				loadData();
+            });
+		//]]>
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Hospital">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="guava-11.0.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/guava-11.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-javaflow-20060411.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/commons-javaflow-20060411.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="olap4j-0.9.7.309-JS-3.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/olap4j-0.9.7.309-JS-3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="groovy-all-2.4.3.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/groovy-all-2.4.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-bridge.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-bridge.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-digester-2.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/commons-digester-2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xercesImpl-2.10.0.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/xercesImpl-2.10.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ant-1.7.1.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/ant-1.7.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jfreechart-1.0.19.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jfreechart-1.0.19.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-dom.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-dom.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="castor-xml-1.3.3.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/castor-xml-1.3.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="httpclient-4.3.4.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/httpclient-4.3.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="itext-2.1.7.js3.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/itext-2.1.7.js3.jar">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jxl-2.6.10.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jxl-2.6.10.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-core-2.1.4.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jackson-core-2.1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-xml.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-xml.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="bsh-2.0b4.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/bsh-2.0b4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="barbecue-1.5-beta1.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/barbecue-1.5-beta1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="servlet-api-2.4.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/servlet-api-2.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-1.1.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/commons-logging-1.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="rhino-1.7.6.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/rhino-1.7.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xmlbeans-2.5.0.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/xmlbeans-2.5.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-1.2.15.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/log4j-1.2.15.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hibernate-core-3.3.2.GA.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/hibernate-core-3.3.2.GA.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="bcel-5.2.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/bcel-5.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="poi-3.10.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/poi-3.10.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-databind-2.1.4.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jackson-databind-2.1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-core-2.5.5.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/spring-core-2.5.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-css.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-css.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dom4j-1.6.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/dom4j-1.6.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="httpcore-4.3.2.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/httpcore-4.3.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="serializer.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/serializer.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="core-2.3.0.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/core-2.3.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lucene-queryparser-4.5.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/lucene-queryparser-4.5.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-annotations-2.1.4.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jackson-annotations-2.1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="poi-ooxml-schemas-3.10.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/poi-ooxml-schemas-3.10.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-parser.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-parser.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-gvt.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-gvt.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jaxen-1.1.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jaxen-1.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="barcode4j-2.1.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/barcode4j-2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-collections-3.2.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/commons-collections-3.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xml-apis-ext.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/xml-apis-ext.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="velocity-1.7-dep.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/velocity-1.7-dep.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-beans-2.5.5.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/spring-beans-2.5.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-beanutils-1.9.0.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/commons-beanutils-1.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-util.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-util.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-script.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-script.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-anim.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-anim.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xalan-2.7.1.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/xalan-2.7.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="saaj-api-1.3.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/saaj-api-1.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lucene-analyzers-common-4.5.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/lucene-analyzers-common-4.5.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jasperreports-6.1.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jasperreports-6.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="castor-core-1.3.3.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/castor-core-1.3.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="poi-ooxml-3.10.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/poi-ooxml-3.10.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mondrian-3.1.1.12687.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/mondrian-3.1.1.12687.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-svg-dom.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-svg-dom.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jcommon-1.0.23.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jcommon-1.0.23.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hsqldb-1.8.0-10.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/hsqldb-1.8.0-10.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="lucene-core-4.5.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/lucene-core-4.5.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="antlr-2.7.5.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/antlr-2.7.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="png-encoder-1.5.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/png-encoder-1.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.5.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/commons-codec-1.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-svggen.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-svggen.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ecj-4.3.1.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/ecj-4.3.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jpa.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jpa.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-awt-util.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-awt-util.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xml-apis.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/xml-apis.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="batik-ext.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/batik-ext.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="itext-2.1.7.js3.jar" deploy-path="/" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/itext-2.1.7.js3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>        
+        <dependent-module archiveName="jasperreports-fonts-5.1.0.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/report/jasperreports-fonts-5.1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.lowagie.text-2.1.7.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/com.lowagie.text-2.1.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-io-2.4.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/commons-io-2.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-fileupload-1.1.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/commons-fileupload-1.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="json-simple-1.1.1.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/json-simple-1.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Hospital.BusinessLogicClient.jar" deploy-path="/lib" handle="module:/resource/Hospital.BusinessLogicClient/Hospital.BusinessLogicClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Hospital.Web.war" deploy-path="/" handle="module:/resource/Hospital.Web/Hospital.Web">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Hospital.Entity.jar" deploy-path="/lib" handle="module:/resource/Hospital.Entity/Hospital.Entity">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Hospital.BusinessLogic.jar" deploy-path="/" handle="module:/resource/Hospital.BusinessLogic/Hospital.BusinessLogic">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jssc.jar" deploy-path="/lib" handle="module:/classpath/lib/D:/MedIT/BIN/Java/jssc.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        
+        
+    </wb-module>
+</project-modules>

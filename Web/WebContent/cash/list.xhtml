@@ -1,0 +1,1496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<p:remoteCommand name="getPaymentList" process="@this" action="#{cashController.paymentList()}" />
+		<p:remoteCommand name="cashBill" process="@this" actionListener="#{cashController.cashBill()}" />
+		<p:remoteCommand name="newDecimal10" process="@this" actionListener="#{applicationController.newDecimal10()}" />
+		<p:remoteCommand name="sendData" action="#{applicationController.sendData()}" onstart="showLoader();" oncomplete="hideLoader();" />
+		<section class="content-header">
+		<h1>Касс</h1>
+		<div class = "row flex-container">
+		<div class = "col-md-3">
+		<p:commandLink action="#{userController.url('cash_register')}" process="@this"
+			styleClass="btn"
+			actionListener="#{cashController.clearPayment()}">
+			<i class="fa fa-fw fa-plus-square" />Оношилгоо шинжилгээ захиалах
+		</p:commandLink>
+		</div>
+		<div class = "col-md-5">
+			<p:calendar onchange="getPaymentList();" style="float: left;" value="#{cashController.beginDate}" pattern="yyyy-MM-dd">
+				<p:ajax event="dateSelect" listener="#{cashController.paymentList()}" />
+			</p:calendar>
+			<span style="float: left;">-</span>
+			<p:calendar onchange="getPaymentList();" style="float: left;" value="#{cashController.endDate}" pattern="yyyy-MM-dd">
+				<p:ajax event="dateSelect" listener="#{cashController.paymentList()}" />
+			</p:calendar>
+		</div>
+		<div class = "col-md-3 text-right">
+		<p:commandLink href="javascript:void(0)" styleClass="btn" style="float: right;" onclick="showLoader();PF('historyPaymentDialog').show();">
+			<i class="fa fa-fw fa-eye"/>Төлбөрийн баримт харах</p:commandLink>
+		<p:commandLink href="javascript:void(0)" styleClass="btn" style="float: right;" onclick="showLoader();PF('paymentGroup').show();">
+			Багц</p:commandLink>
+			</div>
+			
+			<div class =" col-md-1">
+			<p:commandLink onstart="getPaymentList();" 
+						styleClass="btn" style = "margin:right; float: right;" update = "form:organizationList">
+						<i class="fa fa-fw fa-refresh fa-spin"/>
+					</p:commandLink>
+		</div>
+		</div>
+		<ol class="breadcrumb">
+			<li class="active">Касс</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+		<p:dialog widgetVar="paymentGroup" id="paymentGroup" onShow="hideLoader();" modal="true" width="600" height="300">
+			<p:commandLink value="Нэмэх" actionListener="#{cashController.paymentGroupNew()}" styleClass="btn" />
+			<p:dataTable value="#{cashController.listPaymentPackage}" var="pp" rowIndexVar="ind">
+				<p:column width="5%" headerText="№">#{ind + 1}</p:column>
+				<p:column headerText="Нэр">#{pp.name}</p:column>
+				<p:column width="20%" headerText="Үнэ">#{pp.amount}</p:column>
+				<p:column width="5%" headerText="">
+					<p:commandLink actionListener="#{cashController.paymentGroupEdit(pp.pkId)}" styleClass="ui-commandlink ui-widget ui-commandlink ui-widget fa fa-fw fa-edit color-green"></p:commandLink>
+				</p:column>
+				<p:column width="5%" headerText="">
+					<p:commandLink actionListener="#{cashController.paymentGroupDelete(pp.pkId)}" styleClass="ui-commandlink ui-widget ui-commandlink ui-widget fa fa-fw fa-remove color-red"></p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:confirmDialog widgetVar="cnfD" message="Устгахдаа итгэлтэй байна уу?">
+			<p:commandButton style="float: right;" onclick="PF('cnfD').hide();" value="Үгүй" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			<p:commandLink style="float: right;padding: 4px 10px 4px 10px;    margin-top: 6px;" value="Тийм" type="button" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-confirmdialog-yes" icon="ui-icon-check" action="#{cashController.paymentGroupDelete()}" />
+		</p:confirmDialog>
+		<p:dialog widgetVar="paymentGroupEdit" id="paymentGroupEdit" onShow="hideLoader();" modal="true" width="800" height="500">
+			<div class="col-md-12">
+				<div class="col-md-1">Нэр:</div>
+				<div class="col-md-3"><p:inputText value="#{cashController.paymentPackage.name}" /></div>
+				<div class="col-md-4"></div>
+				<div class="col-md-1">Үнэ:</div>
+				<div class="col-md-3"><p:inputText disabled="true" styleClass="tmpPaymentPackageDtls" value="#{cashController.paymentPackage.amount}" /></div>
+				<div class="col-md-12">
+					<p:dataTable value="#{cashController.tmpPaymentPackageDtls}" var="var" styleClass="tmpPaymentPackageDtls">
+						<p:column width="5%" headerText="№"></p:column>
+						<p:column width="40%" headerText="Код">
+							<p:outputLabel rendered="#{!'Last'.equals(var.status)}" value="#{var.id}" />
+							<p:inputText rendered="#{'Last'.equals(var.status)}" value="#{var.id}" onfocus="PF('selectTSDEM').show();" onclick="PF('selectTSDEM').show();" style="width: 100%;" />
+						</p:column>
+						<p:column width="40%" headerText="Нэр">
+							#{var.name}
+						</p:column>
+						<p:column width="10%" headerText="Үнэ">
+							<pe:inputNumber onchange="updateTmpPaymentPackageDtls();" value="#{var.amount}" />
+						</p:column>
+						<p:column width="5%" headerText="">
+							<p:commandLink rendered="#{!'Last'.equals(var.status)}" actionListener="#{cashController.paymentGroupDtlDelete(var.type, var.typePkId)}" styleClass="ui-commandlink ui-widget ui-commandlink ui-widget fa fa-fw fa-remove color-red"></p:commandLink>
+						</p:column>
+					</p:dataTable>
+					<p:remoteCommand name="updateTmpPaymentPackageDtls" update="@(.tmpPaymentPackageDtls)" />
+					<p:commandLink style="float: right;" styleClass="ui-commandlink ui-widget btn" value="Хадгалах" action="#{cashController.savePaymentPackage()}" />
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="selectTSDEM" id="selectTSDEM" onShow="hideLoader();" modal="true" width="800" height="500">
+			<div class="col-md-12">
+				<p:commandLink styleClass="btn" rendered="false" actionListener="#{cashController.setSelectedPaymentPackageType('INSPECTIONMEDICINE')}" update="@(.packageSelectTypes)">Эм</p:commandLink>
+				<p:commandLink styleClass="btn" actionListener="#{cashController.setSelectedPaymentPackageType('XRAY')}" update="@(.packageSelectTypes)">Шижилгээ</p:commandLink>
+				<p:commandLink styleClass="btn" actionListener="#{cashController.setSelectedPaymentPackageType('EXAMINATION')}" update="@(.packageSelectTypes)">Оношилгоо</p:commandLink>
+				<p:commandLink styleClass="btn" actionListener="#{cashController.setSelectedPaymentPackageType('SURGERY')}" update="@(.packageSelectTypes)">Мэсзасал</p:commandLink>
+				<p:commandLink styleClass="btn" actionListener="#{cashController.setSelectedPaymentPackageType('TREATMENT')}" update="@(.packageSelectTypes)">Эмчилгээ</p:commandLink>
+			</div>
+			<div class="col-md-6" style="height: 480px;display: block;overflow: auto;">
+				<p:dataTable value="#{cashController.packageSelectTypes}" var="tp" styleClass="packageSelectTypes" selectionMode="single" selection="#{cashController.packageSelectType}" rowKey="#{tp.pkId}">
+					<p:ajax event="rowDblselect" onstart="selectedPST();" />
+					<p:column>#{tp.name}</p:column>
+				</p:dataTable>
+				<p:remoteCommand name="selectedPST" process="@this" actionListener="#{cashController.setPackageSelectItems(null)}" update="@(.packageSelectItems)" />
+			</div>
+			<div class="col-md-6" style="height: 480px;display: block;overflow: auto;">
+				<p:dataTable value="#{cashController.packageSelectItems}" var="pi" styleClass="packageSelectItems" selectionMode="single" selection="#{cashController.packageSelectItem}" rowKey="#{pi.pkId}">
+					<p:ajax event="rowDblselect" onstart="selectedPSI();" />
+					<p:column>#{pi.name}</p:column>
+					<p:column>#{pi.price}</p:column>
+				</p:dataTable>
+				<p:remoteCommand name="selectedPSI" process="@this" actionListener="#{cashController.selectedPSI()}" />
+			</div>
+		</p:dialog>
+		<script src="#{applicationController.path}js/pdf.js" type="text/javascript"></script>
+		<p:dialog id="requestPaymentDialog" widgetVar="requestPaymentDialog" resizable="false" modal="true" width="300" height="160px" header="Үзлэгийн төлбөр төлөх">
+			<div class="row no-print">
+				<div class="row flex-container">
+					<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px;">Регистрийн №:</label>
+					</div>
+					<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px; float:right; text-align: right;">#{cashController.selectedCashCustomer.regNumber}</label>
+					</div>
+				</div>
+			</div>
+			<div class="row no-print">
+				<div class="row flex-container">
+					<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px; margin-top: 5px;">Овог:</label>
+					</div>
+					<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px; float:right; text-align: right;">#{cashController.selectedCashCustomer.lastName}</label>
+					</div>
+				</div>
+			</div>
+			<div class="row no-print">
+				<div class="row flex-container">
+					<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px;">Нэр:</label>
+					</div>
+					<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px; float:right; text-align: right;">#{cashController.selectedCashCustomer.firstName}</label>
+					</div>
+				</div>
+			</div>
+			<div class="row no-print">
+				<div class="row flex-container">
+					<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+						<label style="font-weight: 100; font-size: 11px;">Одоо төлөх :</label>
+					</div>
+					<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+						<pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" minValue="0" maxValue="#{cashController.payment.amount}" styleClass="form-control number-control" id="payment9" symbol="₮" symbolPosition="s" value="#{cashController.payment.paidAmount}" />
+					</div>
+				</div>
+			</div>
+			<div class="row no-print">
+				<div class="col-md-12 text-align-right">
+					<p:commandLink onclick="showLoader();" process="@this" style="margin-top: 10px;" action="#{cashController.savePayment}" 
+						styleClass="btn" update=":form:message">
+						<i class="fa fa-fw fa-check"/> Хадгалах
+					</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<section class="content">
+			<div class="col-xs-12">
+				<div class="col-xs-12">
+					<div class="box">
+						<!-- /.box-header -->
+						<div class="box-body">
+							<p:dataTable id="organizationList" emptyMessage="Хоосон байна" styleClass="myTable" value="#{cashController.tmpPaymentList}" filteredValue="#{cashController.tmpPaymentList1}" var="info" rowIndexVar="index">
+								<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+								<p:column filterBy="#{info.customer.cardNumber}" filterMatchMode="contains" styleClass="id" headerText="Картын №">#{info.customer.cardNumber}</p:column>
+								<p:column filterBy="#{info.customer.lastName}" filterMatchMode="contains" styleClass="text" headerText="Овог">#{info.customer.lastName}</p:column>
+								<p:column filterBy="#{info.customer.firstName}" filterMatchMode="contains" styleClass="text" headerText="Нэр">#{info.customer.firstName}</p:column>
+								<p:column filterBy="#{info.customer.regNumber}" filterMatchMode="contains" styleClass="id" headerText="Регистрийн №">#{info.customer.regNumber}</p:column>
+								<p:column styleClass="short-number" headerText="Нас">#{info.customer.age}</p:column>
+								<p:column styleClass="short-text" headerText="Хүйс">#{info.customer.genderString}</p:column>
+								<p:column styleClass="button-icon" headerText="">
+									<p:commandLink process="@this" onclick="showLoader();" styleClass="fa fa-fw fa-cc-mastercard color-blue" action="#{cashController.selectedEmployeeRequestSet(info)}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+						
+						<!-- BEGIN Discount -->
+						<div class="box box-solid" style="">
+			                <div class="box-header with-border">
+			                  <h3 class="box-title"><a href="javascript:void(0)" onclick="slideLoan();">Төлбөрийн тооцоотой үйлчлүүлэгчид (<h:outputLabel id="loanCount" value="#{cashController.loanPaymentList.size()}" />)</a></h3>
+			                  <div class="box-tools">
+			                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			                  </div>
+			                </div>
+			                <div class="box-body no-padding" style="display: block;">
+			                  <div class="box-body">
+									<p:dataTable id="organizationList2" emptyMessage="Хоосон байна" styleClass="myTable" value="#{cashController.loanPaymentList}" var="info" rowIndexVar="index">
+										<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+										<p:column styleClass="id" headerText="Картын №">#{info.customer.cardNumber}</p:column>
+										<p:column styleClass="text" headerText="Овог">#{info.customer.lastName}</p:column>
+										<p:column styleClass="text" headerText="Нэр">#{info.customer.firstName}</p:column>
+										<p:column styleClass="id" headerText="Регистрийн №">#{info.customer.regNumber}</p:column>
+										<p:column styleClass="short-number" headerText="Нас">#{info.customer.age}</p:column>
+										<p:column styleClass="short-text" headerText="Хүйс">#{info.customer.genderString}</p:column>
+										<p:column styleClass="amount" headerText="Нийт дүн"><h:outputLabel value="#{info.payment.amount}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+										<p:column styleClass="amount" headerText="Төлөх дүн"><h:outputLabel value="#{info.payment.amount - info.payment.paidAmount}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+										<p:column headerText="" width="10%">
+											<div onclick="click#{index + 1}();" class="progress progress-xs progress-striped active" style="height: 100%;margin-bottom: 0px;cursor:pointer;">
+					                          <div class="progress-bar progress-bar-#{(info.payment.amountPercent.intValue() lt 40)? 'danger' : 'success'}" style="width: #{info.payment.amountPercent}%;min-width: 2em;">
+					                          	#{info.payment.amountPercent}%
+					                          </div>
+					                        </div>
+					                        <p:remoteCommand onstart="showLoader();" process="@this" name="click#{index + 1}" action="#{cashController.showHistory}">
+					                        	<f:setPropertyActionListener target="#{cashController.selectedPayment}" value="#{info.payment}"></f:setPropertyActionListener>
+					                        </p:remoteCommand>
+										</p:column>
+									</p:dataTable>
+								</div>
+			                </div><!-- /.box-body -->
+			              </div>
+						
+						<!-- END Discount -->
+						
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</section>
+		
+		<p:dialog onShow="hideLoader();" widgetVar="historyPaymentDialog" id="historyPaymentDialog" modal="true" 
+			resizable="false" width="800" header="Төлбөрийн баримт">
+			<div class="row">
+				<div class="col-xs-9 margin-bottom">
+					<div class="flex-container">
+						<label class="flex-center-self">Огноогоор шүүх :</label> 
+						<p:calendar id="sbeginDate" pattern="yyyy-MM-dd" styleClass="date-control margin-horizontal" value="#{cashController.filter.beginDate}" /> 
+						<label class="flex-center-self">-</label> 
+						<p:calendar id="sendDate" pattern="yyyy-MM-dd" styleClass="date-control margin-horizontal" value="#{cashController.filter.endDate}" />
+					</div>
+				</div>
+				<div class="col-xs-3 margin-bottom text-right">
+					<p:commandLink process="@this form:sbeginDate form:sendDate" onclick="showLoader();" actionListener="#{cashController.listPaymentHistory()}"  
+						styleClass="medit-btn medit-btn-primary ripplelink" oncomplete="hideLoader();" update=":form:paymentHistoryTable :form:sumAmount :form:historyPaymentDialogReportPanel">
+						<i class="fa fa-fw fa-search"/> Шүүх </p:commandLink>
+				</div>
+				<p:dataTable style="max-height: 400px;" styleClass="myTable" id="paymentHistoryTable" value="#{cashController.listPaymentHistory}" var="his" >
+					<p:column headerText="Билл №">#{his.payment.id}</p:column>
+					<p:column headerText="Овог">#{his.customer.lastName}</p:column>
+					<p:column headerText="Нэр">#{his.customer.firstName}</p:column>
+					<p:column headerText="Огноо" style="text-align: center;">#{his.payment.dateStr}</p:column>
+					<p:column headerText="Төлсөн дүн" style="text-align: right;">#{cashController.decimalConvertToString(his.payment.amount)}</p:column>
+					<p:column headerText="" style="text-align: center;"><p:commandLink styleClass="fa fa-fw fa-cc-mastercard color-blue" actionListener="#{cashController.cashBill(his.payment.pkId)}"></p:commandLink></p:column>
+					<p:column headerText="" style="text-align: center;"><p:commandLink styleClass="fa fa-reply color-blue" actionListener="#{cashController.cashBillBack(his.payment.pkId)}"></p:commandLink></p:column>
+				</p:dataTable>
+				<h:outputText style="float: right;" id="sumAmount" value="#{cashController.sumAmount}" />
+				<h:outputText style="float: right;" value="Нийт:" />
+				<p:commandLink onclick="print1('historyPaymentDialogReport');" style="float: left;" styleClass="ui-commandlink btn" value="Хэвлэх" />
+			</div>
+			<p:panel styleClass="historyPaymentDialogReportPanel" id="historyPaymentDialogReportPanel" style="display: none;">
+				<table id="historyPaymentDialogReport" style="width: 100%;">
+					<tr>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							Овог
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							Нэр
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							Огноо
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							Төлсөн дүн
+						</td>
+					</tr>
+					<ui:repeat value="#{cashController.listPaymentHistory}" var="hist">
+					<tr>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							#{hist.customer.lastName}
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							#{hist.customer.firstName}
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							#{hist.payment.dateStr}
+						</td>
+						<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							#{cashController.decimalConvertToString(hist.payment.amount)}
+						</td>
+					</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="3" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputLabel value="#{cashController.sumAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+								<f:convertNumber type="currency" currencySymbol=" "/>
+							</h:outputLabel>
+						</td>
+					</tr>
+				</table>
+			</p:panel>
+		</p:dialog>
+		<p:dialog onShow="hideLoader();document.getElementById('form:paymentHistoryAmount').type = 'number';" widgetVar="historyDialog" id="historyDialog" modal="true" 
+			resizable="false" width="450"  header="Төлбөр төлөх">
+			<p:remoteCommand name="historyDialogUpdate" update="form:historyDialog" oncomplete="PF('historyDialog').show();" />
+			<div class="col-xs-2" style="font-size: 12px;color: black;font-weight: bold;">Нийт:</div>
+			<div class="col-xs-2" style="font-size: 12px;color: black;font-weight: bold;"><h:outputLabel value="#{cashController.selectedPayment.paidAmount}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></div>
+			<div class="col-xs-1"></div>
+			<div class="col-xs-2" style="font-size: 12px;color: black;font-weight: bold;">Үлдэгдэл:</div>
+			<div class="col-xs-2" style="font-size: 12px;color: black;font-weight: bold;"><h:outputLabel value="#{cashController.selectedPayment.balanceAmount}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></div>
+			<p:dataTable emptyMessage="Хоосон байна" styleClass="myTable" value="#{cashController.histories}" var="info" rowIndexVar="index" >
+				<p:column styleClass="id" headerText="Төлсөн огноо"><h:outputLabel value="#{info.date}"><f:convertDateTime pattern="d-M-yyyy h:m"></f:convertDateTime> </h:outputLabel></p:column>
+				<p:column styleClass="amount" headerText="Төлсөн үлдэгдэл"><h:outputLabel value="#{info.paidAmount}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+			</p:dataTable>
+			<div class="col-xs-4" style="font-size: 12px;color: black;font-weight: bold;margin-top: 7px;">Одоо төлөх дүн:</div>
+			<div class="col-xs-4" style="font-size: 12px;color: black;font-weight: bold;">
+				<pe:inputNumber minValue="0" symbol="₮" symbolPosition="s" styleClass="form-control" id="paymentHistoryAmount" style="min-width: 100px; text-align: right;" value="#{cashController.history.cashInAmount}" />
+			</div>
+			<div class="col-xs-4">
+				<p:commandLink style="width: 80px;float: right;height: 28px;" action="#{cashController.saveHistory()}" styleClass="btn btn-block btn-primary btn-sm" value="Хадгалах" />
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="printCashReportDialog" modal="true" id="printCashReportDialog" styleClass="dialog-scroll"
+			resizable="false" width="500" style="width: 100%;" height="500" onHide="clearPayment();" onShow="hideLoader();">
+			<div id="printcontainer">
+			<table id="print" class="" style="width: 100%; page-break-inside: always;">
+			    	<tr>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+			    			ТӨЛБӨРИЙН БАРИМТ
+			    		</td>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+			    			#{userController.loggedInfo.organization.name}
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+			    			ТӨЛБӨРИЙН БАРИМТ
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Картын №: #{cashController.selectedCustomer.cardNumber}
+			    		</td>
+			    		<td colspan="5" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Овог: #{cashController.selectedCustomer.lastName}
+			    		</td>
+			    		<td colspan="5" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Нэр: #{cashController.selectedCustomer.firstName}
+			    		</td>
+			    	</tr>
+			    	<c:if test="#{cashController.listRequestInspectionDtl.size() > 0}">
+			    	<tr>
+			    		<td colspan="7" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+			    			ҮЗЛЭГ
+			    		</td>
+			    	</tr>
+		            	<tr>
+			                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;width: 70px;background-color: peachpuff;vertical-align: middle;">
+			                	Эмчийн нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+			                	Үзлэгийн дүн
+			                </td>
+			            </tr>
+						<!-- бүлэг эхлэл -->
+						<ui:repeat value="#{cashController.listRequestInspectionDtl}" var="it" varStatus="myVarStatus">
+							<tr>
+								<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+									#{it.name}
+								</td>
+								<td style="text-align:right;vertical-align: middle;">
+									<h:outputText value="#{it.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+										<f:convertNumber pattern="###,###,###.00" />
+									</h:outputText>
+								</td>
+							</tr>
+						</ui:repeat>
+					<!-- бүлэг төгсгөл -->
+					</c:if>
+					<c:if test="#{cashController.listTreatmentInspectionDtl.size() > 0}">
+			    	<tr>
+			    		<td colspan="7" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+			    			ЭМЧИЛГЭЭ
+			    		</td>
+			    	</tr>
+		            	<tr>
+			                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+			                	Эмчилгээний нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+			                	Дүн
+			                </td>
+			            </tr>
+						<!-- бүлэг эхлэл -->
+						<ui:repeat value="#{cashController.listTreatmentInspectionDtl}" var="it" varStatus="myVarStatus">
+							<tr>
+								<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+									#{it.name}
+								</td>
+								<td style="text-align:right;vertical-align: middle;">
+									<h:outputText value="#{it.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+										<f:convertNumber pattern="###,###,###.00"/>
+									</h:outputText>
+								</td>
+							</tr>
+						</ui:repeat>
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+								Бүлгийн дүн: 
+							</td>
+							<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+								<h:outputText value="#{cashController.cash.treatmentAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					<!-- бүлэг төгсгөл -->
+					</c:if>
+					<c:if test="#{cashController.listXrayInspectionDtl.size() > 0}">
+					<tr>
+			    		<td colspan="5" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+			    			ОНОШИЛГОО
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+		                	Оношилгооны нэр
+		                </td>
+		                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+		                	Дүн
+		                </td>
+		            </tr>
+					<ui:repeat value="#{cashController.listXrayInspectionDtl}" var="item" varStatus="myVarStatus">
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+								#{item.name}
+							</td>
+							<td style="text-align:right;vertical-align: middle;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.xrayAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					</c:if>
+					<c:if test="#{cashController.listSurgeryInspectionDtl.size() > 0}">
+					<tr>
+			    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+			    			Мэс засал
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+		                	Мэс засал
+		                </td>
+		                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+		                	Дүн
+		                </td>
+		            </tr>
+					<ui:repeat value="#{cashController.listSurgeryInspectionDtl}" var="item" varStatus="myVarStatus">
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+								#{item.name}
+							</td>
+							<td style="text-align:right;vertical-align: middle;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.surgeryAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					</c:if>
+					<c:if test="#{cashController.listExamnationInspectionDtl.size() > 0}">
+					<tr>
+			    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+			    			Шинжилгээ
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+		                	Шинжилгээний нэр
+		                </td>
+		                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+		                	Дүн
+		                </td>
+		            </tr>
+					<ui:repeat value="#{cashController.listExamnationInspectionDtl}" var="item" varStatus="myVarStatus">
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+								<a href="javascript:void(0);" onclick="showListExamnationInspectionDtl#{item.paymentDtlPkId}();" style="text-decoration: none !important;color: black;" class="link">#{item.name}</a>
+								<p:remoteCommand name="showListExamnationInspectionDtl#{item.paymentDtlPkId}" actionListener="#{cashController.showListExamnationInspectionDtl(item.paymentDtlPkId)}" />
+							</td>
+							<td style="text-align:right;vertical-align: middle;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.examnationAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					</c:if>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Нийт үнэ: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.basicAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Хөнгөлөлт: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.discountPercent} %" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Төлөх: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.amount}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Төлсөн: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.paidAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Үлдэгдэл: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.balanceAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<c:if test="#{cashController.cash.hasLottery == 1}">
+						<tr>
+							<td colspan="6">
+								<hr width="100%" style="color: peachpuff;" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6" rowspan="1" style="width: 100px;">
+								<table class="print-table">
+									<tr>
+										<td style="padding: 5px;font-size: 12px;">
+											Сугалааны дугаар: 
+										</td>
+										<td style="padding: 5px;font-size: 12px;">
+											#{cashController.cash.lottery}
+										</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px;font-size: 12px;">
+											ДДТД: 
+										</td>
+										<td style="padding: 5px;font-size: 12px;">
+											#{cashController.cash.billId}
+										</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px;font-size: 12px;">
+											Сугалааны огноо: 
+										</td>
+										<td style="padding: 5px;font-size: 12px;">
+											#{cashController.cash.billDate}
+										</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px;font-size: 12px;">
+											Дүн: 
+										</td>
+										<td style="padding: 5px;font-size: 12px;">
+											#{cashController.decimalConvertToString(cashController.cash.paidAmount)}
+										</td>
+									</tr>
+								</table>
+								<div class="print-img-container">
+										<p:graphicImage styleClass="print-image" style="margin: 0 auto; width:50%;display: block;" value="#{cashController.getQrUrl(cashController.cash.qrData)}"></p:graphicImage>
+								</div>
+							</td>
+						</tr>
+					</c:if>
+					
+					</table>
+					
+					<c:if test="#{cashController.listRequestInspectionDtl.size() > 0}">
+							
+						<ui:repeat value="#{cashController.listRequestInspectionDtl}" var="item" varStatus="myVarStatus">
+						<div class="page-break"/>
+						<table style="width: 100%; border: 0px; margin: 0px; padding: 0px;font-family: Arial;" cellpadding="0" cellspacing="0">
+						<tr>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;">
+				    			ТӨЛБӨРИЙН БАРИМТ
+				    		</td>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;">
+				    			#{userController.loggedInfo.organization.name}
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:0px 0px;">
+				    			ТӨЛБӨРИЙН БАРИМТ
+				    		</td>
+				    	</tr>
+						<tr>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Картын №: #{cashController.selectedCustomer.cardNumber}
+				    		</td>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Овог: #{cashController.selectedCustomer.lastName}
+				    		</td>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Нэр: #{cashController.selectedCustomer.firstName}
+				    		</td>
+				    	</tr>
+		            	<tr>
+			                <td colspan="5" style="padding-top: 0px; padding-bottom: 0px; border: 0px;font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+			                	Эмчийн нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+			                	Дүн
+			                </td>
+			            </tr>
+							<tr>
+								<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+									#{item.name}
+								</td>
+								<td style="text-align:right;vertical-align: middle;">
+									<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+										<f:convertNumber pattern="###,###,###.00"/>
+									</h:outputText>
+								</td>
+							</tr>
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Ажилтан: #{userController.loggedInfo.employee.firstName}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Огноо: 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								#{cashController.cash.getDateStr()}
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="6">
+								<hr width="100%" style="color: peachpuff;" />
+							</td>
+						</tr>
+				    </table>
+						</ui:repeat>
+				    </c:if>
+				    
+				    <c:if test="#{cashController.listXrayInspectionDtl.size() > 0}">
+							
+						<ui:repeat value="#{cashController.listXrayInspectionDtl}" var="item" varStatus="myVarStatus">
+						<div class="page-break"/>
+						<table style="width: 100%; border: 0px; margin: 0px; padding: 0px;font-family: Arial;" cellpadding="0" cellspacing="0">
+						<tr>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;">
+				    			ТӨЛБӨРИЙН БАРИМТ
+				    		</td>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;">
+				    			#{userController.loggedInfo.organization.name}
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:0px 0px;">
+				    			ТӨЛБӨРИЙН БАРИМТ
+				    		</td>
+				    	</tr>
+						<tr>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Картын №: #{cashController.selectedCustomer.cardNumber}
+				    		</td>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Овог: #{cashController.selectedCustomer.lastName}
+				    		</td>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Нэр: #{cashController.selectedCustomer.firstName}
+				    		</td>
+				    	</tr>
+		            	<tr>
+			                <td colspan="5" style="padding-top: 0px; padding-bottom: 0px; border: 0px;font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+			                	Оношилгооны нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+			                	Дүн
+			                </td>
+			            </tr>
+							<tr>
+								<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+									#{item.name}
+								</td>
+								<td style="text-align:right;vertical-align: middle;">
+									<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+										<f:convertNumber pattern="###,###,###.00"/>
+									</h:outputText>
+								</td>
+							</tr>
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Ажилтан: #{userController.loggedInfo.employee.firstName}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Огноо: 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								#{cashController.cash.getDateStr()}
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="6">
+								<hr width="100%" style="color: peachpuff;" />
+							</td>
+						</tr>
+				    </table>
+						</ui:repeat>
+				    </c:if>
+					
+					<c:if test="#{cashController.listTreatmentInspectionDtl.size() > 0}">
+							
+						<ui:repeat value="#{cashController.listTreatmentInspectionDtl}" var="item" varStatus="myVarStatus">
+						<div class="page-break"/>
+						<table style="width: 100%; border: 0px; margin: 0px; padding: 0px;font-family: Arial;" cellpadding="0" cellspacing="0">
+						<tr>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;">
+				    			ТӨЛБӨРИЙН БАРИМТ
+				    		</td>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;">
+				    			#{userController.loggedInfo.organization.name}
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:0px 0px;">
+				    			ТӨЛБӨРИЙН БАРИМТ
+				    		</td>
+				    	</tr>
+						<tr>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Картын №: #{cashController.selectedCustomer.cardNumber}
+				    		</td>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Овог: #{cashController.selectedCustomer.lastName}
+				    		</td>
+				    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+				    			Нэр: #{cashController.selectedCustomer.firstName}
+				    		</td>
+				    	</tr>
+		            	<tr>
+			                <td colspan="5" style="padding-top: 0px; padding-bottom: 0px; border: 0px;font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+			                	Эмчилгээний нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+			                	Дүн
+			                </td>
+			            </tr>
+							<tr>
+								<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+									#{item.name}
+								</td>
+								<td style="text-align:right;vertical-align: middle;">
+									<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+										<f:convertNumber pattern="###,###,###.00"/>
+									</h:outputText>
+								</td>
+							</tr>
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Ажилтан: #{userController.loggedInfo.employee.firstName}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Огноо: 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								#{cashController.cash.getDateStr()}
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="6">
+								<hr width="100%" style="color: peachpuff;" />
+							</td>
+						</tr>
+				    </table>
+						</ui:repeat>
+				    </c:if>
+					<c:if test="#{cashController.listExamnationInspectionDtl.size() > 0}">
+							
+					<ui:repeat value="#{cashController.listExamnationInspectionDtl}" var="item" varStatus="myVarStatus">
+					<div class="page-break"/>
+					<table style="width: 100%; border: 0px; margin: 0px; padding: 0px;font-family: Arial;" cellpadding="0" cellspacing="0">
+					<tr>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;">
+			    			ТӨЛБӨРИЙН БАРИМТ
+			    		</td>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;">
+			    			#{userController.loggedInfo.organization.name}
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:0px 0px;">
+			    			ТӨЛБӨРИЙН БАРИМТ
+			    		</td>
+			    	</tr>
+					<tr>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Картын №: #{cashController.selectedCustomer.cardNumber}
+			    		</td>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Овог: #{cashController.selectedCustomer.lastName}
+			    		</td>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Нэр: #{cashController.selectedCustomer.firstName}
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td colspan="5" style="padding-top: 0px; padding-bottom: 0px; border: 0px;font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+		                	Шинжилгээний нэр
+		                </td>
+		                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+		                	Дүн
+		                </td>
+		            </tr>
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+								#{item.name}
+							</td>
+							<td style="text-align:right;vertical-align: middle;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+						<ui:repeat value="#{item.examinationDtls}" var="dtl">
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;padding-left: 25px;">
+								#{dtl.name}
+							</td>
+							<td style="text-align:right;vertical-align: middle;">
+								<h:outputText value="#{dtl.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+						</ui:repeat>
+					<tr>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Ажилтан: #{userController.loggedInfo.employee.firstName}
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Огноо: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							#{cashController.cash.getDateStr()}
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="6">
+							<hr width="100%" style="color: peachpuff;" />
+						</td>
+					</tr>
+			    </table>
+					</ui:repeat>
+			    </c:if>
+			<div id="print">
+				
+			</div>
+			<div id="editor"></div>
+			
+            </div>
+            <div class="no-print" >
+				<a class="btn btn-app no-print" href="javascript:void(0)" onclick="print1('printcontainer');">
+	            	<i class="fa fa-print color-blue"></i> Хэвлэх
+	            </a>
+	            <a class="btn btn-app no-print" onclick="printPdf();" href="javascript:void(0)">
+	             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+	             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+	            </a>
+	            <a class="btn btn-app no-print" onclick="tableToExcel('print','Төлбөрийн баримт');"  href="javascript:void(0)">
+	             	<i class="fa fa-file-excel-o color-green"></i> XLS
+	            </a>
+            </div>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" widgetVar="confirmDialogDelete" modal="true"
+			resizable="false" width="300" height="80">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						Та устгахдаа итгэлтэй байна уу?
+					</td>
+				</tr>
+			</table>
+			<div class="row">
+				<div class="col-xs-8" style="float: right;">
+					<div class="row">
+						<div class="col-xs-6">
+							<p:commandLink styleClass="btn btn-block btn-primary btn-flat"
+								action="#{infoController.saveOrganization}" value="Устгах"
+								style="font-size: 12px;color: white;"></p:commandLink>
+						</div>
+						<div class="col-xs-6">
+							<p:commandLink styleClass="btn btn-block btn-danger btn-flat"
+								oncomplete="PF('confirmDialogDelete').hide();" value="Болих"
+								style="font-size: 12px;color: white;"></p:commandLink>
+						</div>
+					</div>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="paymentDtl" id="paymentDtl" width="500" height="400" modal="true" resizable="false" styleClass="dialog-scroll">
+			<table id="print" style="width: 100%;">
+		    	<tr>
+		    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+		    			ТӨЛБӨРИЙН БАРИМТ
+		    		</td>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			#{userController.loggedInfo.organization.name}
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+		    			ТӨЛБӨРИЙН БАРИМТ
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Картын №: #{cashController.selectedCustomer.cardNumber}
+		    		</td>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Овог: #{cashController.selectedCustomer.lastName}
+		    		</td>
+		    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Нэр: #{cashController.selectedCustomer.firstName}
+		    		</td>
+		    	</tr>
+				<c:if test="#{cashController.listExamnationInspectionDtl.size() > 0}">
+				<tr>
+		    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Шинжилгээ
+		    		</td>
+		    	</tr>
+            	<tr>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	№
+	                </td>
+	                <td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Шинжилгээний нэр
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Дүн
+	                </td>
+	            </tr>
+				<ui:repeat value="#{cashController.listCashByInspectionDtls}" var="item" varStatus="myVarStatus">
+					<tr>
+						<td style="width: 10px; font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							#{myVarStatus.index + 1}
+						</td>
+						<td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							<a href="javascript:void(0);" onclick="showListExamnationInspectionDtl#{item.paymentDtlPkId}();" style="text-decoration: none !important;color: black;" class="link">#{item.name}</a>
+							<p:remoteCommand name="showListExamnationInspectionDtl#{item.paymentDtlPkId}" actionListener="#{cashController.showListExamnationInspectionDtl(item.paymentDtlPkId)}" />
+						</td>
+						<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+				</ui:repeat>
+				</c:if>
+		    </table>
+		</p:dialog>
+		<p:remoteCommand name="clearPayment" actionListener="#{cashController.clearPayment()}" />
+		
+		<p:dialog widgetVar="printCashBackReportDialog" modal="true" id="printCashBackReportDialog" styleClass="dialog-scroll"
+			resizable="false" width="500" style="width: 100%;" height="500" onHide="clearPayment();" onShow="hideLoader();">
+			<table id="print" class="" style="width: 100%; page-break-inside: always;">
+		    	<tr>
+		    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+		    			ТӨЛБӨРИЙН БАРИМТ
+		    		</td>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			#{userController.loggedInfo.organization.name}
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+		    			ТӨЛБӨРИЙН БАРИМТ
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Картын №: #{cashController.selectedCustomer.cardNumber}
+		    		</td>
+		    		<td colspan="5" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Овог: #{cashController.selectedCustomer.lastName}
+		    		</td>
+		    		<td colspan="5" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+		    			Нэр: #{cashController.selectedCustomer.firstName}
+		    		</td>
+		    	</tr>
+		    	<c:if test="#{cashController.listRequestInspectionDtl.size() > 0}">
+		    	<tr>
+		    		<td colspan="7" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+		    			ҮЗЛЭГ
+		    		</td>
+		    	</tr>
+            	<tr>
+	                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;width: 70px;background-color: peachpuff;vertical-align: middle;">
+	                	Эмчийн нэр
+	                </td>
+	                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+	                	Үзлэгийн дүн
+	                </td>
+	            </tr>
+						<!-- бүлэг эхлэл -->
+					<ui:repeat value="#{cashController.listRequestInspectionDtl}" var="it" varStatus="myVarStatus">
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+							#{it.name}
+						</td>
+						<td style="text-align:right;vertical-align: middle;">
+							<h:outputText value="#{it.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00" />
+							</h:outputText>
+						</td>
+					</tr>
+					</ui:repeat>
+					<!-- бүлэг төгсгөл -->
+				</c:if>
+				<c:if test="#{cashController.listTreatmentInspectionDtl.size() > 0}">
+		    	<tr>
+		    		<td colspan="7" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+		    			ЭМЧИЛГЭЭ
+		    		</td>
+		    	</tr>
+	            	<tr>
+		                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+		                	Эмчилгээний нэр
+		                </td>
+		                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+		                	Дүн
+		                </td>
+		            </tr>
+						<!-- бүлэг эхлэл -->
+					<ui:repeat value="#{cashController.listTreatmentInspectionDtl}" var="it" varStatus="myVarStatus">
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+								#{it.name}
+							</td>
+							<td style="text-align:right;vertical-align: middle;">
+								<h:outputText value="#{it.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+							<h:outputText value="#{cashController.cash.treatmentAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<!-- бүлэг төгсгөл -->
+				</c:if>
+				<c:if test="#{cashController.listXrayInspectionDtl.size() > 0}">
+				<tr>
+		    		<td colspan="5" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+		    			ОНОШИЛГОО
+		    		</td>
+		    	</tr>
+            	<tr>
+	                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+	                	Оношилгооны нэр
+	                </td>
+	                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+	                	Дүн
+	                </td>
+	            </tr>
+				<ui:repeat value="#{cashController.listXrayInspectionDtl}" var="item" varStatus="myVarStatus">
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+							#{item.name}
+						</td>
+						<td style="text-align:right;vertical-align: middle;">
+							<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+				</ui:repeat>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Бүлгийн дүн: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.xrayAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				</c:if>
+				<c:if test="#{cashController.listSurgeryInspectionDtl.size() > 0}">
+				<tr>
+		    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+		    			Мэс засал
+		    		</td>
+		    	</tr>
+            	<tr>
+	                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+	                	Мэс засал
+	                </td>
+	                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+	                	Дүн
+	                </td>
+	            </tr>
+				<ui:repeat value="#{cashController.listSurgeryInspectionDtl}" var="item" varStatus="myVarStatus">
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+							#{item.name}
+						</td>
+						<td style="text-align:right;vertical-align: middle;">
+							<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+				</ui:repeat>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Бүлгийн дүн: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.surgeryAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				</c:if>
+				<c:if test="#{cashController.listExamnationInspectionDtl.size() > 0}">
+				<tr>
+		    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Arial;text-align:left;vertical-align: middle;">
+		    			Шинжилгээ
+		    		</td>
+		    	</tr>
+            	<tr>
+	                <td colspan="5" style="font-size: 12px;font-family: Arial;text-align:center;background-color: peachpuff;vertical-align: middle;">
+	                	Шинжилгээний нэр
+	                </td>
+	                <td style="font-size: 12px;font-family: Arial;text-align:center;width: 100px;background-color: peachpuff;vertical-align: middle;">
+	                	Дүн
+	                </td>
+	            </tr>
+				<ui:repeat value="#{cashController.listExamnationInspectionDtl}" var="item" varStatus="myVarStatus">
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:left;vertical-align: middle;">
+							<a href="javascript:void(0);" onclick="showListExamnationInspectionDtl#{item.paymentDtlPkId}();" style="text-decoration: none !important;color: black;" class="link">#{item.name}</a>
+							<p:remoteCommand name="showListExamnationInspectionDtl#{item.paymentDtlPkId}" actionListener="#{cashController.showListExamnationInspectionDtl(item.paymentDtlPkId)}" />
+						</td>
+						<td style="text-align:right;vertical-align: middle;">
+							<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+				</ui:repeat>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Бүлгийн дүн: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.examnationAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				</c:if>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Нийт үнэ: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.basicAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Хөнгөлөлт: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.discountPercent} %" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Төлөх: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.amount}" style="font-size: 12px;font-family: Arial;font-weight: normal;margin-bottom:0px;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Төлсөн: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.paidAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						Үлдэгдэл: 
+					</td>
+					<td style="font-size: 12px;font-family: Arial;text-align:right;vertical-align: middle;">
+						<h:outputText value="#{cashController.cash.balanceAmount}" style="font-size: 12px;font-family: Arial;font-weight: normal;">
+							<f:convertNumber pattern="###,###,###.00"/>
+						</h:outputText>
+					</td>
+				</tr>
+				<c:if test="#{cashController.cash.hasLottery == 1}">
+					<tr>
+						<td colspan="6">
+							<hr width="100%" style="color: peachpuff;" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6" rowspan="1" style="width: 100px;">
+							<table class="print-table">
+								<tr>
+									<td style="padding: 5px;font-size: 12px;">
+										Сугалааны дугаар: 
+									</td>
+									<td style="padding: 5px;font-size: 12px;">
+										#{cashController.cash.lottery}
+									</td>
+								</tr>
+								<tr>
+									<td style="padding: 5px;font-size: 12px;">
+										ДДТД: 
+									</td>
+									<td style="padding: 5px;font-size: 12px;">
+										#{cashController.cash.billId}
+									</td>
+								</tr>
+								<tr>
+									<td style="padding: 5px;font-size: 12px;">
+										Сугалааны огноо: 
+									</td>
+									<td style="padding: 5px;font-size: 12px;">
+										#{cashController.cash.billDate}
+									</td>
+								</tr>
+								<tr>
+									<td style="padding: 5px;font-size: 12px;">
+										Дүн: 
+									</td>
+									<td style="padding: 5px;font-size: 12px;">
+										#{cashController.decimalConvertToString(cashController.cash.paidAmount)}
+									</td>
+								</tr>
+							</table>
+							<div class="print-img-container">
+									<p:graphicImage styleClass="print-image" style="margin: 0 auto; width:50%;display: block;" value="#{cashController.getQrUrl(cashController.cash.qrData)}"></p:graphicImage>
+							</div>
+						</td>
+					</tr>
+				</c:if>
+					
+				</table>
+            <div class="no-print" >
+            	<div class="col-md-6">
+            		<div class="col-md-12">
+	            		<div class="col-md-6">Нууц үг :</div> 
+	            		<div class="col-md-6"><p:password value="#{cashController.retBillPassword}" /></div>
+	            	</div>
+	            	<div class="col-md-12">
+	            		<div class="col-md-6">Тайлбар :</div> 
+	            		<div class="col-md-6"><p:inputText value="#{cashController.retBillDescription}" /></div>
+	            	</div>
+            	</div>
+            	<div class="col-md-6">
+					<a class="btn btn-app no-print" href="javascript:void(0)" onclick="billback();" style="float: right;">
+		            	<i class="fa fa-reply color-blue"></i> Буцаах
+		            </a>
+		            <p:remoteCommand name="billback" actionListener="#{cashController.billback}" />
+	            </div>
+            </div>
+		</p:dialog>
+		
+	</ui:define>
+	<ui:define name="script">
+		<script>
+		//<![CDATA[
+			$(document).ready(function(){
+				getPaymentList();
+				var isPrint = #{cashController.isReportCashier()};
+		    	if(isPrint){
+		    		cashBill();
+		    	}else {
+		    		//PF('printCashReportDialog').show();
+		    	}
+		    	refresh();
+			});
+			
+			function refresh(){
+				setTimeout(function(){
+					//location.reload(); 
+				}, 90000);
+			}
+			
+			function slideLoan(){
+				document.getElementsByClassName('btn btn-box-tool')[0].click();
+			}
+			           
+			function printPdf(){
+				var doc = new jsPDF();
+				var specialElementHandlers = {
+			        '#editor': function (element, renderer) {
+			            return true;
+			        }
+			    };
+				debugger;
+				doc.fromHTML($('#printcontainer').html(), 15, 15, {
+			        'width': 700,
+			        'elementHandlers': specialElementHandlers
+			    });
+				doc.save('bill.pdf');
+			}
+			
+			function printXls(){
+				var doc = new jsPDF();
+				var specialElementHandlers = {
+			        '#editor': function (element, renderer) {
+			            return true;
+			        }
+			    };
+				
+				doc.fromHTML($('#print').html(), 15, 15, {
+			        'width': 700,
+			        'elementHandlers': specialElementHandlers
+			    });
+				doc.save('bill.xls');
+			}
+			
+			//document.getElementById('form:beginDateCalendar_input').style.background = 'white';
+			//document.getElementById('form:endDateCalendar_input').className = document.getElementById('form:endDateCalendar_input').className + ' form-control';
+			//document.getElementById('form:endDateCalendar_input').style.background = 'white';
+			//document.getElementById('ui-datepicker-calendar').className = document.getElementById('ui-datepicker-div').className + ' clendar';
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

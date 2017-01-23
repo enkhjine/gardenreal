@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	>
+ <table  style="width:100%" cellpadding="0" cellspacing=" " id="EmrTablePrint">
+ 	<tr class="land" >
+				<td colspan="9"
+					style="font-size: 13px; font-family: Times New Roman;">
+					<img src="#{applicationController.path}images/mlogo.jpg"  width="420" height="110" style="vertical-align: text-top;"></img>
+				</td>
+				<td colspan="3"
+					style="text-align:center;font-size: 12px; font-family: Times New Roman; padding: 5px 5px">
+					 <h:outputText value="Улаанбаатар хот , Монгол Улс"/><br/>
+					 <h:outputText  value=" С.Зоригийн гудамж, Ш/Х-48/111"/><br/>
+		 			 <h:outputText value="Утас: 976-11-328670 Факс: 976-11-321249 " /><br/>
+		 			 <h:outputText value="И-МЭЙЛ: info@mnums.edu.mn"/></td>
+			</tr>        	
+      <tr>
+		<td colspan="12" style="text-align:center;font-weight: 700;font-size: 18px;  font-family: Times New Roman;"><h:outputText  value="#{inspectionController.subNameReInspectionString()}" /></td>
+		</tr>			
+	 <tr> 
+	  <td colspan="4" style="font-size: 12px;  font-family: Times New Roman;">РД: #{inspectionController.selectedCustomer.regNumber}</td>
+	  <td colspan="4" style="font-size: 12px;  font-family: Times New Roman;">Эцэг эхийн нэр : #{inspectionController.selectedCustomer.lastName}</td>
+	  <td colspan="4" style="font-size: 12px;  font-family: Times New Roman;">Нэр : #{inspectionController.selectedCustomer.firstName}</td>
+	 
+	  </tr>
+       <tr>
+       <td colspan="4" style="font-size: 12px;  font-family: Times New Roman;">Хүйс : #{inspectionController.selectedCustomer.genderString}</td>
+        <td colspan="4" style="font-size: 12px;  font-family: Times New Roman;">Нас: #{inspectionController.selectedCustomer.getAge()}</td>
+	    <td colspan="4" style="font-size: 12px;  font-family: Times New Roman;">Утасны дугаар: #{inspectionController.selectedCustomer.phoneNumber}</td>
+	 
+        </tr> 
+	<tr>
+			<td style="border-bottom: 1px solid black; font-weight: 700;font-size: 12px; font-family: Times New Roman;"
+				colspan="12">EMR</td>
+		</tr>
+ <tr> 
+ <c:if test="#{inspectionController.customerReInspection.pain.length()>0}">
+ <tr>
+	<td colspan="12"
+	         style=" font-size: 14px; font-weight: 700; font-family: Times New Roman;">
+	   <p:panel styleClass="am29acdmenu no-style-panel" style="display:none"> 
+		  <p:selectBooleanCheckbox style="vertical-align: middle;padding:5px 0px 0px 0px" itemLabel="Зовиур" value="#{inspectionController.painBooleanCheck}">
+		    <p:ajax event="change" update="@(.painBoolean)"></p:ajax>
+		     </p:selectBooleanCheckbox>
+			</p:panel> 
+		 </td>
+		</tr>
+ <tr>  
+   <td colspan="12" style="font-size: 12px;  font-family: Times New Roman;">
+    <p:panel styleClass="painBoolean no-style-panel">
+     <c:if test="#{inspectionController.painBooleanCheck}">
+         <h:outputText style="font-weight: 700;font-size: 12px;  font-family: Times New Roman;"  value="Гол зовиур: "/>
+      <h:outputText style="font-size: 12px;  font-family: Times New Roman;" value="#{inspectionController.customerReInspection.pain}" />
+       </c:if>
+      </p:panel>
+</td>
+ </tr>
+  </c:if>     
+</tr>
+<tr>      
+ <c:if test="#{inspectionController.customerReInspection.inspection.length()>0}">
+  <tr>
+   <td colspan="12"
+ 		style=" font-size: 13px; font-weight: 700; font-family: Times New Roman; ">
+             <p:panel styleClass="am29acdmenu no-style-panel" style="display:none"> 
+				  <p:selectBooleanCheckbox style="vertical-align: middle;" itemLabel="Асуумж" value="#{inspectionController.checkUpBooleanCheck}">
+				     <p:ajax event="change" update="@(.checkUpBoolean)"></p:ajax>
+				     </p:selectBooleanCheckbox>
+					</p:panel>
+				 </td>
+    </tr>
+   <tr>
+    <td colspan="12" style="font-size: 18px;  font-family: Times New Roman;"> 
+    <p:panel styleClass="checkUpBoolean  no-style-panel">
+     <c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+     <h:outputText style="font-weight: 700;font-size: 12px;  font-family: Times New Roman;"  value="Асуумж: "/>
+      <h:outputText style="font-size: 12px;  font-family: Times New Roman;" value="#{inspectionController.customerReInspection.inspection}" /> 
+     </c:if> 
+     </p:panel>
+    </td>
+   </tr>
+  </c:if>
+</tr>
+
+ <tr>      
+   <c:if test="#{inspectionController.customerReInspection.checkUp.length()>0}">
+   <tr>
+    <td colspan="12"
+					style=" font-size: 13px; font-weight: 700; font-family: Times New Roman; ">
+ 			<p:panel styleClass="am29acdmenu no-style-panel" style="display:none"> 
+				  <p:selectBooleanCheckbox style="vertical-align: middle;" itemLabel="Бодит үзлэг" value="#{inspectionController.cBooleanCheck}">
+				     <p:ajax event="change" update="@(.cBoolean)"></p:ajax>
+				     </p:selectBooleanCheckbox>
+					</p:panel>
+					</td>
+					</tr>
+ <tr>
+  <td colspan="12" style="font-size: 18px;  font-family: Times New Roman;">
+   <p:panel styleClass="cBoolean no-style-panel">
+    <c:if test="#{inspectionController.cBooleanCheck=='true'}">
+    <h:outputText style="font-weight: 700;font-size: 12px;  font-family: Times New Roman;"  value="Бодит  үзлэг :"/>
+    <c:if test="#{inspectionController.customerReInspection.checkUp.length()>0}">
+      <h:outputText style="font-size: 12px;  font-family: Times New Roman;" value="#{inspectionController.customerReInspection.checkUp}" /> 
+    <br/>
+    <table>
+     <tr>
+         <ui:repeat var="attachment"
+		  value="#{inspectionController.listReAttachment}"
+			varStatus="status">
+				<p:graphicImage
+				value="#{inspectionController.getDynamicImage(inspectionController.getListReAttachment().indexOf(attachment))}"
+				cache="false" height="150" width="200" style="margin-right:5px;margin-top:1px">
+				<f:param name="image_id"
+				  value="#{inspectionController.getListReAttachment().indexOf(attachment)}" />
+					</p:graphicImage>
+					<h:outputText value="#{inspectionController.columnDivide(status.index)}" escape="false" />
+				</ui:repeat>
+      </tr>
+      </table>
+     </c:if>
+    </c:if>
+    </p:panel>
+     </td>
+    </tr>
+   </c:if>
+</tr>
+
+  <c:if test="#{inspectionController.reInspPreDiagnose.size()>0}">
+  <tr>
+   <td colspan="12"
+					style=" font-size: 14px; font-weight: 700; font-family: Times New Roman;">
+			    <p:panel styleClass="am29acdmenu no-style-panel" style="display:none"> 
+				  <p:selectBooleanCheckbox style="vertical-align: middle;" itemLabel="Онош" value="#{inspectionController.diagnoseBooleanSelectCheck}">
+				     <p:ajax event="change" update="@(.diagnoseBoolean)"></p:ajax>
+				     </p:selectBooleanCheckbox>
+					</p:panel> 
+				 </td>
+   </tr>
+ <tr>
+  <td colspan="12" style="font-size: 18px;  font-family: Times New Roman;">
+   <p:panel styleClass="diagnoseBoolean  no-style-panel">
+     <c:if test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+       <h:outputText value="Үндсэн онош" style="font-size: 12px;  font-family: Times New Roman;" />
+       <ui:repeat value="#{inspectionController.reInspPreDiagnose}" var="diagnose">
+		<h:outputText rendered="#{diagnose.type==1}"  style="font-size: 12px;  font-family: Times New Roman;" value="#{diagnose.id} - #{diagnose.nameMn}"/>
+		</ui:repeat>
+		 <br/>
+		 <h:outputText value="Урьдчилсан онош" style="font-size: 12px;  font-family: Times New Roman;" />
+       <ui:repeat value="#{inspectionController.reInspPreDiagnose}" var="diagnose">
+		<h:outputText rendered="#{diagnose.type==0}"  style="font-size: 12px;  font-family: Times New Roman;" value="#{diagnose.id} - #{diagnose.nameMn}"/>
+		</ui:repeat>
+		 <br/>
+        <c:if test="#{inspectionController.customerReInspection.rateText.length()>0}">
+      <h:outputText value="Хүндрэл :#{inspectionController.customerReInspection.rateText}" />
+     </c:if>
+      </c:if>
+     </p:panel>
+   </td>
+  </tr>
+   </c:if>
+
+ <tr>      
+ <td colspan="12" >
+    <c:if test="#{inspectionController.customerReInspection.advice.length()>0}">
+      <tr>
+      <td colspan="12"
+		       style=" font-size: 13px; font-weight: 700; font-family: Times New Roman; ">
+		        	<p:panel styleClass="am29acdmenu no-style-panel" style="display:none"> 
+				       <p:selectBooleanCheckbox itemLabel="Төлөвлөгөө" style="vertical-align: middle;" value="#{inspectionController.shcudeluBooleanSelectCheck}">
+				         <p:ajax event="change" update="@(.scheludeBoolean)"></p:ajax>
+				     </p:selectBooleanCheckbox>
+					</p:panel>     	
+		         </td>
+             </tr>
+     <p:panel styleClass="scheludeBoolean no-style-panel">
+       <c:if test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+        <h:outputText style="font-weight: 700; font-size: 13px;  font-family: Times New Roman;"  value="Төлөвлөгөө : "/>  
+        <h:outputText style="font-size: 12px;  font-family: Times New Roman;" value=" #{inspectionController.customerReInspection.advice}" />
+        </c:if>
+      </p:panel>
+      </c:if>
+ </td>
+</tr>
+	<tr>
+	 <td style="border-bottom: 1px solid black; font-weight: 700;font-size: 12px; font-family: Times New Roman;"
+				colspan="12">OCS</td>
+		</tr>
+
+<tr>
+       <c:if test="#{inspectionController.listExamination.size()>0 }">
+         <td colspan="12" style="font-size: 13px; font-family: Times New Roman;">
+          <h:outputText  style="font-size: 13px;" value=" Захиалсан  шинжилгээ:"/>
+          <table width="100%" style="padding-left:20px" cellpadding="0" cellspacing="0">
+		       <tr >
+		        <td  colspan="1" valign="middle" style="border:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">№</td>
+		        <td colspan="6" valign="middle" style="border-top: 1px solid black;border-bottom: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Шинжилгээний нэр</td>
+		        <td colspan="5" valign="middle" style="border: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Заалт</td>
+		        </tr>
+		        <ui:repeat var="meCusExa" value="#{inspectionController.listExamination}"  varStatus="index">
+                        <tr>
+                        <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black;border-right: 1px solid black;  text-align:center;font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+                        <td colspan="6" style="border-bottom: 1px solid black; text-align:left;font-size: 13px; font-family: Times New Roman;" ><h:outputText value="#{meCusExa.name}" />
+                        ( <ui:repeat var="meE" value="#{meCusExa.examinationDtls}">#{meE.elementNameMn},</ui:repeat>)
+                         </td>
+                        <td colspan="5" style="border-bottom: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;  text-align:left;font-size: 13px; font-family: Times New Roman;">#{meCusExa.description}</td>
+                        </tr>
+                        </ui:repeat>
+		        </table>
+          </td>
+          </c:if>
+         </tr>
+       <tr>
+        <c:if test="#{inspectionController.listTreatment.size()>0 }">
+         <td colspan="12" style="font-size: 13px; font-family: Times New Roman;">
+          <h:outputText  style="font-weight: 700;font-size: 13px;" value=" Захиалсан  эмчилгээ:"/>
+          <table width="100%" style="padding-left:20px" cellpadding="0" cellspacing="0">
+		       <tr >
+		        <td  colspan="1" valign="middle" style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;text-align:center;font-size: 13px; font-family: Times New Roman;">№</td>
+		        <td colspan="2" valign="middle" style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;   text-align:center;font-size: 13px; font-family: Times New Roman;">Эмчилгээний нэр</td>
+		        <td colspan="2" valign="middle" style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;text-align:center;font-size: 13px; font-family: Times New Roman;">Ямар эрхтэнд</td>
+		       
+		        <td colspan="2" valign="middle"  style="border-bottom: 1px solid black;border-top: 1px solid black;border-left: 1px solid black;  text-align:center;font-size: 13px; font-family: Times New Roman;">Тун</td>
+		        <td colspan="1" valign="middle"  style="border-bottom: 1px solid black; border-top: 1px solid black;border-left: 1px solid black;   text-align:center;font-size: 13px; font-family: Times New Roman;">Хугацаа</td>
+		        <td colspan="1" valign="middle"  style="border:1px solid black;text-align:center;font-size: 13px; font-family: Times New Roman;">Тоо хэмжээ</td>
+		       
+		        </tr>
+		        <ui:repeat var="meCusTreat" value="#{inspectionController.listTreatment}"  varStatus="index">
+                        <tr>
+                        <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+                        <td colspan="2" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:left;font-size: 13px; font-family: Times New Roman;" ><h:outputText value="#{meCusTreat.name}" /></td>
+                        <td colspan="2" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:left;font-size: 13px; font-family: Times New Roman;">Нүд</td>
+                        <td colspan="2" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:right;font-size: 13px; font-family: Times New Roman;">
+                       	#{meCusTreat.qty}
+                          </td>
+                        <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:right;font-size: 13px; font-family: Times New Roman;"> #{meCusTreat.times}</td>
+                          
+                         <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;    text-align:center;font-size: 13px; font-family: Times New Roman;">#{meCusTreat.dayLength}</td>
+                        
+                        </tr>
+                        </ui:repeat>
+		        </table>
+          </td>
+          </c:if>
+          </tr>
+     <tr>
+     <c:if test="#{inspectionController.listMedicine.size()>0 }">
+               <td colspan="12" style="font-size: 13px; font-family: Times New Roman;">
+             <h:outputText style="font-weight: 700;" value="Захиалсан эм" />
+          <table width="100%" style="padding-left:20px" cellpadding="0" cellspacing="0">
+		       <tr >
+		        <td  colspan="2" rowspan="2"  valign="middle" style="border-top: 1px solid black; border-left: 1px solid black;border-bottom:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">№</td>
+		        <td colspan="2" rowspan="2" valign="middle" style="border-top: 1px solid black; border-left: 1px solid black;border-bottom:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Эмийн нэр</td>
+		        <td colspan="2" rowspan="2" valign="middle" style="border-top: 1px solid black; border-left: 1px solid black;border-bottom:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Хэлбэр</td>
+		        <td colspan="2" rowspan="2" valign="middle" style="border-top: 1px solid black; border-left: 1px solid black;border-bottom:1px solid black;  text-align:center;font-size: 13px; font-family: Times New Roman;">Савлагаа</td>
+		        <td colspan="5" rowspan="1"   valign="middle"  style="border:1px solid black;   text-align:center;font-size: 13px; font-family: Times New Roman;">Хэрэглэх заалт</td>
+		        </tr>
+		            <tr>
+		           
+		            <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:center;size: 13px; font-family: Times New Roman;">Тун</td>
+		             <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Өдөрт</td>
+		              <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Хэдэн өдөр</td>
+		            <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Нийт хэмжээ</td>
+		            <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black;border-right: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Хэрэглэх заавар</td>
+		            
+		             </tr>	             
+		            <ui:repeat var="meCusMed" value="#{inspectionController.listMedicine}"  varStatus="index">
+                        <tr>
+                        <td colspan="2" style="border-left: 1px solid black; border-bottom: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+                        <td colspan="2" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:left;font-size: 13px; font-family: Times New Roman;" ><h:outputText value="#{meCusMed.name}(#{meCusMed.iName})" /></td>
+                       <td colspan="2" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:left;font-size: 13px; font-family: Times New Roman;">#{meCusMed.medicineType}</td>
+                       <td colspan="2" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:center;font-size: 13px; font-family: Times New Roman;">#{meCusMed.drugDose}</td>
+                       <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:right;font-size: 13px; font-family: Times New Roman;">
+                       	#{meCusMed.dose}
+                       </td>
+                       <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:right;font-size: 13px; font-family: Times New Roman;"> #{meCusMed.time}</td>
+                       <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:right;font-size: 13px; font-family: Times New Roman;">
+                       	#{meCusMed.day}
+                       </td>
+                       <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black;text-align:right;font-size: 13px; font-family: Times New Roman;">
+                       	#{meCusMed.repeatCount}
+                       </td>
+                       <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black;border-right: 1px solid black;text-align:Center;font-size: 13px; font-family: Times New Roman;"><h:outputText  value="#{meCusMed.m==1 ? 'өглөө':''} #{meCusMed.d ==1 ? 'өдөр':''}  #{meCusMed.e==1 ? 'орой':''} #{meCusMed.n==1 ?'шөнө':''} ,#{meCusMed.medicineDescription}"/></td>
+                       </tr>
+                        </ui:repeat>
+		       </table>
+		       </td>
+        </c:if>
+
+		      </tr>
+          <tr>
+       <c:if test="#{inspectionController.listXray.size()>0 }">
+         <td colspan="12" style="font-size: 13px; font-family: Times New Roman;">
+          <h:outputText  style="font-size: 13px;" value=" Захиалсан  оношилгоо:"/>
+          <table width="100%" style="padding-left:20px" cellpadding="0" cellspacing="0">
+		       <tr >
+		        <td  colspan="1" valign="middle" style="border:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">№</td>
+		        <td colspan="6" valign="middle" style="border-top: 1px solid black;border-bottom: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Оношилгооны нэр</td>
+		        <td colspan="5" valign="middle" style="border: 1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Заалт</td>
+		        </tr>
+		        <ui:repeat var="meCusXray" value="#{inspectionController.listXray}"  varStatus="index">
+                        <tr>
+                        <td colspan="1" style="border-bottom: 1px solid black; border-left: 1px solid black;border-right: 1px solid black;  text-align:center;font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+                        <td colspan="6" style="border-bottom: 1px solid black; text-align:left;font-size: 13px; font-family: Times New Roman;" ><h:outputText value="#{meCusXray.name}" />
+                        
+                         </td>
+                        <td colspan="5" style="border-bottom: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;  text-align:left;font-size: 13px; font-family: Times New Roman;">#{meCusXray.description}</td>
+                        </tr>
+                        </ui:repeat>
+		        </table>
+          </td>
+          </c:if>
+            </tr>
+            <tr>
+           <c:if test="#{inspectionController.listSurgery.size()>0 }">
+            <td colspan="12" style="font-size: 13px; font-family: Times New Roman;">
+              <h:outputText  style="font-weight: 700;font-size: 13px;" value=" Захиалсан  хагалгаа:"/>
+                <table width="100%" style="padding-left:20px" cellpadding="0" cellspacing="0">
+		       <tr >
+		        <td  colspan="1" valign="middle" style="border: 1px  solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">№</td>
+		        <td colspan="11" valign="middle" style="border-bottom:1px solid black;border-right:1px solid black;border-top:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">Хагалгааны нэр</td>
+		        </tr>
+		        <ui:repeat var="meCusSurgery" value="#{inspectionController.listSurgery}"  varStatus="index">
+                        <tr>
+                        <td colspan="1" style="border-bottom:1px solid black;border-left:1px solid black;border-right:1px solid black; text-align:center;font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+                        <td colspan="11" style="border-bottom:1px solid black;border-right:1px solid black;text-align:left;font-size: 13px; font-family: Times New Roman;" ><h:outputText value="#{meCusSurgery.name}" /></td>
+                        </tr>
+                        </ui:repeat>
+		        </table>
+          </td>
+          </c:if>
+             </tr>
+        <tr>
+            <td colspan="12" style="text-align:right; font-size: 13px; font-family: Times New Roman;">
+                <p:panel styleClass="imageIdsPrint no-style-panel"  style="text-align:right; font-size: 13px; font-family: Times New Roman;"> 
+                Эмчийн  нэр: 
+                     <h:graphicImage style="font-size: 12px; font-family: Times New Roman;vertical-align: middle;display:#{inspectionController.getrBase64String(inspectionController.currentEmployee.signature)}"   value="#{inspectionController.getrBase64String(inspectionController.currentEmployee.signature)}" width="78" height="40">
+                      </h:graphicImage> 
+                     <h:outputText style="font-size: 13px; font-family: Times New Roman;vertical-align: middle;" value="/ #{inspectionController.currentEmployee.firstName} / " />
+                  
+                  </p:panel>
+                 
+                 </td>
+              </tr>
+          <tr>
+           <td colspan="12"  style="text-align:right">
+            <p:panel styleClass="am29acdmenu no-style-panel" style="display:none">
+             <h:outputText style="font-size: 13px; font-family: Times New Roman;" 
+                value="Гарын  үсэг хэвлэх : "/>
+             <h:selectBooleanCheckbox value="#{inspectionController.sigNatureSelectCheck}" >
+                    <p:ajax event="change" update="@(.imageIdsPrint)"></p:ajax>
+                     </h:selectBooleanCheckbox>
+               </p:panel>
+              </td>
+             </tr>              
+          <tr>
+            <td colspan="12" style="text-align:right;font-size: 13px; font-family: Times New Roman;">Үзлэгийн огноо:#{inspectionController.getDateTime()}</td></tr>
+            <tr>
+          
+            <td colspan="12" style="text-align:right;font-size: 13px; font-family: Times New Roman;">Хэвлэсэн огноо:#{inspectionController.getDateNow()}</td></tr>
+	     
+</table>   
+</ui:composition>

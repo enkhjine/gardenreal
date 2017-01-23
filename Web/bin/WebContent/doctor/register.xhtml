@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" 
+	template="emr.xhtml" >
+	<ui:define name="inspection">
+		<p:tab title="#{i18n['general_examination']}">
+			<p:accordionPanel id="default">
+				<p:tab title="#{i18n['pain']}">
+					<div class="row">
+						<div class="col-md-12">
+							<p:inputTextarea style="width: 100%;" rows="4" autoResize="false"
+								value="#{inspectionController.customerDefaultInspection.pain}" placeholder="Зовиур"/>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="#{i18n['question']}">
+					<div class="row">
+						<div class="col-md-12">
+							<p:inputTextarea style="width: 100%;" rows="4" autoResize="false"
+								value="#{inspectionController.customerDefaultInspection.inspection}" placeholder="Асуумж"/>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="#{i18n['checkup']}">
+					<div class="row">
+						<div class="col-md-12">
+							<p:inputTextarea style="width: 100%;" rows="4" autoResize="false"
+								value="#{inspectionController.customerDefaultInspection.checkUp}" placeholder="Бодит үзлэг" />
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-12">
+							<p:panelGrid columns="2" styleClass="form-table">
+								<p:outputLabel value="Зураг:" style="width: 60px;"/>
+								<p:commandLink styleClass="btn" onclick="uploadImage();" actionListener="#{inspectionController.setImageType('default')}">
+									<i class="fa fa-fw fa-upload"/> Зураг сонгох
+								</p:commandLink>
+							</p:panelGrid>
+						</div>
+						<div class="col-md-12 margin-top">
+							<ui:repeat var="attachment" value="#{inspectionController.listDefaultAttachment}">
+								<p:graphicImage value="#{inspectionController.getDynamicNoseImage(inspectionController.getListDefaultAttachment().indexOf(attachment), inspectionController.getListDefaultAttachment())}" 
+								cache="false" height="50" onclick="showModalImage(this);" style="margin-right: 5px;" styleClass="zoom">
+									<f:param name="image_id" value="#{inspectionController.getListDefaultAttachment().indexOf(attachment)}"/>
+									<p:commandLink actionListener="#{inspectionController.setAttachment(attachment)}" oncomplete="PF('attachment-name').show();">
+										<i class="fa fa-edit color-blue" data-toggle="tooltip" data-placement="bottom" title="Зурганд нэр өгөх"/>
+									</p:commandLink>
+									<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listDefaultAttachment, attachment)}"
+										oncomplete="updateSkin()">
+										<i class="fa fa-trash color-red" data-toggle="tooltip" data-placement="bottom" title="Устгах"/>
+									</p:commandLink>
+								</p:graphicImage>
+							</ui:repeat>
+						</div>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="#{i18n['diagnose']}">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.defaultAppDiagnose.id}"
+											onfocus="showDiagnosePick(this,'default',1,'false');"
+											onkeyup="callRefreshList(this,'default',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.defaultAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											onfocus="showDiagnosePick(this,'default',1,'true')"
+											onkeyup="callRefreshList(this,'default',1,'true')" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'default',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош">
+										</p:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											onfocus="showDiagnosePick(this,'default',0,'false');"
+											onkeyup="callRefreshList(this,'default',0,'false');" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											onfocus="showDiagnosePick(this,'default',0,'true')"
+											onkeyup="callRefreshList(this,'default',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'default',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош">
+										</p:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.defaultPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}" id="reinspectionDiagnose">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameEn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.defaultPreDiagnose.remove(diagnose)}"
+												oncomplete="updateDefaultInspection();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+						<p:remoteCommand name="updateDefaultInspection" update="dubu"></p:remoteCommand>
+					</p:panel>
+					
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;" value="#{inspectionController.customerDefaultInspection.rateText}" placeholder="Хүндрэл">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="#{i18n['plan']}">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea  rows="3" autoResize="false" style="width: 100%;" value="#{inspectionController.customerDefaultInspection.advice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+	</ui:define>
+</ui:composition>

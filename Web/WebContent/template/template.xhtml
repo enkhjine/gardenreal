@@ -1,0 +1,595 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="mn" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="cleartype" content="on" />
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+	<link rel="shortcut icon" type="image/png"
+		href="#{applicationController.path}images/icon_02-360x360.png" />
+	<!-- begin -->
+	<link
+		href="#{applicationController.path}bootstrap/css/bootstrap.min.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{applicationController.path}css/fa/css/font-awesome.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{applicationController.path}css/ionicons.css"
+		rel="stylesheet" type="text/css" />
+	<link
+		href="#{applicationController.path}plugins/fullcalendar/fullcalendar.min.css"
+		rel="stylesheet" type="text/css" />
+	<link
+		href="#{applicationController.path}plugins/fullcalendar/fullcalendar.print.css"
+		rel="stylesheet" type="text/css" media='print' />
+	<link href="#{applicationController.path}dist/css/AdminLTE.min.css"
+		rel="stylesheet" type="text/css" />
+	<link
+		href="#{applicationController.path}dist/css/skins/_all-skins.min.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{applicationController.path}css/style.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{applicationController.path}css/jquery.bxslider.css"
+		rel="stylesheet" type="text/css" />	
+	<link
+		href="#{applicationController.path}plugins/daterangepicker/daterangepicker-bs3.css"
+		rel="stylesheet" type="text/css" />
+	<link rel="stylesheet"
+		href="#{applicationController.path}chosen/chosen.css"></link>
+	<link href="#{applicationController.path}Source/css/MooDialog.css"
+		rel="stylesheet" />
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic&amp;subset=cyrillic-ext,cyrillic"
+		rel="stylesheet" type="text/css" />
+
+
+
+	<title>Hospital | #{userController.title}</title>
+</h:head>
+<ui:insert name="event" />
+<h:body styleClass="skin-blue fixed sidebar-mini">
+	<div id="page_effect" style="display: none;"></div>
+	<h:form id="form">
+		<f:view locale="#{languageController.localeSelected}" />
+		<p:remoteCommand process="@this" name="reGenerateCustomerId"
+			action="#{twoController.reGenerateCustomerId()}" />
+		<p:growl id="message" widgetWar="growlMsg" />
+		<div id="wrapper" class="wrapperr">
+			<div id="layout-menu-cover">
+				<ul id="layout-menu">
+					<ui:repeat var="menu" value="#{userController.menus}">
+						<li>
+							<a class="menulink" style="height: 100%;"
+								onclick="setUrl#{menu.pkId}();" href="javascript:void(0)"> 
+								<i>
+									<img src="#{applicationController.path}images/icons/#{menu.id}.png"
+										width="18" height="18" />
+								</i>
+								<div class="menu-label">#{menu.name}</div>
+							</a> 
+						<p:remoteCommand process="@this" name="setUrl#{menu.pkId}" action="#{userController.url(menu.id)}" />
+						</li>
+					</ui:repeat>
+				
+					<li style="width:80px;">
+						<p:commandLink  href="#" id="user-button">
+							<span style="font-size:14px !important;margin-top:15px;" class="tb-menu-text">
+								#{userController.loggedInfo.user.name}
+							</span>
+<!-- 							<i class="fa fa-user"></i> -->
+						</p:commandLink>
+					</li>
+					<li style="width:60px;">
+						<p:commandLink href="#" id="change-language">
+							<span  style = "font-size:14px !important;" class="tb-menu-text">
+								#{i18n['language']}
+							</span>
+<!-- 							<i class="fa fa-language"></i> -->
+						</p:commandLink>
+					</li>
+				</ul>
+			</div>
+			<p:overlayPanel id="languagePanel" for="change-language"
+				hideEffect="fade" styleClass="no-padding" style="width: 120px;">
+				<p:commandButton value="English"
+					action="#{languageController.countryLocaleCodeChanged('en')}"
+					oncomplete="submit()" styleClass="col-md-12 language-change-button" />
+				<p:commandButton value="Монгол"
+					action="#{languageController.countryLocaleCodeChanged('mn_MONGOLIA_mn')}"
+					oncomplete="submit()" styleClass="col-md-12 language-change-button" />
+			</p:overlayPanel>
+			<p:overlayPanel id="imagePanel" for="user-button" hideEffect="fade">
+				<div class="row" style="width: 300px;">
+					<div class="col-md-12 margin-bottom">
+						<img width="100" height="100"
+							src="#{userController.loggedInfo.user.image}"
+							class="img-circle dialog-pro-pic" alt="User Image" />
+					</div>
+					<div class="col-md-12">
+						<p>
+							#{userController.loggedInfo.usernameandcompanyname} <small>2015.06.06
+								бүртгүүлсэн</small>
+						</p>
+					</div>
+					<div class="col-md-6 text-center">
+						<p:commandLink href="javascript:void(0)"
+							onclick="PF('prifileDialog').show();" styleClass="btn">
+							<i class="fa fa-key" />	Нууц үг солих
+						</p:commandLink>
+					</div>
+					<div class="col-md-6 text-center">
+						<p:commandLink styleClass="btn" process="@this"
+							action="#{userController.logout}">
+							<i class="fa fa-sign-out" /> Гарах
+						</p:commandLink>
+					</div>
+				</div>
+			</p:overlayPanel>
+			
+			<div style="display:block;clear:both;"></div>
+			<div class="wrapper-content">
+				<div id="lloader"
+					style="position: fixed; top: 0; right: 0; background-color: rgba(0, 0, 0, 0.45); bottom: 0; left: 0; width: 100%; height: 100%; z-index: 1109;">
+					<div class='loader'>
+						<span></span> <span></span>
+					</div>
+				</div>
+				<div id="center">
+					<ui:insert name="content" />
+				</div>
+			</div>
+<!-- 			<footer class="main-footer"> -->
+<!-- 			<div class="pull-right hidden-xs"> -->
+<!-- 				<b>Хувилбар</b> 1.0 -->
+<!-- 			</div> -->
+<!-- 			<strong><a href="http://medit.mn">MedIT</a></strong> | Эмнэлгийн -->
+<!-- 			систем</footer> -->
+		</div>
+		<p:dialog widgetVar="prifileDialog" header="Нууц үг солих"
+			id="prifileDialog" resizable="false" width="400px" modal="true">
+			<table class="center-block" style="width: 300px;">
+				<tr>
+					<td style="text-align: right; padding-right: 5px;">Хуучин нууц
+						үг :</td>
+					<td><p:password id="oldPassword" styleClass="form-control"
+							value="#{twoController.oldPassword}" style="margin-bottom: 10px;" /></td>
+				</tr>
+				<tr>
+					<td style="text-align: right; padding-right: 5px;">Шинэ нууц
+						үг :</td>
+					<td><p:password id="newPassword" styleClass="form-control"
+							value="#{twoController.newPassword}" style="margin-bottom: 10px;" /></td>
+				</tr>
+				<tr>
+					<td style="text-align: right; padding-right: 5px;">Шинэ нууц
+						үг давтах :</td>
+					<td><p:password id="newPasswordConfirm"
+							styleClass="form-control"
+							value="#{twoController.newPasswordConfirm}"
+							style="margin-bottom: 10px;" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="text-align: right;"><p:commandLink styleClass="btn"
+							action="#{twoController.changePassword}">
+							<i class="fa fa-fw fa-check" />Хадгалах
+						</p:commandLink></td>
+				</tr>
+			</table>
+		</p:dialog>
+		<!-- Login Dialog show Begin -->
+		<p:dialog id="updialogshow" widgetVar="updialogshow" resizable="false" width="800px" height="500px" 
+					modal="true" styleClass="dialog-scroll" onShow="initialize()">
+			
+				<a onclick="PF('newdialogshow').show();" class="btn btn-default">
+					<i class="fa fa-fw fa-plus-square"></i>&nbsp;Шинээр нэмэх
+				</a>
+					<h:commandLink actionListener="#{dashboardController.setReporm}" class="btn btn-default">
+						<i class="fa fa-bolt"></i>&nbsp;Шинэчлэл хийх гэж байна
+					</h:commandLink>
+				<div style="height:15px;clear:both;"></div>
+				<p:outputPanel id="loginDialogsContainer">
+					<p:dataTable id="loginDialogs" var="item" value="#{dashboardController.loginDialogs}" 
+					widgetVar="loginDialogs" emptyMessage="Хоосон" rowIndexVar="index">
+						<p:column headerText="№">#{index+1}</p:column>
+						<p:column headerText="Шинээр нэмэгдсэн өөрчлөлтүүд">
+		        			<h:outputText value="#{item.comments}" escape="false" />
+		    			</p:column>
+						<p:column headerText="Огноо">#{item.beginDateStr}</p:column>
+						<p:column width="9%">
+									<p:commandLink actionListener="#{dashboardController.upDialogShow(item.pkId)}" 
+									title="Шинэчлэх">
+										<i class="fa fa-cog fa-fw" style="float:left;color:#0CAEFA;"></i>
+									</p:commandLink>
+									<p:commandLink actionListener="#{dashboardController.deleteDialogShow(item)}" 
+									title="Устгах">
+										<i class="fa fa-times fa-fw" style="float:right;color:#FC0006;"></i>
+									</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+				<f:event type="preRenderView" listener="#{dashboardController.loginDialogShow}"/>
+		</p:dialog>
+		<!-- Login Dialog show End -->
+		<!-- New Login Dialog Begin -->
+		<p:dialog widgetVar="newdialogshow" resizable="false" modal="true" header="Шинэчлэгдсэн мэдээлэл нэмэх">
+                 		<div style="height: 15px;"></div>
+                 		<h:form>           
+						    <p:editor id="addEditor" widgetVar="addEditorWidget" 
+						    value="#{dashboardController.editorText}" width="600" />						 
+						    <h:panelGrid columns="2" style="margin-top: 10px">
+						        <p:commandButton value="Хадгалах" icon="ui-icon-disk" 
+						         actionListener="#{dashboardController.saveLoginDialog()}"/>						 
+						        <p:commandButton value="Цэвэрлэх" type="button" 
+						        onclick="PF('addEditorWidget').clear();" icon="ui-icon-close" />
+						    </h:panelGrid>						
+						</h:form>
+		</p:dialog>		
+		<!-- New Login Dialog End  -->
+		<!-- Update Login Dialog End  -->
+		<p:dialog widgetVar="updatedialogshow" resizable="false" modal="true"
+		closeOnEscape="true" styleClass="confirmDialog" header="Мэдээлэл шинэчлэх">
+            <div style="height: 15px;"></div>            
+			<p:panel id="updateDialog"  styleClass="panel-style no-padding">
+	            <ui:repeat var="items" value="#{dashboardController.upLoginDialogs}">
+					<p:editor id="upEditor" widgetVar="editorWidget" value="#{items.comments}" width="600">
+					</p:editor>
+					<h:panelGrid columns="2" style="margin-top: 10px">
+						<p:commandButton value="Шинэчлэх" icon="ui-icon-disk" 
+							actionListener="#{dashboardController.updateLoginDialog(items)}" />			 
+						<p:commandButton value="Цэвэрлэх" type="button" 
+							onclick="PF('editorWidget').clear();" icon="ui-icon-close" />
+					</h:panelGrid>	
+				</ui:repeat>
+			</p:panel>
+		</p:dialog>
+		<!-- Update Login Dialog End  -->
+		<!-- Reporm Dialog Begin -->
+		<p:dialog widgetVar="repormdialogshow" resizable="false">
+			<p>Loading...</p>
+		</p:dialog>
+		<!-- Reporm Dialog End -->
+		<!-- 			<script -->
+		<!-- 				src="#{applicationController.path}plugins/jQuery/jQuery-2.1.4.min.js"></script> -->
+		<script
+			src="#{applicationController.path}bootstrap/js/bootstrap.min.js"
+			type="text/javascript"></script>
+		<script src="#{applicationController.path}js/jquery-ui.min.js"
+			type="text/javascript"></script>
+		<script
+			src="#{applicationController.path}plugins/slimScroll/jquery.slimscroll.min.js"
+			type="text/javascript"></script>
+		<script
+			src='#{applicationController.path}plugins/fastclick/fastclick.min.js'></script>
+		<script src="#{applicationController.path}dist/js/app.min.js"
+			type="text/javascript"></script>
+		<script src="#{applicationController.path}dist/js/demo.js"
+			type="text/javascript"></script>
+		<script src="#{applicationController.path}js/moment.min.js"
+			type="text/javascript"></script>
+		<script
+			src="#{applicationController.path}plugins/fullcalendar/fullcalendar.min.js"
+			type="text/javascript"></script>
+		<script src="#{applicationController.path}js/application.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}js/areYouSure/ays-beforeunload-shim.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}js/areYouSure/jquery.are-you-sure.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}js/jquery.validate.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}js/jquery.elevatezoom.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}js/jquery.bxslider.min.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}plugins/input-mask/jquery.inputmask.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}js/jquery.mockjax.js" type="text/javascript"></script>
+		<script src="#{applicationController.path}plugins/2.10.2_moment.min.js" type="text/javascript"></script>
+		
+		<script src="#{applicationController.path}plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+
+
+
+		<script src="#{applicationController.path}Source/mootools-core.js"></script>
+		<script src="#{applicationController.path}Source/Overlay.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.Fx.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.Alert.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.Confirm.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.Error.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.Prompt.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.IFrame.js"></script>
+		<script src="#{applicationController.path}Source/MooDialog.Request.js"></script>
+		
+
+
+		<script src="#{applicationController.path}chosen/chosen.jquery.js"
+			type="text/javascript"></script>
+		<p:remoteCommand name="showMessage" update="showMessage" />
+		<p:panel id="showMessage" style="display:none;">
+			<script>
+			//<![CDATA[
+			           
+	            function update(){
+	        		alert('daaa');   
+	            }
+			           
+			    function handleMessage(data) {
+			        alert('daa');
+			    }
+			    
+			    
+			    $('body').on('keydown', 'input, select, radio', function(e) {
+				    var self = $(this)
+				      , form = self.parents('form:eq(0)')
+				      , focusable
+				      , next
+				      ;
+				    if (e.keyCode == 13) {
+				    	if($(this).hasClass('dmcxaxa-skip-enter')){
+				    		c=document.getElementsByClassName("medicineclass");
+				     		var e = document.getElementById("dmcxaxa");
+				     		last_element = c[c.length - 1];
+				     		last_element.value = $('#dmcxaxa_daa_id').val();
+				     		console.log($('#dmcxaxa_daa_id').val());
+				     		autoFillmedicine1();
+				    	}else if($(this).hasClass('examxaxa-skip-enter')){
+				    		c=document.getElementsByClassName("examinationclass");
+				     		var e = document.getElementById("examxaxa");
+				     		last_element = c[c.length - 1];
+				     		last_element.value = $('#examxaxa_daa_id').val();
+				     		console.log($('#examxaxa_daa_id').val());
+				     		autoFillExamination1();
+				    	}else if($(this).hasClass('xrayxaxa-skip-enter')){
+				    		c=document.getElementsByClassName("xrayclass");
+				     		var e = document.getElementById("xrayxaxa");
+				     		last_element = c[c.length - 1];
+				     		last_element.value = $('#xrayxaxa_daa_id').val();
+				     		console.log($('#xrayxaxa_daa_id').val());
+				     		autoFillxray1();
+				    	}else if($(this).hasClass('surgeryxaxa-skip-enter')){
+				    		c=document.getElementsByClassName("surgeryclass");
+				     		var e = document.getElementById("surgeryxaxa");
+				     		last_element = c[c.length - 1];
+				     		last_element.value = $('#surgeryxaxa_daa_id').val();
+				     		console.log($('#surgeryxaxa_daa_id').val());
+				     		autoFillsurgery2();
+				    	}else if($(this).hasClass('treatmentxaxa-skip-enter')){
+				    		c=document.getElementsByClassName("treatmentclass");
+				     		var e = document.getElementById("treatmentxaxa");
+				     		last_element = c[c.length - 1];
+				     		last_element.value = $('#treatmentxaxa_daa_id').val();
+				     		console.log($('#treatmentxaxa_daa_id').val());
+				     		autoFilltreatment1();
+				    	}else {
+					        focusable = form.find('input,a,select,button,radio').filter(':visible');
+					        next = focusable.eq(focusable.index(this)+1);
+					        if (next.length) {
+					            next.focus();
+					        } else {
+					            form.submit();
+					        }
+				    	}
+				        return false;
+				    }
+				});
+			           
+				$('document').ready(function(){
+					updateMessage();
+					hideLoader();
+					PrimeFaces.locales ['mn'] = { closeText: 'Хаах', prevText: 'Өмнөх', nextText: 'Дараах', monthNames: ['Нэг', 'Хоёр' , 'Гурав' , 'Дөрөв' , 'Тав' , 'Зургаа' , 'Долоо' , 'Найм' , 'Ес','Арав','Арван нэг','Арван хоёр' ], monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ], dayNames: ['Даваа', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'], dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'], dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'], weekHeader: 'Неделя', firstDay: 1, isRTL: false, showMonthAfterYear: false, yearSuffix:'', timeOnlyTitle: 'Только время', timeText: 'Время', hourText: 'Час', minuteText: 'Минута', secondText: 'Секунда', currentText: 'Сегодня', ampm: false, month: 'Месяц', week: 'неделя', day: 'День', allDayText: 'Весь день' };
+					PrimeFaces.locales['en'] = {
+						    closeText: 'Close',
+						    prevText: 'Previous',
+						    nextText: 'Next',
+						    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+						    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+						    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+						    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Tue', 'Fri', 'Sat'],
+						    dayNamesMin: ['S', 'M', 'T', 'W ', 'T', 'F ', 'S'],
+						    weekHeader: 'Week',
+						    firstDay: 1,
+						    isRTL: false,
+						    showMonthAfterYear: false,
+						    yearSuffix:'',
+						    timeOnlyTitle: 'Only Time',
+						    timeText: 'Time',
+						    hourText: 'Time',
+						    minuteText: 'Minute',
+						    secondText: 'Second',
+						    currentText: 'Current Date',
+						    ampm: false,
+						    month: 'Month',
+						    week: 'week',
+						    day: 'Day',
+						    allDayText: 'All Day',
+						    messages: {  //optional for Client Side Validation
+						        'javax.faces.component.UIInput.REQUIRED': '{0}: Validation Error: Value is required.',
+						        'javax.faces.converter.IntegerConverter.INTEGER': '{2}: \'{0}\' must be a number consisting of one or more digits.',
+						        'javax.faces.converter.IntegerConverter.INTEGER_detail': '{2}: \'{0}\' must be a number between -2147483648 and 2147483647 Example: {1}',
+						        'javax.faces.converter.DoubleConverter.DOUBLE': '{2}: \'{0}\' must be a number consisting of one or more digits.',
+						        'javax.faces.converter.DoubleConverter.DOUBLE_detail': '{2}: \'{0}\' must be a number between 4.9E-324 and 1.7976931348623157E308  Example: {1}',
+						        'javax.faces.converter.BigDecimalConverter.DECIMAL': '{2}: \'{0}\' must be a signed decimal number.',
+						        'javax.faces.converter.BigDecimalConverter.DECIMAL_detail': '{2}: \'{0}\' must be a signed decimal number consisting of zero or more digits, that may be followed by a decimal point and fraction.  Example: {1}',
+						        'javax.faces.converter.BigIntegerConverter.BIGINTEGER': '{2}: \'{0}\' must be a number consisting of one or more digits.',
+						        'javax.faces.converter.BigIntegerConverter.BIGINTEGER_detail': '{2}: \'{0}\' must be a number consisting of one or more digits. Example: {1}',
+						        'javax.faces.converter.ByteConverter.BYTE': '{2}: \'{0}\' must be a number between 0 and 255.',
+						        'javax.faces.converter.ByteConverter.BYTE_detail': '{2}: \'{0}\' must be a number between 0 and 255.  Example: {1}',
+						        'javax.faces.converter.CharacterConverter.CHARACTER': '{1}: \'{0}\' must be a valid character.',
+						        'javax.faces.converter.CharacterConverter.CHARACTER_detail': '{1}: \'{0}\' must be a valid ASCII character.',
+						        'javax.faces.converter.ShortConverter.SHORT': '{2}: \'{0}\' must be a number consisting of one or more digits.',
+						        'javax.faces.converter.ShortConverter.SHORT_detail': '{2}: \'{0}\' must be a number between -32768 and 32767 Example: {1}',
+						        'javax.faces.converter.BooleanConverter.BOOLEAN': '{1}: \'{0}\' must be \'true\' or \'false\'',
+						        'javax.faces.converter.BooleanConverter.BOOLEAN_detail': '{1}: \'{0}\' must be \'true\' or \'false\'.  Any value other than \'true\' will evaluate to \'false\'.',
+						        'javax.faces.validator.LongRangeValidator.MAXIMUM': '{1}: Validation Error: Value is greater than allowable maximum of \'{0}\'',
+						        'javax.faces.validator.LongRangeValidator.MINIMUM': '{1}: Validation Error: Value is less than allowable minimum of \'{0}\'',
+						        'javax.faces.validator.LongRangeValidator.NOT_IN_RANGE': '{2}: Validation Error: Specified attribute is not between the expected values of {0} and {1}.',
+						        'javax.faces.validator.LongRangeValidator.TYPE={0}': 'Validation Error: Value is not of the correct type.',
+						        'javax.faces.validator.DoubleRangeValidator.MAXIMUM': '{1}: Validation Error: Value is greater than allowable maximum of \'{0}\'',
+						        'javax.faces.validator.DoubleRangeValidator.MINIMUM': '{1}: Validation Error: Value is less than allowable minimum of \'{0}\'',
+						        'javax.faces.validator.DoubleRangeValidator.NOT_IN_RANGE': '{2}: Validation Error: Specified attribute is not between the expected values of {0} and {1}',
+						        'javax.faces.validator.DoubleRangeValidator.TYPE={0}': 'Validation Error: Value is not of the correct type',
+						        'javax.faces.converter.FloatConverter.FLOAT': '{2}: \'{0}\' must be a number consisting of one or more digits.',
+						        'javax.faces.converter.FloatConverter.FLOAT_detail': '{2}: \'{0}\' must be a number between 1.4E-45 and 3.4028235E38  Example: {1}',
+						        'javax.faces.converter.DateTimeConverter.DATE': '{2}: \'{0}\' could not be understood as a date.',
+						        'javax.faces.converter.DateTimeConverter.DATE_detail': '{2}: \'{0}\' could not be understood as a date. Example: {1}',
+						        'javax.faces.converter.DateTimeConverter.TIME': '{2}: \'{0}\' could not be understood as a time.',
+						        'javax.faces.converter.DateTimeConverter.TIME_detail': '{2}: \'{0}\' could not be understood as a time. Example: {1}',
+						        'javax.faces.converter.DateTimeConverter.DATETIME': '{2}: \'{0}\' could not be understood as a date and time.',
+						        'javax.faces.converter.DateTimeConverter.DATETIME_detail': '{2}: \'{0}\' could not be understood as a date and time. Example: {1}',
+						        'javax.faces.converter.DateTimeConverter.PATTERN_TYPE': '{1}: A \'pattern\' or \'type\' attribute must be specified to convert the value \'{0}\'', 
+						        'javax.faces.converter.NumberConverter.CURRENCY': '{2}: \'{0}\' could not be understood as a currency value.',
+						        'javax.faces.converter.NumberConverter.CURRENCY_detail': '{2}: \'{0}\' could not be understood as a currency value. Example: {1}',
+						        'javax.faces.converter.NumberConverter.PERCENT': '{2}: \'{0}\' could not be understood as a percentage.',
+						        'javax.faces.converter.NumberConverter.PERCENT_detail': '{2}: \'{0}\' could not be understood as a percentage. Example: {1}',
+						        'javax.faces.converter.NumberConverter.NUMBER': '{2}: \'{0}\' could not be understood as a date.',
+						        'javax.faces.converter.NumberConverter.NUMBER_detail': '{2}: \'{0}\' is not a number. Example: {1}',
+						        'javax.faces.converter.NumberConverter.PATTERN': '{2}: \'{0}\' is not a number pattern.',
+						        'javax.faces.converter.NumberConverter.PATTERN_detail': '{2}: \'{0}\' is not a number pattern. Example: {1}',
+						        'javax.faces.validator.LengthValidator.MINIMUM': '{1}: Validation Error: Length is less than allowable minimum of \'{0}\'',
+						        'javax.faces.validator.LengthValidator.MAXIMUM': '{1}: Validation Error: Length is greater than allowable maximum of \'{0}\'',
+						        'javax.faces.validator.RegexValidator.PATTERN_NOT_SET': 'Regex pattern must be set.',
+						        'javax.faces.validator.RegexValidator.PATTERN_NOT_SET_detail': 'Regex pattern must be set to non-empty value.',
+						        'javax.faces.validator.RegexValidator.NOT_MATCHED': 'Regex Pattern not matched',
+						        'javax.faces.validator.RegexValidator.NOT_MATCHED_detail': 'Regex pattern of \'{0}\' not matched',
+						        'javax.faces.validator.RegexValidator.MATCH_EXCEPTION': 'Error in regular expression.',
+						        'javax.faces.validator.RegexValidator.MATCH_EXCEPTION_detail': 'Error in regular expression, \'{0}\'',
+						        //optional for bean validation integration in client side validation
+						        'javax.faces.validator.BeanValidator.MESSAGE': '{0}',
+						        'javax.validation.constraints.AssertFalse.message': 'must be false',
+						        'javax.validation.constraints.AssertTrue.message': 'must be true',
+						        'javax.validation.constraints.DecimalMax.message': 'must be less than or equal to {0}',
+						        'javax.validation.constraints.DecimalMin.message': 'must be greater than or equal to {0}',
+						        'javax.validation.constraints.Digits.message': 'numeric value out of bounds (<{0} digits>.<{1} digits> expected)',
+						        'javax.validation.constraints.Future.message': 'must be in the future',
+						        'javax.validation.constraints.Max.message': 'must be less than or equal to {0}',
+						        'javax.validation.constraints.Min.message': 'must be greater than or equal to {0}',
+						        'javax.validation.constraints.NotNull.message': 'may not be null',
+						        'javax.validation.constraints.Null.message': 'must be null',
+						        'javax.validation.constraints.Past.message': 'must be in the past',
+						        'javax.validation.constraints.Pattern.message': 'must match "{0}"',
+						        'javax.validation.constraints.Size.message': 'size must be between {0} and {1}'
+						    }
+						};
+				});
+				
+				function pausecomp(millis)
+				{
+					var date = new Date();
+					var curDate = null;
+					do { curDate = new Date(); }
+					while(curDate-date < millis);
+				}
+				
+				function hideLoader(){
+					document.getElementById('lloader').style.display = "none";
+				}
+				
+				function showLoader(){
+					document.getElementById('lloader').style.display = "block";
+				}
+				
+				function updateMessage(){
+					var message = '#{userController.showMessage}';
+					var warningmessage = '#{userController.warningMessage}';
+					var errormessage = '#{userController.errorMessage}';
+					if(message != '') new MooDialog.Prompt(message);
+					if(warningmessage != '') {
+						new MooDialog.Alert(warningmessage,{
+							title: 'Анхааруулга',
+							onInitialize: function(wrapper){
+								wrapper.setStyle('opacity', 0);
+								this.fx = new Fx.Morph(wrapper, {
+									duration: 600,
+									transition: Fx.Transitions.Bounce.easeOut
+								});
+								this.overlay = new Overlay(this.options.inject, {
+									duration: this.options.duration
+								});
+								if (this.options.closeOnOverlayClick) this.overlay.addEvent('click', this.close.bind(this));
+							},
+							onBeforeOpen: function(){
+								this.overlay.open();
+								this.fx.start({
+									'margin-top': [-200, -100],
+									opacity: [0, 1]
+								}).chain(function(){
+									this.fireEvent('show');
+								}.bind(this));
+							},
+							onBeforeClose: function(){
+								this.fx.start({
+									'margin-top': [-100, 0],
+									opacity: 0
+								}).chain(function(){
+									this.fireEvent('hide');
+								}.bind(this));
+								this.overlay.close();
+							},
+							
+						});
+					}
+					if(errormessage != '') {
+						new MooDialog.Error(errormessage,{
+							title: 'Алдаа',
+							onInitialize: function(wrapper){
+								wrapper.setStyle('opacity', 0);
+								this.fx = new Fx.Morph(wrapper, {
+									duration: 600,
+									transition: Fx.Transitions.Bounce.easeOut
+								});
+								this.overlay = new Overlay(this.options.inject, {
+									duration: this.options.duration
+								});
+								if (this.options.closeOnOverlayClick) this.overlay.addEvent('click', this.close.bind(this));
+							},
+							onBeforeOpen: function(){
+								this.overlay.open();
+								this.fx.start({
+									'margin-top': [-200, -100],
+									opacity: [0, 1]
+								}).chain(function(){
+									this.fireEvent('show');
+								}.bind(this));
+							},
+							onBeforeClose: function(){
+								this.fx.start({
+									'margin-top': [-100, 0],
+									opacity: 0
+								}).chain(function(){
+									this.fireEvent('hide');
+								}.bind(this));
+								this.overlay.close();
+							},
+							
+						});
+					}
+				}
+				
+				var config = {
+			      '.chosen-select'           : {},
+			      '.chosen-select-deselect'  : {allow_single_deselect:true},
+			      '.chosen-select-no-single' : {disable_search_threshold:10},
+			      '.chosen-select-no-results': {no_results_text:'Олдсонгүй!'},
+			      '.chosen-select-width'     : {width:"95%"}
+			    }
+			    for (var selector in config) {
+			      $(selector).chosen(config[selector]);
+			    }
+				
+				function drawChosen(){
+					var config = {
+				      '.chosen-select'           : {},
+				      '.chosen-select-deselect'  : {allow_single_deselect:true},
+				      '.chosen-select-no-single' : {disable_search_threshold:10},
+				      '.chosen-select-no-results': {no_results_text:'Олдсонгүй!'},
+				      '.chosen-select-width'     : {width:"95%"}
+				    }
+				    for (var selector in config) {
+				      $(selector).chosen(config[selector]);
+				    }
+				}
+				//]]>
+			</script>
+		</p:panel>
+		<ui:insert name="script" />
+	</h:form>
+</h:body>
+</html>

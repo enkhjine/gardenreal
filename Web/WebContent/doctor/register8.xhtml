@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<p:tab title="Бөөр судлал - Одоогийн өвчний түүх">
+			<p:accordionPanel id="kidney" multiple="true">
+				<p:tab title="Зовиур" id="distress">
+					<div class="row margin-bottom" >
+						<div class="col-md-12">
+						  <div class="col-md-4">
+						  	<p:selectBooleanCheckbox id="tergunPain"
+								value="#{inspectionController.customerKidney.tergunPain}"
+								itemLabel="Нуруугаар чилж өвднө" style="margin-right: 5px;" />
+						  </div>
+						<div class="col-md-4">
+					        <p:selectBooleanCheckbox id="edema"
+								value="#{inspectionController.customerKidney.edema}"
+								itemLabel="Хавагнана" style="margin-right: 5px;" />
+						  </div>
+						<div class="col-md-4">
+						    <p:selectBooleanCheckbox id="press"
+								value="#{inspectionController.customerKidney.press}"
+								itemLabel="Артерийн даралт ихэснэ" style="margin-right: 5px;" />
+						     </div>
+						</div>	
+					<div class="col-md-12" style="margin-top:5px">
+					 <div class="col-md-12">
+							 <p:selectBooleanCheckbox id="urogenital"
+								value="#{inspectionController.customerKidney.urogenital}"
+								itemLabel="Шээсний гарц өөрчлөлттэй" style="margin-right: 5px;" />
+							 </div>
+					  </div>				
+					<div class="col-md-12">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;margin-top:5px"
+								value="#{inspectionController.customerKidney.otherPain}" placeholder="Бусад зовиур">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="when">Тухайн зовиурууд хэзээнээс эхэлсэн:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputTextarea rows="3" id="when"
+								value="#{inspectionController.customerKidney.whenPain}"
+								style="width: 100%;" placeholder="Тухайн зовиурууд хэзээнээс эхэлсэн"/>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="thisTime">Урьд өмнө бөөрний өвчнөөр өвдөж байсан эсэх:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputTextarea  rows="3" id="thisTime"
+								value="#{inspectionController.customerKidney.thisTimeKidneyPain}"
+								style="width: 100%;" placeholder="Урьд өмнө бөөрний өвчнөөр өвдөж байсан эсэх"/>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="thisTimeReason">Тухайн зовиур юутай холбоотой эхэлсэн:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputTextarea rows="3" id="thisTimeReason"
+								value="#{inspectionController.customerKidney.thisPain}"
+								style="width: 100%;" placeholder="Тухайн зовиур юутай холбоотой эхэлсэн" />
+						</div>
+					</div>	
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel >Хоолой өвддөг байсан эсэх:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText 
+								value="#{inspectionController.customerKidney.throatPain}" placeholder="Хоолой өвддөг байсан эсэх"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel >Ажил хөдөлмөрийн нөхцөл:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputTextarea  rows="2"
+								value="#{inspectionController.customerKidney.thsiJob}"
+								style="width: 100%;" placeholder="Ажил хөдөлмөрийн нөхцөл" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel >Амьдралын нөхцөл:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputTextarea rows="2" 
+								value="#{inspectionController.customerKidney.thisLife}"
+								style="width: 100%;" placeholder="Амьдралын нөхцөл" />
+						</div>
+					</div>				
+				      <div class="row margin-top">
+				      <div class="col-md-12" style="margin-top:3px">
+				       <div class="col-md-6">
+				         <div class="col-md-4">
+				          Эм хэрэглэсэн эсэх
+				           </div>
+				         <div class="col-md-8">
+						  	<p:selectOneMenu value="#{inspectionController.customerKidney.useMedicine}">
+						  	 <f:selectItem itemLabel="ямар" />
+						  	 <f:selectItem itemLabel="эмийг хэр удаан" />
+						  	 </p:selectOneMenu>
+						  </div>
+				         </div>
+				         
+						<div class="col-md-6">
+						 <div class="col-md-4">
+						  	<h:outputLabel value="Эм хэрэглэсэн хугацаа" />
+						  </div>
+						<div class="col-md-8">
+						  	<p:inputTextarea rows="3" style="width:100%"
+								value="#{inspectionController.customerKidney.timeMedicine}"
+								placeholder="Эм хэрэглэсэн хугацаа" />
+						  </div>
+						  </div>
+					 </div>
+					<div class="col-md-12" style="margin-top:3px">
+				       <div class="col-md-6">
+						 <div class="col-md-4">
+						  <h:outputLabel value="Эм хэрэглэсэн үр дүн"/>
+						  </div>
+						 <div class="col-md-8">
+						  <p:inputTextarea rows="2" 
+						  				value="#{inspectionController.customerKidney.resultMedicine}"
+						  				placeholder="Эм хэрэглэсэн үр дүн"/>
+						   </div>
+						 </div>
+						 <div class="col-md-6">
+						   <div class="col-md-4">
+						    <h:outputLabel value="Шинжилгээ хийлгэсэн эсэх"/>
+						    </div>
+						    <div class="col-md-8">
+						     <p:selectOneMenu style="width:120px">
+						       <f:selectItem itemLabel="ЦЕШ" />
+						       <f:selectItem itemLabel="Биохими-бөөрний үйл ажиллагаа"/>
+						       <f:selectItem itemLabel="Хэвлийн эхо"/>
+						       <f:selectItem itemLabel="Ничепоренко"/> 
+						       </p:selectOneMenu>
+						     </div>
+						  </div>
+						 </div>  	  
+				        </div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+				<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('kidney')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoHemota" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listkidneyAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListkidneyAttachment().indexOf(attachment), inspectionController.getListkidneyAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListkidneyAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listkidneyAttachment, attachment)}"
+											oncomplete="updateHemota()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateHemota"  update="qoHemota" />
+						</div>
+					</div>
+				   <div class="row margin-top">
+				    <div class="col-md-12" >
+				      <div class="col-md-6">
+				       <div class="col-md-7">
+				        <h:outputLabel>Биеийн ерөнхий байдал /Ерөнхий үзлэг/</h:outputLabel>
+				         </div>
+				         <div class="col-md-5">
+				          <p:selectOneMenu value="#{inspectionController.customerKidney.defualtInspection}">
+				            <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+				            <f:selectItem itemLabel="Хүнд" itemValue="1"/>
+				            <f:selectItem itemLabel="Хүндэвтэр " itemValue="2"/>
+				            <f:selectItem itemLabel="Дунд" itemValue="3"/>
+				            <f:selectItem itemLabel="Хөнгөн" itemValue="4"/>
+				           </p:selectOneMenu>
+				          </div>
+				       </div>
+				      <div class="col-md-6">
+				       <div class="col-md-7">
+				        <h:outputLabel>Ухаан санааны байдал</h:outputLabel>
+				         </div>
+				         <div class="col-md-5">
+				          <p:selectOneMenu value="#{inspectionController.customerKidney.brainState}">
+				            <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+				            <f:selectItem itemLabel="Саруул" itemValue="1"/>
+				            <f:selectItem itemLabel="Ступор" itemValue="2"/>
+				            <f:selectItem itemLabel="Сопор" itemValue="3"/>
+				            <f:selectItem itemLabel="Кома" itemValue="4"/>
+				           </p:selectOneMenu>
+				          </div>
+				       </div> 
+				     </div>
+				   </div>
+				 <div class="row margin-top">
+				    <div class="col-md-12" >
+				      <div class="col-md-6">
+				       <div class="col-md-7">
+				        <h:outputLabel>Арьс, салстын байдал</h:outputLabel>
+				         </div>
+				         <div class="col-md-5" >
+				          <p:selectOneMenu value="#{inspectionController.customerKidney.skinState}" >
+				           <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+				            <f:selectItem itemLabel="Өнгө" itemValue="1"/>
+				            <f:selectItem itemLabel="Эмгэг тууралт" itemValue="2"/>
+				            <f:selectItem itemLabel="Нөсөө" itemValue="3"/>
+				            <f:selectItem itemLabel="Температур" itemValue="4"/>
+				            <f:selectItem itemLabel="Уян чанар" itemValue="5"/>
+				            <f:selectItem itemLabel="Арьсан дорх өөхөн эдийн хөгжил" itemValue="6"/>
+				            <f:selectItem itemLabel="Хаван" itemValue="7"/>
+				            <f:selectItem itemLabel="Арьсны дайврын үзлэг" itemValue="8"/>
+				           </p:selectOneMenu>
+				          </div>
+				       </div>
+				     </div>
+				   </div>
+				  <div class="row margin-top">
+				     <div class="form-title" style="cursor:pointer;" onclick="toggleRash()">
+				              Бодит үзлэг/хэсэгчилсэн үзлэг/<i id="rash-chevron" class="pull-right fa fa-chevron-down"/>
+				        </div>
+				    <div  class="row " id="rash">
+				     <div class="col-md-12" >
+						  <div class="col-md-6">
+						  	<p:selectBooleanCheckbox id="kid1"
+								value="#{inspectionController.customerKidney.visuallyPalpation }"
+								itemLabel="Өнгөц баримжаалсан тэмтрэлт" style="margin-right: 5px;">
+								<p:ajax event="change" update="visuallyPalpationPanel"/> 
+								 </p:selectBooleanCheckbox>
+						   <p:panel id="visuallyPalpationPanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.visuallyPalpation=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.visuallyPalpationChoose}">
+				              <f:selectItem itemLabel="эмзэглэлтэй" itemValue="1"/>
+				              <f:selectItem itemLabel="эмзэглэлгүй" itemValue="0"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+						<div class="col-md-6">
+						  	<p:selectBooleanCheckbox id="kid2"
+								value="#{inspectionController.customerKidney.abdominalMuscle }"
+								itemLabel="Хэвлийн булчингийн чангарал" style="margin-right: 5px;" >
+								 <p:ajax event="change" update="abdominalMusclePanel"></p:ajax>
+								 </p:selectBooleanCheckbox>
+							<p:panel id="abdominalMusclePanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.abdominalMuscle =='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio  value="#{inspectionController.customerKidney.abdominalMuscleChoose}">
+				              <f:selectItem itemLabel="байгаа" itemValue="1"/>
+				              <f:selectItem itemLabel="байхгүй" itemValue="0"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+				       </div>
+				       
+				      <div class="col-md-12" style="margin-top:3px">
+				       <div class="col-md-6">
+						  	<p:selectBooleanCheckbox id="kid3"
+								value="#{inspectionController.customerKidney.abdominalPain}"
+								itemLabel="Хэвлийн аль хэсэгт өвдөлттэй байгааг" style="margin-right: 5px;">
+								<p:ajax event="change" update="abdominalPainPanel" />
+								</p:selectBooleanCheckbox>
+							<p:panel id="abdominalPainPanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.abdominalPain=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.abdominalPainChoose}">
+				              <f:selectItem itemLabel="хэвлийн дээд" itemValue="0" />
+				              <f:selectItem itemLabel="дунд" itemValue="1"/>
+				              <f:selectItem itemLabel="доод" itemValue="2"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+					   <div class="col-md-6">
+						  	<p:selectBooleanCheckbox id="kid4"
+								value="#{inspectionController.customerKidney.abdominalIrritation }"
+								itemLabel="Хэвлийн гялтангийн цочролын шинж" style="margin-right: 5px;" >
+								<p:ajax  event="change" update="abdominalIrritationPanel"/>
+								</p:selectBooleanCheckbox>
+						   <p:panel id="abdominalIrritationPanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.abdominalIrritation=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.abdominalIrritationChoose}">
+				              <f:selectItem itemLabel="байгаа" itemValue="1"/>
+				              <f:selectItem itemLabel="байхгүй" itemValue="0"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+						</div>
+				     <div class="col-md-12" style="margin-top:3px">
+						<div class="col-md-6">
+						  	<p:selectBooleanCheckbox id="kid5"
+								value="#{inspectionController.customerKidney.abdominalTension}"
+								itemLabel="Хэвлийн чинэрэлт" style="margin-right: 5px;">
+								<p:ajax event="change" update="abdominalTensionPanel" />
+								</p:selectBooleanCheckbox>
+							<p:panel id="abdominalTensionPanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.abdominalTension=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.abdominalTensionChoose}">
+				              <f:selectItem itemLabel="байгаа" itemValue="1"/>
+				              <f:selectItem itemLabel="байхгүй" itemValue="0"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+						<div class="col-md-6">
+						  	<p:selectBooleanCheckbox id="kid6"
+								value="#{inspectionController.customerKidney.abdominalHernia}"
+								itemLabel="Хэвлийн цагаан шугамын ивэрхий" style="margin-right: 5px;">
+								<p:ajax  event="change"  update="abdominalHerniaPanel"/>
+								</p:selectBooleanCheckbox>
+							<p:panel id="abdominalHerniaPanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.abdominalHernia=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.abdominalHerniaChoose}">
+				              <f:selectItem itemLabel="байгаа" itemValue="1" />
+				              <f:selectItem itemLabel="байхгүй" itemValue="0"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+				       </div>
+				       <div class="col-md-12">
+				        <div class="col-md-12" style="margin-top:3px">
+				         <p:selectBooleanCheckbox itemLabel="Хэвлий дэх томорсон бүтэц"
+				         					value="#{inspectionController.customerKidney.abdominalStructure}">
+				         					<p:ajax  event="change" update="abdominalStructurePanel" />
+				         					</p:selectBooleanCheckbox>
+				         <p:panel id="abdominalStructurePanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.abdominalStructure=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.abdominalStructureChoose}">
+				              <f:selectItem itemLabel="байгаа" itemValue="1"/>
+				              <f:selectItem itemLabel="байхгүй" itemValue="0"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+				          </div>
+				        </div>
+			          </div>
+			         </div> 
+				  <div class="row margin-top">
+				         <div class="form-title" style="cursor:pointer;" onclick="toggleTouch()">
+				              Тогшиж тэмтрэх <i id="rash-chevron1" class="pull-right fa fa-chevron-down"/>
+				            </div>
+				      <div class="row"  id="touch">
+				       <div class="col-md-12" >
+				       <div class="col-md-8">
+						  	 <p:inputTextarea  rows="3" style="width:100%"
+						  	 				 placeholder="Бөөр тэмтрэх"  value="#{inspectionController.customerKidney.kidneyTouch}"/>
+						  </div>
+					   <div class="col-md-4">
+						  	<p:selectBooleanCheckbox 
+								value="#{inspectionController.customerKidney.pastyernatskiin}"
+								itemLabel="Пастернацкийн шинж" style="margin-right: 5px;" >
+								<p:ajax event="change" update="pastyernatskiinPanel"/>
+								</p:selectBooleanCheckbox>
+						  <p:panel id="pastyernatskiinPanel" styleClass="no-style-panel">
+						    <c:if test="#{inspectionController.customerKidney.pastyernatskiin	=='true'}">
+				            <div class="col-md-12" style="margin-top:3px">
+				             <p:selectOneRadio value="#{inspectionController.customerKidney.pastyernatskiinChoose}">
+				              <f:selectItem itemLabel="эерэг" itemValue="0" />
+				              <f:selectItem itemLabel="сөрөг" itemValue="1"/>
+				              </p:selectOneRadio>
+				               </div>
+				               </c:if>  
+				             </p:panel>
+						  </div>
+						</div>
+				          </div>
+			          </div>	
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.kidneyAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'kidney',1,'false');"
+											onkeyup="callRefreshList(this,'kidney',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.kidneyAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'kidney',1,'true');"
+											onkeyup="callRefreshList(this,'kidney',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'kidney',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'kidney',0,'false');"
+											onkeyup="callRefreshList(this,'kidney',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'kidney',0,'true');"
+											onkeyup="callRefreshList(this,'kidney',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'kidney',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.kidneyPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameEn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.kidneyPreDiagnose.remove(diagnose)}"
+												oncomplete="updateHematoDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateHematoDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerKidney.rateText}" placeholder="Үнэлгээ бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Тѳлѳвлѳгѳѳ">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea  rows="3" autoResize="false" style="width: 100%;"
+										 value="#{inspectionController.customerKidney.advice}" placeholder="Зөвлөгөө бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="additional-script">
+		<script>
+			//<![CDATA[
+			function  toggleRash(){
+				$('#rash').toggle('fast','swing');
+				if($('#rash-chevron').hasClass('fa-chevron-left')){
+					$('#rash-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				else $('#rash-chevron').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+			}
+			function toggleTouch(){
+				$('#touch').toggle('fast','swing');
+				if($('#rash-chevron1').hasClass('fa-chevron-left')){
+					$('#rash-chevron1').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+				}
+				else $('#rash-chevron1').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

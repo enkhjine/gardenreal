@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Ажилтан</h1>
+		<p:commandLink action="#{userController.url('employee_register')}" styleClass="btn" actionListener="#{infoController.newEmployee}">
+			<i class="fa fa-fw fa-plus-square" />#{i18n['register_employee']}</p:commandLink>
+		<ol class="breadcrumb">
+			<li class="active">Ажилтан</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+		<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">#{i18n['list']}</h3>
+					</div>
+					<div class="col-xs-12">
+						<div class="row flex-container">
+							<div class="col-md-1 col-sm-12 col-xs-12 flex-center-self">
+								<label for="asdasd">#{i18n['suborganization']}</label>
+							</div>
+							<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+								<p:selectOneMenu id="filterBySubOrganization" value="#{infoController.filterKey}" style="min-width: 100%;" filter="true">
+									<f:selectItem itemLabel="Бүгд" itemValue="all">
+									</f:selectItem>
+									<f:selectItems value="#{infoController.subOrganizations}"
+										var="pk" itemLabel="#{pk.name} (#{pk.employeeCount})"
+										itemValue="#{pk.name}">
+									</f:selectItems>
+									<p:ajax event="change" update="form:employeeList"
+										process="@this"
+										listener="#{infoController.filterEmployeeBySubOrganization(infoController.filterKey)}" />
+								</p:selectOneMenu>
+							</div>
+							<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+								<label for="doctroLvl">#{i18n['doctor_degree']}</label>
+							</div>
+							<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+								<p:selectOneMenu id="filterByDegree" value="#{infoController.filterKey1}" style="min-width: 100%;" filter="true">
+									<f:selectItem itemLabel="Бүгд" itemValue="all">
+									</f:selectItem>
+									<f:selectItems value="#{infoController.degrees}" var="pk"
+										itemLabel="#{pk.name}" itemValue="#{pk.name}">
+									</f:selectItems>
+									<p:ajax event="change" process="@this"
+										update="form:employeeList"
+										listener="#{infoController.filterEmployeeByDegree(infoController.filterKey1)}" />
+								</p:selectOneMenu>
+							</div>
+							<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+								<div class="flex-container">
+									<p:selectBooleanCheckbox id="inspect"
+										value="#{infoController.filterCheck}"
+										styleClass="minimal flex-center-self" style="float: left;"
+										onchange="ttt();" update="form:employeeList" process="@this">
+									</p:selectBooleanCheckbox>
+									<p:remoteCommand name="ttt"
+										actionListener="#{infoController.filterEmployeeByInspect}"
+										update=":form:employeeList"></p:remoteCommand>
+									<label class="flex-center-self" style="padding-left: 5px;"
+										for="form:inspect">#{i18n['distinct_inspection_doctor']}</label>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-12 col-xs-12 flex-center-self">
+								<p:commandLink styleClass="btn"
+									onclick="PF('prizeList').show();">
+									<i class="fa fa-fw fa-cog" />#{i18n['set_price_by_degree']}</p:commandLink>
+							</div>
+						</div>
+					</div>
+					<div class="box-body">
+						<p:dataTable id="employeeList"
+							styleClass="data-table myTable employeeTable"
+							value="#{infoController.employees}" var="info"
+							rowIndexVar="index" emptyMessage="#{i18n['empty']}">
+							<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+							<p:column styleClass="text" headerText="#{i18n['suborganization']}">#{info.subOrganizationName}</p:column>
+							<p:column styleClass="id" headerText="#{i18n['employee_id']}">#{info.id}</p:column>
+							<p:column styleClass="text" headerText="#{i18n['last_name']}">#{info.lastName} </p:column>
+							<p:column styleClass="text" headerText="#{i18n['first_name']}">#{info.firstName}</p:column>
+							<p:column styleClass="id" headerText="#{i18n['phone']}">#{info.phone}</p:column>
+							<p:column styleClass="short-text" headerText="#{i18n['does_inspection']}">#{info.inspectStatus}</p:column>
+							<p:column styleClass="text" headerText="#{i18n['degree']}">#{info.degreeName}</p:column>
+							<p:column styleClass="button-icon" headerText="#{i18n['edit']}">
+								<p:commandLink styleClass="fa fa-fw fa-edit color-blue"
+									action="#{infoController.modifiedEmployee(info)}"></p:commandLink>
+							</p:column>
+							<p:column styleClass="button-icon" headerText="#{i18n['delete']}">
+								<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+									action="#{infoController.deleteEmployee(info)}"
+									oncomplete="PF('confirmDialogDelete').show();"></p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="confirmDialogDelete" modal="true"
+			resizable="false" width="300" closeOnEscape="true">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">#{i18n['sure_to_delete']}</td>
+				</tr>
+			</table>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-1" />
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn"
+							action="#{infoController.deleteEmployee}">
+							<i class="fa fa-fw fa-check" />#{i18n['delete']}</p:commandLink>
+					</div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn redBtn"
+							oncomplete="PF('confirmDialogDelete').hide();"
+							style="font-size: 12px;color: white;">
+							<i class="fa fa-fw fa-times" />#{i18n['cancel']}</p:commandLink>
+					</div>
+					<div class="col-md-1" />
+				</div>
+			</div>
+		</p:dialog>
+
+		<p:dialog onShow="dcc();" widgetVar="customizePrize"
+			header="#{i18n['set_new_price_by_degree']}" styleClass="dialog-scroll" modal="true" id="cpbd1" resizable="false" width="450" closeOnEscape="true">
+			<div id="cpbd1panel" class="container-fluid">
+				<div class="row flex-container">
+					<div class="col-md-5 flex-center-self">
+						<label>#{i18n['doctor_degree']}: </label>
+					</div>
+					<div class="col-md-7 flex-center-self">
+						<p:selectOneMenu style="min-width:100%;" id="degreeListss"
+							value="#{infoController.selectedPkId}">
+							<f:selectItems value="#{infoController.degrees}" var="d"
+								itemValue="#{d.pkId}" itemLabel="#{d.name}"></f:selectItems>
+							<p:ajax event="change" update="form:priceList @(.myTable)"
+								process="@this" action="ddc();" />
+						</p:selectOneMenu>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-5 flex-center-self">
+						<label>#{i18n['new_price']}</label>
+					</div>
+					<div class="col-md-7">
+						<p:inputText value="#{infoController.cPriceHistory.price}"
+							style="min-width:100%;" styleClass="number-control" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-5 flex-center-self">
+						<label>#{i18n['reinspection_price']}</label>
+					</div>
+					<div class="col-md-7">
+						<p:inputText value="#{infoController.cPriceHistory.rePrice}"
+							style="min-width:100%;" styleClass="number-control" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-5 flex-center-self">
+						<label>#{i18n['price_use_date']}</label>
+					</div>
+					<div class="col-md-7 flex-center-self">
+						<p:calendar id="bbb" styleClass="date-control" pattern="yyyy-MM-dd"
+							value="#{infoController.cPriceHistory.priceUsageDate}" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-5 flex-center-self">
+						<label>#{i18n['show_previous_price']}</label>
+					</div>
+					<div class="col-md-7 flex-center-self">
+						<p:selectBooleanCheckbox onclick="ccd();" id="ccc" />
+					</div>
+				</div>
+				<p:dataTable id="priceList" styleClass="myTable"
+					value="#{infoController.degreePriceHistorys}" var="info"
+					rowIndexVar="index" style="display:none;"
+					emptyMessage="#{i18n['empty']}">
+					<p:column styleClass="date" headerText="#{i18n['price_used_date']}">#{info.getDateString(info.priceUsageDate)}</p:column>
+					<p:column styleClass="date" headerText="#{i18n['settings_date']}">#{info.getDateString(info.updatedDate)}</p:column>
+					<p:column styleClass="amount" headerText="#{i18n['inspection_price']}">
+						<p:outputLabel value="#{info.price}">
+							<f:convertNumber pattern="###,###,###.00"></f:convertNumber>
+						</p:outputLabel>
+					</p:column>
+				</p:dataTable>
+				<div class="row margin-vertical">
+					<div class="col-md-8" />
+					<div class="col-md-4 text-right">
+						<p:commandLink styleClass="btn"
+							oncomplete="PF('customizePrize').hide(); PF('prizeList').show();"
+							action="#{infoController.saveCPriceHistory()}"
+							update="form:message">
+							<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+					</div>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="prizeList" header="#{i18n['set_new_price_by_degree']}"
+			styleClass="dialog-scroll" modal="true" id="cpbd" resizable="false"
+			width="500" height="300" closeOnEscape="true">
+			<div class="content">
+				<div class="row">
+					<label>#{i18n['price_list']}</label>
+					<p:dataTable id="degreeLists" styleClass="myTable"
+						value="#{infoController.duph}" var="info" rowIndexVar="index"
+						emptyMessage="#{i18n['empty']}">
+						<p:column styleClass="text" headerText="#{i18n['doctor_degree']}">#{info.name}</p:column>
+						<p:column styleClass="amount" headerText="#{i18n['inspection_price']}">
+							<h:outputLabel value="#{info.price}">
+								<f:convertNumber pattern="###,###,###.00"></f:convertNumber>
+							</h:outputLabel>
+						</p:column>
+						<p:column styleClass="amount" headerText="#{i18n['reinspection_price']}">
+							<h:outputLabel value="#{info.rePrice}">
+								<f:convertNumber pattern="###,###,###.00"></f:convertNumber>
+							</h:outputLabel>
+						</p:column>
+						<p:column styleClass="date" headerText="#{i18n['price_used_date']}">#{info.priceUsageDate}</p:column>
+						<p:column styleClass="text" headerText="#{i18n['show_history']}">
+							<p:commandLink value="#{info.count} #{i18n['changed']}"
+								onclick="PF('customizePrize').show(); PF('prizeList').hide();"
+								actionListener="#{infoController.setSelectedPkId(info.pkId)}"
+								process="@this" update="@(.myTable)">
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</p:dialog>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+
+			$(document)
+					.ready(
+							function() {
+								document.getElementById('ui-datepicker-div').className = document
+										.getElementById('ui-datepicker-div').className
+										+ ' clendar';
+								document.getElementById('form:bbb_input').style.maxWidth = "100%";
+							});
+
+			function dcc() {
+				document.getElementById("form:ccc").checked = false;
+				document.getElementById("form:priceList").style.display = "none";
+			}
+			function ddc() {
+				document.getElementById("form:ccc").checked = true;
+				document.getElementById("form:priceList").style.display = "block";
+
+			}
+			function ccd() {
+				if (document.getElementById("form:ccc").checked) {
+					document.getElementById("form:priceList").style.display = "block";
+				} else {
+					document.getElementById("form:priceList").style.display = "none";
+				}
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Шинжилгээний жагсаалт</h1>
+
+		<ol class="breadcrumb">
+			<li class="active">Шинжилгээний</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="content">
+			<div class="box">
+				<div class="box-body">
+					<div class="row flex-container">
+						<div class="col-md-3 flex-center-self">
+							<div class="flex-container">
+								<label class="flex-center-self">Шүүх: </label>
+								<p:calendar id="beginDate" styleClass="date-control"
+									value="#{examinationController.beginDate}"
+									onchange="filterList();" pattern="yyyy-MM-dd" mask="true"
+									navigator="true">
+									<p:ajax event="dateSelect"
+										listener="#{examinationController.refreshRequestList()}" />
+								</p:calendar>
+								<label class="flex-center-self"
+									style="margin-right: 10px !important;">-</label>
+								<p:calendar id="endDate" styleClass="date-control"
+									value="#{examinationController.endDate}"
+									onchange="filterList();" pattern="yyyy-MM-dd" mask="true"
+									navigator="true">
+									<p:ajax event="dateSelect"
+										listener="#{examinationController.refreshRequestList()}" />
+								</p:calendar>
+							</div>
+						</div>
+
+						<div class="col-md-1 col-sm-12 col-xs-12 flex-center-self">
+							<label class="flex-center-self">Хайх: </label>
+						</div>
+
+						<div class="col-md-3 col-sm-12 col-xs-12 flex-center-self">
+							<p:selectOneMenu value="#{examinationController.filterPkId}"
+								style="width:100%;" id="exaList" filter="true">
+								<f:selectItem itemLabel="Бүх" itemValue="0" />
+								<f:selectItems value="#{examinationController.exaList}"
+									var="exa" itemLabel="#{exa.name}" itemValue="#{exa.pkId}">
+								</f:selectItems>
+								<p:ajax event="change"
+									listener="#{examinationController.refreshRequestList()}" />
+							</p:selectOneMenu>
+
+						</div>
+
+						<div class="col-md-3 col-sm-12 col-xs-12 flex-center-self">
+							<p:inputText id="srch" value="#{examinationController.filterKey}"
+								onkeyup="filterList();" style="width:100%;" />
+							
+							<p:watermark for="form:srch"
+								value="Картын№ , овог, нэр , регистер" />
+						</div>
+
+						<div class="col-md-2 text-right">
+							<label><p:commandLink styleClass="btn"
+									action="#{examinationController.saveExaminationRequests()}"
+									update="form:message">
+									<i class="glyphicon glyphicon-ok" /> Хадгалах
+							</p:commandLink> </label>
+						</div>
+					</div>
+
+					<div class="row flex-container">
+						<p:dataTable id="exaRequests" styleClass="myTable col-md-12"
+							rowIndexVar="index" emptyMessage="Хоосон байна"
+							value="#{examinationController.examinationRequests}" var="er">
+							<p:column styleClass="button-icon">
+								<p:selectBooleanCheckbox value="#{er.complete}">
+									<p:ajax event="change"
+										listener="#{examinationController.generateBarCode(er)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column styleClass="index" headerText="№"> #{index + 1}</p:column>
+							<p:column styleClass="id" headerText="Картын №"> #{er.customer.cardNumber} </p:column>
+							<p:column styleClass="text" headerText="Овог"> #{er.customer.lastName} </p:column>
+							<p:column styleClass="text" headerText="Нэр"> #{er.customer.firstName} </p:column>
+							<p:column styleClass="id" headerText="Регистрийн дугаар"> #{er.customer.regNumber} </p:column>
+							<p:column styleClass="short-number" headerText="Нас"> #{er.customer.age} </p:column>
+							<p:column styleClass="short-text" headerText="Хүйс"> #{er.customer.genderString} </p:column>
+							<p:column styleClass="text" headerText="Шинжилгээний нэр"> #{er.examinationName} </p:column>
+							<p:column styleClass="text" headerText="Илгээсэн огноо"
+								style="text-align:center"> #{er.getDateString(er.requestDate)} </p:column>
+						</p:dataTable>
+
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-10"></div>
+						<div class="col-md-2 text-right">
+							<label> <p:commandLink styleClass="btn"
+									action="#{examinationController.saveExaminationRequests()}"
+									update="form:message">
+									<i class="glyphicon glyphicon-ok" /> Хадгалах
+								</p:commandLink>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="showImage" modal="true" header="Рентген зураг"
+			resizable="false" styleClass="dh dialog-scroll" width="200"
+			id="showImage" closeOnEscape="true">
+			<div class="row">
+				<div class="col-md-12">
+					<div id="print7" style="width: 120px; margin: 0px auto">
+						<p:panel id="barCodeSection" styleClass="no-style-panel">
+							<div class="row text-center">
+								<div class="col-md-12">
+									<center>
+										<p:outputLabel value="#{examinationController.barCode}"
+											style="width:100%; display:block; margin:0 auto;font-size:10px;" />
+									</center>
+								</div>
+								<center>
+									<p:graphicImage id="qqqqqq" styleClass="curr_img"
+										value="#{examinationController.imageRentgen}" cache="true"
+										style="width:100%; height:60px; display:block; margin:2px auto;">
+									</p:graphicImage>
+								</center>
+								<div class="col-md-12">
+									<center>
+										<p:outputLabel
+											value="#{examinationController.selectedExaminationRequest.pkId}"
+											style="width:100%; display:block; margin:0 auto;font-size:10px;" />
+									</center>
+								</div>
+							</div>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix" />
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<a class="btn btn-app" href="javascript:void(0)"
+						onclick="print1('print7');"> <i class="fa fa-print color-blue"></i>
+						Хэвлэх
+					</a>
+				</div>
+			</div>
+		</p:dialog>
+		<p:remoteCommand name="filterList"
+			actionListener="#{examinationController.refreshRequestList()}" />
+		<p:remoteCommand name="loadData"
+			actionListener="#{examinationController.refreshExaminationList()}"></p:remoteCommand>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$(document).ready(function() {
+
+				loadData();
+				filterList();
+			});
+			function uploadImage(id) {
+				$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();
+			}
+			function updateUrl() {
+				var currImg = $('.curr_img');
+				currImg.attr("src", currImg.attr("src") + "&ts="
+						+ (new Date).getTime());
+			}
+
+			//]]>
+		</script>	</ui:define>
+</ui:composition>

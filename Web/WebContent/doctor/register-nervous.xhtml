@@ -1,0 +1,1378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<p:tab title="Толгой өвдөлт">
+			<p:accordionPanel id="headache" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Толгой өвдөнө" id="haveHeadache" value="#{inspectionController.customerHeadache.haveHeadache}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Нүдний угаар өвдөнө" id="eyegroundPain" value="#{inspectionController.customerHeadache.eyegroundPain}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Толгой таллаж өвдөнө" id="haveHalfHeadache" value="#{inspectionController.customerHeadache.haveHalfHeadache}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Толгой дүүрнэ" id="headHaze" value="#{inspectionController.customerHeadache.headHaze}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Толгой эргэнэ" id="headSwim" value="#{inspectionController.customerHeadache.headSwim}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад зовиур" 
+							 value="#{inspectionController.customerHeadache.headachePainText}"/>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Толгой өвдөлтийн байршил</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%"  value="#{inspectionController.customerHeadache.headacheSite}"/>
+						</div>
+						<div class="col-md-3">Давтамж</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headacheSequence}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өвдөлтийн хүч</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headachePower}" />
+						</div>
+						<div class="col-md-3">Өвдөлт хэзээнээс эхэлсэн</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headacheWhenstart}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ямар үед илүү өвддөг</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headacheWhen}" />
+						</div>
+						<div class="col-md-3">Юунд сэдэрдэг</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headacheRankle}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Үргэлжлэх хугацаа</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headacheDuration}" />
+						</div>
+						<div class="col-md-3">Удам байгаа эсэх, эм уусан уу</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerHeadache.headacheGeneration}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад асуумж" 
+							 value="#{inspectionController.customerHeadache.headacheMedText}"/>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('headache')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoHeadache" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listHeadacheAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListHeadacheAttachment().indexOf(attachment), inspectionController.getListHeadacheAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListHeadacheAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listHeadacheAttachment, attachment)}"
+											oncomplete="updateHeadache()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateHeadache"  update="qoHeadache" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Үнэр сонсгол амтлах чадвар хэвийн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheSmellHearTaste}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хараа хэвийн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheVision}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүүхэн харааны гэрлийн урвал бий эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headachePupil}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нүдний хөдөлгөөн хэвийн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheEyeMovement}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Гурвалсан мэдрэлийн цэгт эмзэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheTrigeminus}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нүүрний 2 тал ижил</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheFace}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">ХУН ижил</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheHUN}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хэл гол шугамаар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheTongue}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүзүү мөрний хөдөлгөөн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheNeckShoulder}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Мөчдийн хөдөлгөөн чөлөөтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheJoint}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Мэдэрхүйн өөрчлөлт бий эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheFeel}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Тэнцвэрийн өөрчлөлт</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheBalance}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Мэнэнгийн шинж</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheMenen}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нурууны хөдөлгөөн чөлөөтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerHeadache.headacheBackMovement}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.headacheAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'headache',1,'false');"
+											onkeyup="callRefreshList(this,'headache',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.headacheAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'headache',1,'true');"
+											onkeyup="callRefreshList(this,'headache',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'headache',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'headache',0,'false');"
+											onkeyup="callRefreshList(this,'headache',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'headache',0,'true');"
+											onkeyup="callRefreshList(this,'headache',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'headache',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.headachePreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.headachePreDiagnose.remove(diagnose)}"
+												oncomplete="updateHeadacheDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateHeadacheDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerHeadache.headacheRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerHeadache.headacheAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		<p:tab title="Нурууны өвдөлт">
+			<p:accordionPanel id="backache" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Нуруу өвдөнө " value="#{inspectionController.customerBackache.haveBackache}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Нуруу хөшинө" value="#{inspectionController.customerBackache.backCongeal}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Нурууны хөдөлгөөн хязгаарлагдсан" value="#{inspectionController.customerBackache.backMovementRestricted}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Өвдөлт хөл рүү дамжина" value="#{inspectionController.customerBackache.backacheToFoot}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Хөл бадайрна" value="#{inspectionController.customerBackache.footNumb}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Хөл сулрана" value="#{inspectionController.customerBackache.footDisentangle}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад зовиур"
+							 value="#{inspectionController.customerBackache.backachePainText}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өвдөлтийн байршил</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerBackache.backacheSite}" />
+						</div>
+						<div class="col-md-3">Хөдөлгөөнтэй холбоотой эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.isCauseMovement}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Юунд сэдэрч, юунд намддаг</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerBackache.rankleRemission}" />
+						</div>
+						<div class="col-md-3">Бэртэл авч байсан эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backacheMutilation}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өвдөлт дамждаг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backacheTransfer}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Өвдөлтийн эрчим</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerBackache.backachePower}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хөл бадайрдаг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.isFootNumb}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хөлийн хүч суларсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.isFootDisentangle}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хөлийн мэдэрхүй өөрчлөгдсөн</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.isFootFeelChange}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад асуумж"
+							 value="#{inspectionController.customerBackache.backacheMedText}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('backache')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoBackache" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listBackacheAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListBackacheAttachment().indexOf(attachment), inspectionController.getListBackacheAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListBackacheAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listBackacheAttachment, attachment)}"
+											oncomplete="updateBackache()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateBackache"  update="qoBackache" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Нурууны хэлбэр зөв</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backLine}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нурууны булчин чангарсан</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backMuscle}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Нурууны хөдөлгөөн чөлөөтэй эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backMovement}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нурууны паравертебраль цэгт эмзэглэл</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backParavertebral}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ласега 1 2 шинж илрэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backLasegue}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Мацкевич шинж илрэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backMackiewicz}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Валягийн цэгт эвзэглэл бий эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backValyagi}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хөлийн хүч 2 талд ижил</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.footPowerSame}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Рефлексүүд жигд</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backReflex}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Мэдэрхүйн өөрчлөлт бий эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerBackache.backFeelChanged}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.backacheAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'backache',1,'false');"
+											onkeyup="callRefreshList(this,'backache',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.backacheAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'backache',1,'true');"
+											onkeyup="callRefreshList(this,'backache',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'backache',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'backache',0,'false');"
+											onkeyup="callRefreshList(this,'backache',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'backache',0,'true');"
+											onkeyup="callRefreshList(this,'backache',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'backache',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.backachePreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.backachePreDiagnose.remove(diagnose)}"
+												oncomplete="updateBackacheDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateBackacheDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								  value="#{inspectionController.customerBackache.backacheRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								  value="#{inspectionController.customerBackache.backacheAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		<p:tab title="Эпилепси">
+			<p:accordionPanel id="epilepsy" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Унаж татна" value="#{inspectionController.customerEpilepsy.haveEpilepsy}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Унахын өмнө дохио мэдэгдэнэ" value="#{inspectionController.customerEpilepsy.feelBeforeEpilepsy}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Толгой өвдөнө" value="#{inspectionController.customerEpilepsy.epilepsyHeadache}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Юм мартана" value="#{inspectionController.customerEpilepsy.epilepsyForget}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Унасны дараа ухаангүй болно" value="#{inspectionController.customerEpilepsy.distractionAfterEpilepsy}" />
+						</div>
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Ууртай болно" value="#{inspectionController.customerEpilepsy.epilepsyGettingAngry}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">
+							<p:selectBooleanCheckbox itemLabel="Нойр муу болно" value="#{inspectionController.customerEpilepsy.epilepsyBadForSleep}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад зовиур"
+							 value="#{inspectionController.customerEpilepsy.epilepsyPainText}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хэзээнээс унадаг болсон</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.epilepsyWhen}" />
+						</div>
+						<div class="col-md-3">Давтамж</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.epilepsySequence}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Үргэлжлэх хугацаа</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.epilepsyDuration}" />
+						</div>
+						<div class="col-md-3">Яаж татдаг хэлбэр</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.epilepsyHow}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Унахын өмнө дохио мэдэгддэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.isFeelBeforeEpilepsy}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Унасны дараа ямар байдаг</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.howAfterEpilepsy}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ямар үед илүү уналт ихэсдэг</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.epilepsyWhenIncrease}" />
+						</div>
+						<div class="col-md-3">Ямар эм уудаг</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerEpilepsy.epilepsyPharmacy}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Зан төрхийн өөрчлөлт бий эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.epilepsyCharacter}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Оюуны хөгжил доройтсон эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.epilepsyMind}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Унах үед дороо шээдэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.isPeeWhenEpilepsy}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Статусд орж байсан уу</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.isEpilepsyStatus}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад асуумж"
+							 value="#{inspectionController.customerEpilepsy.epilepsyMedText}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('epilepsy')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoEpilepsy" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listEpilepsyAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListEpilepsyAttachment().indexOf(attachment), inspectionController.getListEpilepsyAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListEpilepsyAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listEpilepsyAttachment, attachment)}"
+											oncomplete="updateEpilepsy()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateEpilepsy"  update="qoEpilepsy" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">12 хос мэдрэлийн талаас өөрчлөлттэй эсэх</div>
+						<div class="col-md-6">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.epilepsy12pairs}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">Хөдөлгөөний хүрээ өөрчлөлттэй эсэх</div>
+						<div class="col-md-6">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.epilepsyMovementChanged}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-6">Тэнцвэрийн хүрээ өөрчлөлттэй эсэх</div>
+						<div class="col-md-6">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerEpilepsy.epilepsyBalanceChanged}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.epilepsyAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'epilepsy',1,'false');"
+											onkeyup="callRefreshList(this,'epilepsy',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.epilepsyAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'epilepsy',1,'true');"
+											onkeyup="callRefreshList(this,'epilepsy',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'epilepsy',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'epilepsy',0,'false');"
+											onkeyup="callRefreshList(this,'epilepsy',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'epilepsy',0,'true');"
+											onkeyup="callRefreshList(this,'epilepsy',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'epilepsy',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.epilepsyPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.epilepsyPreDiagnose.remove(diagnose)}"
+												oncomplete="updateEpilepsyDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateEpilepsyDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								 value="#{inspectionController.customerEpilepsy.epilepsyRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								 value="#{inspectionController.customerEpilepsy.epilepsyAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		<p:tab title="Тархины цус хомсрох харвалт">
+			<p:accordionPanel id="apoplexy" multiple="true">
+				<p:tab title="Зовиур">
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Нүд бүрэлзэнэ" value="#{inspectionController.customerApoplexy.apoplexyEyeBlur}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Толгой өвдөнө" value="#{inspectionController.customerApoplexy.apoplexyHeadache}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Толгой эргэнэ" value="#{inspectionController.customerApoplexy.apoplexySwim}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Хэл тультрана" value="#{inspectionController.customerApoplexy.apoplexyTongue}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Нүүр муруйна" value="#{inspectionController.customerApoplexy.apoplexyFace}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Чих шуугина" value="#{inspectionController.customerApoplexy.apoplexyTinnitus}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Гар хөл сулрана" value="#{inspectionController.customerApoplexy.apoplexyFootArmDisentangle}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Гар хөл мэдээгүй болно" value="#{inspectionController.customerApoplexy.apoplexyFootArmPalsy}" />
+						</div>
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Шүлс гоожино" value="#{inspectionController.customerApoplexy.apoplexyFlux}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-4">
+							<p:selectBooleanCheckbox itemLabel="Тэнцвэр алдана" value="#{inspectionController.customerApoplexy.apoplexyLoseBalance}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад зовиур"
+							 value="#{inspectionController.customerApoplexy.apoplexyPainText}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ухаан алдсан эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyDistraction}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">АД ихэсдэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyADIncrease}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Зүрх судасны өвчтэй эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyHeartPain}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Архи, тамхи хэрэглэдэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyUseAlcoholicCigar}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Залгихад хүндрэлтэй байгаа эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexySwallow}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Хэл ээдэрдэг эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyTongueFalter}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Гар хөлийн хөдөлгөөн чөлөөтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyFootArmMovement}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Булчингийн хүч сайн эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyMuscle}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Мэдэрхүйн өөрчлөлт байгаа эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyFeel}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Тэнцвэр хэвийн эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyBalance}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өмнө нь харваж байсан эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.beforeApoplexy}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Одоо ууж байгаа эм</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyPharmacy}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Удам бий эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyGeneration}">
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width:100%" placeholder="Бусад асуумж"
+							 value="#{inspectionController.customerApoplexy.apoplexyMedText}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('apoplexy')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoApoplexy" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listApoplexyAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListApoplexyAttachment().indexOf(attachment), inspectionController.getListApoplexyAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListApoplexyAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listApoplexyAttachment, attachment)}"
+											oncomplete="updateApoplexy()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateApoplexy"  update="qoApoplexy" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">2 нүдний хүүхэн хараа хэлбэр ижил</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyPupilSame}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нүдний алимны хөдөлгөөн чөлөөтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyEyeballMovement}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүүхэн харааны гэрлийн урвалтай эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyPupilLight}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нистагм</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyNystagmus}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Гурвалсан мэдрэлийн цэгт эмзэглэлтэй эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyTrigeminus}">
+								<f:selectItem itemLabel="Тийм" itemValue="1" />
+								<f:selectItem itemLabel="Үгүй" itemValue="0" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Нүүрний мэдэрхүй 2 талд ижил</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyFaceFeelSame}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">ХУН 2 талд ижил</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyHUN}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Залгиурын рефлекс үүсч байгаа эсэх</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexySwallowReflex}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хэл гол шугамаар</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyTongueLine}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Толгой мөрний хөдөлгөөн чөлөөтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyHeadShoulderMovement}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Мөчдийн хөдөлгөөн чөлөөтэй</div>
+						<div class="col-md-3">
+							<p:selectOneRadio layout="grid" columns="2" value="#{inspectionController.customerApoplexy.apoplexyJointMovement}">
+								<f:selectItem itemLabel="Тийм" itemValue="0" />
+								<f:selectItem itemLabel="Үгүй" itemValue="1" />
+							</p:selectOneRadio>
+						</div>
+						<div class="col-md-3">Булчингийн хүч</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyMusclePower}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Булчингийн тонус</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyHypertonic}" />
+						</div>
+						<div class="col-md-3">Шөрмөсний рефлекс</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyFiberReflex}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Эмгэг рэфлекс</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyPathogeneticReflex}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="form-title">Мэдэрхүйн өөрчлөлт</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өнгөц</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyFeelPerfunctory}" />
+						</div>
+						<div class="col-md-3">Гүний</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyFeelDeep}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="form-title">Тэнцвэрийн өөрчлөлт</div>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Ромбергийн сорил</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyRombergTest}" />
+						</div>
+						<div class="col-md-3">Хуруу хамрын сорил</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyFingerNoseTest}" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-3">Өсгий өвдөг шилбэний сорил</div>
+						<div class="col-md-3">
+							<p:inputText style="width:100%" value="#{inspectionController.customerApoplexy.apoplexyHeelKneeTest}" />
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.apoplexyAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'apoplexy',1,'false');"
+											onkeyup="callRefreshList(this,'apoplexy',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.apoplexyAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'apoplexy',1,'true');"
+											onkeyup="callRefreshList(this,'apoplexy',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'apoplexy',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'apoplexy',0,'false');"
+											onkeyup="callRefreshList(this,'apoplexy',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'apoplexy',0,'true');"
+											onkeyup="callRefreshList(this,'apoplexy',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'apoplexy',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.apoplexyPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameMn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.apoplexyPreDiagnose.remove(diagnose)}"
+												oncomplete="updateApoplexyDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateApoplexyDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-3">Хүндрэл:</div>
+						<div class="col-md-9">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								 value="#{inspectionController.customerApoplexy.apoplexyRateText}">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Төлөвлөгөө">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								 value="#{inspectionController.customerApoplexy.apoplexyAdvice}" placeholder="Зөвлөгөө">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+	</ui:define>
+</ui:composition>

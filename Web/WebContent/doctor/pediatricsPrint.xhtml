@@ -1,0 +1,1360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<table style="width: 100%;" cellpadding="0" cellspacing=" "
+		id="EmrTablePrint">
+		<tr>
+			<td colspan="12"
+				style="font-size: 13px; font-family: Times New Roman;"><img
+				src="#{applicationController.path}images/mlogo.jpg"
+				style="width: 380px; height: 65px; float: left; vertical-align: text-middle;"></img>
+				<h:outputText
+					style="font-size: 10px; font-family: Times New Roman;float:right;text-center:right"
+					value="Улаанбаатар хот , Монгол Улс С.Зоригийн гудамж, Ш/Х-48/111" /><br />
+				<h:outputText
+					style="font-size: 10px; font-family: Times New Roman;float:right;text-center:right"
+					value="Утас: 976-11-328670 Факс: 976-11-321249 " /><br /> <h:outputText
+					style="font-size: 10px; font-family: Times New Roman;float:right;text-center:right"
+					value="И-МЭЙЛ: info@mnums.edu.mn" /></td>
+		</tr>
+		<tr>
+			<td colspan="12"
+				style="text-align: center; font-weight: 700; font-size: 21px; font-family: Times New Roman;">Хүүхэд</td>
+		</tr>
+		<tr class="land">
+			<td colspan="4"
+				style="font-size: 13px; font-family: Times New Roman;">РД:
+				#{inspectionController.selectedCustomer.regNumber}</td>
+			<td colspan="4"
+				style="font-size: 13px; font-family: Times New Roman;">Эцэг
+				эхийн нэр : #{inspectionController.selectedCustomer.lastName}</td>
+			<td colspan="4"
+				style="font-size: 13px; font-family: Times New Roman;">Нэр :
+				#{inspectionController.selectedCustomer.firstName}</td>
+
+		</tr>
+		<tr class="land">
+			<td colspan="3"
+				style="font-size: 13px; font-family: Times New Roman;">Хүйс :
+				#{inspectionController.selectedCustomer.genderString}</td>
+			<td colspan="4"
+				style="font-size: 13px; font-family: Times New Roman;">Нас:
+				#{inspectionController.selectedCustomer.getAge()}</td>
+			<td colspan="5"
+				style="font-size: 13px; font-family: Times New Roman;">Утасны
+				дугаар: #{inspectionController.selectedCustomer.phoneNumber}</td>
+		</tr>
+		<tr class="land">
+			<td colspan="12"
+				style="border-bottom: 1pt solid black; font-size: 13px; font-weight: 700; font-family: Times New Roman;">EMR</td>
+		</tr>
+		<c:if
+			test="#{inspectionController.jsonJaundice.get('p').size()>0  or inspectionController.jsonRachitis.get('p').size()>0  or inspectionController.jsonDiarrhoea.get('p').size()>0 or inspectionController.jsonPediatricInfection.get('p').size()>0 or inspectionController.jsonTubeInflammation.get('p').size()>0 or inspectionController.jsonPediatricsOtherPain.get('p').size()>0}">
+			<tr>
+				<td colspan="12"
+					style="font-size: 14px; font-weight: 700; font-family: Times New Roman;">
+					<p:panel styleClass="am29acdmenu no-style-panel"
+						style="display:none">
+						<p:selectBooleanCheckbox style="vertical-align: middle;"
+							itemLabel="Зовиур"
+							value="#{inspectionController.painBooleanCheck}">
+							<p:ajax event="change" update="@(.painBoolean)"></p:ajax>
+						</p:selectBooleanCheckbox>
+					</p:panel>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="12"><p:panel
+						styleClass="painBoolean no-style-panel">
+						<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+							<h:outputText value="Зовиур "
+								style="font-size: 14px; font-weight: 700; font-family: Times New Roman;vertical-align: middle;" />
+						</c:if>
+					</p:panel></td>
+			</tr>
+			<tr>
+				<c:if test="#{inspectionController.jsonJaundice.get('p').size()>0}">
+					<tr>
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="painBoolean no-style-panel">
+								<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+									<ui:repeat var="lung"
+										value="#{inspectionController.jsonJaundice}">
+										<ui:repeat var="plung" value="#{lung.get('p')}"
+											varStatus="status">
+											<h:outputText
+												style="font-size: 13px; font-family: Times New Roman; "
+												rendered="#{!plung.get('l').equals('jaundiceAdvice')}"
+												value=" #{i18n[plung.get('l')]}" />
+											<h:outputText
+												rendered="#{plung.get('t').equals('select')}"
+												value=" - #{i18n[plung.get('a').get(plung.get('v'))]},"
+												style="font-size: 13px; font-family: Times New Roman; "/>
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerJaundice.jaundicePainText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerJaundice.jaundicePainText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</tr>
+				</c:if>
+			</tr>
+
+			<tr>
+				<c:if test="#{inspectionController.jsonRachitis.get('p').size()>0}">
+					<td colspan="12"
+						style="font-size: 13px; font-family: Times New Roman;"><p:panel
+							styleClass="painBoolean  no-style-panel">
+							<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+								<ui:repeat var="lung"
+									value="#{inspectionController.jsonRachitis}">
+									<ui:repeat var="plung" value="#{lung.get('p')}"
+										varStatus="status">
+										<h:outputText
+											style="font-size: 13px; font-family: Times New Roman; "
+											rendered="#{!plung.get('l').equals('rachitisAdvice')}"
+											value=" #{i18n[plung.get('l')]}" />
+										<h:outputText
+											rendered="#{plung.get('t').equals('select')}"
+											value=" - #{i18n[plung.get('a').get(plung.get('v'))]},"
+											style="font-size: 13px; font-family: Times New Roman; "/>
+									</ui:repeat>
+								</ui:repeat>
+								<c:if test="#{inspectionController.customerRachitis.rachitisPainText.length()>0}">
+									<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerRachitis.rachitisPainText}"  />
+								</c:if>
+							</c:if>
+						</p:panel></td>
+				</c:if>
+			</tr>
+			<tr>
+				<c:if test="#{inspectionController.jsonDiarrhoea.get('p').size()>0}">
+					<tr>
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="painBoolean  no-style-panel">
+								<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+									<ui:repeat var="lung"
+										value="#{inspectionController.jsonDiarrhoea}">
+										<ui:repeat var="plung" value="#{lung.get('p')}"
+											varStatus="status">
+											<h:outputText
+												style="font-size: 13px; font-family: Times New Roman; "
+												rendered="#{!plung.get('l').equals('diarrhoeaAdvice')}"
+												value=" #{i18n[plung.get('l')]}, " />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerDiarrhoea.diarrhoeaPainText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerDiarrhoea.diarrhoeaPainText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</tr>
+				</c:if>
+			</tr>
+
+			<tr>
+				<c:if test="#{inspectionController.jsonPediatricInfection.get('p').size()>0}">
+					<tr>
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="painBoolean  no-style-panel">
+								<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+									<ui:repeat var="lung"
+										value="#{inspectionController.jsonPediatricInfection}">
+										<ui:repeat var="plung" value="#{lung.get('p')}"
+											varStatus="status">
+											<h:outputText
+												style="font-size: 13px; font-family: Times New Roman; "
+												rendered="#{!plung.get('l').equals('pediatricInfectionAdvice')}"
+												value=" #{i18n[plung.get('l')]} ," />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerPediatricInfection.pediatricInfectionPainText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerPediatricInfection.pediatricInfectionPainText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</tr>
+				</c:if>
+
+			</tr>
+			<tr>
+				<c:if test="#{inspectionController.jsonTubeInflammation.get('p').size()>0}">
+					<tr>
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="painBoolean  no-style-panel">
+								<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+									<ui:repeat var="lung"
+										value="#{inspectionController.jsonTubeInflammation}">
+										<ui:repeat var="plung" value="#{lung.get('p')}"
+											varStatus="status">
+											<h:outputText
+												style="font-size: 13px; font-family: Times New Roman; "
+												rendered="#{!plung.get('l').equals('tubeInflammationAdvice')}"
+												value=" #{i18n[plung.get('l')]} , " />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerTubeInflammation.tubeInflammationPainText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerTubeInflammation.tubeInflammationPainText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</tr>
+				</c:if>
+
+			</tr>
+			<tr>
+				<c:if test="#{inspectionController.jsonPediatricsOtherPain.get('p').size()>0}">
+					<tr>
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="painBoolean  no-style-panel">
+								<c:if test="#{inspectionController.painBooleanCheck=='true'}">
+									<ui:repeat var="lung"
+										value="#{inspectionController.jsonPediatricsOtherPain}">
+										<ui:repeat var="plung" value="#{lung.get('p')}"
+											varStatus="status">
+											<h:outputText
+												style="font-size: 13px; font-family: Times New Roman; "
+												rendered="#{!plung.get('l').equals('pediatricsOtherAdvice')}"
+												value=" #{i18n[plung.get('l')]} , " />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherPainText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerPediatricsOtherPain.pediatricsOtherPainText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</tr>
+				</c:if>
+
+			</tr>
+		</c:if>
+		<!-- Асуумж -->
+		<tr>
+			<c:if
+				test="#{inspectionController.jsonJaundice.get('m').size()>0  or inspectionController.jsonRachitis.get('m').size()>0  or inspectionController.jsonDiarrhoea.get('m').size()>0 or inspectionController.jsonPediatricInfection.get('m').size()>0 or inspectionController.jsonTubeInflammation.get('m').size()>0 or inspectionController.jsonPediatricsOtherPain.get('m').size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-weight: 700; font-family: Times New Roman;">
+
+					<p:panel styleClass="am29acdmenu no-style-panel"
+						style="display:none">
+						<p:selectBooleanCheckbox style="vertical-align: middle;"
+							itemLabel="Асуумж"
+							value="#{inspectionController.checkUpBooleanCheck}">
+							<p:ajax event="change" update="@(.checkUpBoolean)"></p:ajax>
+						</p:selectBooleanCheckbox>
+					</p:panel>
+				</td>
+				<tr>
+					<td colspan="12"><p:panel
+							styleClass="checkUpBoolean  no-style-panel">
+							<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+								<h:outputText value="Асуумж "
+									style="vertical-align: middle;font-size: 13px; font-weight: 700; font-family: Times New Roman;" />
+							</c:if>
+						</p:panel></td>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.jsonJaundice.get('m').size()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="checkUpBoolean  no-style-panel">
+								<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+									<ui:repeat var="tValue"
+										value="#{inspectionController.jsonJaundice}">
+										<ui:repeat var="bm" value="#{tValue.get('m')}"
+											varStatus="status">
+											<h:outputText value="#{i18n[bm.get('l')]}"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{bm.get('t').equals('select')}"
+												value="  #{i18n[bm.get('a').get(bm.get('v'))]} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerJaundice.jaundiceMedText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerJaundice.jaundiceMedText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.jsonRachitis.get('m').size()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="checkUpBoolean  no-style-panel">
+								<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+									<ui:repeat var="tValue"
+										value="#{inspectionController.jsonRachitis}">
+										<ui:repeat var="bm" value="#{tValue.get('m')}"
+											varStatus="status">
+											<h:outputText value="#{i18n[bm.get('l')]}"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{!bm.get('t').equals('select') and !bm.get('t').equals('boolean') and !bm.get('l').equals('rachitisMedText')}"
+												value="  #{bm.get('v')} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{bm.get('t').equals('select')}"
+												value="  #{i18n[bm.get('a').get(bm.get('v'))]} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerRachitis.rachitisMedText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerRachitis.rachitisMedText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.jsonDiarrhoea.get('m').size()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="checkUpBoolean  no-style-panel">
+								<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+									<ui:repeat var="tValue"
+										value="#{inspectionController.jsonDiarrhoea}">
+										<ui:repeat var="bm" value="#{tValue.get('m')}"
+											varStatus="status">
+											<h:outputText value="#{i18n[bm.get('l')]}"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{!bm.get('t').equals('select') and !bm.get('t').equals('boolean') and !bm.get('l').equals('diarrhoeaMedText')}"
+												value="  #{bm.get('v')} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{bm.get('t').equals('select')}"
+												value="  #{i18n[bm.get('a').get(bm.get('v'))]} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerDiarrhoea.diarrhoeaMedText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerDiarrhoea.diarrhoeaMedText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.jsonPediatricInfection.get('m').size()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="checkUpBoolean  no-style-panel">
+								<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+									<ui:repeat var="tValue"
+										value="#{inspectionController.jsonPediatricInfection}">
+										<ui:repeat var="bm" value="#{tValue.get('m')}"
+											varStatus="status">
+											<h:outputText value="#{i18n[bm.get('l')]}"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{!bm.get('t').equals('select') and !bm.get('t').equals('boolean') and !bm.get('l').equals('pediatricInfectionMedText')}"
+												value="  #{bm.get('v')} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{bm.get('t').equals('select')}"
+												value="  #{i18n[bm.get('a').get(bm.get('v'))]} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerPediatricInfection.pediatricInfectionMedText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerPediatricInfection.pediatricInfectionMedText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.jsonTubeInflammation.get('m').size()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="checkUpBoolean  no-style-panel">
+								<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+									<ui:repeat var="tValue"
+										value="#{inspectionController.jsonTubeInflammation}">
+										<ui:repeat var="bm" value="#{tValue.get('m')}"
+											varStatus="status">
+											<h:outputText value="#{i18n[bm.get('l')]}"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{!bm.get('t').equals('select') and !bm.get('t').equals('boolean') and !bm.get('l').equals('tubeInflammationMedText')}"
+												value="  #{bm.get('v')} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+											<h:outputText rendered="#{bm.get('t').equals('select')}"
+												value="  #{i18n[bm.get('a').get(bm.get('v'))]} ,"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerTubeInflammation.tubeInflammationMedText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerTubeInflammation.tubeInflammationMedText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.jsonPediatricsOtherPain.get('m').size()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="checkUpBoolean  no-style-panel">
+								<c:if test="#{inspectionController.checkUpBooleanCheck=='true'}">
+									<ui:repeat var="tValue"
+										value="#{inspectionController.jsonPediatricsOtherPain}">
+										<ui:repeat var="bm" value="#{tValue.get('m')}"
+											varStatus="status">
+											<h:outputText value="#{i18n[bm.get('l')]}"
+												style=" font-size: 13px; font-family: Times New Roman;" />
+										</ui:repeat>
+									</ui:repeat>
+									<c:if test="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherMedText.length()>0}">
+										<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerPediatricsOtherPain.pediatricsOtherMedText}"  />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+			</c:if>
+		</tr>
+		<tr>
+			<c:if
+				test="#{inspectionController.jsonJaundice.get('c').size()>0  or inspectionController.jsonRachitis.get('c').size()>0  or inspectionController.jsonDiarrhoea.get('c').size()>0 or inspectionController.jsonPediatricInfection.get('c').size()>0 or inspectionController.jsonTubeInflammation.get('c').size()>0 or inspectionController.jsonPediatricsOtherPain.get('c').size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-weight: 700; font-family: Times New Roman;">
+					<p:panel styleClass="am29acdmenu no-style-panel"
+						style="display:none">
+						<p:selectBooleanCheckbox style="vertical-align: middle;"
+							itemLabel="Бодит үзлэг"
+							value="#{inspectionController.cBooleanCheck}">
+							<p:ajax event="change" update="@(.cBoolean)"></p:ajax>
+						</p:selectBooleanCheckbox>
+					</p:panel>
+				</td>
+				<tr>
+					<c:if
+						test="#{inspectionController.jsonJaundice.get('c').size()>0 or inspectionController.listJaundiceAttachment.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="cBoolean  no-style-panel">
+									<c:if test="#{inspectionController.cBooleanCheck=='true'}">
+										<ui:repeat var="nValue"
+											value="#{inspectionController.jsonJaundice}">
+											<ui:repeat var="bc" value="#{nValue.get('c')}"
+												varStatus="status">
+												<h:outputText
+													rendered="#{!(bc.get('l').equals('jaundiceAdvice') or bc.get('l').equals('jaundiceRateText'))}"
+													value="#{i18n[bc.get('l')]} - "
+													style="font-size: 13px;font-family: Times New Roman; " />
+												<h:outputText rendered="#{bc.get('t').equals('select')}"
+													value=" #{i18n[bc.get('a').get(bc.get('v'))]}, "
+													style="font-size: 13px;font-family: Times New Roman; " />
+											</ui:repeat>
+										</ui:repeat>
+										<br />
+										<table>
+											<tr>
+												<ui:repeat var="attachment"
+													value="#{inspectionController.listJaundiceAttachment}"
+													varStatus="status">
+													<p:graphicImage
+														value="#{inspectionController.getDynamicNoseImage(inspectionController.getListJaundiceAttachment().indexOf(attachment), inspectionController.getListJaundiceAttachment())}"
+														cache="false" height="100" width="200"
+														onclick="showModalImage(this);"
+														style="margin-right: 5px;margin-top:3px" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{inspectionController.getListJaundiceAttachment().indexOf(attachment)}" />
+													</p:graphicImage>
+													<h:outputText
+														value="#{inspectionController.columnDivide(status.index)}"
+														escape="false" />
+												</ui:repeat>
+											</tr>
+										</table>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+
+				</tr>
+				<tr>
+					<c:if
+						test="#{inspectionController.jsonRachitis.get('c').size()>0 or inspectionController.listRachitisAttachment.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="cBoolean  no-style-panel">
+									<c:if test="#{inspectionController.cBooleanCheck=='true'}">
+										<ui:repeat var="nValue"
+											value="#{inspectionController.jsonRachitis}">
+											<ui:repeat var="bc" value="#{nValue.get('c')}"
+												varStatus="status">
+												<h:outputText
+													rendered="#{!(bc.get('l').equals('rachitisAdvice') or bc.get('l').equals('rachitisRateText'))}"
+													value="#{i18n[bc.get('l')]} - "
+													style="font-size: 13px;font-family: Times New Roman; " />
+												<h:outputText rendered="#{bc.get('t').equals('select')}"
+													value=" #{i18n[bc.get('a').get(bc.get('v'))]}, "
+													style="font-size: 13px;font-family: Times New Roman; " />
+											</ui:repeat>
+										</ui:repeat>
+										<br />
+										<table>
+											<tr>
+												<ui:repeat var="attachment"
+													value="#{inspectionController.listRachitisAttachment}"
+													varStatus="status">
+													<p:graphicImage
+														value="#{inspectionController.getDynamicNoseImage(inspectionController.getListRachitisAttachment().indexOf(attachment), inspectionController.getListRachitisAttachment())}"
+														cache="false" height="100" width="200"
+														onclick="showModalImage(this);"
+														style="margin-right: 5px;margin-top:3px" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{inspectionController.getListRachitisAttachment().indexOf(attachment)}" />
+													</p:graphicImage>
+													<h:outputText
+														value="#{inspectionController.columnDivide(status.index)}"
+														escape="false" />
+												</ui:repeat>
+											</tr>
+										</table>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+
+				</tr>
+
+				<tr>
+					<c:if
+						test="#{inspectionController.jsonDiarrhoea.get('c').size()>0 or inspectionController.listDiarrhoeaAttachment.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="cBoolean  no-style-panel">
+									<c:if test="#{inspectionController.cBooleanCheck=='true'}">
+										<ui:repeat var="nValue"
+											value="#{inspectionController.jsonDiarrhoea}">
+											<ui:repeat var="bc" value="#{nValue.get('c')}"
+												varStatus="status">
+												<h:outputText
+													rendered="#{!(bc.get('l').equals('diarrhoeaAdvice') or bc.get('l').equals('diarrhoeaRateText'))}"
+													value="#{i18n[bc.get('l')]} - "
+													style="font-size: 13px;font-family: Times New Roman; " />
+											</ui:repeat>
+										</ui:repeat>
+										<br />
+										<table>
+											<tr>
+												<ui:repeat var="attachment"
+													value="#{inspectionController.listDiarrhoeaAttachment}"
+													varStatus="status">
+													<p:graphicImage
+														value="#{inspectionController.getDynamicNoseImage(inspectionController.getListDiarrhoeaAttachment().indexOf(attachment), inspectionController.getListDiarrhoeaAttachment())}"
+														cache="false" height="100" width="200"
+														onclick="showModalImage(this);"
+														style="margin-right: 5px;margin-top:3px" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{inspectionController.getListDiarrhoeaAttachment().indexOf(attachment)}" />
+													</p:graphicImage>
+													<h:outputText
+														value="#{inspectionController.columnDivide(status.index)}"
+														escape="false" />
+												</ui:repeat>
+											</tr>
+										</table>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+
+				</tr>
+
+				<tr>
+					<c:if
+						test="#{inspectionController.jsonPediatricInfection.get('c').size()>0 or inspectionController.listPediatricInfectionAttachment.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="cBoolean  no-style-panel">
+									<c:if test="#{inspectionController.cBooleanCheck=='true'}">
+										<ui:repeat var="nValue"
+											value="#{inspectionController.jsonPediatricInfection}">
+											<ui:repeat var="bc" value="#{nValue.get('c')}"
+												varStatus="status">
+												<h:outputText
+													rendered="#{!(bc.get('l').equals('pediatricInfectionAdvice') or bc.get('l').equals('pediatricInfectionRateText'))}"
+													value="#{i18n[bc.get('l')]} - "
+													style="font-size: 13px;font-family: Times New Roman; " />
+												<h:outputText 
+													rendered="#{!(bc.get('l').equals('pediatricInfectionAdvice') or bc.get('l').equals('pediatricInfectionRateText') or bc.get('t').equals('select') or bc.get('t').equals('boolean'))}"
+													value="#{bc.get('v')} - "
+													style="font-size: 13px;font-family: Times New Roman; " />
+												<h:outputText rendered="#{bc.get('t').equals('select')}"
+													value=" #{i18n[bc.get('a').get(bc.get('v'))]}, "
+													style="font-size: 13px;font-family: Times New Roman; " />
+											</ui:repeat>
+										</ui:repeat>
+										<br />
+										<table>
+											<tr>
+												<ui:repeat var="attachment"
+													value="#{inspectionController.listPediatricInfectionAttachment}"
+													varStatus="status">
+													<p:graphicImage
+														value="#{inspectionController.getDynamicNoseImage(inspectionController.getListPediatricInfectionAttachment().indexOf(attachment), inspectionController.getListPediatricInfectionAttachment())}"
+														cache="false" height="100" width="200"
+														onclick="showModalImage(this);"
+														style="margin-right: 5px;margin-top:3px" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{inspectionController.getListPediatricInfectionAttachment().indexOf(attachment)}" />
+													</p:graphicImage>
+													<h:outputText
+														value="#{inspectionController.columnDivide(status.index)}"
+														escape="false" />
+												</ui:repeat>
+											</tr>
+										</table>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if
+						test="#{inspectionController.jsonTubeInflammation.get('c').size()>0 or inspectionController.listTubeInflammationAttachment.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="cBoolean  no-style-panel">
+									<c:if test="#{inspectionController.cBooleanCheck=='true'}">
+										<ui:repeat var="nValue"
+											value="#{inspectionController.jsonTubeInflammation}">
+											<ui:repeat var="bc" value="#{nValue.get('c')}"
+												varStatus="status">
+												<h:outputText
+													rendered="#{!(bc.get('l').equals('tubeInflammationAdvice') or bc.get('l').equals('tubeInflammationRateText'))}"
+													value="#{i18n[bc.get('l')]} - "
+													style="font-size: 13px;font-family: Times New Roman; " />
+												<h:outputText rendered="#{bc.get('t').equals('select')}"
+													value=" #{i18n[bc.get('a').get(bc.get('v'))]}, "
+													style="font-size: 13px;font-family: Times New Roman; " />
+											</ui:repeat>
+										</ui:repeat>
+										<br />
+										<table>
+											<tr>
+												<ui:repeat var="attachment"
+													value="#{inspectionController.listTubeInflammationAttachment}"
+													varStatus="status">
+													<p:graphicImage
+														value="#{inspectionController.getDynamicNoseImage(inspectionController.getListTubeInflammationAttachment().indexOf(attachment), inspectionController.getListTubeInflammationAttachment())}"
+														cache="false" height="100" width="200"
+														onclick="showModalImage(this);"
+														style="margin-right: 5px;margin-top:3px" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{inspectionController.getListTubeInflammationAttachment().indexOf(attachment)}" />
+													</p:graphicImage>
+													<h:outputText
+														value="#{inspectionController.columnDivide(status.index)}"
+														escape="false" />
+												</ui:repeat>
+											</tr>
+										</table>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if
+						test="#{inspectionController.jsonPediatricsOtherPain.get('c').size()>0 or inspectionController.listPediatricsOtherPainAttachment.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="cBoolean  no-style-panel">
+									<c:if test="#{inspectionController.cBooleanCheck=='true'}">
+										<ui:repeat var="tValue"
+											value="#{inspectionController.jsonPediatricsOtherPain}">
+											<ui:repeat var="bm" value="#{tValue.get('c')}"
+												varStatus="status">
+												<h:outputText value="#{i18n[bm.get('l')]}"
+													style=" font-size: 13px; font-family: Times New Roman;" />
+											</ui:repeat>
+										</ui:repeat>
+										<c:if test="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherInsText.length()>0}">
+											<h:outputText style="font-size:13px; font-family:Times New Roman;" value = " - #{inspectionController.customerPediatricsOtherPain.pediatricsOtherInsText}"  />
+										</c:if>
+										<br />
+										<table>
+											<tr>
+												<ui:repeat var="attachment"
+													value="#{inspectionController.listPediatricsOtherPainAttachment}"
+													varStatus="status">
+													<p:graphicImage
+														value="#{inspectionController.getDynamicNoseImage(inspectionController.getListPediatricsOtherPainAttachment().indexOf(attachment), inspectionController.getListPediatricsOtherPainAttachment())}"
+														cache="false" height="100" width="200"
+														onclick="showModalImage(this);"
+														style="margin-right: 5px;margin-top:3px" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{inspectionController.getListPediatricsOtherPainAttachment().indexOf(attachment)}" />
+													</p:graphicImage>
+													<h:outputText
+														value="#{inspectionController.columnDivide(status.index)}"
+														escape="false" />
+												</ui:repeat>
+											</tr>
+										</table>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+				</tr>
+			</c:if>
+		</tr>
+		<tr>
+			<c:if
+				test="#{inspectionController.jaundicePreDiagnose.size()>0  or inspectionController.rachitisPreDiagnose.size()>0  or inspectionController.diarrhoeaPreDiagnose.size()>0 or inspectionController.pediatricInfectionPreDiagnose.size()>0 or inspectionController.tubeInflammationPreDiagnose.size()>0 or inspectionController.pediatricsOtherPainPreDiagnose.size()>0}">
+				<tr>
+					<td colspan="12"
+						style="font-size: 14px; font-weight: 700; font-family: Times New Roman;">
+						<p:panel styleClass="am29acdmenu no-style-panel"
+							style="display:none">
+							<p:selectBooleanCheckbox style="vertical-align: middle;"
+								itemLabel="Онош"
+								value="#{inspectionController.diagnoseBooleanSelectCheck}">
+								<p:ajax event="change" update="@(.diagnoseBoolean)"></p:ajax>
+							</p:selectBooleanCheckbox>
+						</p:panel>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="12"><p:panel
+							styleClass="diagnoseBoolean  no-style-panel">
+							<c:if
+								test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+								<h:outputText value="Онош "
+									style=" font-size: 14px; font-weight: 700; font-family: Times New Roman;" />
+							</c:if>
+						</p:panel></td>
+				</tr>
+				<c:if test="#{inspectionController.jaundicePreDiagnose.size()>0}">
+					<tr>
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="diagnoseBoolean  no-style-panel">
+								<c:if
+									test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+									<h:outputText value="Нярайн шарлалт "
+										style="font-size: 13px; font-family: Times New Roman; " />
+									<h:outputText value="Үндсэн онош"
+										style="font-size: 13px; font-family: Times New Roman; " />
+									<ui:repeat var="nose"
+										value="#{inspectionController.jaundicePreDiagnose}"
+										style="font-size: 13px;font-family: Times New Roman; ">
+										<h:outputText rendered="#{nose.type==1}"
+											value=" - #{nose.id} - #{nose.nameMn}, "
+											style="font-size: 13px; font-family: Times New Roman; " />
+									</ui:repeat>
+									<h:outputText value="Урьдчилсан онош"
+										style="font-size: 13px; font-family: Times New Roman; " />
+									<ui:repeat var="nose"
+										value="#{inspectionController.jaundicePreDiagnose}"
+										style="font-size: 13px;font-family: Times New Roman; ">
+										<h:outputText rendered="#{nose.type==0}"
+											value="- #{nose.id} - #{nose.nameMn}, "
+											style="font-size: 13px; font-family: Times New Roman; " />
+									</ui:repeat>
+									<br />
+									<c:if
+										test="#{inspectionController.customerJaundice.jaundiceRateText.length()>0}">
+										<h:outputText
+											value="Хүндрэл: #{inspectionController.customerJaundice.jaundiceRateText}"
+											style="font-size: 13px;font-family: Times New Roman; " />
+									</c:if>
+								</c:if>
+							</p:panel></td>
+					</tr>
+				</c:if>
+				<tr>
+					<c:if test="#{inspectionController.rachitisPreDiagnose.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="diagnoseBoolean  no-style-panel">
+									<c:if
+										test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+										<h:outputText value="Рахит "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<h:outputText value="Үндсэн онош"
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat var="ear"
+											value="#{inspectionController.rachitisPreDiagnose}">
+											<h:outputText rendered="#{ear.type==1}"
+												value=" - #{ear.id}, #{ear.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<h:outputText value="Урьдчилсан  "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat var="ears"
+											value="#{inspectionController.rachitisPreDiagnose}">
+											<h:outputText rendered="#{ears.type==0}"
+												value="- #{ears.id},  #{ears.nameMn}"
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<br />
+										<c:if
+											test="#{inspectionController.customerRachitis.rachitisRateText.length()>0}">
+											<h:outputText
+												value="Хүндрэл - #{inspectionController.customerRachitis.rachitisRateText}"
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</c:if>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if></tr>
+				<tr>
+					<c:if test="#{inspectionController.diarrhoeaPreDiagnose.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="diagnoseBoolean  no-style-panel">
+									<c:if
+										test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+										<h:outputText value="Суулгалт "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<h:outputText value="Үндсэн "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.diarrhoeaPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==1}"
+												value=" - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<h:outputText value="Урьдчилсан онош "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.diarrhoeaPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==0}"
+												value=" Урьдчилсан - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<br />
+										<c:if
+											test="#{inspectionController.customerDiarrhoea.diarrhoeaRateText.length()>0}">
+											<h:outputText
+												value="Хүндрэл - #{inspectionController.customerDiarrhoea.diarrhoeaRateText}"
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</c:if>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+
+					<c:if test="#{inspectionController.pediatricInfectionPreDiagnose.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="diagnoseBoolean  no-style-panel">
+									<c:if
+										test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+										<h:outputText value="Нярайн халдвар "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<h:outputText value="Үндсэн "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.pediatricInfectionPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==1}"
+												value=" - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<h:outputText value="Урьдчилсан онош "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.pediatricInfectionPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==0}"
+												value=" Урьдчилсан - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<br />
+										<c:if
+											test="#{inspectionController.customerPediatricInfection.pediatricInfectionRateText.length()>0}">
+											<h:outputText
+												value="Хүндрэл - #{inspectionController.customerPediatricInfection.pediatricInfectionRateText}"
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</c:if>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.tubeInflammationPreDiagnose.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="diagnoseBoolean  no-style-panel">
+									<c:if
+										test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+										<h:outputText value="Гуурсан хоолойн үрэвсэл "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<h:outputText value="Үндсэн "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.tubeInflammationPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==1}"
+												value=" - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<h:outputText value="Урьдчилсан онош "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.tubeInflammationPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==0}"
+												value=" Урьдчилсан - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<br />
+										<c:if
+											test="#{inspectionController.customerTubeInflammation.tubeInflammationRateText.length()>0}">
+											<h:outputText
+												value="Хүндрэл - #{inspectionController.customerTubeInflammation.tubeInflammationRateText}"
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</c:if>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.pediatricsOtherPainPreDiagnose.size()>0}">
+						<tr>
+							<td colspan="12"
+								style="font-size: 13px; font-family: Times New Roman;"><p:panel
+									styleClass="diagnoseBoolean  no-style-panel">
+									<c:if
+										test="#{inspectionController.diagnoseBooleanSelectCheck=='true'}">
+										<h:outputText value="Бусад өвчин "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<h:outputText value="Үндсэн "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.pediatricsOtherPainPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==1}"
+												value=" - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<h:outputText value="Урьдчилсан онош "
+											style="font-size: 13px; font-family: Times New Roman; " />
+										<ui:repeat value="#{inspectionController.pediatricsOtherPainPreDiagnose}"
+											var="diagnose">
+											<h:outputText rendered="#{diagnose.type==0}"
+												value=" Урьдчилсан - #{diagnose.id}, #{diagnose.nameMn} "
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</ui:repeat>
+										<br />
+										<c:if
+											test="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherRateText.length()>0}">
+											<h:outputText
+												value="Хүндрэл - #{inspectionController.customerPediatricsOtherPain.pediatricsOtherRateText}"
+												style="font-size: 13px; font-family: Times New Roman; " />
+										</c:if>
+									</c:if>
+								</p:panel></td>
+						</tr>
+					</c:if>
+				</tr>
+			</c:if>
+		</tr>
+		<tr>
+			<c:if
+				test="#{inspectionController.customerJaundice.jaundiceAdvice.length()>0 or inspectionController.customerRachitis.rachitisAdvice.length()>0  or inspectionController.customerDiarrhoea.diarrhoeaAdvice.length()>0 or inspectionController.customerPediatricInfection.pediatricInfectionAdvice.length()>0 or inspectionController.customerTubeInflammation.tubeInflammationAdvice.length()>0 or inspectionController.customerPediatricsOtherPain.pediatricsOtherAdvice}">
+				<tr>
+
+					<td colspan="12"
+						style="font-size: 13px; font-weight: 700; font-family: Times New Roman;">
+						<p:panel styleClass="am29acdmenu no-style-panel"
+							style="display:none">
+							<p:selectBooleanCheckbox itemLabel="Төлөвлөгөө"
+								style="vertical-align: middle;"
+								value="#{inspectionController.shcudeluBooleanSelectCheck}">
+								<p:ajax event="change" update="@(.scheludeBoolean)"></p:ajax>
+							</p:selectBooleanCheckbox>
+						</p:panel>
+					</td>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.customerJaundice.jaundiceAdvice.length()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="scheludeBoolean    no-style-panel">
+								<c:if
+									test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+									<h:outputText value="Нярайн шарлалт "
+										style="font-size: 13px; font-family: Times New Roman;" />
+									<h:outputText
+										value="Зөвлөгөө : #{inspectionController.customerJaundice.jaundiceAdvice}"
+										style="font-size: 13px; font-family: Times New Roman;" />
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if
+						test="#{inspectionController.customerRachitis.rachitisAdvice.length()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="scheludeBoolean    no-style-panel">
+
+								<c:if
+									test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+									<h:outputText value="Рахит "
+										style="font-size: 13px; font-family: Times New Roman;" />
+									<h:outputText
+										value="Төлөвлөгөө - #{inspectionController.customerRachitis.rachitisAdvice}"
+										style="font-size: 13px; font-family: Times New Roman;" />
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+
+					<c:if
+						test="#{inspectionController.customerDiarrhoea.diarrhoeaAdvice.length()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="scheludeBoolean  no-style-panel">
+								<c:if
+									test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+									<h:outputText value="Суулгалт "
+										style="font-size: 13px; font-family: Times New Roman;" />
+									<h:outputText
+										value="  Төлөвлөгөө - #{inspectionController.customerDiarrhoea.diarrhoeaAdvice}"
+										style="font-size: 13px; font-family: Times New Roman;" />
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.customerPediatricInfection.pediatricInfectionAdvice.length()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="scheludeBoolean    no-style-panel">
+								<c:if
+									test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+									<h:outputText value="Нярайн халдвар "
+										style="font-size: 13px; font-family: Times New Roman;" />
+									<h:outputText
+										value="Зөвлөгөө : #{inspectionController.customerPediatricInfection.pediatricInfectionAdvice}"
+										style="font-size: 13px; font-family: Times New Roman;" />
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+					<tr>
+					<c:if test="#{inspectionController.customerTubeInflammation.tubeInflammationAdvice.length()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="scheludeBoolean    no-style-panel">
+								<c:if
+									test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+									<h:outputText value="Гуурсан хоолойн үрэвсэл "
+										style="font-size: 13px; font-family: Times New Roman;" />
+									<h:outputText
+										value="Зөвлөгөө : #{inspectionController.customerTubeInflammation.tubeInflammationAdvice}"
+										style="font-size: 13px; font-family: Times New Roman;" />
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+				<tr>
+					<c:if test="#{inspectionController.customerPediatricsOtherPain.pediatricsOtherAdvice.length()>0}">
+						<td colspan="12"
+							style="font-size: 13px; font-family: Times New Roman;"><p:panel
+								styleClass="scheludeBoolean    no-style-panel">
+								<c:if
+									test="#{inspectionController.shcudeluBooleanSelectCheck=='true'}">
+									<h:outputText value="Бусад өвчин "
+										style="font-size: 13px; font-family: Times New Roman;" />
+									<h:outputText
+										value="Зөвлөгөө : #{inspectionController.customerPediatricsOtherPain.pediatricsOtherAdvice}"
+										style="font-size: 13px; font-family: Times New Roman;" />
+								</c:if>
+							</p:panel></td>
+					</c:if>
+				</tr>
+			</c:if>
+		</tr>
+		<tr>
+			<td colspan="12"
+				style="border-bottom: 1px solid black; font-size: 13px; font-weight: 700; font-family: Times New Roman; padding: 5px 5px">OCS</td>
+		</tr>
+		<tr>
+			<c:if test="#{inspectionController.listExamination.size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-family: Times New Roman;"><h:outputText
+						style="font-size: 13px;font-weight: 700;"
+						value=" Захиалсан  шинжилгээ:" />
+					<table width="100%" style="padding-left: 20px" cellpadding="0"
+						cellspacing="0">
+						<tr>
+							<td colspan="1" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">№</td>
+							<td colspan="6" valign="middle"
+								style="border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Шинжилгээний
+								нэр</td>
+							<td colspan="5" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Заалт</td>
+						</tr>
+						<ui:repeat var="meCusExa"
+							value="#{inspectionController.listExamination}" varStatus="index">
+							<tr>
+								<td colspan="1"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+								<td colspan="6"
+									style="border-bottom: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;"><h:outputText
+										value="#{meCusExa.name}" /> ( <ui:repeat var="meE"
+										value="#{meCusExa.examinationDtls}">#{meE.elementNameMn},</ui:repeat>)
+								</td>
+								<td colspan="5"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;">#{meCusExa.description}</td>
+							</tr>
+						</ui:repeat>
+					</table></td>
+			</c:if>
+		</tr>
+		<tr>
+			<c:if test="#{inspectionController.listTreatment.size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-family: Times New Roman;"><h:outputText
+						style="font-weight: 700;font-size: 13px;"
+						value=" Захиалсан  эмчилгээ:" />
+					<table width="100%" style="padding-left: 20px" cellpadding="0"
+						cellspacing="0">
+						<tr>
+							<td colspan="1" valign="middle"
+								style="border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">№</td>
+							<td colspan="2" valign="middle"
+								style="border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Эмчилгээний
+								нэр</td>
+							<td colspan="2" valign="middle"
+								style="border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Ямар
+								эрхтэнд</td>
+
+							<td colspan="2" valign="middle"
+								style="border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Тун</td>
+							<td colspan="1" valign="middle"
+								style="border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Хугацаа</td>
+							<td colspan="1" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Тоо
+								хэмжээ</td>
+
+						</tr>
+						<ui:repeat var="meCusTreat"
+							value="#{inspectionController.listTreatment}" varStatus="index">
+							<tr>
+								<td colspan="1"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+								<td colspan="2"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;"><h:outputText
+										value="#{meCusTreat.name}" /></td>
+								<td colspan="2"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;">Нүд</td>
+								<td colspan="2"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: right; font-size: 13px; font-family: Times New Roman;">
+									#{meCusTreat.qty}</td>
+								<td colspan="1"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: right; font-size: 13px; font-family: Times New Roman;">
+									#{meCusTreat.times}</td>
+
+								<td colspan="1"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">#{meCusTreat.dayLength}</td>
+
+							</tr>
+						</ui:repeat>
+					</table></td>
+			</c:if>
+		</tr>
+		<tr>
+			<c:if test="#{inspectionController.listMedicine.size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-family: Times New Roman;"><h:outputText
+						value="Захиалсан эм" />
+					<table width="100%" style="padding-left: 20px" cellpadding="0"
+						cellspacing="0">
+						<tr>
+							<td colspan="1" rowspan="2" valign="middle"
+								style="border-top: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman; width: 3%">№</td>
+							<td colspan="2" rowspan="2" valign="middle"
+								style="border-top: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman; width: 33%">Эмийн
+								нэр</td>
+							<td colspan="2" rowspan="2" valign="middle"
+								style="border-top: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman; width: 5%">Хэлбэр</td>
+							<td colspan="1" rowspan="2" valign="middle"
+								style="border-top: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman; width: 3%">Савлагаа</td>
+							<td colspan="5" rowspan="1" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Хэрэглэх
+								заалт</td>
+						</tr>
+						<tr>
+
+							<td colspan="1"
+								style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: center; size: 13px; font-family: Times New Roman;">Тун</td>
+							<td colspan="1"
+								style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Өдөрт</td>
+							<td colspan="1"
+								style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Хэдэн
+								өдөр</td>
+							<td colspan="1"
+								style="border-bottom: 1px solid black; border-left: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Нийт
+								хэмжээ</td>
+							<td colspan="1"
+								style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Хэрэглэх
+								заавар</td>
+
+						</tr>
+						<ui:repeat var="meCusMed"
+							value="#{inspectionController.listMedicine}" varStatus="index">
+							<tr>
+								<td colspan="1"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman; width: 3%">#{index.index+1}</td>
+								<td colspan="2"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: left; padding-left: 5px; font-size: 13px; font-family: Times New Roman; width: 33%"><h:outputText
+										value="#{meCusMed.name}(#{meCusMed.iName})" /></td>
+								<td colspan="2"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: left; padding-left: 5px; font-size: 13px; font-family: Times New Roman; width: 5%">#{meCusMed.medicineType}</td>
+								<td colspan="1"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman; width: 3%">#{meCusMed.drugDose}</td>
+								<td colspan="1"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: right; padding-right: 4px; font-size: 13px; font-family: Times New Roman; width: 3%">
+									#{meCusMed.dose}</td>
+								<td colspan="1"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: right; font-size: 13px; padding-right: 4px; font-family: Times New Roman; width: 3%">
+									#{meCusMed.time}</td>
+								<td colspan="1"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: right; font-size: 13px; padding-right: 4px; font-family: Times New Roman; width: 3%">
+									#{meCusMed.day}</td>
+								<td colspan="1"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: right; font-size: 13px; padding-right: 4px; font-family: Times New Roman; width: 3%">
+									#{meCusMed.repeatCount}</td>
+								<td colspan="2"
+									style="border-left: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; padding-right: 4px; text-align: left; padding-left: 3px; font-size: 13px; font-family: Times New Roman; width: 50%"><h:outputText
+										value="#{meCusMed.m==1 ? 'өглөө':''} #{meCusMed.d ==1 ? 'өдөр':''}  #{meCusMed.e==1 ? 'орой':''} #{meCusMed.n==1 ?'шөнө':''} ,#{meCusMed.medicineDescription}" /></td>
+							</tr>
+						</ui:repeat>
+					</table></td>
+			</c:if>
+
+		</tr>
+		<tr>
+			<c:if test="#{inspectionController.listXray.size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-family: Times New Roman;"><h:outputText
+						style="font-size: 13px;font-weight: 700;"
+						value=" Захиалсан  оношилгоо:" />
+					<table width="100%" style="padding-left: 20px" cellpadding="0"
+						cellspacing="0">
+						<tr>
+							<td colspan="1" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">№</td>
+							<td colspan="6" valign="middle"
+								style="border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Оношилгооны
+								нэр</td>
+							<td colspan="5" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Заалт</td>
+						</tr>
+						<ui:repeat var="meCusXray"
+							value="#{inspectionController.listXray}" varStatus="index">
+							<tr>
+								<td colspan="1"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+								<td colspan="6"
+									style="border-bottom: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;"><h:outputText
+										value="#{meCusXray.name}" /></td>
+								<td colspan="5"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;">#{meCusXray.description}</td>
+							</tr>
+						</ui:repeat>
+					</table></td>
+			</c:if>
+		</tr>
+		<tr>
+			<c:if test="#{inspectionController.listSurgery.size()>0}">
+				<td colspan="12"
+					style="font-size: 13px; font-family: Times New Roman;"><h:outputText
+						style="font-weight: 700;font-size: 13px;"
+						value=" Захиалсан  хагалгаа:" />
+					<table width="100%" style="padding-left: 20px" cellpadding="0"
+						cellspacing="0">
+						<tr>
+							<td colspan="1" valign="middle"
+								style="border: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">№</td>
+							<td colspan="11" valign="middle"
+								style="border-bottom: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">Хагалгааны
+								нэр</td>
+						</tr>
+						<ui:repeat var="meCusSurgery"
+							value="#{inspectionController.listSurgery}" varStatus="index">
+							<tr>
+								<td colspan="1"
+									style="border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; text-align: center; font-size: 13px; font-family: Times New Roman;">#{index.index+1}</td>
+								<td colspan="11"
+									style="border-bottom: 1px solid black; border-right: 1px solid black; text-align: left; font-size: 13px; font-family: Times New Roman;"><h:outputText
+										value="#{meCusSurgery.name}" /></td>
+							</tr>
+						</ui:repeat>
+					</table></td>
+			</c:if>
+		</tr>
+		<tr>
+			<td colspan="12"
+				style="text-align: right; font-size: 13px; font-family: Times New Roman;">
+				<p:panel styleClass="imageIdsPrint no-style-panel"
+					style="text-align:right; font-size: 13px; font-family: Times New Roman;"> 
+	                Эмчийн  нэр: 
+	                     <h:graphicImage
+						style="font-size: 12px; font-family: Times New Roman;vertical-align: middle;display:#{inspectionController.getrBase64String(inspectionController.currentEmployee.signature)}"
+						value="#{inspectionController.getrBase64String(inspectionController.currentEmployee.signature)}"
+						width="78" height="40">
+					</h:graphicImage>
+					<h:outputText
+						style="font-size: 13px; font-family: Times New Roman;vertical-align: middle;"
+						value="/ #{inspectionController.currentEmployee.firstName} / " />
+
+				</p:panel>
+
+			</td>
+		</tr>
+		<tr>
+			<td colspan="12" style="text-align: right"><p:panel
+					styleClass="am29acdmenu no-style-panel" style="display:none">
+					<h:outputText
+						style="vertical-align: middle;font-size: 13px; font-family: Times New Roman;vertical-align: middle;"
+						value="Гарын  үсэг хэвлэх : " />
+					<h:selectBooleanCheckbox style="vertical-align: middle;"
+						onclick="rowscount()"
+						value="#{inspectionController.sigNatureSelectCheck}">
+						<p:ajax event="change" update="@(.imageIdsPrint)"></p:ajax>
+					</h:selectBooleanCheckbox>
+				</p:panel></td>
+		</tr>
+		<tr>
+			<td colspan="12"
+				style="text-align: right; font-size: 13px; font-family: Times New Roman;">Үзлэгийн
+				огноо:#{inspectionController.getDateTime()}</td>
+		</tr>
+		<tr>
+			<td colspan="12"
+				style="text-align: right; font-size: 13px; font-family: Times New Roman;">Хэвлэсэн
+				огноо:#{inspectionController.getDateNow()}</td>
+		</tr>
+	</table>
+	<script>
+		//<![CDATA[
+		//]]>
+	</script>
+
+</ui:composition>

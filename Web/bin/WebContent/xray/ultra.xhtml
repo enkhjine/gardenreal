@@ -1,0 +1,1962 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="drequesto.xhtml">
+	<ui:define name="modulexray">
+		<div class="row">
+			<div class="display-table col-md-12" style="width: 100%;">
+				<div class="display-table-row">
+					<p:commandLink styleClass="display-table-cell btn"
+						onclick="PF('diagnose-dtl-dialog').show()"
+						actionListener="#{inspectionController.fillXrayRequest()}">
+							    		Дүрс оношилгоо
+							    	</p:commandLink>
+					<p:commandLink styleClass="display-table-cell btn"
+						oncomplete="PF('examination-dtl-dialog').show()"
+						actionListener="#{inspectionController.getOcsData()}"
+						update="form:doom" process="@this">
+							    		Шинжилгээний хариу
+							    	</p:commandLink>
+					<p:commandLink styleClass="display-table-cell btn"
+						onclick="PF('surgery-dtl-dialog').show()"
+						actionListener="#{inspectionController.getCustomerSurgery()}"
+						update="form:customerSurgeryTable">
+							    		Хагалгаа жагсаалт
+							    	</p:commandLink>
+					<p:commandLink styleClass="display-table-cell btn"
+						onclick="PF('treatment-dtl-dialog').show()"
+						actionListener="#{inspectionController.getCustomerTreatment()}"
+						update="form:customerTreatmentTable">
+							    		Эмчилгээний  явц
+							    	</p:commandLink>
+				</div>
+			</div>
+		</div>
+
+
+		<p:accordionPanel id="reinspection" multiple="true">
+			<p:tab title="Оношилгооны хариу">
+				<div class="row">
+					<div class="col-md-15" style="cursor: pointer;"
+						onclick="toggleLiver()">
+						<div class="form-title">
+							Элэг <i id="liver-chevron" class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="liver">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label> Элэгний эхо ойлт:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.liverReflection}">
+								<p:ajax event="change"></p:ajax>
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Бага зэрэг" itemValue="Бага зэрэг" />
+								<f:selectItem itemLabel="Ихэссэн" itemValue="Ихэссэн" />
+								<f:selectItem itemLabel="Багассан" itemValue="Багассан" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Бүтэц:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.liverState}">
+								<p:ajax event="change" />
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Жигд" itemValue="Жигд" />
+								<f:selectItem itemLabel="Жигд бус" itemValue="Жигд бус" />
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-2" style="text-align: center">
+							<div class="row">
+								<div class="col-md-8">
+									<label> Баруун дэлбэнгийн зузаан:</label>
+								</div>
+								<div class="col-md-4">
+									<p:inputText style="width:100%"
+										value="#{xrayController.ultrasound.liverRight}">
+										<p:ajax event="change"></p:ajax>
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2" style="text-align: center">
+							<div class="row">
+								<div class="col-md-8">
+									<label> Баруун дэлбэнгийн ташуу босоо хэмжээ:</label>
+								</div>
+								<div class="col-md-4">
+									<p:inputText style="width:100%"
+										value="#{xrayController.ultrasound.liverDiagonal}">
+										<p:ajax event="change"></p:ajax>
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2" style="text-align: center">
+							<div class="row">
+								<div class="col-md-8" style="text-align: center">
+									<label>Зүүн дэлбэнгийн зузаан:</label>
+								</div>
+								<div class="col-md-4">
+									<p:inputText style="width:100%"
+										value="#{xrayController.ultrasound.liverLeft}">
+										<p:ajax event="change"></p:ajax>
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Гадаргуу:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.liverUpside}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Тэгш" itemValue="Тэгш" />
+								<f:selectItem itemLabel="Тэгш бус" itemValue="Тэгш бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label> Үүдэн венийн голч:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.liverVensize}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Элэгний вен:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.liverVen}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<f:selectItem itemLabel="Нарийссан" itemValue="Нарийссан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Элгэн доторхи цөсний цорго:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.liverGall}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<f:selectItem itemLabel="Нарийссан" itemValue="Нарийссан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Элгэнд голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.liverSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.liverDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleGall()">
+						<div class="form-title">
+							Цөсний хүүдий <i id="gall-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="gall">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label> Хэмжээ өлөн үед:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.gallSizenumber}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.gallSize}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Агшсан" itemValue="Агшсан" />
+								<f:selectItem itemLabel="Суналттай" itemValue="Суналттай" />
+								<f:selectItem itemLabel="Мэс заслаар авагдсан"
+									itemValue="Мэс заслаар авагдсан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Хана:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.gallWallnumber}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.gallWall}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Зузаан" itemValue="Зузаан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-2" style="text-align: center">
+							<div class="row">
+								<div class="col-md-7" style="text-align: center">
+									<label>Агууламж,голомтот өөрчлөлт:</label>
+								</div>
+								<div class="col-md-5">
+									<p:selectOneMenu style="width:100%"
+										value="#{xrayController.ultrasound.gallSidestruct}">
+										<f:selectItem itemLabel="Сонгох" itemValue="" />
+										<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+										<f:selectItem itemLabel="Цөс өтгөрсөн"
+											itemValue="Цөс өтгөрсөн" />
+										<f:selectItem itemLabel="Тунадастай" itemValue="Тунадастай" />
+										<f:selectItem itemLabel="Чулуутай" itemValue="Чулуутай" />
+										<f:selectItem itemLabel="Ургацагтай" itemValue="Ургацагтай" />
+										<p:ajax event="change"></p:ajax>
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Хана:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.gallWallstruct}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Нугаралтгүй" itemValue="Нугаралтгүй" />
+								<f:selectItem itemLabel="Нугаралттай" itemValue="Нугаралттай" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Цөсний ерөнхий цорго:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.gallGeneral}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өргөсөөгүй" itemValue="Өргөсөөгүй" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голч:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.gallNumber}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1"></div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.gallSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1"></div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.gallDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="togglePancreas()">
+						<div class="form-title">
+							Нойр булчирхай <i id="pancreas-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="pancreas">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Эхо ойлт:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.pancreasReflection}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Бага зэрэг" itemValue="Бага зэрэг" />
+								<f:selectItem itemLabel="Ихэссэн" itemValue="Ихэссэн" />
+								<f:selectItem itemLabel="Багассан" itemValue="Багассан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Бүтэц:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.pancreasState}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Жигд" itemValue="Жигд" />
+								<f:selectItem itemLabel="Жигд бус" itemValue="Жигд бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Толгой:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.pancreasHead}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Их бие:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.pancreasBody}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Сүүл:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.pancreasTail}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Гадаргуу:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.pancreasUpside}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Тэгш" itemValue="Тэгш" />
+								<f:selectItem itemLabel="Тэгш бус" itemValue="Тэгш бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Суваг:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.pancreasPort}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.pancreasSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.pancreasDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleKidneyright()">
+						<div class="form-title">
+							Баруун бөөр <i id="kidneyright-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="kidneyright">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Хэмжээ:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightSize}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Гадаргуу:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightUpside}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Тэгш" itemValue="Тэгш" />
+								<f:selectItem itemLabel="Долгионтсон" itemValue="Долгионтсон" />
+								<f:selectItem itemLabel="Тэгш бус" itemValue="Тэгш бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> АТС:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightATC}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Бага зэрэг" itemValue="Бага зэрэг" />
+								<f:selectItem itemLabel="Сийрэг" itemValue="Сийрэг" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Паренхимийн зузаан:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightParenhimisize}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Паренхимийн эхо ойлт:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightParenhimi}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Ихэссэн" itemValue="Ихэссэн" />
+								<f:selectItem itemLabel="Буурсан" itemValue="Буурсан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label> Аяганцрын байдал:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightCup}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Зураглал тодорсон"
+									itemValue="Зураглал тодорсон" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label>АТС,паренхимийн харьцаа:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightATCParenhimi}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="1:2:1" itemValue="1:2:1" />
+								<f:selectItem itemLabel="1:1:1" itemValue="1:1:1" />
+								<f:selectItem itemLabel="1:3:1" itemValue="1:3:1" />
+								<f:selectItem itemLabel="2:1:2" itemValue="2:1:2" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.kidneyrightDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleKidneyleft()">
+						<div class="form-title">
+							Зүүн бөөр <i id="kidneyleft-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="kidneyleft">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Хэмжээ:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftSize}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Гадаргуу:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftUpside}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Тэгш" itemValue="Тэгш" />
+								<f:selectItem itemLabel="Долгионтсон" itemValue="Долгионтсон" />
+								<f:selectItem itemLabel="Тэгш бус" itemValue="Тэгш бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Эхо ойлт:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftReflection}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Ихэссэн" itemValue="Ихэссэн" />
+								<f:selectItem itemLabel="Буурсан" itemValue="Буурсан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> АТС:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftATC}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Бага зэрэг" itemValue="Бага зэрэг" />
+								<f:selectItem itemLabel="Сийрэг" itemValue="Сийрэг" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Паренхимийн зузаан:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftParenhimisize}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label> Паренхимийн эхо ойлт:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftParenhimi}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Ихэссэн" itemValue="Ихэссэн" />
+								<f:selectItem itemLabel="Буурсан" itemValue="Буурсан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Аяганцрын байдал:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftCup}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Зураглал тодорсон"
+									itemValue="Зураглал тодорсон" />
+								<f:selectItem itemLabel="Өргөссөн" itemValue="Өргөссөн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label>АТС,паренхимийн харьцаа:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftATCParenhimi}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="1:2:1" itemValue="1:2:1" />
+								<f:selectItem itemLabel="1:1:1" itemValue="1:1:1" />
+								<f:selectItem itemLabel="1:3:1" itemValue="1:3:1" />
+								<f:selectItem itemLabel="2:1:2" itemValue="2:1:2" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.kidneyleftDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleSpleen()">
+						<div class="form-title">
+							Дэлүү <i id="spleen-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="spleen">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label> Хэмжээ : (тоогоор)</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.spleenSizenumber}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Хэмжээ:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.spleenSize}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Томорсон" itemValue="Томорсон" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Бүтэц:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.spleenState}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Жигд" itemValue="Жигд" />
+								<f:selectItem itemLabel="Жигд бус" itemValue="Жигд бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Эхо ойлт:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.spleenReflection}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Ихэссэн" itemValue="Ихэссэн" />
+								<f:selectItem itemLabel="Буурсан" itemValue="Буурсан" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.spleenSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Дэлүүний вен:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.spleenVen}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.spleenDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleUterus()">
+						<div class="form-title">
+							Умай <i id="uterus-chevron" class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="uterus">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.uterusDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center">
+							<label> Эндометрийн зузаан:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.uterusEndometr}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleUterine()">
+						<div class="form-title">
+							Умайн дайвар <i id="uterine-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="uterine">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.uterineDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleProstate()">
+						<div class="form-title">
+							Түрүү булчирхай <i id="prostate-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="prostate">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Хэмжээ:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.prostateSizenumber}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.prostateSize}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Хэвийн" itemValue="Хэвийн" />
+								<f:selectItem itemLabel="Томорсон" itemValue="Томорсон" />
+								<f:selectItem itemLabel="Жижгэрсэн" itemValue="Жижгэрсэн" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Бүтэц:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.prostateState}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Жигд" itemValue="Жигд" />
+								<f:selectItem itemLabel="Жигд бус" itemValue="Жигд бус" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.prostateSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Зах ирмэг:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.prostateCorner}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Тэгш" itemValue="Тэгш" />
+								<f:selectItem itemLabel="Долгионтсон" itemValue="Долгионтсон" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.prostateDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleBladder()">
+						<div class="form-title">
+							Давсаг <i id="bladder-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="bladder">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Ханын зузаан:</label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.bladderWall}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Голомтот:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.bladderSide}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Өөрчлөлтгүй" itemValue="Өөрчлөлтгүй" />
+								<f:selectItem itemLabel="Өөрчлөлттэй" itemValue="Өөрчлөлттэй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label> Үлдэгдэл шээс:</label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.bladderPee}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Тодорхойлогдоно"
+									itemValue="Тодорхойлогдоно" />
+								<f:selectItem itemLabel="Тодорхойлогдохгүй"
+									itemValue="Тодорхойлогдохгүй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText style="width:100%"
+								value="#{xrayController.ultrasound.bladderDoctor}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" style="cursor: pointer;"
+						onclick="toggleAbdomen()">
+						<div class="form-title">
+							Хэвлийн хөндий <i id="abdomen-chevron"
+								class="pull-right fa fa-chevron-down" />
+						</div>
+					</div>
+				</div>
+				<div class="row" id="abdomen">
+					<div class="row margin-bottom">
+						<div class="col-md-1" style="text-align: center">
+							<label>Хэвлийн хөндийд сул : </label>
+						</div>
+						<div class="col-md-1">
+							<p:selectOneMenu style="width:100%"
+								value="#{xrayController.ultrasound.abdomenLiquid}">
+								<f:selectItem itemLabel="Сонгох" itemValue="" />
+								<f:selectItem itemLabel="Шингэнтэй" itemValue="Шингэнтэй" />
+								<f:selectItem itemLabel="Шингэнгүй" itemValue="Шингэнгүй" />
+								<p:ajax event="change"></p:ajax>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1" style="text-align: center; padding-top: 5px">
+							<label>Тайлбар : </label>
+						</div>
+						<div class="col-md-1">
+							<p:inputText value="#{xrayController.ultrasound.abdomenDoctor}"
+								style="width:100%">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+
+			</p:tab>
+		</p:accordionPanel>
+		<div class="row">
+			<div class="col-md-9"></div>
+			<div class="col-md-1"
+				style="text-align: right; font-size: 12px; font-family: Times New Roman;">
+				<p:commandLink style="width:100%" oncomplete="PF('ultra').show();" styleClass="btn" 
+					actionListener="#{xrayController.printPrepare()}">
+				<i class="fa fa-print"></i> Хэвлэх
+				</p:commandLink>
+			</div>
+			<div class="col-md-1"
+				style="text-align: right; font-size: 12px; font-family: Times New Roman;">
+				<p:commandLink style="width:100%" value="Түр хадгалах" styleClass="btn" />
+			</div>
+			<div class="col-md-1"
+				style="text-align: right; font-size: 12px; font-family: Times New Roman;">
+				<p:commandLink style="width:100%" styleClass="btn"
+					actionListener="#{xrayController.saveUltrasound()}">
+					<i class="fa fa-save"></i> Хадгалах
+				</p:commandLink>
+			</div>
+		</div>
+
+
+		<p:dialog id="ultra" widgetVar="ultra" styleClass="dialog-scroll"
+			resizable="false" header="" closeOnEscape="true" modal="true"
+			height="500px" width="720px">
+			<p:panel id="ultra_data" styleClass="no-style-panel"
+				>
+				<table id="ultra_print" style="width: 100%">
+					<tr>
+						<td colspan="3"
+							style="font-size: 9px; font-family: Times New Roman; text-align: right; padding-right: 19px">
+							Монгол улс, Улаанбаатар хот</td>
+					</tr>
+					<tr>
+						<td colspan="1"
+							style="font-size: 9px; font-family: Times New Roman; text-align: center; font-weight: 700">
+							ИХ СУРГУУЛИЙН</td>
+						<td colspan="3"
+							style="font-size: 9px; font-family: Times New Roman; text-align: right; padding-right: 44px">
+							Зоригийн гудамж</td>
+					</tr>
+					<tr>
+						<td colspan="1"
+							style="font-size: 9px; font-family: Times New Roman; text-align: center; font-weight: 700">
+							НЭГДСЭН ЭМНЭЛЭГ</td>
+						<td colspan="3"
+							style="font-size: 9px; font-family: Times New Roman; text-align: right; padding-right: 17px">
+							Холбооны салбар 48, ш/х-221</td>
+					</tr>
+					<tr>
+						<td colspan="3"
+							style="font-size: 9px; font-family: Times New Roman; text-align: right;">
+							Утас: 70120091 Факс: 976-11-70120081</td>
+					</tr>
+					<tr>
+						<td colspan="3"
+							style="font-size: 9px; font-family: Times New Roman; text-align: right; padding-right: 14px">
+							E-mail: hospital@mnums.edu.mn</td>
+					</tr>
+					<tr>
+						<td colspan="3"
+							style="font-size: 15px; font-family: Times New Roman; font-weight: 700; text-align: right; padding-top: 8px">ДҮРС
+							ОНОШЛОГООНЫ ТАСАГ<br />
+						</td>
+					</tr>
+					<tr
+						style="font-size: 12px; font-family: Times New Roman; text-align: right">
+						<td colspan="3">........... он ...... сар ...... өдөр</td>
+					</tr>
+					<tr>
+						<td colspan="3"
+							style="font-size: 14px; font-family: Times New Roman; font-weight: 700; text-align: center">
+							ХЭВЛИЙН ХЭТ АВИАН ШИНЖИЛГЭЭ<br />
+						</td>
+					</tr>
+					<tr
+						style="font-size: 12px; font-family: Times New Roman; padding-top: 5px;">
+						<td>Овог нэр : #{xrayController.currentXrayRequest.customer.lastName} #{xrayController.currentXrayRequest.customer.firstName}</td>
+						<td>Нас : #{xrayController.currentXrayRequest.customer.age}</td>
+						<td style="text-align: right">Хүйс : #{xrayController.currentXrayRequest.customer.genderString}</td>
+					</tr>
+					<tr
+						style="font-size: 12px; font-family: Times New Roman; padding-top: 8px; width: 100%">
+						<td colspan="3" style="width: 100%"><br /> Элэг : Элэгний
+							эхо ойлт : #{xrayController.ultrasound.liverReflection} , Бүтэц :
+							#{xrayController.ultrasound.liverState} , Баруун дэлбэнгийн
+							зузаан : #{xrayController.ultrasound.liverRight} см , Баруун
+							дэлбэнгийн ташуу босоо хэмжээ :
+							#{xrayController.ultrasound.liverDiagonal} см , Зүүн дэлбэнгийн
+							зузаан : #{xrayController.ultrasound.liverLeft} см , Гадаргуу :
+							#{xrayController.ultrasound.liverUpside} , Үүдэн венийн голч :
+							#{xrayController.ultrasound.liverVensize} см , Элэгний вен :
+							#{xrayController.ultrasound.liverVen} , Элгэн доторхи цөсний
+							цорго : #{xrayController.ultrasound.liverGall} , Элгэнд голомтот
+							: #{xrayController.ultrasound.liverSide} ,
+							#{xrayController.ultrasound.liverDoctor}<br /> Цөсний хүүдий :
+							Хэмжээ өлөн үед : #{xrayController.ultrasound.gallSizenumber} см
+							, #{xrayController.ultrasound.gallSize} , Хана :
+							#{xrayController.ultrasound.gallWall} ,
+							#{xrayController.ultrasound.gallWallnumber} мм , Агууламж,
+							голомтот өөрчлөлт : #{xrayController.ultrasound.gallSidestruct} ,
+							Хана : #{xrayController.ultrasound.gallWallstruct} , Цөсний
+							ерөнхий цорго : #{xrayController.ultrasound.gallGeneral} , Голч :
+							#{xrayController.ultrasound.gallNumber} мм , Голомтот :
+							#{xrayController.ultrasound.gallSide} ,
+							#{xrayController.ultrasound.gallDoctor}<br /> Нойр булчирхай :
+							Эхо ойлт : #{xrayController.ultrasound.pancreasReflection} ,
+							Бүтэц : #{xrayController.ultrasound.pancreasState} , Толгой :
+							#{xrayController.ultrasound.pancreasHead} см , Их бие :
+							#{xrayController.ultrasound.pancreasBody} см , Сүүл :
+							#{xrayController.ultrasound.pancreasTail} см , Гадаргуу :
+							#{xrayController.ultrasound.pancreasUpside} , Суваг :
+							#{xrayController.ultrasound.pancreasPort} , Голомтот :
+							#{xrayController.ultrasound.pancreasSide} ,
+							#{xrayController.ultrasound.pancreasDoctor}<br /> Баруун бөөр :
+							Хэмжээ : #{xrayController.ultrasound.kidneyrightSize} см ,
+							Гадаргуу : #{xrayController.ultrasound.kidneyrightUpside} , АТС :
+							#{xrayController.ultrasound.kidneyrightATC} , Голомтот :
+							#{xrayController.ultrasound.kidneyrightSide} , Паренхимийн зузаан
+							: #{xrayController.ultrasound.kidneyrightParenhimisize} см ,
+							Паренхимийн эхо ойлт :
+							#{xrayController.ultrasound.kidneyrightParenhimi} , Аяганцрын
+							байдал : #{xrayController.ultrasound.kidneyrightCup} , АТС,
+							паренхимийн харьцаа :
+							#{xrayController.ultrasound.kidneyrightATCParenhimi} ,
+							#{xrayController.ultrasound.kidneyrightDoctor}<br /> Зүүн бөөр :
+							Хэмжээ : #{xrayController.ultrasound.kidneyleftSize} см ,
+							Гадаргуу : #{xrayController.ultrasound.kidneyleftUpside} , Эхо
+							ойлт : #{xrayController.ultrasound.kidneyleftReflection} , АТС :
+							#{xrayController.ultrasound.kidneyleftATC} , Голомтот :
+							#{xrayController.ultrasound.kidneyleftSide} , Паренхимийн зузаан
+							: #{xrayController.ultrasound.kidneyleftParenhimisize} см ,
+							Паренхимийн эхо ойлт :
+							#{xrayController.ultrasound.kidneyleftParenhimi} , Аяганцрын
+							байдал : #{xrayController.ultrasound.kidneyleftCup} , АТС,
+							паренхимийн харьцаа :
+							#{xrayController.ultrasound.kidneyleftATCParenhimi} ,
+							#{xrayController.ultrasound.kidneyleftDoctor}<br /> Дэлүү :
+							Хэмжээ : #{xrayController.ultrasound.spleenSizenumber} см ,
+							#{xrayController.ultrasound.spleenSize} , Бүтэц :
+							#{xrayController.ultrasound.spleenState} , Эхо ойлт :
+							#{xrayController.ultrasound.spleenReflection} , Голомтот :
+							#{xrayController.ultrasound.spleenSide} , Дэлүүний вен :
+							#{xrayController.ultrasound.spleenVen} мм ,
+							#{xrayController.ultrasound.spleenDoctor}<br /> Умай :
+							#{xrayController.ultrasound.uterusDoctor} , Эндометрийн зузаан :
+							#{xrayController.ultrasound.uterusEndometr} <br /> Умайн дайвар
+							: #{xrayController.ultrasound.uterineDoctor} <br /> Түрүү
+							булчирхай : Хэмжээ :
+							#{xrayController.ultrasound.prostateSizenumber} см ,
+							#{xrayController.ultrasound.prostateSize} , Бүтэц :
+							#{xrayController.ultrasound.prostateState} , Голомтот :
+							#{xrayController.ultrasound.prostateSide} , Зах ирмэг
+							#{xrayController.ultrasound.prostateCorner} ,
+							#{xrayController.ultrasound.prostateDoctor} <br /> Давсаг :
+							Ханын зузаан : #{xrayController.ultrasound.bladderWall} см ,
+							Голомтот : #{xrayController.ultrasound.bladderSide} , Үлдэгдэл
+							шээс : #{xrayController.ultrasound.bladderPee} ,
+							#{xrayController.ultrasound.bladderDoctor}<br /> Хэвлийн хөндийд
+							сул : #{xrayController.ultrasound.abdomenLiquid} ,
+							#{xrayController.ultrasound.abdomenDoctor}</td>
+					</tr>
+				</table>
+				
+			</p:panel>
+			<a class="btn btn-app" href="javascript:void()"
+				onclick="print1('ultra_print');"> <i
+				class="fa fa-print color-blue" /> ХЭВЛЭХ
+			</a>
+			<a class="btn btn-app" onclick="printPdf();"
+				href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+				PDF <p:remoteCommand process="@this" name="printToPDF" />
+			</a>
+			<a class="btn btn-app"
+				onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+		<p:dialog id="ERMprintDialogs1" widgetVar="ERMprintDialog1"
+			width="800px" height="500" styleClass="dialog-scroll">
+			<p:panel id="ERMprint_panel1" styleClass="no-style-panel">
+				<ui:include src="#{inspectionController.inpectionTypeString}"></ui:include>
+			</p:panel>
+			<a class="btn btn-app" href="javascript:void(0)"
+				onclick="print1('EmrTablePrint');"> <i
+				class="fa fa-print color-blue"></i> Хэвлэх
+			</a>
+			<a class="btn btn-app"
+				onclick="tableToExcel('EmrTablePrint','Хэвлэх');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" id="ocs-redirect"
+			widgetVar="ocsRedirect" modal="true" resizable="false">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">EMR Амжилттай
+						хадгалагдлаа.<br /> OCS-рүү шилжих үү ?
+					</td>
+				</tr>
+			</table>
+			<div class="row">
+				<div class="col-md-1" />
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn " action="ocs"
+						oncomplete="PF('ocsRedirect').hide();">
+						<i class="fa fa-fw fa-check" />Тийм</p:commandLink>
+				</div>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn redBtn"
+						oncomplete="PF('ocsRedirect').hide();">
+						<i class="fa fa-fw fa-times" />Үгүй</p:commandLink>
+				</div>
+				<div class="col-md-1" />
+			</div>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" id="confirmDialogDiagnose"
+			widgetVar="confirmDialogDeleteDiagnose" modal="true"
+			resizable="false" width="300">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">Та оношийг устгахдаа
+						итгэлтэй байна уу?</td>
+				</tr>
+			</table>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="examination-dtl-dialog"
+			styleClass="dialog-scroll" header="Шинжилгээ" minimizable="true"
+			closeOnEscape="yes" width="750" height="500">
+			<div class="row">
+				<div class="col-md-12 margin-bottom">
+					<p:panel id="doom" styleClass="no-style-panel">
+						<p:commandLink styleClass="btn"
+							onclick="$(PF('allExaTable').jqId).show();$(PF('exaTable').jqId).hide()">
+		    				Бүгд
+		    			</p:commandLink>
+						<ui:repeat var="exam"
+							value="#{inspectionController.customerExaminations}">
+							<p:commandLink styleClass="btn"
+								action="#{inspectionController.getExaminationResults(exam)}"
+								oncomplete="$(PF('allExaTable').jqId).hide();$(PF('exaTable').jqId).show()">
+			    				#{exam.examinationName} (#{exam.count})
+			    			</p:commandLink>
+						</ui:repeat>
+					</p:panel>
+				</div>
+			</div>
+			<p:dataTable styleClass="myTable" id="examination-info"
+				widgetVar="allExaTable" style="display:none;"
+				value="#{inspectionController.listExaminationRequestCompleted}"
+				var="dtl" rowIndexVar="rowIndex" emptyMessage="Хоосон байна">
+				<p:column headerText="№" styleClass="id">
+						#{rowIndex + 1}						
+					</p:column>
+				<p:column headerText="Огноо" styleClass="date-time">
+						#{dtl.getDateString(dtl.getRequestDate())}						
+					</p:column>
+				<p:column headerText="Шинжилгээний нэр" styleClass="text">
+						#{dtl.examinationName}						
+					</p:column>
+				<p:column headerText="Лаборант" styleClass="text">
+						#{dtl.employeeName}
+					</p:column>
+				<p:column headerText="Илгээсэн эмч" styleClass="text">
+						#{dtl.employeeName}
+					</p:column>
+			</p:dataTable>
+			<p:panel styleClass="no-style-panel" widgetVar="exaTable" id="qop">
+				<div class="ui-datatable ui-widget myTable">
+					<div class="ui-datatable-tablewrapper">
+						<table>
+							<thead id="form:examination-info_head">
+								<tr>
+									<th class="ui-state-default id"><span>Элемент</span></th>
+									<th class="ui-state-default id"><span>Лавлах хэмжээ</span></th>
+									<th class="ui-state-default id"><span>Нэгж</span></th>
+									<ui:repeat var="req"
+										value="#{inspectionController.currentCustomerExaminations}">
+										<th class="ui-state-default date-time"><span>#{req.getDateString(req.requestDate)}</span>
+										</th>
+									</ui:repeat>
+								</tr>
+							</thead>
+							<tbody id="form:examination-info_data"
+								class="ui-datatable-data ui-widget-content">
+
+								<ui:repeat var="result"
+									value="#{inspectionController.examinationResults}">
+
+									<tr class="ui-widget-content ui-datatable-even">
+										<td class="text">#{result.evqName}</td>
+										<td class="text">#{result.range}</td>
+										<td class="text">#{result.measurement}</td>
+										<ui:repeat var="value" value="#{result.values}">
+											<td class="short-number">#{value}</td>
+										</ui:repeat>
+									</tr>
+
+								</ui:repeat>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</p:panel>
+		</p:dialog>
+		<p:dialog widgetVar="examinationEquals" header="Дэлгэрэнгүй"
+			width="800" height="500">
+		</p:dialog>
+		<p:dialog widgetVar="exaResultPrint" id="exaResultPrint" height="500"
+			width="800" closeOnEscape="true" resizable="false"
+			styleClass="dialog-scroll" header="Шинжилгээний үзүүлэлтүүд">
+			<p:panel styleClass="no-style-panel" id="dubuQo">
+				<ui:repeat var="e" value="#{customerController.filteredErc}"
+					varStatus="status">
+					<table id="tablePrintFromcl" style="width: 100%;">
+						<tr>
+							<td colspan="4"
+								style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+								АШУҮИС-ийн "ИХ СУРГУУЛИЙН НЭГДСЭН ЭМНЭЛЭГ"</td>
+						</tr>
+						<tr>
+							<td colspan="2"
+								style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; padding: 12px 0px;">
+								Овог, Нэр : #{e.customer.lastName} , #{e.customer.firstName}</td>
+							<td colspan="2"
+								style="font-size: 13px; font-family: Times New Roman; text-align: right; vertical-align: middle; padding: 12px 0px;">
+								Нас, Хүйс : #{e.customer.age} , #{e.customer.genderString}</td>
+						</tr>
+						<tr>
+							<td colspan="4"
+								style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+								#{e.examinationName}</td>
+						</tr>
+						<tr>
+							<td colspan="4"
+								style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; padding-top: 12px;">
+								<table style="border: 0.1px solid black; width: 100%"
+									cellpadding="0" cellspacing="0">
+									<tr>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											№</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Асуумж</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Лавламж</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											Нэгж</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											Хариу</td>
+									</tr>
+									<ui:repeat value="#{e.exaResults}" var="r" varStatus="index">
+										<tr>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{index.index+1}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.evqName}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.range}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.measurement}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.value}</td>
+										</tr>
+									</ui:repeat>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"
+								style="font-size: 12px; font-family: Times New Roman; padding: 12px 0px; text-align: left;">Эмч:
+							</td>
+							<td colspan="2"
+								style="font-size: 12px; font-family: Times New Roman; padding: 12px 60px 0px 0px; text-align: right;">Лаборант:
+							</td>
+						</tr>
+
+					</table>
+					<!-- <p:panel styleClass = "no-style-panel" rendered="#{!status.last}" > 
+					<div  style = "page-break-before: always;" />
+				</p:panel> -->
+				</ui:repeat>
+				<p
+					style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; text-align: center;">Хэвлэсэн
+					огноо:
+					#{customerController.getDateString(customerController.currentDate)}</p>
+			</p:panel>
+			<a class="btn btn-app" href="javascript:void(0)"
+				onclick="print1('form:dubuQo');"> <i
+				class="fa fa-print color-blue"></i> Хэвлэх
+			</a>
+			<a class="btn btn-app" onclick="printPdf();"
+				href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+				PDF <p:remoteCommand process="@this" name="printToPDF" />
+			</a>
+			<a class="btn btn-app"
+				onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+
+		<p:dialog widgetVar="showImage" modal="false"
+			header="#{i18n['xray_image']}" resizable="true"
+			styleClass="dialog-scroll" width="800" height="550" id="showImage"
+			closeOnEscape="true">
+			<div class="row">
+				<p:graphicImage id="pppp"
+					style="max-width:100%; max-height:100v; position:absolute;"
+					value="#{xrayController.imageRentgen}" cache="false" />
+			</div>
+		</p:dialog>
+
+		<p:dialog widgetVar="diagnose-dtl-dialog" styleClass="dialog-scroll"
+			header="Оношилгоо" height="400" width="800" minimizable="true">
+			<p:panel styleClass="no-style-panel" id="xrayInfoUpdate">
+				<div class="content">
+					<div class="row" style="margin-top: 10px; margin-botton: 10px;">
+						<div class="col-md-4">
+							<p style="font-weight: 900; float: left;">Овог, Нэр :</p>
+							<p>#{inspectionController.selectedCustomer.lastName} ,
+								#{inspectionController.selectedCustomer.firstName}</p>
+						</div>
+						<div class="col-md-4">
+							<p style="font-weight: 900; float: left;">Нас, Хүйс :</p>
+							<p>#{inspectionController.selectedCustomer.age} ,
+								#{inspectionController.selectedCustomer.genderString}</p>
+						</div>
+						<div class="col-md-4">
+							<p style="font-weight: 900; float: left;">РД :</p>
+							<p>#{inspectionController.selectedCustomer.regNumber}</p>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<p:dataTable id="tableXrayInfo" styleClass="myTable"
+							value="#{inspectionController.xrayRequests}" var="info"
+							rowIndexVar="index" emptyMessage="#{i18n['empty']}"
+							paginator="true" paginatorPosition="bottom">
+							<p:column styleClass="index" headerText="№"> #{index + 1}</p:column>
+							<p:column styleClass="date"
+								headerText="#{i18n['sent_by_doctor']} / #{i18n['date']}">#{info.dateString} <br /> #{info.employeeName}  </p:column>
+							<p:column styleClass="text" headerText="#{i18n['xray_name']}">#{info.xrayName} </p:column>
+							<p:column styleClass="text" headerText="#{i18n['description']}"> #{info.description} </p:column>
+							<p:column styleClass="text" headerText="#{i18n['image']}">
+								<ui:repeat value="#{info.imgList}" var="il" varStatus="index">
+									<h:commandLink value="#{il}"
+										rendered="#{info.image != null and !il.endsWith('jpg')}"
+										actionListener="#{xrayController.showSelectedImage(info, il)}">
+										<p:fileDownload value="#{xrayController.imageRentgen}" />
+									</h:commandLink>
+
+									<p:commandLink value="#{il}"
+										rendered="#{info.image != null and il.endsWith('jpg')}"
+										actionListener="#{xrayController.showSelectedImage(info, il)}"
+										oncomplete="PF('showImage').show();">
+									</p:commandLink>
+
+									<br />
+								</ui:repeat>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:panel>
+		</p:dialog>
+		<p:dialog widgetVar="surgery-dtl-dialog" styleClass="dialog-scroll"
+			header="Хагалгаа" minimizable="true">
+			<p:selectOneMenu filter="true"
+				value="#{inspectionController.selectedSurgeryTypePkId}"
+				styleClass="pull-left">
+				<f:selectItem itemLabel="Бүгд" itemValue="0" />
+				<f:selectItems value="#{applicationController.surgeryType}"
+					var="type" itemLabel="#{type.name}" itemValue="#{type.pkId}" />
+			</p:selectOneMenu>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.beginDate}"
+				styleClass="date-control pull-left" />
+			<span class="pull-left">-</span>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.endDate}"
+				styleClass="date-control pull-left" />
+			<p:inputText id="filterSurgeryName" styleClass="pull-left"
+				value="#{inspectionController.filterSurgeryName}" />
+			<p:watermark for="filterSurgeryName" value="Хагалгааны нэр"></p:watermark>
+
+			<p:commandButton icon="ui-icon-search" value="Шүүх"
+				actionListener="#{inspectionController.getCustomerSurgery}"
+				ajax="true" update="form:customerSurgeryTable"></p:commandButton>
+			<p:dataTable id="customerSurgeryTable" styleClass="myTable"
+				emptyMessage="Хоосон байна." style="width: 100%;"
+				value="#{inspectionController.listSurgeryInfo}" var="item"
+				rowIndexVar="index" paginator="true" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5">
+				<p:column headerText="Төрөл" styleClass="text">
+						#{item.typeName}
+					</p:column>
+				<p:column headerText="Нэр" styleClass="text">
+						#{item.name}
+					</p:column>
+				<p:column headerText="Үргэлжлэх хугацаа" styleClass="number">
+						#{item.dayLength}
+					</p:column>
+				<p:column headerText="Илгээсэн эмч" styleClass="text">
+						#{item.doctorName}
+					</p:column>
+				<p:column headerText="Огноо" styleClass="date">
+						#{item.getDateString(item.inspectionDate)}
+					</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog widgetVar="medicine-dtl-dialog" styleClass="dialog-scroll"
+			header="Эм" minimizable="true">
+			<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+				var="inspectionInfo" style="width: 100%;"
+				value="#{inspectionController.listMedicineInfo}">
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column headerText="Нэр" />
+						<p:column headerText="Хэмжих нэгж" />
+						<p:column headerText="Үргэлжлэх хугацаа" />
+						<p:column headerText="1 удаа хэрэглэх хэмжээ" />
+						<p:column headerText="Өдөрт уух тоо" />
+						<p:column headerText="Цагийн интервал" />
+					</p:row>
+				</p:columnGroup>
+				<p:subTable value="#{inspectionInfo.inspectionDtl}" var="dtl">
+					<f:facet name="header">
+			            	Огноо: #{inspectionInfo.getDateString()}
+			                #{inspectionInfo.subOrgaName} - #{inspectionInfo.employeeName}
+			            </f:facet>
+					<p:column styleClass="text">
+						<h:outputText value="#{dtl.name}" />
+					</p:column>
+					<p:column styleClass="short-text">
+						<h:outputText value="#{dtl.measurement}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.expireDay}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.dose}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.repeatCount}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.repeatTime}" />
+					</p:column>
+				</p:subTable>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog header="Эмчилгээ" widgetVar="treatment-dtl-dialog"
+			styleClass="dialog-scroll" minimizable="true">
+			<p:selectOneMenu filter="true"
+				value="#{inspectionController.selectedTreatmentTypePkId}"
+				styleClass="pull-left">
+				<f:selectItem itemLabel="Бүгд" itemValue="0" />
+				<f:selectItems value="#{applicationController.treatmentType}"
+					var="type" itemLabel="#{type.name}" itemValue="#{type.pkId}" />
+			</p:selectOneMenu>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.beginDate}"
+				styleClass="date-control pull-left" />
+			<span class="pull-left">-</span>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.endDate}"
+				styleClass="date-control pull-left" />
+			<p:inputText id="filterTreatmentName" styleClass="pull-left"
+				value="#{inspectionController.filterTreatmentName}" />
+			<p:watermark for="filterTreatmentName" value="Эмчилгээний нэр"></p:watermark>
+
+			<p:commandButton icon="ui-icon-search" value="Шүүх"
+				actionListener="#{inspectionController.getCustomerTreatment}"
+				ajax="true" update="form:customerTreatmentTable"></p:commandButton>
+			<p:dataTable id="customerTreatmentTable" styleClass="myTable"
+				emptyMessage="Хоосон байна" var="treatment" style="width: 100%;"
+				value="#{inspectionController.listTreatmentInfo}" paginator="true"
+				paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5">
+				<p:column headerText="Төрөл" styleClass="text">
+						#{treatment.typeName}
+					</p:column>
+				<p:column headerText="Нэр" styleClass="text">
+						#{treatment.name}
+					</p:column>
+				<p:column headerText="Үргэлжлэх хугацаа" styleClass="number">
+						#{treatment.dayLength}
+					</p:column>
+				<p:column headerText="Эмчилгээ хийх тоо" styleClass="number">
+						#{treatment.times}
+					</p:column>
+				<p:column headerText="Хийлгэсэн тоо" styleClass="number">
+						#{treatment.doneCount}
+					</p:column>
+				<p:column headerText="Илгээсэн эмч" styleClass="text">
+						#{treatment.doctorName}
+					</p:column>
+				<p:column headerText="Огноо" styleClass="date">
+						#{treatment.getDateString(treatment.inspectionDate)}
+					</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog header="Онош" widgetVar="all-diagnose-dialog" modal="true"
+			width="700" resizable="false" minimizable="true">
+			<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+				var="diagnose" style="width: 100%;"
+				value="#{applicationController.lazyDiagnoseList}" paginator="true"
+				lazy="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rows="5">
+				<p:column headerText="ID" styleClass="text"
+					filterBy="#{diagnose.id}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.id}
+						</p:commandLink>
+				</p:column>
+				<p:column headerText="Монгол нэр" styleClass="text"
+					filterBy="#{diagnose.nameMn}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.nameMn}
+						</p:commandLink>
+				</p:column>
+				<p:column headerText="Англи нэр" styleClass="number"
+					filterBy="#{diagnose.nameEn}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.nameEn}
+						</p:commandLink>
+				</p:column>
+				<p:column headerText="Орос нэр" styleClass="number"
+					filterBy="#{diagnose.nameRu}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.nameRu}
+						</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Тийм" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="Үгүй" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+		<div id="id-diagnose-overlay" class="diagnose-overlay"
+			style="display: none;">
+			<p:panel id="diagnose-list" styleClass="no-style-panel">
+				<div class="display-table">
+					<ui:repeat var="diagnose"
+						value="#{inspectionController.approvedFilteredDiagnose}">
+						<div class="diagnose-overlay-row">
+							<div class="display-table-cell">
+								<p:commandLink
+									actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}">
+												#{diagnose.id}
+								</p:commandLink>
+							</div>
+							<div class="display-table-cell">
+								<p:commandLink
+									actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}">
+												#{diagnose.nameMn}
+								</p:commandLink>
+							</div>
+						</div>
+					</ui:repeat>
+					<div class="col-md-12 text-center" style="">Таны хайсан онош
+						байхгүй байна</div>
+				</div>
+			</p:panel>
+		</div>
+		<div id="modal-image" class="modal-image" style="display: none;">
+			<div class="modal-image-close" onclick="$('#modal-image').hide()">
+				<i class="fa fa-remove" />
+			</div>
+		</div>
+		<p:remoteCommand name="refreshDiagnoseList"
+			actionListener="#{inspectionController.getFilteredDiagnoses}"
+			process="@form" update="form:diagnose-list" />
+	</ui:define>
+	<ui:define name="additional-script-2">
+		<script
+			src="#{applicationController.path}js/jquery.elevateZoom-3.0.8.min.js"
+			type="text/javascript"></script>
+		<script>
+			//<![CDATA[
+			var isReinspection = false;
+			var diagnoseInputId = "";
+			$(document)
+					.ready(
+							function() {
+								if ($("#form\\:inspSelect\\:0").attr("checked")) {
+									isReinspection = false;
+									$("#form\\:reinspection").hide();
+									$("#form\\:inspection").show();
+								} else {
+									isReinspection = true;
+									$("#form\\:reinspection").show();
+									$("#form\\:inspection").hide();
+								}
+								$(document)
+										.click(
+												function(elem) {
+													if ($(elem.target).attr(
+															"id") != diagnoseInputId) {
+														$(
+																"#id-diagnose-overlay")
+																.hide();
+													}
+												})
+								$(window)
+										.scroll(
+												function() {
+													if ($(
+															"#id-diagnose-overlay")
+															.css('display') != 'none') {
+														var elem = document.activeElement;
+														$(
+																"#id-diagnose-overlay")
+																.offset(
+																		{
+																			top : parseFloat($(
+																					elem)
+																					.offset().top)
+																					+ parseFloat($(
+																							elem)
+																							.outerHeight()),
+																			left : $(
+																					elem)
+																					.offset().left
+																		})
+													}
+												});
+								// 				$(PrimeFaces.escapeClientId('form:search-inspection')).click();
+
+								// 				$('#form').areYouSure();
+							});
+			function callRefreshList(elem, diagnose, type, byName) {
+				if ($(elem).val().length > 2 || $(elem).val().length == 0) {
+					delay(function() {
+						refreshDiagnoseList([ {
+							name : 'val',
+							value : $(elem).val()
+						}, {
+							name : 'diag',
+							value : diagnose
+						}, {
+							name : 'typ',
+							value : type
+						}, {
+							name : 'byName',
+							value : byName
+						} ])
+					}, 300);
+				}
+			}
+			function showDiagnosePick(elem, diagnose, type, byName) {
+				if ($(elem).val().length == 0) {
+					delay(function() {
+						refreshDiagnoseList([ {
+							name : 'val',
+							value : $(elem).val()
+						}, {
+							name : 'diag',
+							value : diagnose
+						}, {
+							name : 'typ',
+							value : type
+						}, {
+							name : 'byName',
+							value : byName
+						} ])
+					}, 300);
+				}
+				var topPos = parseFloat($(elem).offset().top)
+						+ parseFloat($(elem).outerHeight());
+				var leftPos = $(elem).offset().left;
+				diagnoseInputId = $(elem).attr("id");
+				console.log(topPos + ' ' + leftPos);
+				$("#id-diagnose-overlay").show();
+				$("#id-diagnose-overlay").offset({
+					top : topPos,
+					left : leftPos
+				});
+			}
+			function showHideInspection() {
+				if (isReinspection) {
+					isReinspection = false;
+					$("#form\\:reinspection").hide();
+					$("#form\\:inspection").show();
+				} else {
+					isReinspection = true;
+					$("#form\\:reinspection").show();
+					$("#form\\:inspection").hide();
+				}
+			}
+			function uploadImage(id) {
+				$(
+						PrimeFaces
+								.escapeClientId('form:reinspection:fileUpload_input'))
+						.click();
+			}
+			function makeZoomable() {
+				// 				$(".zoom").each(function(e){
+				// 					$($(".zoom")[e]).attr("data-zoom-image", $($(".zoom")[e]).attr('src'))
+				// 					$($(".zoom")[e]).elevateZoom({scrollZoom : true,zoomWindowPosition: 10,easing : true});
+				// 				})
+			}
+			function showModalImage(elem) {
+				$("#modal-image img").remove();
+				$("#modal-image").show();
+				var clone = $(elem).clone();
+				$(clone).removeAttr("height");
+				console.log($(clone).height());
+				$(clone).load(function() {
+					if ($(this).height() > 400) {
+						$(this).height(400);
+					}
+				});
+				$(clone).addClass("absolute-center");
+				$(clone).attr("id", "");
+				$("#modal-image").append(clone);
+			}
+			var toggleLiver = function(){
+				$('#liver').toggle('fast','swing');
+				if($('#liver-chevron').hasClass('fa-chevron-down'))
+					$('#liver-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				else
+					$('#liver-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+			}
+			var toggleGall = function(){
+				$('#gall').toggle('fast','swing');
+				if($('#gall-chevron').hasClass('fa-chevron-down'))
+					$('#gall-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad");
+				else
+					$('#gall-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad");
+			}
+			var togglePancreas = function(){
+				$('#pancreas').toggle('fast','swing');
+				if($('#pancreas-chevron').hasClass('fa-chevron-down'))
+					$('#pancreas-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#pancreas-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleKidneyright = function(){
+				$('#kidneyright').toggle('fast','swing');
+				if($('#kidneyright-chevron').hasClass('fa-chevron-down'))
+					$('#kidneyright-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#kidneyright-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleKidneyleft = function(){
+				$('#kidneyleft').toggle('fast','swing');
+				if($('#kidneyleft-chevron').hasClass('fa-chevron-down'))
+					$('#kidneyleft-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#kidneyleft-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleSpleen = function(){
+				$('#spleen').toggle('fast','swing');
+				if($('#spleen-chevron').hasClass('fa-chevron-down'))
+					$('#spleen-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#spleen-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleUterus = function(){
+				$('#uterus').toggle('fast','swing');
+				if($('#uterus-chevron').hasClass('fa-chevron-down'))
+					$('#uterus-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#uterus-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleUterine = function(){
+				$('#uterine').toggle('fast','swing');
+				if($('#uterine-chevron').hasClass('fa-chevron-down'))
+					$('#uterine-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#uterine-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleProstate = function(){
+				$('#prostate').toggle('fast','swing');
+				if($('#prostate-chevron').hasClass('fa-chevron-down'))
+					$('#prostate-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#prostate-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleBladder = function(){
+				$('#bladder').toggle('fast','swing');
+				if($('#bladder-chevron').hasClass('fa-chevron-down'))
+					$('#bladder-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#bladder-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var toggleAbdomen = function(){
+				$('#abdomen').toggle('fast','swing');
+				if($('#abdomen-chevron').hasClass('fa-chevron-down'))
+					$('#abdomen-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad")
+				else
+					$('#abdomen-chevron').switchClass("fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad")
+			}
+			var calcWeightIndex = function() {
+				debugger;
+				var height = $("#form\\:inspection\\:pastHistory\\:height")
+						.val(), weight = $(
+						"#form\\:inspection\\:pastHistory\\:weight").val();
+				if (parseFloat(height) != 0 && parseFloat(weight) != 0) {
+					$("#weightIndex").html(
+							(weight / Math.pow(height / 100, 2)).toFixed(2));
+				}
+			}
+			function copyText(inp) {
+				debugger;
+				if (inp) {
+					// select text
+					if (document.selection) {
+						var range = document.body.createTextRange();
+						range.moveToElementText(inp);
+						range.select();
+					} else if (window.getSelection) {
+						var range = document.createRange();
+						range.selectNode(inp);
+						window.getSelection().addRange(range);
+					}
+
+					try {
+						// copy text
+						document.execCommand('copy');
+						inp.blur();
+						// copied animation
+					} catch (err) {
+						alert('please press Ctrl/Cmd+C to copy');
+					}
+				}
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,3568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="drequesto.xhtml">
+	<ui:define name="modulexray">
+		<div class="row">
+			<div class="display-table col-md-12" style="width: 100%;">
+				<div class="display-table-row">
+					<p:commandLink styleClass="display-table-cell btn blueBtn"
+						onclick="PF('diagnose-dtl-dialog').show()"
+						actionListener="#{inspectionController.fillXrayRequest()}">
+							    		Дүрс оношилгоо
+							    	</p:commandLink>
+					<p:commandLink styleClass="display-table-cell btn blueBtn"
+						oncomplete="PF('examination-dtl-dialog').show()"
+						actionListener="#{inspectionController.getOcsData()}"
+						update="form:doom" process="@this">
+							    		Шинжилгээний хариу
+							    	</p:commandLink>
+					<p:commandLink styleClass="display-table-cell btn blueBtn"
+						onclick="PF('surgery-dtl-dialog').show()"
+						actionListener="#{inspectionController.getCustomerSurgery()}"
+						update="form:customerSurgeryTable">
+							    		Хагалгаа жагсаалт
+							    	</p:commandLink>
+					<p:commandLink styleClass="display-table-cell btn blueBtn"
+						onclick="PF('treatment-dtl-dialog').show()"
+						actionListener="#{inspectionController.getCustomerTreatment()}"
+						update="form:customerTreatmentTable">
+							    		Эмчилгээний  явц
+							    	</p:commandLink>
+				</div>
+			</div>
+		</div>
+
+
+		<p:accordionPanel id="xrayInspection" multiple="true">
+			<p:tab title="Бэлтгэл" style="padding: 0px 0px 0px 0px !important;">
+				<div class="row margin-bottom">
+					<div class="col-md-1">
+						<p:outputLabel
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Оношлогоо:" />
+					</div>
+					<div class="col-md-3">
+						<p:selectOneMenu style="width:70%" styleClass="pull-right"
+							value="#{xrayController.esDtl.diagnose}">
+							<f:selectItem itemValue="Анхан давтан хяналт"
+								itemLabel="Анхан давтан хяналт" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="col-md-1">
+						<p:outputLabel
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Эмчилгээ:" />
+					</div>
+					<div class="col-md-3">
+						<p:selectOneMenu value="#{xrayController.esDtl.treatment}"
+							style="width:70%" styleClass="pull-right">
+							<f:selectItem itemLabel="1" itemValue="1" />
+							<f:selectItem itemLabel="2" itemValue="2"  />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="col-md-1">
+						<p:outputLabel
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Таниулах зөвшөөрөл:" />
+					</div>
+					<div class="col-md-3">
+						<p:selectOneMenu style="width:70%" styleClass="pull-right"
+							value="#{xrayController.esDtl.auth}">
+							<f:selectItem itemValue="no" itemLabel="Авсан" />
+							<f:selectItem itemValue="yes" itemLabel="Аваагүй" />
+						</p:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row margin-bottom">
+					<div class="col-md-1">
+						<p:outputLabel
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Өлөн" />
+					</div>
+					<div class="col-md-3">
+						<p:selectOneRadio styleClass="pull-right"
+							value="#{xrayController.esDtl.hungry}">
+							<f:selectItem itemValue="yes" itemLabel="Тийм"></f:selectItem>
+							<f:selectItem itemValue="no" itemLabel="Үгүй"></f:selectItem>
+						</p:selectOneRadio>
+					</div>
+
+					<div class="col-md-4 margin-bottom">
+						<p:outputLabel styleClass="pull-left"
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Цус шингэлэх эм уусан эсэх" />
+						<p:inputText value="#{xrayController.esDtl.blood}"
+							styleClass="pull-right" style="width:40%" />
+					</div>
+					<div class="col-md-4">
+						<p:outputLabel styleClass="pull-left"
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Бэлтгэл эм тариа" />
+						<p:inputText value="#{xrayController.esDtl.preparePuncture}"
+							styleClass="pull-right" style="width:40%" />
+					</div>
+				</div>
+				<div class="row margin-bottom">
+					<div class="col-md-4">
+						<p:outputLabel styleClass="pull-left"
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Антибиотик хэрэглэсэн" />
+						<p:inputText value="#{xrayController.esDtl.antiBiotic}"
+							styleClass="pull-right" style="width:40%" />
+					</div>
+
+					<div class="col-md-4">
+						<p:outputLabel styleClass="pull-left"
+							style="font-size:10px; margin-left:10px; color:#666f77"
+							value="Ходоодны хүчил бууруулах эм уусан эсэх" />
+						<p:inputText value="#{xrayController.esDtl.acid}"
+							styleClass="pull-right" style="width:30%" />
+					</div>
+				</div>
+
+				<div class="row margin-bottom">
+					<div class="row ">
+						<div class="col-md-4">
+							<p:outputLabel styleClass="pull-left"
+								style="font-size:10px; margin-left:10px; color:#666f77"
+								value="Хэсгийн мэдээ алдуулалт" />
+							<p:selectOneMenu value="#{xrayController.esDtl.sectional}"
+								styleClass="pull-right" style="width:40%">
+								<f:selectItem itemLabel="1" itemValue="1" />
+								<f:selectItem itemLabel="2" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="col-md-4">
+							<p:outputLabel styleClass="pull-left"
+								style="font-size:10px; margin-left:10px; color:#666f77"
+								value="Унтуулгатай мэдээ алдуулалт" />
+							<p:selectOneMenu styleClass="pull-right" style="width:40%"
+								value="#{xrayController.esDtl.narcos}">
+								<f:selectItem itemLabel="1" itemValue="1" />
+								<f:selectItem itemLabel="2" itemValue="2" />
+							</p:selectOneMenu>
+						</div>
+
+
+
+					</div>
+				</div>
+
+				<div class="row margin-bottom">
+					<div class="row">
+						<div class="col-md-2">
+							<p:outputLabel styleClass="pull-left"
+								style="font-size:10px; margin-left:10px; color:#666f77"
+								value="HP ureasa хэрэглэсэн" />
+						</div>
+
+						<div class="col-md-2">
+							<p:selectOneRadio value="#{xrayController.esDtl.hpureasa}">
+								<f:selectItem itemLabel="-" itemValue="-" />
+								<f:selectItem itemLabel="+" itemValue="+" />
+								<f:selectItem itemLabel="++" itemValue="++" />
+								<f:selectItem itemLabel="+++" itemValue="+++" />
+							</p:selectOneRadio>
+						</div>
+
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+
+				<div class="row margin-bottom">
+					<div class="col-md-4">
+						<p:selectBooleanCheckbox styleClass="pull-left"
+							style="margin-left:10px;" itemLabel="Indigocarmin"
+							value="#{xrayController.esDtl.indi}" />
+					</div>
+
+					<div class="col-md-4">
+						<p:selectBooleanCheckbox styleClass="pull-left"
+							style="margin-left:10px;" itemLabel="Methylene Blue"
+							value="#{xrayController.esDtl.methy}" />
+					</div>
+
+					<div class="col-md-4">
+						<p:selectBooleanCheckbox styleClass="pull-left"
+							style="margin-left:10px;" itemLabel="Lugol's solution 1%"
+							value="#{xrayController.esDtl.lugo}" />
+					</div>
+				</div>
+			</p:tab>
+
+			<p:tab title="Оношилгооны хариу">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="col-md-12">
+							<p:panel styleClass="no-style-panel" id="qo">
+								<div class="row">
+									<div class="col-md-12 margin-top">
+										<p:panelGrid columns="2" styleClass="form-table">
+											<p:outputLabel value="Зураг:" style="width: 60px;" />
+											<p:commandLink styleClass="btn" onclick="uploadImage();"
+												actionListener="#{xrayController.setImageType('endo')}">
+												<i class="fa fa-fw fa-upload" /> Зураг сонгох
+														</p:commandLink>
+										</p:panelGrid>
+									</div>
+									<div class="col-md-12 margin-top">
+										<p:panel styleClass="no-style-panel no-padding" id="galleria">
+											<ui:repeat var="attachment"
+												value="#{xrayController.xrayAttachments}">
+												<div
+													style="float: left; text-align: center; position: relative;">
+													<p:graphicImage
+														value="#{xrayController.getDynamicImage(xrayController.getXrayAttachments().indexOf(attachment))}"
+														cache="false" height="50" onclick="showModalImage(this);"
+														style="margin-right: 5px;" styleClass="zoom">
+														<f:param name="image_id"
+															value="#{xrayController.getXrayAttachments().indexOf(attachment)}" />
+													</p:graphicImage>
+													<br />
+													<p:commandLink
+														actionListener="#{xrayController.setAttachment(attachment)}"
+														oncomplete="PF('attachment-name').show();">
+														<i class="fa fa-edit color-blue" data-toggle="tooltip"
+															data-placement="bottom" title="Зурганд нэр өгөх" />
+													</p:commandLink>
+													<p:commandLink
+														actionListener="#{inspectionController.deleteFile(xrayController.xrayAttachments, attachment)}"
+														oncomplete="updateXrayAtt()">
+														<i class="fa fa-trash color-red" data-toggle="tooltip"
+															data-placement="bottom" title="Устгах" />
+													</p:commandLink>
+												</div>
+											</ui:repeat>
+
+											<p:remoteCommand name="updateXrayAtt" update="qo" />
+										</p:panel>
+									</div>
+									<p:fileUpload id="fileUpload"
+										fileUploadListener="#{xrayController.upload1}"
+										style="display:none;" onstart="showLoader()"
+										oncomplete="hideLoader();" onerror="hideLoader();"
+										sizeLimit="100000000" multiple="true" auto="true"
+										description="#{i18n['choose_image']}" />
+								</div>
+							</p:panel>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="row margin-bottom">
+							<div class="col-md-12" style="cursor: pointer;"
+								onclick="togglePL();">
+								<div class="form-title">
+									Pharynx, Larynx cervical esophagus <i
+										class="pull-right fa fa-chevron-down" id="PL-chevron" />
+								</div>
+							</div>
+						</div>
+						<div class="row" id="PL">
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									style="margin-left:10px" itemLabel="Normal"
+									onchange="checkBoxChanged(this, 'plimp')" />
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left rl"
+									style="margin-left:10px" itemLabel="Reflux laryngopharyngitis"
+									onchange="checkBoxChanged(this, 'plimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									style="margin-left:10px"
+									itemLabel="Diffuse erythema, edema, interarytenoid hypertrophy, cobblestoning"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									style="margin-left:10px"
+									itemLabel="Reflux finding Score(RFS): subglottic edema"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									style="margin-left:10px" itemLabel="ventricular obliration"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									style="margin-left:10px" itemLabel="erythema/ hyperemia"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									style="margin-left:10px" itemLabel="duffuse laryngeal edema"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									style="margin-left:10px"
+									itemLabel="posterior commussure hypertrophy "
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left rlenigma"
+									itemLabel="granuloma/ granulation tissue thick endolaryngeal mucus"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left cl"
+									itemLabel="Corrosive lesion" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'plimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left clenigma"
+									itemLabel="Edema" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left clenigma"
+									itemLabel="epithelial hemorrhage" style="margin-left:10px" />
+								<p:selectBooleanCheckbox styleClass="pull-left clenigma"
+									itemLabel="Ulceration " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left clenigma"
+									itemLabel="desquamation" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lp"
+									itemLabel="Laryngopharyngeal papilloma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'plimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left lpenigma"
+									itemLabel="Wartlike appearance of squamous epithelium"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left ll"
+									itemLabel="Laryngopharyngeal Lipoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'plimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left llenigma"
+									itemLabel="Well circumscribed lession with greasy consistency and yellow to orange color- 'pillow sign'"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left vcl"
+									itemLabel="Vocal Cord Nodule" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'plimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left vclenigma"
+									itemLabel="Calluses of the vocal folds"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+							</div>
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lc"
+									itemLabel="Laryngeal Cancer" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'plimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left lcenigma"
+									itemLabel="Thickening, irregular large mass"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'pldesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">IMP:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="plimp" value="#{xrayController.esDtl.plimp}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none; "
+										styleClass="plimp1" value="#{xrayController.esDtl.plimpValue}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">DESC:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="pldesc" value="#{xrayController.esDtl.pldesc}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="pldesc1"
+										value="#{xrayController.esDtl.pldescValue}" />
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12" style="cursor: pointer;"
+								onclick="toggleESO();">
+								<div class="form-title">
+									Esophagus <i class="pull-right fa fa-chevron-down"
+										id="ESO-chevron" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row" id="ESO">
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Cervical Esophugus; upper esophageal sphincter"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left "
+									itemLabel="Thoracic Esophagus: upper, middle, lower"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="anterior wall; posterior wall,"
+									style="margin-left:10px" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Esophagogastric Junction(EGJ);"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Size ….. Cm" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="small ,middle,  large, " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="diffuse, multiple, few, focal,"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<p
+								style="color: #4f4f4f !important; font-weight: 700 !important; font-size: 12px">Infectious
+								Esophagitis:</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left ve"
+									itemLabel="Viral Esophagitis(HIV, HSV, CMV)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left veenigma"
+									itemLabel="Multiple vesicular lesions" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left veenigma"
+									itemLabel="shallow ulcers with prominent demarcation"
+									style="margin-left:10px" />
+								<p:selectBooleanCheckbox styleClass="pull-left veenigma"
+									itemLabel="large ulcer formation by confluence of small ilcers"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left veenigma"
+									itemLabel="Longitudinal deep ulcer" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left ce"
+									itemLabel="Candida Esophagitis " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left ceenigma"
+									itemLabel="Multiple white and yellowish mucosal plaquelike lesion"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedecs');" />
+
+
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left be"
+									itemLabel="Bacterial Esophagitis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left beenigma"
+									itemLabel="Vaious appearamces ranging  from normal mucosa to ulcer assocoated with erythema, plaques, pseudomembranes or hemorrhage"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left te"
+									itemLabel="Tuberculous Esophagitis " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left teenigma"
+									itemLabel="Ulcerative, tumorlike lesion"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Noninfectious
+								Esophagitis:</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left pie"
+									itemLabel="Pill-Induced Esophagitis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left pieenigma"
+									itemLabel="Well-demarcated, solitary , multiple ulcer, 'kissing type' ulcers"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left contacte"
+									itemLabel="Contact Esophagitis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left contacteenigma"
+									itemLabel="Longitudinal erotion or ulcer with mucosal edema"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left corrisivee"
+									itemLabel="Corrisive Esophagitis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left corrisiveeenigma"
+									itemLabel="Erythema, edema, bleeding, erosions , ulcers; "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left corrisiveeenigma"
+									itemLabel="I degree:mucosal hyperemia and edema;  "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left corrisiveeenigma"
+									itemLabel="II degree:shallow erosions or deep ulcers with covering exudates and severe erythema;  "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left corrisiveeenigma"
+									itemLabel="III degree:transmural damage and extensive mucosal necrosis "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left radiatione"
+									itemLabel="Radiation Esophagitis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left radiationeenigma"
+									itemLabel="Acute stage: erythema, edema, erotion, ulcer, exudates and necrosis"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left radiationeenigma"
+									itemLabel="Chronic stage: stricture, fistula, scar change, telangiectasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left radiationeenigma"
+									itemLabel="Coexistent fungal or viral esophagitis"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left eosinophilice"
+									itemLabel="Eosinophilic Esophagitis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left eosinophiliceenigma"
+									itemLabel="Ridges, linear furrows, white exudate or multiple rings, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left behcetd"
+									itemLabel="Behçet's Disease- Associated Esophagitis"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left behcetdenigma"
+									itemLabel="Well demarcated, geographic ulcers "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left skind"
+									itemLabel="Skin Disease- Associated Esophagitis"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left skindenigma"
+									itemLabel="Edematous desquamated epithelial layer"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Reflux
+								esophagitis - GERD</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gerda"
+									itemLabel="GERD grade A" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gerdaenigma"
+									itemLabel="≥1 mucosal break no longer than 5mm without continuation between mucosal fold"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gerdb"
+									itemLabel="GERD grade B" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gerdbenigma"
+									itemLabel="≥1 mucosal break  longer than 5mm without continuation between mucosal fold"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gerdc"
+									itemLabel="GERD grade C" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gerdcenigma"
+									itemLabel="≥1 mucosal break  that is continuous between  the top of two or more mucosal fold  but that involves less than 75% of the circumference"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gerdd"
+									itemLabel="GERD grade D" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gerddenigma"
+									itemLabel="≥1 mucosal break  that involves less at least 75% of the esophageal circumference"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left sentinelfold"
+									itemLabel="Sentinel fold " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left peptics"
+									itemLabel="Peptic Strictures" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Barrett's
+								Esophagus</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left praguem"
+									itemLabel="Prague: maximal length(M, Tongues)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lengtho"
+									itemLabel="length of the circumferential Barrett;s segment(C)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">
+								Benign Esophageal Tumor</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left epithelialt"
+									itemLabel="Epithelial Tumors:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+							</div>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left squamousp"
+									itemLabel="Squamous Papilloma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left squamouspenigma"
+									itemLabel="Small, whirish-pink, wartlik, exophytic projections"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left adenoma"
+									itemLabel="Adenoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left adenomaenigma"
+									itemLabel="these lesions arise almaost exlusively in the segments of Barrett`s esophagus"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Nonepithelial
+								tumors</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left leimyoma"
+									itemLabel="Leiomyoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left leimyomaenigma"
+									itemLabel="varable sized nonspecific protrusions covered with intact squamous mucosa "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastrointestinals"
+									itemLabel="Gastrointestinal Stromal Tumor -GIST"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastrointestinalsenigma"
+									itemLabel="similar finding with leiomyoma from muscularis propria"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left granularc"
+									itemLabel="Granular Cell Tumor " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left granularcenigma"
+									itemLabel="yellowish-white, molar tooth-shaped, sessile polypoid appearance"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left cyctict"
+									itemLabel="Cystic Tumor" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left cyctictenigma"
+									itemLabel="variously sized, easily compressible, soft masses"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left fibravascularp"
+									itemLabel="Fibrovascular Polyp" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left fibravascularpenigma"
+									itemLabel="protruding mass covered by intact mucosa in cervical esophagus"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left inflammotoryf"
+									itemLabel="Inflammatory Fibroid Polyp" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left inflammotoryfenigma"
+									itemLabel="inflammatory pseudopolyps and eosinophilic granulomas"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lipoma"
+									itemLabel="Lipoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left lipomaenigma"
+									itemLabel="pale or yellowish - colored soft mass "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left hemamgioma"
+									itemLabel="Hemamgioma " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left hemamgiomaenigma"
+									itemLabel="nodular, soft, and bluish- red protrusion"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Esophageal
+								Cancer Classification</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left superficialece"
+									itemLabel="Superficial Esophageal Cancer (Early) "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="1. Protruding: Pedunculated- O-Ip; Sessile-O-Is"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="2. Nonprotruding and excavated type:"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Slightly elevated- O-IIa" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Completely flat O-IIb" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Slightly depressed- O-IIc" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Elevated and depressed O-IIc+IIa, O-IIa+ Iic"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="3. Excavated type:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Ulcer OIII" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Excavated and depressed OIIc+III, O-III+Iic"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="Endoscopic findings:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="mucosal alteration , discoloration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="nodular or depressed mucosa"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="erythema, erotion , ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="mucosa is friable and bleeds easily on examination and biopsy"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="nodular or depressed mucosa"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="erythema, erotion , ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left superficialeceenigma"
+									itemLabel="mucosa is friable and bleeds easily on examination and biopsy"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left advancedec"
+									itemLabel="Advanced Esophageal Cancer" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Type I : protruding type" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Type II: Ulcerative and localized type"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Type III: Ulcerative  and infiltrative type"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="TypeIV: Diffusely infiltrative type"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Type V Unclassifiable type" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Endoscopic findings:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Exophytic, polypoid mass " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Fungiform, cleftedsurface, sometimes with central excavation"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Erythema, erotion , ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Ulcerative carcinoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Indurated wall, eccentric luminal narrowing"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left advancedecenigma"
+									itemLabel="Surface may be nodular or ulcerated, but the mucosa may appear normal"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">
+								Miscellaneaous Esophageal Disease</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left esophagealv"
+									itemLabel="Esophageal Varices" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="1. Dagradi classification" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Grade I. variceal diameter less than 2 mm, disappear with esophageal lumen insufflation"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Grade I. variceal diameter less than 2 mm, disappear with esophageal lumen insufflation"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Grade II. varices of similar diameter, clearly visible in the esophageal lumen "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Grade III. varices of 3-4mm, prominent  in the esophageal lumen"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Grade IV. Vaceal diameter 5 mm or more, tortuous"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Grade V. red color signs" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="2. Japanese Research Society for portal Hypertension"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="General Color: Blue, White" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="F1(small and straight varices)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="F2(enlarged tortuous varices,less than one-third of the lumen )"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="red color signs absent" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="red wale markings" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="cherry red spots(-, +, ++, +++)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="hematocystic spot" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="diffuse redness" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="Proximal extension:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="distal one-third- Ls" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="extension to mid- esophagus-Lm"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left esophagealvenigma"
+									itemLabel="extention to proximal one- third- Li"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Motility
+								Disorders</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left achalasia"
+									itemLabel="Achalasia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left achalasiaenigma"
+									itemLabel="resistance to the endoscopic passage and failire of the cardia to open during prolonged observation."
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left diffuses"
+									itemLabel="Diffuse Esophageal Spasm" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left diffusesenigma"
+									itemLabel="segmental, irregular, nonpropulsive contractions"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left malloryw"
+									itemLabel="Mallory - Weissa and Boerhave Syndrome"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left mallorywenigma"
+									itemLabel="Longitudinal bloodstained or bleeding tears at the gasrtoesophageal junction, Perforation site"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Other</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left foreignb"
+									itemLabel="Foreign body" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left foreignbenigma"
+									itemLabel="roughA variety of foreign bodies are present in the esophagus (drug, fish bone, metal wire)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left diverticulum"
+									itemLabel="Diverticulum " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left diverticulumenigma"
+									itemLabel="esophageal diverticulum can be accompanied  by food impaction and erotion or ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left totalgs"
+									itemLabel="Total gastrectomy state" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'ceimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left totalgsenigma"
+									itemLabel="toatal gastrectomy with esophagojejunal anastomosis site may show mild inflammation findings"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'cedesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">IMP:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="ceimp" value="#{xrayController.esDtl.ceimp}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="ceimp1" value="#{xrayController.esDtl.ceimpValue}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">DESC:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="cedesc" value="#{xrayController.esDtl.cedesc}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="cedesc"
+										value="#{xrayController.esDtl.cedescValue}" />
+
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12" style="cursor: pointer;"
+								onclick="toggleST();">
+								<div class="form-title">
+									Stomach <i class="pull-right fa fa-chevron-down"
+										id="ST-chevron" />
+								</div>
+							</div>
+						</div>
+						<div class="row" id="ST">
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Cardia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Fundus" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Body (greater curvature, lesser curvature)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Antrum(Gastric angle, Pylorus ring )"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Anterior wall; Posterior wall,"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Size ….. Cm" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="small ,middle,  large, " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="diffuse, multiple, few, focal, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">
+								Gastritis;</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastritis"
+									itemLabel="Gastritis; " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gastritisenigma"
+									itemLabel="edema, erythema, friability, exudates, flat erotions, rised erotions, rugal hyperplasia, atrophy, visibility of a vascular pattern, intramural bleeding spots, nodularity"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left acuteg"
+									itemLabel="Acute gastritis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left acutegenigma"
+									itemLabel="erythema, rised erotion , flat erotion, mucosal edema, hyperemia, exudate, hemorrhage, friability of mucosa, intramucosal bleeding spots, intragastric hemorrhage, ulcerate"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left acutegenigma"
+									itemLabel="bleeding features: fresh, hematin, diffuse oozing, exudate, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left chronicg"
+									itemLabel="Chronic gastritis: " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left chronica"
+									itemLabel="Chronic  atrophic Gastritis and intestinal metaplsia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left chronicaenigma"
+									itemLabel="antral mucosa thinnig, color and context change of the mucosa to red and white, a white- colored mucosa, increased visibility of a vascular pattern, loss of  rugal fold with adequate air inspiration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left chronicaenigma"
+									itemLabel="Atrophy  by Kimura-Takemoto classification: C0, C1, C2, C3, O1, O2, 03"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Other
+								gastritis</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lymphocyticg"
+									itemLabel="Lymphocytic gastritis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left lymphocyticgenigma"
+									itemLabel="numerous tiny nodules " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left eosinophilicg"
+									itemLabel="Eosinophilic gastritis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+
+								<p:selectBooleanCheckbox
+									styleClass="pull-left eosinophilicgenigma"
+									itemLabel="irregularly shaped and variable sized erythemas  are scattered from the antrum to the body "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left syphiliticg"
+									itemLabel="Syphilitic gastritis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left syphiliticgenigma"
+									itemLabel="diffuse hemorrhagic gastritis and ulceration are usually noted from the antrum to the body aof the stomach"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastricsar"
+									itemLabel="Gastric Sarcoidosis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gastricsarenigma"
+									itemLabel="nodular mucosal irregularities, flat erotion, thickened mucosa, greater or lesser curvature deformities and benign or malignant- appering ulcers"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Hypertrophic
+								gastritis(Giant Gastric Rugae)</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left hypertrophicg"
+									itemLabel="Hypertrophic gastritis(Giant Gastric Rugae)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left hypertrophicgenigma"
+									itemLabel="fold hypertrophy, thick mucosa coats the folds, A variety of proliferative, inflammatory, and infiltrative conditions are associated with enlaged or giant mucosal fold in the stomach"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left "
+									itemLabel="Gastric ulcer" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Benign
+								Gastric Ucler</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Benign Gastric Ulcer: " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Active stage:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left a1"
+									itemLabel="A1" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left a1enigma"
+									itemLabel="Surrounding mucosa edematously swollen and no regeneratong epithelium present"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left a2"
+									itemLabel="A2" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left a2enigma"
+									itemLabel="Decrease in surrounding edema, clear ulcer margin, and slight amount of regenerating epithelium in the ulcer margin. Red halo in the marginal zone and white slough cicle in the ulcer margin are frquently seen. Usually, converging mucosal folds can be followed right up to the ulcer margin"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left healings"
+									itemLabel="Healing stage" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left h1"
+									itemLabel="H1" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left h1enigma"
+									itemLabel="thin with coating and regenerating epithelium extend into the ulcer base.the gradient between the ulcer margin and the ulcer floor becomes flat. An ulcer crater is still evident  ant the margin or the ulcer is sharp. The diameter of the mucosal defect is about one- half to two-thirds that od A1."
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left h2"
+									itemLabel="H2" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left h2enigma"
+									itemLabel="Defect is smaller than in H1 and the regenerating epithelium covers most of the ulcer floor. The area of white coating is about a quarter to one- third that of A1."
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left scarings"
+									itemLabel="Scaring stage" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left s1"
+									itemLabel="S1" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left s1enigma"
+									itemLabel="Red scar" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left s2"
+									itemLabel="S2" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left s2enigma"
+									itemLabel="White scar" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left complication"
+									itemLabel="Complication" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left complicationenigma"
+									itemLabel="bleeding(Forrest Ia, Forrest Ib, Forrest IIa, Forrest IIb, Forrest IIc, Forrest III), obstruction, penetration, perforation"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left nsaidiu"
+									itemLabel="NSAID - Induced Ulceration" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left nsaidiuenigma"
+									itemLabel="regular shape, clear demarcations, multiple ulcerations"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastrictuber"
+									itemLabel="Gastric Tuberculosis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastrictuberenigma"
+									itemLabel="refractory ulcer" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left amyloidosis"
+									itemLabel="Amyloidosis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left amyloidosisenigma"
+									itemLabel="shallow ulceration with thick and yellow exudate"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left cmvg"
+									itemLabel="CMV gastitis - induced ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left cmvgenigma"
+									itemLabel="superficial and deep ulcers, mucosal erythema, multiple ulcer with various shapes"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gistao"
+									itemLabel="GIST and other subepithelial tumors"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left "
+									itemLabel="Subepithelial tumor " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Benign:</p>
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenign"
+									itemLabel="GIST - benign" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="Gastrointestinal Stromal tumor(GIST): bugle, normal overlying mucosa, smooth, regular appearance, central necrosis, inflammatory lesion"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="GIST - benign" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="EUS appearance:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="very low risk: &lt;2 cm , &lt;5/50HPF"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="Low risk: 2-5cm,  &lt; 5/50HPF"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="Intermediate risk: &lt; 5cm, 6-10/50HPF; 5-10cm, &lt;5/50HPF"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left gistbenignenigma"
+									itemLabel="High risk: &gt;5cm, &gt; 5/50HPF; &gt;10cm, any mitotic rate; any size, &gt; 10/50HPF"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left leiomyma"
+									itemLabel="Leiomyoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left leiomymaenigma"
+									itemLabel="small and well circumscribed, feel rubbery when palpated with the endoscope"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lipoma"
+									itemLabel="Lipoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left lipomaenigma"
+									itemLabel="smooth submucosal masses with a yellowish hue, ' tenting' , 'cushion sign'. 'naked fat' "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left varix"
+									itemLabel="Varix" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left varixenigma"
+									itemLabel="pillow sign, bluish hue" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left neuralor"
+									itemLabel="Neural origin- schwannoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left neuralorenigma"
+									itemLabel="proximal portion, round, oval(multinodular)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left granularcell"
+									itemLabel="Granular cell tumor" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left granularcellenigma"
+									itemLabel="&lt; 2cm, sessile, yellow  and white hue, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left inflammatory"
+									itemLabel="Inflammatory fibrinoid polyp"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duplication"
+									itemLabel="Duplication cyst" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lymphangioma"
+									itemLabel="Lymphangioma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left lymphangiomaenigma"
+									itemLabel="semitransparent white submucosal tumor, easily compressible with forceps"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left pancreatic"
+									itemLabel="Pancreatic rest(ectopic pancreas)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left pancreaticenigma"
+									itemLabel="slightly irregular, 0.2-4 cm, mucosa over the lesion may have a central depression"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Malignant
+								(potentially)</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="GIST - malignant" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left carconoid"
+									itemLabel="Carcinoid" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left carconoidenigma"
+									itemLabel="slightly yellow, sessile, semipedunculated lesions with normal appearing overlying mucosa"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left carconoidenigma"
+									itemLabel="Type I (70-80%, multiple,&lt; 1cm, site-Fundus, atrophic gastritis)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left carconoidenigma"
+									itemLabel="Type II (less than 5%, Zollinger Ellison Syndrom, multiple, ,1cm, site- fundus,)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left carconoidenigma"
+									itemLabel="Type III (15-20%, sporadic carcinoid syndrom, single, 2-5 cm, site- fundus and antrum, )"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left "
+									itemLabel="Limphoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Metastasis" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left glumortumor"
+									itemLabel="Glomus tumor" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left glumortumorenigma"
+									itemLabel="small, median size ranging from 2 to 3cm"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Extrinsic
+								compression</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left extrinsiccomp"
+									itemLabel="Extrinsic compression" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left extrinsiccompenigma"
+									itemLabel="changing the patient's position, air insufflation, extraluminal compression"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">
+								Gastric polyps and Dysplasias</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Nonneoplastic polyps" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left hyperplastic"
+									itemLabel="Hyperplastic polyps" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left hyperplasticenigma"
+									itemLabel="&lt; 1.5cm , single, multiple, sessile, pedunculated, the pits of polyp surface are enlarged and hyperemic in color , small erotion, ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left fundicgland"
+									itemLabel="Fundic Gland polyps" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left fundicglandenigma"
+									itemLabel="single, multiple, glassy, transparent, sessile, &lt;1cm"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox
+									styleClass="pull-left inflammatoryfibroad"
+									itemLabel="Inflammatory fibroid polyp" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left inflammatoryfibroadenigma"
+									itemLabel="well-circumscribed solitary, small sessile, peduculated lesions with regular pit pattern"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left xanthoma"
+									itemLabel="Xanthoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left xanthomaenigma"
+									itemLabel="Grossly, single,  multiple, 1-2 mm, round , oval, well circumscibed, yellow, macular, nodular lession"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left hamartomatous"
+									itemLabel="Hamartomatous polyps and polyps associated with polyposis syndrom"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left hamartomatousenigma"
+									itemLabel="pedunculated, round polyps with hyperemic and exudative sufaces"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left peutz"
+									itemLabel="Peutz-Jeghers polyp" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left peutzenigma"
+									itemLabel="sporadically" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left juveline"
+									itemLabel="Juvenile polyps" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left juvelineenigma"
+									itemLabel="multiple, onset juvenile polyposis"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Neoplastic
+								polyps</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left neoplastic"
+									itemLabel="Neoplastic polyps" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left neoplasticenigma"
+									itemLabel="circumscribed, polypoid dysplastic lesions, reddish, whitish discolored, multilobulated surface, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left viennaclass"
+									itemLabel="Vienna classification of GI epithelial neoplasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left viennaclassenigma"
+									itemLabel="Neoplastic polyps(paris endoscopic classification)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left negativefor"
+									itemLabel="1. Negative for neoplasia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left negativeforenigma" itemLabel="Polypoid: "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left indefinite"
+									itemLabel="2. Indefinite for neoplasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left indefiniteenigma"
+									itemLabel="Ip-pedunculated" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left musocallow"
+									itemLabel="3. Mucosal low-grade neoplasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left musocallowenigma"
+									itemLabel="Is- Sessile" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lowgrade"
+									itemLabel="Low grade adenoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left lowgradeenigma"
+									itemLabel="Non- polypoid:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lowgradedys"
+									itemLabel="Low grade dysplasia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left lowgradedysenigma"
+									itemLabel="IIa- Slightly elevate" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left muscalhg"
+									itemLabel="4. Mucosal high-grade neoplasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left muscalhgenigma"
+									itemLabel="IIb- Flat" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left highgradea"
+									itemLabel="High grade adenoma/dysplasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left highgradeaenigma"
+									itemLabel="IIc- Slightly depressed" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left noninvasivec"
+									itemLabel="Noninvasive carcinoma(carcinoma in situ)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left noninvasivecenigma"
+									itemLabel="III- Excavated(ulcer)" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Suspicious for invasive carcinoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Intramucosal carcinoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="5. Submucosal invasion by carcinoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left adenomadys"
+									itemLabel="Adenoma/Dysplasia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left adenomadysenigma"
+									itemLabel=", multilobulated surface, contrasting with smooth and atrophic adjacent mucosa, suferficially eroded, erotion, ulceration, hyperemic changes, depressed"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Gastric polyps and Familial adenomatous polyposis"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">
+								Early gastric cancer</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox
+									styleClass="pull-left earlygastriccancer"
+									itemLabel="Early gastric cancer" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left earlygastriccancerenigma"
+									itemLabel="protrusion, shallow mucosal depression, flat mucosal discoloration, erythematous mucosal change, surrounding mucosal infiltration, granular, friable, hyperemic, exudate, hemorrhage"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type1egc"
+									itemLabel="Type I EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type1egcenigma"
+									itemLabel="protruded lesion, the height of tumor is more than that of the closed cups of biopsy forceps(2,5mm)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type2aegc"
+									itemLabel="Type IIa EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type2aegcenigma"
+									itemLabel="superficial elevated lesion no more than 2.5mm in height, granular, friable, hyperemic, exudate, hemorrhage"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type2b"
+									itemLabel="Type IIb EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type2benigma"
+									itemLabel="flat lesion which shows a subtle irregular mucosal nodularity or discoloration, irregular ulcer scar, irregular vascular ectasia"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type2c"
+									itemLabel="Type IIc EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type2cenigma"
+									itemLabel="superficial depressed lesion without ulcer, uneven, dirty, covered with whitish exudates, hemorrhage, the edge aand margin of the lession are irregular, blurred, converging folds, abrupt cutting, clubbing, fusion, rat-tail apperance"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type3"
+									itemLabel="Type III EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type3enigma"
+									itemLabel="excavated ulcer, more deep , irregular, the abnormal changes of converging folds "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left mixedtype"
+									itemLabel="Mixed -Type EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left mixedtypeenigma"
+									itemLabel="IIa+IIc; IIc+IIa; IIb+IIa; IIb+IIc;"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left agclike"
+									itemLabel="AGC-like EGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left agclikeenigma"
+									itemLabel="depressed lesion, deep ulcerative finding"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">
+								Advanced gastric cancer</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Borrmann's classification " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type1agc"
+									itemLabel="Type 1 AGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type1agcenigma"
+									itemLabel="polypoid form with a wide base that protrudes into the lumen without necrosid or ulceration, &gt;2-3cm, surface  is irregular, bleeding , black blood clots"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type2agc"
+									itemLabel="Type 2 AGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type2agcenigma"
+									itemLabel="ulcerative form with an ulcer and cancercells infiltrating the marginal elevations of the ulcer, the ulcer base is irregularly uneven, and the ulcer margin is encroached irregularly"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type3agc"
+									itemLabel="Type 3 AGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type3agc"
+									itemLabel="ulceroinfiltrative form, some elevated margin of the ulcer is destroyed by cancer infiltration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left type4agc"
+									itemLabel="Type 4 AGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left type4agc"
+									itemLabel="diffuse infiltrative form, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left egcmimicking"
+									itemLabel="EGC- Mimicking AGC" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left egcmimickingenigma"
+									itemLabel="EGCIIc-like AGC, after surgery, the infiltration of the  cancer "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left submucosal"
+									itemLabel="Submucosal Tumor-Like Carcinoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left submucosalenigma"
+									itemLabel="submucosal infiltration, depression, redness, exudate"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lymphocarc"
+									itemLabel="Lymphoepithelioma-Like Carcinoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left lymphocarcenigma"
+									itemLabel="heavy lymphocyte infiltration "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left mucinouscarc"
+									itemLabel="Mucinous Carcinoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left mucinouscarc"
+									itemLabel="produced mucin, larger , thicker tumor"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Primary Squamous Cell Carcinoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Gastric
+								Lymphomas and Other Gastric Malignancies</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gaslymphomas"
+									itemLabel="Gastric Lymphomas" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gaslymphomasenigma"
+									itemLabel="polypoid mass, ulcerative infiltration, hypertrophic thick fold"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gaslymphomasenigma"
+									itemLabel="exophytic polypoid masses" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gaslymphomasenigma"
+									itemLabel="ulcero-infiltrative" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gaslymphomasenigma"
+									itemLabel="Histological subtypes:" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gaslymphomasenigma"
+									itemLabel="hypertrophic with large, nodular folds"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gasextra"
+									itemLabel="Gastric extranodal marginal zone B cell lymphoma of MALT"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gasextraenigma"
+									itemLabel="B cell non Hodgkin lymphoma with perifollicular , marginal zone growth of small lymphocytes; from minimal mucosal changes to ulceration or masses mimicking gastric carcinoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left diffuseb"
+									itemLabel="Diffuse large B cell lymphoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left diffusebenigma"
+									itemLabel="aggressive lymphoma; exophytic mass, ulcerative infiltration, hypertrophic thick fold"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left matnlecell"
+									itemLabel="Mantle Cell Lymphoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left matnlecellenigma"
+									itemLabel="Non- Hodgkin lymphomas; multiple lymphomatous polyposis, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left enteropathyt"
+									itemLabel="Enteropathy -type T cell lymphoma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left enteropathytenigma"
+									itemLabel="multifocal, mucosal flattening, ulceration "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Gastric
+								malignancies</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gntgc"
+									itemLabel="Gastric neuroendocrine tumors(Castric carcinoids)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gntgcenigma"
+									itemLabel="multifocal small gastric polyps, &lt;10mm,multiple,  -well differentiated type1"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gntgcenigma"
+									itemLabel="part of Zollinger -Ellison syndrom , &lt;10mm-, multiple, well differentiated type 2"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gntgcenigma"
+									itemLabel="solitary &gt; 20mm, well differentiated- type 3"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left gntgcenigma"
+									itemLabel="solitary, often ulcerated, &gt;20mm, poor differentiated- type 4"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastricmeta"
+									itemLabel="Gastric metastasis from malignancies of other organs"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastricmetaenigma"
+									itemLabel="polypoid masses with erosions, ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Miscellaneous
+								gastric diseases</p>
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Vascular abnormalities" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastricangi"
+									itemLabel="Gastric angiodysplasia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastricangienigma"
+									itemLabel="brigth red, flat elevated lesions, 'watermelon stomach', telangiectatic lesions,"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left portalhyper"
+									itemLabel="Portal hypertensive gasropathy"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left portalhyperenigma"
+									itemLabel="GAVE-gastric antral vascular ectasia, congestive gastropathy, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left portalhyperenigma"
+									itemLabel="classification; mild-Mosaic pattern without red spots"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left portalhyperenigma"
+									itemLabel="moderate- typical mosaic pattern and infrequent red spots"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left portalhyperenigma"
+									itemLabel="severe - numerous red spots"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left dieulafoy"
+									itemLabel="Dieulafoy's lesion" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left dieulafoyenigma"
+									itemLabel="protuberant artery with a nipple , no surrounding alceration, 'caliber- persistent artery'"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left dieylafoyles"
+									itemLabel="Dieulafoy's lesion" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left dieylafoylesenigma"
+									itemLabel="protuberant artery with a nipple , no surrounding alceration, 'caliber- persistent artery'"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Anatomic
+								abnormalities</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastricdivert"
+									itemLabel="Gastric diverticulum " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastricdivertenigma"
+									itemLabel="outpouching of all of the wall layers"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left mallorytear"
+									itemLabel="Mallory - Weiss tear" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left mallorytearenigma"
+									itemLabel="mechanical laceration at the gasroesophageal junction"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left gastricbezoar"
+									itemLabel="Gastric Bezoar" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left gastricbezoarenigma"
+									itemLabel="mechanical laceration at the gasroesophageal junction"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left foreignbodies"
+									itemLabel="Foreign bodies" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left foreignbodiesenigma"
+									itemLabel="coins, balls, denturs, mercury cells, press- through packs, totthbrushes, wires, acupunture needles , may become lodged in the stomach"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'stdesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">IMP:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="stimp" value="#{xrayController.esDtl.stimp}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="stimp1" value="#{xrayController.esDtl.stimpValue}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">DESC:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="stdesc" value="#{xrayController.esDtl.stdesc}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="stdesc1"
+										value="#{xrayController.esDtl.stdescValue}" />
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12" style="cursor: pointer;"
+								onclick="toggleDUO();">
+								<div class="form-title">
+									Duodenum <i class="pull-right fa fa-chevron-down"
+										id="DUO-chevron" />
+								</div>
+							</div>
+						</div>
+						<div class="row" id="DUO">
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="bulbus" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="duodenal second portion" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="major papillae " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="minor papillae" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Anterior wall; Posterior wall,"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Size ….. Cm" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="small ,middle,  large, " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="diffuse, multiple, few, focal,"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodenitis"
+									itemLabel="Duodenitis " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenitisenigma"
+									itemLabel="erosions, erythema, edema, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodenal"
+									itemLabel="Duodenal Ulcers" style="margin-left:10px" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Active stage (A1, A2)" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Healing stage (H1, H2)" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Scarring stage (s1, S2)" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Complication" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Bleeding(Forrest calssification)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Type I - Active bleeding " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Forrest Ia - spurting bleeging"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Forrest Ib - Oozing bleeding "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="TypeII- Stigmata of recent bleeding"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Forrest IIa - nonbleeding protruding visible vessel "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Forrest IIb - Adherent clot "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Forrest IIc - flat red or black pigmentation"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Type III - Clean based ulcer"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Perforation" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalenigma"
+									itemLabel="Stricture" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Duodenal tumors" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodenalpoly"
+									itemLabel="Duodenal polyps" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox
+									styleClass="pull-left duodenalpolyenigma"
+									itemLabel="inflammatory hyperlpastic, gastric heterotopia(polypiod type, flat elevated type)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodgist"
+									itemLabel="Duodenal GIST" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodgistenigma"
+									itemLabel="mass with normal looking surface, central ulceration"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodcarc"
+									itemLabel="Duodenal carcinoids" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodcarcenigma"
+									itemLabel="small polypoid lesion with smooth slightly yellow overlying mucosa, top ulcerations, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left otherduod"
+									itemLabel="Other duodenal submucosal tumors(SMTs)"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left otherduodenigma"
+									itemLabel="ectopic pancreas, submucosal cysts, lipoma, lymphangioma"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodaden"
+									itemLabel="Duodenal adenocarcinoma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodadenenigma"
+									itemLabel="nodular, polypoid, flat wall- thickening, ulcerated, obstucted"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left duodenally"
+									itemLabel="Duodenal lymphomas" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+								<p:selectBooleanCheckbox styleClass="pull-left duodenallyenigma"
+									itemLabel="large exophytic masses, polypiod, ulcerative, superficial nodular"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Duodenal involvement of other malignancies"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+							</div>
+
+							<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Miscellaneaous
+								Duodenal Disease</p>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Duodenal diverticulum " style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left angiody"
+									itemLabel="Angiodysplasia" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left angiodyenigma"
+									itemLabel="5-10mm, cherry red, arborizing , ectatic vessels, surrounding halo, "
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left"
+									itemLabel="Duodenal varix" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left henochs"
+									itemLabel="Henoch- Schonlein Purpura" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left henochsenigma"
+									itemLabel="edematous , erosive, ulcerative lesions"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left lymphangiomna"
+									itemLabel="lymphangioma" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left smallpoly"
+									itemLabel="small polypoid lesion with whitish discoloration, Milky fluid may come out after a biopsy."
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+
+							<div class="row margin-bottom">
+								<p:selectBooleanCheckbox styleClass="pull-left ascaris"
+									itemLabel="Ascaris Lumbricoides" style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'doimp');" />
+
+								<p:selectBooleanCheckbox styleClass="pull-left ascarisenigma"
+									itemLabel="20-30 cm, gray to white, long, tubular worm, which can move very quickly"
+									style="margin-left:10px"
+									onchange="checkBoxChanged(this, 'dodesc');" />
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">IMP:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="doimp" value="#{xrayController.esDtl.doimp}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="doimp1" value="#{xrayController.esDtl.doimpValue}" />
+								</div>
+							</div>
+							<div class="row margin-bottom">
+								<div class="col-md-2">
+									<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">DESC:</p>
+								</div>
+								<div class="col-md-10" style="padding: 0px 10px;">
+									<p:inputTextarea rows="5" style="width:100%;"
+										styleClass="dodesc" value="#{xrayController.esDtl.dodesc}" />
+									<p:inputTextarea rows="5" style="width:100%; display:none;"
+										styleClass="dodesc1"
+										value="#{xrayController.esDtl.dodescValue}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:tab>
+
+		</p:accordionPanel>
+		<div class="row margin-bottom">
+			<div class="col-md-10"></div>
+			<div class="col-md-1">
+				<p:commandLink value="Хэвлэх" styleClass="btn blueBtn pull-right"
+					style="min-width:95%" oncomplete="PF('endoPrint').show();"
+					actionListener="#{xrayController.printPrepare()}" />
+			</div>
+			<div class="col-md-1">
+				<p:commandLink value="Хадгалах" styleClass="btn blueBtn pull-right"
+					style="min-width:95%"
+					actionListener="#{xrayController.saveEndoscope()}" />
+			</div>
+		</div>
+
+		<p:dialog id="endoPrint" widgetVar="endoPrint" height="550"
+			width="800" closeOnEscape="true" styleClass="dialog-scroll"
+			resizable="false">
+			<p:panel styleClass="no-style-panel">
+				<table id="esPrint" style="width: 100%;">
+					<tr>
+						<td colspan="4"
+							style="font-size: 15px; font-weight: 700; font-family: Times New Roman; border-bottom: 2px solid; padding-bottom: 5px;">
+							<center>
+								АШУҮИС "ИСНЭ"<br /> ГАСТРОЭНТРЕЛОГИ-ДУРАНГИЙН ТАСАГ
+							</center>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Оношилгоо</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.diagnose}</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Овог</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.currentXrayRequest.customer.lastName}</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Эмчилгээ</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.treatment}</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Нэр</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.currentXrayRequest.customer.firstName}</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Цус шингэлэх эм</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.blood}</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Нас Хүйс</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.currentXrayRequest.customer.age}
+								#{xrayController.currentXrayRequest.customer.genderString}</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Бэлтгэл эм тариа</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.preparePuncture}</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Антибиотик</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">
+								#{xrayController.esDtl.antiBiotic}</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								HP ureasa хэрэглэсэн</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.hpureasa}</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; font-family: Times New Roman;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								.....</p>
+						</td>
+						<td style="font-size: 13px; font-family: Times New Roman;">
+							<p style="text-align: right; margin-right: 10px">
+								#{xrayController.esDtl.indigocarmin},
+								#{xrayController.esDtl.methyleneBlue} ,
+								#{xrayController.esDtl.lugol}</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; border-bottom: 1px dashed; padding-bottom: 5px;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Ходоодны хүчил бууруулах эм</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; border-bottom: 1px dashed; padding-bottom: 5px;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.acid}</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; border-bottom: 1px dashed; padding-bottom: 5px;">
+							<p
+								style="font-size: 13px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Мэдээ алдуулалт</p>
+						</td>
+						<td
+							style="font-size: 13px; font-family: Times New Roman; border-bottom: 1px dashed; padding-bottom: 5px;">
+							<p style="text-align: right; margin-right: 10px">#{xrayController.esDtl.sectional}
+								, #{xrayController.esDtl.narcos}</p>
+						</td>
+					</tr>
+
+
+
+					<tr>
+						<td colspan="4"
+							style="font-size: 14px; font-family: Times New Roman; font-family: Times New Roman; padding-bottom: 5px;">
+							<p
+								style="font-size: 15px; font-weight: 700; font-family: Times New Roman;">
+								Гастрологийн онош</p>
+							<p
+								style="font-size: 14px; font-weight: 700; font-family: Times New Roman;">
+								<i> Шинжилгээнд илэрсэн өөрчлөлтүүд</i>
+							</p> Pharynx, Larynx cervical esophagus:
+							#{xrayController.esDtl.pldesc} <br /> Esophagus:
+							#{xrayController.esDtl.cedesc} <br /> Stomach:
+							#{xrayController.esDtl.stdesc} <br /> Duodenum:
+							#{xrayController.esDtl.dodesc} <br />
+
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4"
+							style="font-size: 14px; font-weight: 700; font-family: Times New Roman; border-bottom: 1px dashed; padding-bottom: 5px;">
+							<p
+								style="font-size: 14px; font-weight: 700; font-family: Times New Roman;">
+								<i> ОНОШ ДҮГНЭЛТ</i>
+							</p>
+							<p
+								style="font-size: 14px; font-weight: 700; font-family: Times New Roman; padding-left: 10px">
+								DS:#{xrayController.esDtl.ceimp} #{xrayController.esDtl.plimp}
+								#{xrayController.esDtl.stimp} #{xrayController.esDtl.doimp}</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="4"
+							style="font-size: 12px; font-family: Times New Roman; font-family: Times New Roman; padding-bottom: 5px;">
+							<ui:repeat var="attachment"
+								value="#{xrayController.xrayAttachments}" varStatus="status">
+								<div style="float: left;">
+									<p:graphicImage
+										value="#{xrayController.getDynamicImage(xrayController.getXrayAttachments().indexOf(attachment))}"
+										cache="false" height="200" width="225"
+										style="margin-right: 5px;margin-top:3px; " styleClass="zoom">
+										<f:param name="image_id"
+											value="#{xrayController.getXrayAttachments().indexOf(attachment)}" />
+									</p:graphicImage>
+									<p
+										style="font-size: 12px; font-weigth: 700; font-family: Times New Roman;">
+										#{attachment.description}</p>
+								</div>
+								<h:outputText
+									value="#{xrayController.columnDivide(status.index)}"
+									escape="false" />
+							</ui:repeat>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="2"
+							style="width: 400px; font-size: 14px; font-family: Times New Roman;">
+							<p
+								style="font-size: 14px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Шинжилсэн эмч:</p>
+						</td>
+
+						<td colspan="2"
+							style="font-size: 14px; font-family: Times New Roman;">
+							<p>/........................./</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="2"
+							style="font-size: 14px; font-family: Times New Roman;">
+							<p
+								style="font-size: 14px; font-weight: 700; font-family: Times New Roman; text-align: left;">
+								Сувилагч:</p>
+						</td>
+
+						<td colspan="2"
+							style="width: 400px; font-size: 14px; font-family: Times New Roman;">
+							<p>/........................./</p>
+						</td>
+					</tr>
+
+				</table>
+			</p:panel>
+
+
+
+			<a class="btn btn-app" href="javascript:void(0)"
+				onclick="print1('esPrint');"> <i class="fa fa-print color-blue"></i>
+				Хэвлэх
+			</a>
+			<a class="btn btn-app" onclick="printPdf();"
+				href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+				PDF <p:remoteCommand process="@this" name="printToPDF" />
+			</a>
+			<a class="btn btn-app"
+				onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+
+		<p:dialog styleClass="confirmDialog" id="ocs-redirect"
+			widgetVar="ocsRedirect" modal="true" resizable="false">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">EMR Амжилттай
+						хадгалагдлаа.<br /> OCS-рүү шилжих үү ?
+					</td>
+				</tr>
+			</table>
+			<div class="row">
+				<div class="col-md-1" />
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn " action="ocs"
+						oncomplete="PF('ocsRedirect').hide();">
+						<i class="fa fa-fw fa-check" />Тийм</p:commandLink>
+				</div>
+				<div class="col-md-5">
+					<p:commandLink styleClass="btn redBtn"
+						oncomplete="PF('ocsRedirect').hide();">
+						<i class="fa fa-fw fa-times" />Үгүй</p:commandLink>
+				</div>
+				<div class="col-md-1" />
+			</div>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" id="confirmDialogDiagnose"
+			widgetVar="confirmDialogDeleteDiagnose" modal="true"
+			resizable="false" width="300">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">Та оношийг устгахдаа
+						итгэлтэй байна уу?</td>
+				</tr>
+			</table>
+
+		</p:dialog>
+
+		<p:dialog widgetVar="examination-dtl-dialog"
+			styleClass="dialog-scroll" header="Шинжилгээ" minimizable="true"
+			closeOnEscape="yes" width="750" height="500">
+			<div class="row">
+				<div class="col-md-12 margin-bottom">
+					<p:panel id="doom" styleClass="no-style-panel">
+						<p:commandLink styleClass="btn"
+							onclick="$(PF('allExaTable').jqId).show();$(PF('exaTable').jqId).hide()">
+		    				Бүгд
+		    			</p:commandLink>
+						<ui:repeat var="exam"
+							value="#{inspectionController.customerExaminations}">
+							<p:commandLink styleClass="btn"
+								action="#{inspectionController.getExaminationResults(exam)}"
+								oncomplete="$(PF('allExaTable').jqId).hide();$(PF('exaTable').jqId).show()">
+			    				#{exam.examinationName} (#{exam.count})
+			    			</p:commandLink>
+						</ui:repeat>
+					</p:panel>
+				</div>
+			</div>
+			<p:dataTable styleClass="myTable" id="examination-info"
+				widgetVar="allExaTable" style="display:none;"
+				value="#{inspectionController.listExaminationRequestCompleted}"
+				var="dtl" rowIndexVar="rowIndex" emptyMessage="Хоосон байна">
+				<p:column headerText="№" styleClass="id">
+						#{rowIndex + 1}						
+					</p:column>
+				<p:column headerText="Огноо" styleClass="date-time">
+						#{dtl.getDateString(dtl.getRequestDate())}						
+					</p:column>
+				<p:column headerText="Шинжилгээний нэр" styleClass="text">
+						#{dtl.examinationName}						
+					</p:column>
+				<p:column headerText="Лаборант" styleClass="text">
+						#{dtl.employeeName}
+					</p:column>
+				<p:column headerText="Илгээсэн эмч" styleClass="text">
+						#{dtl.employeeName}
+					</p:column>
+			</p:dataTable>
+			<p:panel styleClass="no-style-panel" widgetVar="exaTable" id="qop">
+				<div class="ui-datatable ui-widget myTable">
+					<div class="ui-datatable-tablewrapper">
+						<table>
+							<thead id="form:examination-info_head">
+								<tr>
+									<th class="ui-state-default id"><span>Элемент</span></th>
+									<th class="ui-state-default id"><span>Лавлах хэмжээ</span></th>
+									<th class="ui-state-default id"><span>Нэгж</span></th>
+									<ui:repeat var="req"
+										value="#{inspectionController.currentCustomerExaminations}">
+										<th class="ui-state-default date-time"><span>#{req.getDateString(req.requestDate)}</span>
+										</th>
+									</ui:repeat>
+								</tr>
+							</thead>
+							<tbody id="form:examination-info_data"
+								class="ui-datatable-data ui-widget-content">
+
+								<ui:repeat var="result"
+									value="#{inspectionController.examinationResults}">
+
+									<tr class="ui-widget-content ui-datatable-even">
+										<td class="text">#{result.evqName}</td>
+										<td class="text">#{result.range}</td>
+										<td class="text">#{result.measurement}</td>
+										<ui:repeat var="value" value="#{result.values}">
+											<td class="short-number">#{value}</td>
+										</ui:repeat>
+									</tr>
+
+								</ui:repeat>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</p:panel>
+		</p:dialog>
+		<p:dialog widgetVar="examinationEquals" header="Дэлгэрэнгүй"
+			width="800" height="500">
+		</p:dialog>
+		<p:dialog widgetVar="exaResultPrint" id="exaResultPrint" height="500"
+			width="800" closeOnEscape="true" resizable="false"
+			styleClass="dialog-scroll" header="Шинжилгээний үзүүлэлтүүд">
+			<p:panel styleClass="no-style-panel" id="dubuQo">
+				<ui:repeat var="e" value="#{customerController.filteredErc}"
+					varStatus="status">
+					<table id="tablePrintFromcl" style="width: 100%;">
+						<tr>
+							<td colspan="4"
+								style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+								АШУҮИС-ийн "ИХ СУРГУУЛИЙН НЭГДСЭН ЭМНЭЛЭГ"</td>
+						</tr>
+						<tr>
+							<td colspan="2"
+								style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; padding: 12px 0px;">
+								Овог, Нэр : #{e.customer.lastName} , #{e.customer.firstName}</td>
+							<td colspan="2"
+								style="font-size: 13px; font-family: Times New Roman; text-align: right; vertical-align: middle; padding: 12px 0px;">
+								Нас, Хүйс : #{e.customer.age} , #{e.customer.genderString}</td>
+						</tr>
+						<tr>
+							<td colspan="4"
+								style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+								#{e.examinationName}</td>
+						</tr>
+						<tr>
+							<td colspan="4"
+								style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; padding-top: 12px;">
+								<table style="border: 0.1px solid black; width: 100%"
+									cellpadding="0" cellspacing="0">
+									<tr>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											№</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Асуумж</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Лавламж</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											Нэгж</td>
+										<td
+											style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											Хариу</td>
+									</tr>
+									<ui:repeat value="#{e.exaResults}" var="r" varStatus="index">
+										<tr>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{index.index+1}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.evqName}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.range}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.measurement}</td>
+											<td
+												style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+												#{r.value}</td>
+										</tr>
+									</ui:repeat>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"
+								style="font-size: 12px; font-family: Times New Roman; padding: 12px 0px; text-align: left;">Эмч:
+							</td>
+							<td colspan="2"
+								style="font-size: 12px; font-family: Times New Roman; padding: 12px 60px 0px 0px; text-align: right;">Лаборант:
+							</td>
+						</tr>
+
+					</table>
+					<!-- <p:panel styleClass = "no-style-panel" rendered="#{!status.last}" > 
+					<div  style = "page-break-before: always;" />
+				</p:panel> -->
+				</ui:repeat>
+				<p
+					style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; text-align: center;">Хэвлэсэн
+					огноо:
+					#{customerController.getDateString(customerController.currentDate)}</p>
+			</p:panel>
+			<a class="btn btn-app" href="javascript:void(0)"
+				onclick="print1('form:dubuQo');"> <i
+				class="fa fa-print color-blue"></i> Хэвлэх
+			</a>
+			<a class="btn btn-app" onclick="printPdf();"
+				href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+				PDF <p:remoteCommand process="@this" name="printToPDF" />
+			</a>
+			<a class="btn btn-app"
+				onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+
+		<p:dialog widgetVar="showImage" modal="false"
+			header="#{i18n['xray_image']}" resizable="true"
+			styleClass="dialog-scroll" width="800" height="550" id="showImage"
+			closeOnEscape="true">
+			<div class="row">
+				<p:graphicImage id="pppp"
+					style="max-width:100%; max-height:100v; position:absolute;"
+					value="#{xrayController.imageRentgen}" cache="false" />
+			</div>
+		</p:dialog>
+
+		<p:dialog widgetVar="diagnose-dtl-dialog" styleClass="dialog-scroll"
+			header="Оношилгоо" height="400" width="800" minimizable="true">
+			<p:panel styleClass="no-style-panel" id="xrayInfoUpdate">
+				<div class="content">
+					<div class="row" style="margin-top: 10px; margin-botton: 10px;">
+						<div class="col-md-4">
+							<p style="font-weight: 900; float: left;">Овог, Нэр :</p>
+							<p>#{inspectionController.selectedCustomer.lastName} ,
+								#{inspectionController.selectedCustomer.firstName}</p>
+						</div>
+						<div class="col-md-4">
+							<p style="font-weight: 900; float: left;">Нас, Хүйс :</p>
+							<p>#{inspectionController.selectedCustomer.age} ,
+								#{inspectionController.selectedCustomer.genderString}</p>
+						</div>
+						<div class="col-md-4">
+							<p style="font-weight: 900; float: left;">РД :</p>
+							<p>#{inspectionController.selectedCustomer.regNumber}</p>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<p:dataTable id="tableXrayInfo" styleClass="myTable"
+							value="#{inspectionController.xrayRequests}" var="info"
+							rowIndexVar="index" emptyMessage="#{i18n['empty']}"
+							paginator="true" paginatorPosition="bottom">
+							<p:column styleClass="index" headerText="№"> #{index + 1}</p:column>
+							<p:column styleClass="date"
+								headerText="#{i18n['sent_by_doctor']} / #{i18n['date']}">#{info.dateString} <br /> #{info.employeeName}  </p:column>
+							<p:column styleClass="text" headerText="#{i18n['xray_name']}">#{info.xrayName} </p:column>
+							<p:column styleClass="text" headerText="#{i18n['description']}"> #{info.description} </p:column>
+							<p:column styleClass="text" headerText="#{i18n['image']}">
+								<ui:repeat value="#{info.imgList}" var="il" varStatus="index">
+									<h:commandLink value="#{il}"
+										rendered="#{info.image != null and !il.endsWith('jpg')}"
+										actionListener="#{xrayController.showSelectedImage(info, il)}">
+										<p:fileDownload value="#{xrayController.imageRentgen}" />
+									</h:commandLink>
+
+									<p:commandLink value="#{il}"
+										rendered="#{info.image != null and il.endsWith('jpg')}"
+										actionListener="#{xrayController.showSelectedImage(info, il)}"
+										oncomplete="PF('showImage').show();">
+									</p:commandLink>
+
+									<br />
+								</ui:repeat>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:panel>
+		</p:dialog>
+		<p:dialog widgetVar="surgery-dtl-dialog" styleClass="dialog-scroll"
+			header="Хагалгаа" minimizable="true">
+			<p:selectOneMenu filter="true"
+				value="#{inspectionController.selectedSurgeryTypePkId}"
+				styleClass="pull-left">
+				<f:selectItem itemLabel="Бүгд" itemValue="0" />
+				<f:selectItems value="#{applicationController.surgeryType}"
+					var="type" itemLabel="#{type.name}" itemValue="#{type.pkId}" />
+			</p:selectOneMenu>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.beginDate}"
+				styleClass="date-control pull-left" />
+			<span class="pull-left">-</span>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.endDate}"
+				styleClass="date-control pull-left" />
+			<p:inputText id="filterSurgeryName" styleClass="pull-left"
+				value="#{inspectionController.filterSurgeryName}" />
+			<p:watermark for="filterSurgeryName" value="Хагалгааны нэр"></p:watermark>
+
+			<p:commandButton icon="ui-icon-search" value="Шүүх"
+				actionListener="#{inspectionController.getCustomerSurgery}"
+				ajax="true" update="form:customerSurgeryTable"></p:commandButton>
+			<p:dataTable id="customerSurgeryTable" styleClass="myTable"
+				emptyMessage="Хоосон байна." style="width: 100%;"
+				value="#{inspectionController.listSurgeryInfo}" var="item"
+				rowIndexVar="index" paginator="true" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5">
+				<p:column headerText="Төрөл" styleClass="text">
+						#{item.typeName}
+					</p:column>
+				<p:column headerText="Нэр" styleClass="text">
+						#{item.name}
+					</p:column>
+				<p:column headerText="Үргэлжлэх хугацаа" styleClass="number">
+						#{item.dayLength}
+					</p:column>
+				<p:column headerText="Илгээсэн эмч" styleClass="text">
+						#{item.doctorName}
+					</p:column>
+				<p:column headerText="Огноо" styleClass="date">
+						#{item.getDateString(item.inspectionDate)}
+					</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog widgetVar="medicine-dtl-dialog" styleClass="dialog-scroll"
+			header="Эм" minimizable="true">
+			<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+				var="inspectionInfo" style="width: 100%;"
+				value="#{inspectionController.listMedicineInfo}">
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column headerText="Нэр" />
+						<p:column headerText="Хэмжих нэгж" />
+						<p:column headerText="Үргэлжлэх хугацаа" />
+						<p:column headerText="1 удаа хэрэглэх хэмжээ" />
+						<p:column headerText="Өдөрт уух тоо" />
+						<p:column headerText="Цагийн интервал" />
+					</p:row>
+				</p:columnGroup>
+				<p:subTable value="#{inspectionInfo.inspectionDtl}" var="dtl">
+					<f:facet name="header">
+			            	Огноо: #{inspectionInfo.getDateString()}
+			                #{inspectionInfo.subOrgaName} - #{inspectionInfo.employeeName}
+			            </f:facet>
+					<p:column styleClass="text">
+						<h:outputText value="#{dtl.name}" />
+					</p:column>
+					<p:column styleClass="short-text">
+						<h:outputText value="#{dtl.measurement}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.expireDay}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.dose}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.repeatCount}" />
+					</p:column>
+					<p:column styleClass="number">
+						<h:outputText value="#{dtl.repeatTime}" />
+					</p:column>
+				</p:subTable>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog header="Эмчилгээ" widgetVar="treatment-dtl-dialog"
+			styleClass="dialog-scroll" minimizable="true">
+			<p:selectOneMenu filter="true"
+				value="#{inspectionController.selectedTreatmentTypePkId}"
+				styleClass="pull-left">
+				<f:selectItem itemLabel="Бүгд" itemValue="0" />
+				<f:selectItems value="#{applicationController.treatmentType}"
+					var="type" itemLabel="#{type.name}" itemValue="#{type.pkId}" />
+			</p:selectOneMenu>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.beginDate}"
+				styleClass="date-control pull-left" />
+			<span class="pull-left">-</span>
+			<p:calendar navigator="true" pattern="yyyy-MM-dd"
+				value="#{inspectionController.endDate}"
+				styleClass="date-control pull-left" />
+			<p:inputText id="filterTreatmentName" styleClass="pull-left"
+				value="#{inspectionController.filterTreatmentName}" />
+			<p:watermark for="filterTreatmentName" value="Эмчилгээний нэр"></p:watermark>
+
+			<p:commandButton icon="ui-icon-search" value="Шүүх"
+				actionListener="#{inspectionController.getCustomerTreatment}"
+				ajax="true" update="form:customerTreatmentTable"></p:commandButton>
+			<p:dataTable id="customerTreatmentTable" styleClass="myTable"
+				emptyMessage="Хоосон байна" var="treatment" style="width: 100%;"
+				value="#{inspectionController.listTreatmentInfo}" paginator="true"
+				paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5">
+				<p:column headerText="Төрөл" styleClass="text">
+						#{treatment.typeName}
+					</p:column>
+				<p:column headerText="Нэр" styleClass="text">
+						#{treatment.name}
+					</p:column>
+				<p:column headerText="Үргэлжлэх хугацаа" styleClass="number">
+						#{treatment.dayLength}
+					</p:column>
+				<p:column headerText="Эмчилгээ хийх тоо" styleClass="number">
+						#{treatment.times}
+					</p:column>
+				<p:column headerText="Хийлгэсэн тоо" styleClass="number">
+						#{treatment.doneCount}
+					</p:column>
+				<p:column headerText="Илгээсэн эмч" styleClass="text">
+						#{treatment.doctorName}
+					</p:column>
+				<p:column headerText="Огноо" styleClass="date">
+						#{treatment.getDateString(treatment.inspectionDate)}
+					</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog header="Онош" widgetVar="all-diagnose-dialog" modal="true"
+			width="700" resizable="false" minimizable="true">
+			<p:dataTable styleClass="myTable" emptyMessage="Хоосон байна"
+				var="diagnose" style="width: 100%;"
+				value="#{applicationController.lazyDiagnoseList}" paginator="true"
+				lazy="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rows="5">
+				<p:column headerText="ID" styleClass="text"
+					filterBy="#{diagnose.id}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.id}
+						</p:commandLink>
+				</p:column>
+				<p:column headerText="Монгол нэр" styleClass="text"
+					filterBy="#{diagnose.nameMn}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.nameMn}
+						</p:commandLink>
+				</p:column>
+				<p:column headerText="Англи нэр" styleClass="number"
+					filterBy="#{diagnose.nameEn}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.nameEn}
+						</p:commandLink>
+				</p:column>
+				<p:column headerText="Орос нэр" styleClass="number"
+					filterBy="#{diagnose.nameRu}">
+					<p:commandLink
+						actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}"
+						oncomplete="PF('all-diagnose-dialog').hide()">
+							#{diagnose.nameRu}
+						</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
+		<p:dialog header="Зурганы нэр" widgetVar="attachment-name"
+			modal="true" resizable="false">
+			<p:remoteCommand name="updateAttachmentName"
+				update="form:attachmentNamePanel" />
+			<p:panel styleClass="no-style-panel" id="attachmentNamePanel">
+				<p:inputText id="attachmentName" style="width: 200px;"
+					value="#{xrayController.attachmentName}" />
+				<p:watermark value="Зурагны нэр оруулна уу" for="attachmentName"></p:watermark>
+				#{xrayController.attachment.description}
+				<p:commandLink styleClass="btn" style="margin-left: 10px;"
+					actionListener="#{xrayController.setFileName}"
+					oncomplete="PF('attachment-name').hide()">
+					<i class="fa fa-check" />
+				</p:commandLink>
+			</p:panel>
+		</p:dialog>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Тийм" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="Үгүй" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+		<div id="id-diagnose-overlay" class="diagnose-overlay"
+			style="display: none;">
+			<p:panel id="diagnose-list" styleClass="no-style-panel">
+				<div class="display-table">
+					<ui:repeat var="diagnose"
+						value="#{inspectionController.approvedFilteredDiagnose}">
+						<div class="diagnose-overlay-row">
+							<div class="display-table-cell">
+								<p:commandLink
+									actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}">
+												#{diagnose.id}
+								</p:commandLink>
+							</div>
+							<div class="display-table-cell">
+								<p:commandLink
+									actionListener="#{inspectionController.onDiagnoseSelect(diagnose)}">
+												#{diagnose.nameMn}
+								</p:commandLink>
+							</div>
+						</div>
+					</ui:repeat>
+					<div class="col-md-12 text-center" style="">Таны хайсан онош
+						байхгүй байна</div>
+				</div>
+			</p:panel>
+		</div>
+		<div id="modal-image" class="modal-image" style="display: none;">
+			<div class="modal-image-close" onclick="$('#modal-image').hide()">
+				<i class="fa fa-remove" />
+			</div>
+		</div>
+		<p:remoteCommand name="refreshDiagnoseList"
+			actionListener="#{inspectionController.getFilteredDiagnoses}"
+			process="@form" update="form:diagnose-list" />
+
+		<p:remoteCommand name="prepareData"
+			actionListener="#{xrayController.prepareData()}" />
+	</ui:define>
+	<ui:define name="additional-script-2">
+		<script
+			src="#{applicationController.path}js/jquery.elevateZoom-3.0.8.min.js"
+			type="text/javascript"></script>
+		<script>
+			//<![CDATA[
+
+			function toggleST() {
+				$('#ST').toggle('fast', 'swing');
+				if ($('#ST-chevron').hasClass('fa-chevron-down'))
+					$('#ST-chevron').switchClass("fa-chevron-down",
+							"fa-chevron-left", 200, "easeInOutQuad");
+				else
+					$('#ST-chevron').switchClass("fa-chevron-left",
+							"fa-chevron-down", 200, "easeInOutQuad");
+			}
+			function toggleDUO() {
+				$('#DUO').toggle('fast', 'swing');
+				if ($('#DUO-chevron').hasClass('fa-chevron-down'))
+					$('#DUO-chevron').switchClass("fa-chevron-down",
+							"fa-chevron-left", 200, "easeInOutQuad");
+				else
+					$('#DUO-chevron').switchClass("fa-chevron-left",
+							"fa-chevron-down", 200, "easeInOutQuad");
+			}
+
+			function checkBoxChanged(e, d) {
+				var hecn = d + "1";
+				debugger;
+				var childElementCount = document
+						.getElementsByClassName(e.parentElement.parentElement.classList[3]
+								+ 'enigma').length;
+				if (e.checked == true) {
+					for (var i = 0; i < childElementCount; i++) {
+						document
+								.getElementsByClassName(e.parentElement.parentElement.classList[3]
+										+ 'enigma')[i].style.display = 'block';
+					}
+
+					document.getElementsByClassName(d)[0].value = document
+							.getElementsByClassName(d)[0].value
+							+ e.parentElement.parentElement.childNodes[2].innerHTML
+							+ ' '
+					document.getElementsByClassName(hecn)[0].value = document
+							.getElementsByClassName(hecn)[0].value
+							+ ';;;'
+							+ e.parentElement.parentElement.childNodes[2].innerHTML
+				} else {
+					for (var j = 0; j < childElementCount; j++) {
+						document
+								.getElementsByClassName(e.parentElement.parentElement.classList[3]
+										+ 'enigma')[j].style.display = 'none';
+					}
+					document.getElementsByClassName(d)[0].value = document
+							.getElementsByClassName(d)[0].value
+							.replace(
+									e.parentElement.parentElement.childNodes[2].innerHTML,
+									'');
+					document.getElementsByClassName(hecn)[0].value = document
+							.getElementsByClassName(hecn)[0].value
+							.replace(
+									e.parentElement.parentElement.childNodes[2].innerHTML,
+									'');
+				}
+			}
+
+			var isReinspection = false;
+			var diagnoseInputId = "";
+			$(document).ready(function() {
+				prepareData();
+			});
+
+			function loadDataPls(a) {
+
+				var cbs = $(".ui-chkbox-box");
+				var vv = a.split(";;;")
+				for (var j = 0; j < vv.length; j++)
+					for (var i = 0; i < cbs.length; i++) {
+						if (cbs[i].parentNode.children[2].innerHTML == vv[j]) {
+							cbs[i].addClass('ui-state-active');
+							cbs[i].children[0]
+									.addClass('ui-icon ui-icon-check');
+							cbs[i].checked = true;
+							cbs[i].parentNode = true;
+							cbs[i].children[0].checked = true;
+
+						}
+					}
+
+				var elements = $("[class*='enigma']");
+				for (var i = 0; i < elements.length; i++) {
+
+					elements[i].style.display = 'none';
+					var fcn = elements[i].classList[3].replace('enigma', '');
+					var fe = document.getElementsByClassName(fcn)[0].childNodes[1];
+					if (fe.checked == true) {
+						elements[i].style.display = 'block';
+					}
+
+				}
+
+			}
+			function callRefreshList(elem, diagnose, type, byName) {
+				if ($(elem).val().length > 2 || $(elem).val().length == 0) {
+					delay(function() {
+						refreshDiagnoseList([ {
+							name : 'val',
+							value : $(elem).val()
+						}, {
+							name : 'diag',
+							value : diagnose
+						}, {
+							name : 'typ',
+							value : type
+						}, {
+							name : 'byName',
+							value : byName
+						} ])
+					}, 300);
+				}
+			}
+			function showDiagnosePick(elem, diagnose, type, byName) {
+				if ($(elem).val().length == 0) {
+					delay(function() {
+						refreshDiagnoseList([ {
+							name : 'val',
+							value : $(elem).val()
+						}, {
+							name : 'diag',
+							value : diagnose
+						}, {
+							name : 'typ',
+							value : type
+						}, {
+							name : 'byName',
+							value : byName
+						} ])
+					}, 300);
+				}
+				var topPos = parseFloat($(elem).offset().top)
+						+ parseFloat($(elem).outerHeight());
+				var leftPos = $(elem).offset().left;
+				diagnoseInputId = $(elem).attr("id");
+				console.log(topPos + ' ' + leftPos);
+				$("#id-diagnose-overlay").show();
+				$("#id-diagnose-overlay").offset({
+					top : topPos,
+					left : leftPos
+				});
+			}
+			function showHideInspection() {
+				if (isReinspection) {
+					isReinspection = false;
+					$("#form\\:reinspection").hide();
+					$("#form\\:inspection").show();
+				} else {
+					isReinspection = true;
+					$("#form\\:reinspection").show();
+					$("#form\\:inspection").hide();
+				}
+			}
+			function uploadImage(id) {
+				$(
+						PrimeFaces
+								.escapeClientId('form:xrayInspection:fileUpload_input'))
+						.click();
+			}
+			function makeZoomable() {
+				// 				$(".zoom").each(function(e){
+				// 					$($(".zoom")[e]).attr("data-zoom-image", $($(".zoom")[e]).attr('src'))
+				// 					$($(".zoom")[e]).elevateZoom({scrollZoom : true,zoomWindowPosition: 10,easing : true});
+				// 				})
+			}
+			function showModalImage(elem) {
+				$("#modal-image img").remove();
+				$("#modal-image").show();
+				var clone = $(elem).clone();
+				$(clone).removeAttr("height");
+				console.log($(clone).height());
+				$(clone).load(function() {
+					if ($(this).height() > 400) {
+						$(this).height(400);
+					}
+				});
+				$(clone).addClass("absolute-center");
+				$(clone).attr("id", "");
+				$("#modal-image").append(clone);
+			}
+
+			var calcWeightIndex = function() {
+				debugger;
+				var height = $("#form\\:inspection\\:pastHistory\\:height")
+						.val(), weight = $(
+						"#form\\:inspection\\:pastHistory\\:weight").val();
+				if (parseFloat(height) != 0 && parseFloat(weight) != 0) {
+					$("#weightIndex").html(
+							(weight / Math.pow(height / 100, 2)).toFixed(2));
+				}
+			}
+			function copyText(inp) {
+				debugger;
+				if (inp) {
+					// select text
+					if (document.selection) {
+						var range = document.body.createTextRange();
+						range.moveToElementText(inp);
+						range.select();
+					} else if (window.getSelection) {
+						var range = document.createRange();
+						range.selectNode(inp);
+						window.getSelection().addRange(range);
+					}
+
+					try {
+						// copy text
+						document.execCommand('copy');
+						inp.blur();
+						// copied animation
+					} catch (err) {
+						alert('please press Ctrl/Cmd+C to copy');
+					}
+				}
+			}
+
+			function togglePL() {
+				$('#PL').toggle('fast', 'swing');
+				if ($('#PL-chevron').hasClass('fa-chevron-down'))
+					$('#PL-chevron').switchClass("fa-chevron-down",
+							"fa-chevron-left", 200, "easeInOutQuad");
+				else
+					$('#PL-chevron').switchClass("fa-chevron-left",
+							"fa-chevron-down", 200, "easeInOutQuad");
+			}
+			function toggleESO() {
+				$('#ESO').toggle('fast', 'swing');
+				if ($('#ESO-chevron').hasClass('fa-chevron-down'))
+					$('#ESO-chevron').switchClass("fa-chevron-down",
+							"fa-chevron-left", 200, "easeInOutQuad");
+				else
+					$('#ESO-chevron').switchClass("fa-chevron-left",
+							"fa-chevron-down", 200, "easeInOutQuad");
+			}
+
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

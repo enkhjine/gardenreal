@@ -1,0 +1,1233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<p:tab title=" Уламжлалт - Одоогийн өвчний түүх">
+			<p:accordionPanel id="tradition" multiple="true">
+				<p:tab title="Бодит үзлэг" id="distress">
+				<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('tradition')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qoTrad" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listTradtionAttachment}">
+									<div style="float:left;text-align: center;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListTradtionAttachment().indexOf(attachment), inspectionController.getListTradtionAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListTradtionAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listTradtionAttachment, attachment)}"
+											oncomplete="updateTrad()">
+											<i class="fa fa-trash"/> Устгах
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+							<p:remoteCommand  name="updateTrad"  update="qoTrad" />
+						</div>
+					</div>
+					<div class="row margin-bottom" >
+					  <div class="col-md-12">
+					   <div class="col-md-4">
+					      <div class="form-title" style="cursor:pointer;" onclick="toggleTouch('Баруун')">
+					       Биеийн  ерөнхий байдал <i id="rash-chevron1" class="pull-right fa fa-chevron-left"></i>
+					       </div>
+					      <div id="rightEye" style="display:none">
+					      <div class="col-md-12 margin-bottom">
+					          <p:selectOneRadio  layout="grid" columns="2" value="#{inspectionController.customerTradition.generalBody}">
+					            <f:selectItem itemLabel="Дунд" itemValue="0"/>
+					            <f:selectItem itemLabel="Хүндэвтэр" itemValue="1"/>
+					            <f:selectItem itemLabel="Хүнд" itemValue="2"/>
+					            <f:selectItem itemLabel="Маш хүнд" itemValue="3"/>
+					             </p:selectOneRadio>
+					         </div>
+					       </div>
+					      </div>
+					      <div class="col-md-4">
+					        <div class="form-title" style="cursor:pointer" onclick="mentation()">
+					          Ухаан санаа<i id="rash-chevronMent" class="pull-right fa fa-chevron-left"></i>
+					          </div>
+					        <div id="mentationId" style="display:none">
+					         <div class="col-md-12 margin-bottom">
+					            <p:selectOneRadio  layout="grid" columns="2"  value="#{inspectionController.customerTradition.tradMetation}">
+					               <f:selectItem itemLabel="Саруул" itemValue="0"/>
+					               <f:selectItem itemLabel="Бүдгэрсэн" itemValue="1"/>
+					               <f:selectItem itemLabel="Ухаангүй" itemValue="2"/>
+					               </p:selectOneRadio>
+					              </div>
+					            </div>
+					        </div>
+                        <div class="col-md-4">
+					      <div class="form-title" style="cursor:pointer;" onclick="toggleRash()">
+					        Арьс салст<i id="rash-chevron" class="pull-right fa fa-chevron-left"></i>
+					       </div>
+				           <div id="leftEyeId" style="display:none">
+					      <div class="col-md-12 margin-bottom">
+					           <p:selectOneRadio  layout="grid" columns="2" value="#{inspectionController.customerTradition.skinMucous}">
+					               <f:selectItem itemLabel="Хэвийн" itemValue="0"/>
+					               <f:selectItem itemLabel="Хэвийн бус" itemValue="1"/>
+					               </p:selectOneRadio>
+					         </div>
+					       </div>
+					       </div>
+					    </div>
+					</div>
+					<div class="row margin-bottom">
+					 <div class="col-md-12">
+					   <div class="form-title" style="cursor:pointer" onclick="wind('Амьсгалын эрхтэн тогтолцоо ')">
+					     Амьсгалын эрхтэн тогтолцоо <i id="rash-chevronWind" class="pull-right fa fa-chevron-left"></i>
+					     </div>
+					     <div id="windId" style="display:none">
+					       <div class="col-md-12  margin-bottom">
+					         Амьсгал 1  минутанд  <p:inputText type="number" style="width:10%"  value="#{inspectionController.customerTradition.minuteOne}"/> удаа 
+					        </div>
+					        <div class="form-title">Чагналтаар</div>
+					        <div class="col-md-12  margin-bottom">
+					          <p:selectOneRadio value="#{inspectionController.customerTradition.sound}">
+					            <f:selectItem itemLabel="Уушги цулцангийн" itemValue="0"/>
+					            <f:selectItem itemLabel="Хэржигнүүртэй" itemValue="1"/>
+					            <f:selectItem itemLabel="Гуурсан  хоолойн" itemValue="2"/>
+					            <f:selectItem itemLabel="Амьсгал  сулавтар" itemValue="3"/>
+					            </p:selectOneRadio>
+					           </div>
+					       </div>
+					   </div>
+					  </div>
+
+				   <div class="row margin-bottom">
+					 <div class="col-md-12">
+					   <div class="form-title" style="cursor:pointer" onclick="cookIncept('Хоол  шингээх эрхтэн тогтолцоо')">
+					     Хоол  шингээх эрхтэн тогтолцоо <i id="rash-cookIncept" class="pull-right fa fa-chevron-left"></i>
+					     </div>
+					     <div id="cookInceptId" style="display:none">
+					       <div class="col-md-12  margin-bottom">
+					       <div class="col-md-6">
+					         <div class="form-title">Хэл</div>
+					         <p:selectOneRadio layout="grid"  columns="2" value="#{inspectionController.customerTradition.lingua}">
+					           <f:selectItem itemLabel="normal" itemValue="0"/>
+					           <f:selectItem itemLabel="Хуурай"  itemValue="1"/>
+					           <f:selectItem itemLabel="Өнгөргүй" itemValue="2" />
+					           <f:selectItem itemLabel="Өнгөртэй"  itemValue="3"/>
+					          </p:selectOneRadio>
+					         </div>
+					        <div class="col-md-6">
+					         <div class="form-title">Хэвлийн үзлэг</div>
+					          <p:selectOneRadio  layout="grid" columns="2" value="#{inspectionController.customerTradition.bowelInspection}">
+					           <f:selectItem itemLabel="Өнгөц тэмтрэлтээр" itemValue="0" />
+					           <f:selectItem itemLabel="Гүн тэмтрэлтээр" itemValue="1"/>
+					           <f:selectItem itemLabel="Эмзэглэлтэй" itemValue="2"/>
+					           <f:selectItem itemLabel="Ердийн" itemValue="3" />
+					           <f:selectItem itemLabel="Зөөлөн  гялтан  цочролгүй" itemValue="4"/>
+					           <f:selectItem itemLabel="Гялтан  цочролын шинж илэрсэн"  itemValue="5"/>
+					           </p:selectOneRadio>
+					         </div>
+					        </div>
+					       </div>
+					   </div>
+					 </div>
+			    <div class="row margin-bottom">
+					 <div class="col-md-12">
+					   <div class="form-title" style="cursor:pointer" onclick="brain('Мэдрэлийн тогтолцоо')">
+					     Мэдрэлийн тогтолцоо <i id="rash-brain" class="pull-right fa fa-chevron-left"></i>
+					     </div>
+					     <div id="brainId" style="display:none">
+					       <div class="col-md-12  margin-bottom">
+					         <div class="col-md-6">
+					          <div class="form-title">Сонсох чадавхи</div>
+					          <p:selectOneRadio value="#{inspectionController.customerTradition.listenRate}">
+					            <f:selectItem itemLabel="Хэвийн" itemValue="0" />
+					            <f:selectItem itemLabel="Буурсан"  itemValue="1"/>
+					            </p:selectOneRadio>
+					          </div>
+					         <div class="col-md-6">
+					          <div class="form-title">Рефлексүүд</div>
+					          <p:selectOneRadio value="#{inspectionController.customerTradition.reflex}">
+					            <f:selectItem itemLabel="Хадгалагдана" itemValue="0" />
+					            <f:selectItem itemLabel="Хадгалагдахгүй" itemValue="1"/>
+					            </p:selectOneRadio>
+					          </div>
+					        </div>
+					        <div class="col-md-12  margin-bottom">
+					         <p:inputTextarea  rows="3" style="width:100%" value="#{inspectionController.customerTradition.other}" autoResize="false" placeholder="Бусад" />
+					         </div>
+					        <div class="col-md-12  margin-bottom">
+					         <p:inputTextarea  rows="3" style="width:100%" value="#{inspectionController.customerTradition.mentalityLevel}" placeholder="Сэтгэцийн  байдлын  талаар  бичих" />
+					         </div>
+					       </div>
+					   </div>
+					  </div>
+				   <div class="row margin-bottom">
+					 <div class="col-md-12">
+					   <div class="form-title" style="cursor:pointer" onclick="uvurchlul('Өвөрчлөл')">
+					     Өвөрчлөл<i id="rash-uvurchlul" class="pull-right fa fa-chevron-left"></i>
+					     </div>
+					     <div id="uvurchlulId" style="display:none">
+					       <div class="col-md-12  margin-bottom">
+					        <div class="col-md-6">
+					         <p:selectOneMenu value="#{inspectionController.customerTradition.giving}" style="width:200px">
+					          <f:selectItem itemLabel="Хий" itemValue="0"/>
+					          <f:selectItem itemLabel="Шар" itemValue="1"/>
+					          <f:selectItem itemLabel="Бадган" itemValue="2"/>
+					          <f:selectItem itemLabel="Хий шар  хавсарсан" itemValue="3"/>
+					          <f:selectItem itemLabel="Хий бадган хавсарсан" itemValue="4"/>
+					          <f:selectItem itemLabel="Шар  бадган  хавсарсан" itemValue="5"/>
+					          <f:selectItem itemLabel="Хий шар бадган хурсан" itemValue="6"/>
+					          </p:selectOneMenu>
+					         </div>
+					        <div class="col-md-6">
+					         <div class="col-md-3">
+					          Цог сүлд
+					          </div>
+					         <div class="col-md-3">
+					          <p:selectOneMenu value="#{inspectionController.customerTradition.emberBlazonry}" style="width:125px">
+					          <f:selectItem itemLabel="Сайн " itemValue="0"/>
+					          <f:selectItem itemLabel="дунд" itemValue="1"/>
+					          <f:selectItem itemLabel="Буурсан" itemValue="2"/>
+					          </p:selectOneMenu>
+					          </div>
+					         </div>					         
+					        </div>
+					       </div>
+					   </div>
+					  </div>
+				<div class="row margin-bottom">
+					 <div class="col-md-12">
+					   <div class="form-title" style="cursor:pointer" onclick="inspectionExam('Үзэх шинжилгээ')">
+					     Үзэх шинжилгээ<i id="rash-inspectionExam" class="pull-right fa fa-chevron-left"></i>
+					     </div>
+					     <div id="inspectionExamId" style="display:none">
+					       <div class="col-md-12  margin-bottom">
+					        <div class="col-md-6">
+					        <!-- Хий  -->
+					         <div class="form-title">Хий</div>
+					           <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Нүүр  царай</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.face}" >
+					               <f:selectItem itemLabel="Хуурай ширүүн" itemValue="0"/>
+					               <f:selectItem itemLabel="Бор  хүрэн хар Хөхөлбөр  өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Нүд</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.eye}"> 
+					               <f:selectItem itemLabel="Хуурай ширүүн" itemValue="0"/>
+					               <f:selectItem itemLabel="Цагаан нүд  хөхөлбөр" itemValue="1"/>
+					               <f:selectItem itemLabel="Харц тогтворгүй" itemValue="2"/>
+					               <f:selectItem itemLabel="Олон  анивчина" itemValue="3"/>
+					               <f:selectItem itemLabel="Нулимс гоожно" itemValue="4"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="5"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Чих</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.ears}" >
+					               <f:selectItem itemLabel="Хөхөлбөр  өнгөтэй" itemValue="0"/>
+					               <f:selectItem itemLabel="Шуугина загатнана" itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Хамар</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.nose}">
+					                <f:selectItem itemLabel="Хөхөлбөр  өнгөтэй" itemValue="0"/>
+					               <f:selectItem itemLabel="Хамар  битүүрэх" itemValue="1"/>
+					               <f:selectItem itemLabel="Үнэр  мэдрэхгүй болох" itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Уруул</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.lips}">
+					               <f:selectItem itemLabel="Хөхөлбөр өнгөтэй" itemValue="0"/>
+					               <f:selectItem itemLabel="Муруйна" itemValue="1"/>
+					               <f:selectItem itemLabel="Чичирч таталдана" itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Хэл</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.insExamLingua}">
+					               <f:selectItem itemLabel="Улаан  хөхөлбөр ягаан өнгөтэй" itemValue="0"/>
+					               <f:selectItem itemLabel="Хуурай ширүүн" itemValue="1"/>
+					               <f:selectItem itemLabel="Өнгөгүй" itemValue="2"/>
+					               <f:selectItem itemLabel="Хийн гүвдрүүтэй" itemValue="3"/>
+					               <f:selectItem itemLabel="Хөшүүн охор богино,үзүүр нарийн,хэл чулчирна,хэлгийрнэ,таталдана" itemValue="4"/>
+					               <f:selectItem itemLabel="Эхүүн  амтагдана" itemValue="5"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="6"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Баас</div>
+					              <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.dejecture}" >
+					               <f:selectItem itemLabel="Шингэн" itemValue="0" />
+					               <f:selectItem itemLabel="Хөөс ихтэй" itemValue="1" />
+					               <f:selectItem itemLabel="Хоргослож хатна" itemValue="2" />
+					               <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Шээс</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.pee}" > 
+					               <f:selectItem itemLabel="Хөхөлбөр  өнгөтэй" itemValue="0"/>
+					               <f:selectItem itemLabel="Ус адил тунгалаг" itemValue="1"/>
+					               <f:selectItem itemLabel="Үнэр  уур  багатай" itemValue="2"/>
+					               <f:selectItem itemLabel="Хөөс том, дуутай хагарч арилна" itemValue="3"/>
+					               <f:selectItem itemLabel="Дээрээ бутарсан  нарийн ширхэглэг язмагтай" itemValue="4"/>
+					               <f:selectItem itemLabel="Хувирсны  сүүлд  хөхөлбөр  өнгөтэй тунгалаг" itemValue="5"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="7"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Хөлс</div>
+					             <div class="col-md-7">
+					               <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.perspiration}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Бага хэмжээтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Үс</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.hair}" >
+					               <f:selectItem itemLabel="Бор  хар  өнгөтэй" itemValue="0"/>
+					               <f:selectItem itemLabel="Хар" itemValue="1"/>
+					               <f:selectItem itemLabel="Хуурай" itemValue="2"/>
+					               <f:selectItem itemLabel="Буржгар" itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад"   itemValue="4"/>
+					             </p:selectOneMenu>
+					               </div>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Шүд</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.tooth}"  >
+					              <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Дорсгор иржгэр" itemValue="1"/>
+					               <f:selectItem itemLabel="Том" itemValue="2"/>
+					               <f:selectItem itemLabel="Эцэнхий буйлтай" itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					            <div class="col-md-5">Хумс</div>
+					             <div class="col-md-7">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.nail}" >
+					               <f:selectItem itemLabel="Хөхрөх" itemValue="0"/>
+					               <f:selectItem itemLabel="Хувхайрах" itemValue="1"/>
+					               <f:selectItem itemLabel="Зузаарах" itemValue="2"/>
+					               <f:selectItem itemLabel="Хатуу болох" itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+					               </p:selectOneMenu>
+					               </div>
+					            </div>
+					         </div>
+					 <div class="col-md-3">
+					          <div class="form-title" style="cursor:pointer" onclick="yellowPain('Шар')">
+					          Шар<i id="rash-yellow" class="pull-right fa fa-chevron-left"></i></div>
+					          <div id="yellowId" style="display:none">
+					           <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"   value="#{inspectionController.customerTradition.yellowface}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Зөөлөн чийглэг хөлс ихтэй , тослог" itemValue="1"/>
+					               <f:selectItem itemLabel="Улаа бутарсан  шар  шаргал  өнгөтэй" itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					          <div class="col-md-12 margin-bottom" >
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.yelloweye}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Цагаан нүд  улаан шар шаргал"  itemValue="1"/>
+					               <f:selectItem itemLabel="Махан  ургацагтай" itemValue="2"/>
+					               <f:selectItem itemLabel="Харц ширүүн" itemValue="3"/>
+					               <f:selectItem itemLabel="Шар ус  нуух гоожно" itemValue="4"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="5"/>
+					               </p:selectOneMenu>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"   value="#{inspectionController.customerTradition.yellowears}"  >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Улаан шар  өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Шар ус өгрий булаг  гоожно" itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.yellownose}"  >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Хамар  улайх цус гарах хуурайших" itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"   value="#{inspectionController.customerTradition.yellowlips}"  >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Улбар шаргал  өнгөтэй"  itemValue="1"/>
+					               <f:selectItem itemLabel="Хатаж хуурайшина хагарна"  itemValue="2"/>
+					               <f:selectItem itemLabel="Цус гарна"  itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.yellownsExalingua}"  >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Улаавтар  өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Нимгэн  зузаан шаргал шар өнгөтэй" itemValue="2"/>
+					               <f:selectItem itemLabel="Улаан  бэржрүү гүвдрүүтэй" itemValue="3"/>
+					               <f:selectItem itemLabel="Хар толбо зураастай" itemValue="4"/>
+					               <f:selectItem itemLabel="Давслаг  гашуун амтагдана" itemValue="5"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="6"/>
+					               </p:selectOneMenu>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"   value="#{inspectionController.customerTradition.yelloweject}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Шар  өнгөтэй"  itemValue="1"/>
+					               <f:selectItem itemLabel="Цус өгрийн  хольцтой"  itemValue="2"/>
+					               <f:selectItem itemLabel="Өмхий үнэртэй"   itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.yellowpee}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Шар,улбар шар ,улаан өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Үнэр  уур  ихтэй,уур  нь  удаан арилна" itemValue="2" />
+					               <f:selectItem itemLabel="Хөөс нь жижиг  удаан  арилна" itemValue="3"/>
+					               <f:selectItem itemLabel="Зуузан  өрөмтэй"   itemValue="4"/>
+					               <f:selectItem itemLabel="Дундаа хөвсөн зузаан  бөөгнөрсөн  язмагтай"  itemValue="5" />
+					               <f:selectItem itemLabel="Хувирсаны сүүлд шар улбар хүрэн  өнгөтэй өтгөн"  itemValue="6" />
+					               <f:selectItem itemLabel="Бусад" itemValue="7"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.yellowerspi}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Их  хэмжээтэй үнэрлэг"  itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					               </p:selectOneMenu>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.yellowhair}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Шаравтар" itemValue="1"/>
+					               <f:selectItem itemLabel="Тослог" itemValue="2"/>
+					               <f:selectItem itemLabel="Зөөлөн  улаан эрт  бууралтсан" itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+					               </p:selectOneMenu>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.yellowtooth}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Шарласан" itemValue="1"/>
+					               <f:selectItem itemLabel="Тослог" itemValue="2"/>
+					               <f:selectItem itemLabel="Зөөлөн буйлтай" itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+					               </p:selectOneMenu>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.yellownail}" >
+					               <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					               <f:selectItem itemLabel="Шарлах"    itemValue="1"/>
+					               <f:selectItem itemLabel="Харавтар зураас тогтох"    itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад"    itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					           </div>
+					          </div>
+					     <div class="col-md-3">
+					       <div class="form-title" style="cursor:pointer" onclick="badganToggle('Бадган')">
+					             Бадган <i id="rash-badgan" class="pull-right fa fa-chevron-left"></i></div>
+					         <div id="badganId" style="display:none">
+					           <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu   style="width:125px" value="#{inspectionController.customerTradition.cancerStomachface}">
+					               <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Сэлхэрсэн"   itemValue="1"/>
+					               <f:selectItem itemLabel="Цайвар  өнгөтэй"   itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад"   itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.cancerStomacheye}"  > 
+					              <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цагаан нүд  цагаан цайвар"   itemValue="1"/>
+					               <f:selectItem itemLabel="Өөхөн ургацагтай"   itemValue="2"/>
+					               <f:selectItem itemLabel="Харц дөлгөөн"   itemValue="3"/>
+					               <f:selectItem itemLabel="Зовхи сэлхэрнэ"  itemValue="4"/>
+					               <f:selectItem itemLabel="Бусад"  itemValue="5"/>
+					               </p:selectOneMenu>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.cancerStomachears}" >
+					              <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цагаан өнгөтэй"  itemValue="1"/>
+					               <f:selectItem itemLabel="Хулхи  ихтэй"  itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад"  itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.cancerStomachnose}" >
+					              <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Хамраас ялгадас гарах, хамрын үзүүр  цайх"   itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад"   itemValue="2"/>  
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.cancerStomachlips}" >
+					               <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цайвар  өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Өнгөтэй өрөмтэй" itemValue="2"/>
+					               <f:selectItem itemLabel="Ялбарна ,шүүс гоожино " itemValue="3"/>  
+					               <f:selectItem itemLabel="Бусад"  itemValue="2"/>  
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.cancerStomachnsExaLingua}">
+					               <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цайвар  ягаан өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Том" itemValue="2"/>
+					               <f:selectItem itemLabel="Чийглэг зөөлөн" itemValue="3"/>
+					               <f:selectItem itemLabel="Нимгэн зузаан ,цайвар  өнгөртэй,зах ирмэгзэрээ шүдний оромтой" itemValue="4"/>
+					               <f:selectItem itemLabel="Ам заваарна" itemValue="5"/>
+					               <f:selectItem itemLabel="Амтлаг  амтагдана" itemValue="6"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="7"/>
+					               </p:selectOneMenu>
+					            </div>
+					          <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.dcancerStomacheject}"  >
+					                <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цайвар шаргал  өнгөтэй" itemValue="1"/>
+					               <f:selectItem itemLabel="Эс шингэн идээ ундаа  салсын хольцтой" itemValue="2"/>
+					               <f:selectItem itemLabel="Наалдамтгай" itemValue="3"/>
+					               <f:selectItem itemLabel="Исгэлэн үнэртэй" itemValue="4"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="5"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.cancerStomachpee}" > 
+					                <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цайвар шар  өнгөтэй" itemValue="3"/>
+					               <f:selectItem itemLabel="Үнэр  уур багатай" itemValue="3"/>
+					               <f:selectItem itemLabel="Хөөс нь жижиг удаан арилна, савны хананд наалдана" itemValue="3"/>
+					               <f:selectItem itemLabel="Доороо нарийн бөөгнөрсөн тунасан язмагтай" itemValue="4"/>
+					               <f:selectItem itemLabel="Хувирсаны сүүлд цайвар шар  өнгөтэй, шингэн" itemValue="5"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="6"/>
+					               </p:selectOneMenu>
+					            </div>
+					         <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.cancerStomachtooth}"  >
+					               <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Дунд зэрэг" itemValue="1"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					               </p:selectOneMenu>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.pcancerStomacherspi}"  >
+					                <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Бараан гялалзсан"  itemValue="1"/>
+					               <f:selectItem itemLabel="Тослог"  itemValue="2"/>
+					               <f:selectItem itemLabel="Даахирсан"  itemValue="3"/>
+					               <f:selectItem itemLabel="Бусад" itemValue="4"/>
+					               </p:selectOneMenu>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px"  value="#{inspectionController.customerTradition.cancerStomachhair}">
+					               <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цагаан"  itemValue="1"/>
+					               <f:selectItem itemLabel="Хатуу"  itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад"  itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					        <div class="col-md-12 margin-bottom">
+					              <p:selectOneMenu  style="width:125px" value="#{inspectionController.customerTradition.cancerStomachnail}">
+					               <f:selectItem itemLabel="Сонгох"   itemValue="0"/>
+					               <f:selectItem itemLabel="Цайх"  itemValue="1"/>
+					               <f:selectItem itemLabel="Цагаан толбо, дусал адил бусаар гаргах"  itemValue="2"/>
+					               <f:selectItem itemLabel="Бусад"  itemValue="3"/>
+					               </p:selectOneMenu>
+					            </div>
+					           </div>
+					          </div>
+					        </div>
+					       </div>
+					   </div>
+					 </div>
+			     <div class="row  margin-bottom">
+					  <div class="col-md-12">
+					    <div class="form-title" style="cursor:pointer" onclick="examToggle('Хүрэлцэх шинжилгээ')">
+					    Хүрэлцэх шинжилгээ <i id="rash-exa" class="pull-right fa fa-chevron-left"></i></div>
+					   <div id="exaId" style="display:none">
+					    <div class="col-md-12">
+					      <div class="form-title">Бэлчирийн орон</div>
+					    <div class="col-md-6">
+					     <div class="form-title" style="cursor:pointer" onclick="basinInToggle('Өврийн бэлчир')">
+					    Өврийн бэлчир <i id="rash-basinIn" class="pull-right fa fa-chevron-left"></i>
+					    </div>
+					      <div class="row margin-bottom" id="basinInId" style="display:none">
+					       <div class="col-md-12">
+						    <div class="col-md-4">
+						    <div class="form-title">Хий</div>
+						    <div class="col-md-12">
+						     <p:selectOneMenu value="#{inspectionController.customerTradition.innerDelta}" style="width:85px">
+						       <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+						       <f:selectItem itemLabel="Хар цагааны завсар" itemValue="1"/>
+						       <f:selectItem itemLabel="Бусад" itemValue="2"/>
+						      </p:selectOneMenu>
+						     </div>
+						    </div>
+						    <div class="col-md-4"><div class="form-title">Шар</div>
+						     <div class="col-md-12">
+						      <p:selectOneMenu value="#{inspectionController.customerTradition.innerYellow}" style="width:85px">
+						        <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+						       <f:selectItem itemLabel="Гэдэсний дээд" itemValue="1"/>
+						       <f:selectItem itemLabel="Гэдэсний доод" itemValue="2"/>
+						       <f:selectItem itemLabel="Бусад" itemValue="3"/>
+						      </p:selectOneMenu>
+						      </div>
+						     </div>
+						    <div class="col-md-4">
+						     <div class="form-title">Бадган</div>
+						      <div class="col-md-12">
+						      <p:selectOneMenu value="#{inspectionController.customerTradition.innerStomach}" style="width:85px">
+						        <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+						       <f:selectItem itemLabel="Аюулхайн" itemValue="1"/>
+						       <f:selectItem itemLabel="Галын илч буурсан" itemValue="2"/>
+						       <f:selectItem itemLabel="Бэтийн" itemValue="3"/>
+						       <f:selectItem itemLabel="Давсагны" itemValue="4"/>
+						       <f:selectItem itemLabel="Бусад" itemValue="5"/>
+						      </p:selectOneMenu>
+						      </div>
+						      </div>					          
+					        </div>
+					      </div>
+					      </div>
+					     <div class="col-md-6">
+					      <div class="form-title" style="cursor:pointer" onclick="basinToggle('Арын бэлчир')">
+					      Арын бэлчир <i id="rash-basin" class="pull-right fa fa-chevron-left"></i></div>
+					     <div class="col-md-12" id="basinId" style="display:none">
+						    <div class="col-md-4">
+						    <div class="form-title">Хий</div>
+						    <div class="col-md-12">
+						     <p:selectOneMenu value="#{inspectionController.customerTradition.backgroundDelta}" style="width:85px">
+						        <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+						       <f:selectItem itemLabel="Th1 - Хий " itemValue="1"/>
+						       <f:selectItem itemLabel="Th6 - Амин судас" itemValue="2"/>
+						       <f:selectItem itemLabel="Th7 - Зүрх" itemValue="3"/>
+						       <f:selectItem itemLabel="L4 - Олгой" itemValue="4"/>
+						       <f:selectItem itemLabel="Бусад" itemValue="5"/>
+						      </p:selectOneMenu>
+						     </div>
+						    </div>
+						    <div class="col-md-4"><div class="form-title">Шар</div>
+						     <div class="col-md-12">
+						      <p:selectOneMenu value="#{inspectionController.customerTradition.backgroundYellow}" style="width:85px">
+						        <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+						       <f:selectItem itemLabel="Th2 - Шар" itemValue="1"/>
+						       <f:selectItem itemLabel="Th9 - Элэг" itemValue="2"/>
+						       <f:selectItem itemLabel="Th10 - Цөс" itemValue="3"/>
+						       <f:selectItem itemLabel="L5 - Гэдэс" itemValue="4"/>
+						       <f:selectItem itemLabel="Бусад" itemValue="5"/>
+						      </p:selectOneMenu>
+						      </div>
+						     </div>
+						    <div class="col-md-4">
+						     <div class="form-title">Бадган</div>
+						      <div class="col-md-12">
+						      <p:selectOneMenu value="#{inspectionController.customerTradition.backgroundStomach}" style="width:85px">
+						        <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+						       <f:selectItem itemLabel="Th3 - Бадган" itemValue="1"/>
+						       <f:selectItem itemLabel="Th11 - Дэлүү" itemValue="2"/>
+						       <f:selectItem itemLabel="Th12 - Ходоод" itemValue="3"/>
+						       <f:selectItem itemLabel="S1 - Давсаг" itemValue="4"/>
+						       <f:selectItem itemLabel="Бусад" itemValue="5"/>
+						      </p:selectOneMenu>
+						      </div>
+						      </div>					          
+					        </div>
+					     </div>
+					      </div>
+					    <div class="margin-bottom">
+					     <div class="form-title">Арьс , хаван  хавдар</div>
+					       <div class="col-md-6">
+					        <div class="form-title">Хий</div>
+					         <div class="col-md-5 margin-bottom ">хаван хавдар</div>
+					         <div class="col-md-7 margin-bottom "> 
+					          <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.edema}">
+					           <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					           <f:selectItem itemLabel="Хуурай, ширүүн, хүйтэн, ихсэж багасах нь  түргэн" itemValue="1" />
+					           <f:selectItem itemLabel="бусад"/>
+					          </p:selectOneMenu>
+					           </div>
+					          <div class="col-md-12 margin-bottom ">
+					             <div class="col-md-5">Арьс</div>
+					             <div class="col-md-7">
+					               <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.skin}">
+					          	    <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					          	   <f:selectItem itemLabel="Хуурай" itemValue="1"/>
+					           	   <f:selectItem itemLabel="Ширүүн" itemValue="2"/>
+					               <f:selectItem itemLabel="Хүйтэн" itemValue="3"/>
+					               <f:selectItem itemLabel="бусад" itemValue="4"/>
+					          </p:selectOneMenu>
+					               </div>
+					            </div>
+					         </div>
+					       <div class="col-md-3">
+					        <div class="form-title">Шар</div>
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.edemaYellow}">
+					            <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					           <f:selectItem itemLabel="Өвчин  эмзэглэл  ихтэй,халуун" itemValue="1"/>
+					           <f:selectItem itemLabel="бусад" itemValue="2"/>
+					          </p:selectOneMenu>
+					           </div>
+					          <div class="col-md-12 margin-bottom">
+					           <p:selectOneMenu style="width:125px"  value="#{inspectionController.customerTradition.skinYellow}">
+					            <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					           <f:selectItem itemLabel="Зөөлөн" itemValue="1" />
+					           <f:selectItem itemLabel="Тослог" itemValue="2"/>
+					           <f:selectItem itemLabel="Бүлээн,халуун" itemValue="3"/>
+					           <f:selectItem itemLabel="бусад" itemValue="4"/>
+					          </p:selectOneMenu>
+					           </div>
+					        </div>
+					       <div class="col-md-3">
+					        <div class="form-title">Бадган</div>
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.edemaStomach}">
+					            <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					           <f:selectItem itemLabel="Хүйтэн, өвчин эмзэглэл бага, тогтвортой" itemValue="1" />
+					           <f:selectItem itemLabel="бусад" itemValue="2"/>
+					          </p:selectOneMenu>
+					         </div>
+					         <div class="col-md-12 margin-bottom">
+					          <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.skinStomach}">
+					            <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					           <f:selectItem itemLabel="Өөхлөг" itemValue="1"/>
+					           <f:selectItem itemLabel="Тослог" itemValue="2"/>
+					           <f:selectItem itemLabel="Хүйтэн" itemValue="3" />
+					           <f:selectItem itemLabel="бусад" itemValue="4"/>
+					          </p:selectOneMenu>
+					           </div>
+					        </div>
+					       </div>
+					    </div>
+					   </div>
+					  </div>
+				<div class="row margin-bottom">
+					  <div class="form-title" style="cursor:pointer" onclick="questionToggle('Асуух шинжилгээ')">
+					   Асуух шинжилгээ<i id="rash-ques" class="pull-right fa fa-chevron-left"></i></div>
+					  <div id="quesId" style="display:none">
+					    <div class="col-md-6">
+					   <div class="form-title">Хий</div>
+					     <div class="col-md-12 margin-bottom">
+					      <div class="col-md-5">Өлсөх</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.starve}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Тогтмол бус" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					      <div class="col-md-12 margin-bottom">
+					       <div class="col-md-5">Ундаасах</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.thirst}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Тогтмол бус" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					       <div class="col-md-5">Нойр</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.sleep}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Өнгөц сэрэмтгий" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Их зүүдлэнэ хар дарна" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					       <div class="col-md-5">Яриа</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.talk}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Түргэн" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Олон үглэнэ" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					       <div class="col-md-5">Галбир</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.figure}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Туранхай" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					       <div class="col-md-5">Биеийн идэвхи</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.outer}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Хөдөлгөөн түргэн" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					        <div class="col-md-5">Оюуны идэвхи</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.mental}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Санаж сэдсэн идэвхтэй" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					        <div class="col-md-5">Мөн чанар</div>
+					    	<div class="col-md-7">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.essence}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Дан" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Хавсарсан" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Хурсан" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					    	  </div>
+					       </div>
+					    	</div>
+					    <div class="col-md-3">
+					    	<div class="form-title">Шар</div>
+					    	<div>
+					    	 <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.starveYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="их" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					      <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.thirstYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Их" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.sleepYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Шөнө унтаж чадахгүй" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Өдөр  нойр их хүрнэ" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.talkYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Хурц ширүүн,түрэмтгий" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.figureYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Дунд зэрэг" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.outerYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Дунд зэрэг" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.mentalYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Түрэмгий ухаалаг" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.essenceYellow}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Дан" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Хавсарсан" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Хурсан" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					    	 </div>
+					    	</div>
+					    <div class="col-md-3">
+					     <div class="form-title">Бадган</div>
+					     <div>
+					      <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.starveStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Бага" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					      <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.thirstStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Бага" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.sleepStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Нойр их" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Алжааж  нойрмоглоно" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.talkStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Удаан алгуур" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Үг дуу цөөн" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.figureStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Тарган" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom" >
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.outerStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Хөдөлгөөн удаан" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.mentalStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Амгалан, удаан" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Бусад" itemValue="2"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					       <div class="col-md-12 margin-bottom">
+					    	 <p:selectOneMenu style="width:125px" value="#{inspectionController.customerTradition.essenceStomach}">
+					    	   <f:selectItem itemLabel="Сонгох" itemValue="0"/>
+					    	  <f:selectItem itemLabel="Дан" itemValue="1"/>
+					    	  <f:selectItem itemLabel="Хавсарсан" itemValue="2"/>
+					    	  <f:selectItem itemLabel="Хурсан" itemValue="3"/>
+					    	  </p:selectOneMenu>
+					       </div>
+					      </div>
+					     </div>
+					    </div>
+					   </div>
+				<div class="row margin-bottom">
+					 <div class="col-md-12">
+     					 <p:inputTextarea  rows="3" style="width:100%" value="#{inspectionController.customerEye.otherPain}" placeholder="Бусад зовиур"/>
+					   </div>
+					  </div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.traditionAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tradition',1,'false');"
+											onkeyup="callRefreshList(this,'tradition',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.traditionAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tradition',1,'true');"
+											onkeyup="callRefreshList(this,'tradition',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'tradition',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tradition',0,'false');"
+											onkeyup="callRefreshList(this,'tradition',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'tradition',0,'true');"
+											onkeyup="callRefreshList(this,'tradition',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'tradition',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.traditionPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameEn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.traditionPreDiagnose.remove(diagnose)}"
+												oncomplete="updateHematoDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateHematoDubu" update="dubu" />
+					
+					<p:remoteCommand name="windTraditationToggle" actionListener="#{inspectionController.windTraditationToggle}"/>					
+					<p:remoteCommand name ="cookInceptToggle" actionListener="#{inspectionController.cookInceptToggle}"/>
+					<p:remoteCommand name ="inspectionExamToggle" actionListener="#{inspectionController.inspectionExamToggle}"/>
+					<p:remoteCommand name ="uvurchlulToggle" actionListener="#{inspectionController.uvurchlulToggle}"/>
+					<p:remoteCommand name ="examTraditationToggle" actionListener="#{inspectionController.examTraditationToggle}"/>
+					<p:remoteCommand name ="badganToggleAction" actionListener="#{inspectionController.badganTraditationToggle}"/>
+					<p:remoteCommand name ="yellowPainToggle" actionListener="#{inspectionController.yellowPainToggle}"/>
+					
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerEye.rateText}" placeholder="Үнэлгээ бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Тѳлѳвлѳгѳѳ">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea  rows="3" autoResize="false" style="width: 100%;"
+										 value="#{inspectionController.customerEye.advice}" placeholder="Зөвлөгөө бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="additional-script">
+		<script>
+			//<![CDATA[
+			function  toggleRash(){
+				$('#leftEyeId').toggle('fast','swing');
+				if($('#rash-chevron').hasClass('fa-chevron-down')){
+					
+					$('#rash-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				}
+				else $('#rash-chevron').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+			}
+			function  mentation(){
+				$('#mentationId').toggle('fast','swing');
+				if($('#rash-chevronMent').hasClass('fa-chevron-down')){
+				 	$('#rash-chevronMent').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				 }
+				else $('#rash-chevronMent').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+			}
+			function  wind(el){
+				$('#windId').toggle('fast','swing');
+				if($('#rash-chevronWind').hasClass('fa-chevron-down')){
+				 	$('#rash-chevronWind').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				 	
+				 }
+				else
+					{
+						windTraditationToggle([{name:'windElement',value:el}]);
+						$('#rash-chevronWind').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+					}
+			}
+			function toggleTouch(el){
+				console.log(el);
+				$('#rightEye').toggle('fast','swing');
+				if($('#rash-chevron1').hasClass('fa-chevron-left')){
+					toggleLeftEye([{name:'leftEyePain',value:el}]);
+					
+					$('#rash-chevron1').switchClass("fa-chevron-left","fa-chevron-down",200,"easeInOutQuad");
+				}
+				else 
+					{
+					toggleLeftEye([{name:'leftEyePain',value:el}]);
+					$('#rash-chevron1').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					}
+			}
+			function alkalosis(){
+				$('#alkalosisId').toggle('fast','swing');
+				if($('#rash-alkalosis').hasClass('fa-chevron-down')){
+					$('#rash-alkalosis').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else $('#rash-alkalosis').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+			}
+			function cookIncept(el){
+				$('#cookInceptId').toggle('fast','swing');
+				if($('#rash-cookIncept').hasClass('fa-chevron-down')){
+					$('#rash-cookIncept').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else {
+					cookInceptToggle([{name:'cookIncept',value:el}])
+					$('#rash-cookIncept').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+			}
+			function inspectionExam(el){
+				$('#inspectionExamId').toggle('fast','swing');
+				if($('#rash-inspectionExam').hasClass('fa-chevron-down')){
+					
+					$('#rash-inspectionExam').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else {
+					inspectionExamToggle([{name:'examIns',value:el}]);
+					$('#rash-inspectionExam').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+			}
+			function uvurchlul(el){
+				$('#uvurchlulId').toggle('fast','swing');
+				if($('#rash-uvurchlul').hasClass('fa-chevron-down')){
+					
+					$('#rash-uvurchlul').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else 
+					{
+					uvurchlulToggle([{name:'uvurchlul',value:el}]);
+					$('#rash-uvurchlul').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+			}
+			function brain(){
+				$('#brainId').toggle('fast','swing');
+				if($('#rash-brain').hasClass('fa-chevron-down')){
+					$('#rash-brain').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else $('#rash-brain').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+			}
+			function badganToggle(el){
+				$('#badganId').toggle('fast','swing');
+				if($('#rash-badgan').hasClass('fa-chevron-down')){
+					$('#rash-badgan').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else {
+					badganToggleAction([{name:'badgan',value:el}]);
+					$('#rash-badgan').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+			}
+			function yellowPain(el){
+				$('#yellowId').toggle('fast','swing');
+				if($('#rash-yellow').hasClass('fa-chevron-down')){
+					$('#rash-yellow').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else {
+					yellowPainToggle([{name:'yellowElement',value:el}]);
+					$('#rash-yellow').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+			}
+			function examToggle(el){
+				$('#exaId').toggle('fast','swing');
+				if($('#rash-exa').hasClass('fa-chevron-down')){
+					$('#rash-exa').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else {
+					examTraditationToggle([{name:'examtrad',value:el}]);
+					console.log(el);
+					$('#rash-exa').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+			}
+			function basinToggle(){
+				$('#basinId').toggle('fast','swing');
+				if($('#rash-basin').hasClass('fa-chevron-down')){
+					$('#rash-basin').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else $('#rash-exa').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+			}
+			function basinInToggle(){
+				$('#basinInId').toggle('fast','swing');
+				if($('#rash-basinIn').hasClass('fa-chevron-down')){
+					$('#rash-basinIn').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else $('#rash-basinIn').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+			}
+			function questionToggle(){
+				$('#quesId').toggle('fast','swing');
+				if($('#rash-ques').hasClass('fa-chevron-down')){
+					$('#rash-ques').switchClass("fa-chevron-down","fa-chevron-left",200,"easeInOutQuad");
+				}
+				else $('#rash-ques').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Хагалгааны бүртгэл</h1>
+		<ol class="breadcrumb">
+			<li><p:commandLink
+					action="#{userController.url('surgery_list')}" value="Эмчилгээ">
+					<i class="fa fa-circle-o"></i>
+				</p:commandLink></li>
+			<li class="active">Бүртгэл</li>
+		</ol>
+		</section>
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:ttname">#{i18n['surgery_type']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectOneMenu id="ttname" styleClass="pull-left" value="#{surgeryController.currentSurgery.surgeryTypePkId}"
+							style="width: calc(100% - 37px);display: inline-block">
+							<f:selectItem itemLabel="Сонгох" itemValue="0"/>
+							<f:selectItems value="#{surgeryController.surgeryTypes}"
+								var="surgeryType" itemLabel="#{surgeryType.name}"
+								itemValue="#{surgeryType.pkId}"></f:selectItems>
+						</p:selectOneMenu>
+						<p:commandLink styleClass="btn pull-left" action="#{surgeryController.newSurgeryType}" update="rtt"
+							style="margin-left: 5px;padding:4px 9px !important;"
+							oncomplete="PF('registerSurgeryType').show();" value=" + "></p:commandLink>
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:name">#{i18n['surgery_name']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText id="name" value="#{surgeryController.currentSurgery.name}" style="width: 100%;" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:price">#{i18n['surgery_price']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText styleClass="number-control" id="price"
+							value="#{surgeryController.currentSurgeryPrice.price}"
+							style="width: 100%;">
+						</p:inputText>
+						
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label style="" for="form:usageDate">#{i18n['price_use_date']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:calendar id="usageDate" styleClass="date-control" pattern="yyyy-MM-dd"
+							value="#{surgeryController.currentSurgeryPrice.beginDate}">
+							<p:ajax event="dateSelect" listener="#{surgeryController.currentSurgeryPrice.setPkId(null)}" />
+						</p:calendar>
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:active">#{i18n['make_inactive']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectOneRadio value="#{surgeryController.currentSurgery.active}">
+							<f:selectItem itemLabel="#{i18n['inactive']}" itemValue="0"/>
+							<f:selectItem itemLabel="#{i18n['active']}" itemValue="1"/>
+						</p:selectOneRadio>
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:employees">#{i18n['select_doctor']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectCheckboxMenu id="employees" value="#{surgeryController.selectedEmployeePkId}" label="Хагалгааны эмч" style="width: 100%;"
+				                filter="true" filterMatchMode="contains" panelStyle="width:250px">
+				            <f:selectItems value="#{surgeryController.employees}"
+								var="employee" itemLabel="#{employee.firstName}"
+								itemValue="#{employee.pkId}"/>
+				        </p:selectCheckboxMenu>
+					</div>
+				</div>
+				<div class="clearfix" />
+				<div class="row">
+					<div class="col-md-12 text-right">
+						<p:commandLink styleClass="btn" action="#{surgeryController.saveSurgery}">
+							<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="registerSurgeryType"
+			header="Хагалгааны төрөл бүртгэх" modal="true" id="rtt"
+			resizable="false" width="350">
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="form:surgeryTypeName">#{i18n['surgery_type']}</label>
+					<p:inputText id="surgeryTypeName" value="#{surgeryController.currentSurgeryType.name}"
+						style="width: 100%;" />
+				</div>
+			</div>
+			<div class="col-md-12 text-right">
+				<p:commandLink styleClass="btn"
+					actionListener="#{surgeryController.saveSurgeryType()}"
+					update="form:message form:ttname form:surgeryTypeName"
+					oncomplete="PF('registerSurgeryType').hide();">
+					<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+			</div>
+		</p:dialog>
+		<p:remoteCommand name = "loadData" action="#{surgeryController.getRegData()}" update="form:ttname"/>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+     	//<![CDATA[
+		$(document).ready(function () {
+			//document.getElementById('form:itemName').setAttribute("list", "il");
+			loadData();
+		});
+		$('body').on('keydown', 'input, select, textarea', function(e) {
+		    var self = $(this)
+		      , form = self.parents('form:eq(0)')
+		      , focusable
+		      , next
+		      ;
+		    if (e.keyCode == 13) {
+		        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+		        next = focusable.eq(focusable.index(this)+1);
+		        if (next.length) {
+		            next.focus();
+		        } else {
+		            form.submit();
+		        }
+		        return false;
+		    }
+		});
+		//]]>
+		</script>
+	</ui:define>
+</ui:composition>

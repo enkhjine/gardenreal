@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Шинжилгээний жагсаалт</h1>
+
+		<ol class="breadcrumb">
+			<li class="active">Шинжилгээний</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="content">
+			<div class="box">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-5">
+							<div class="row margin-bottom">
+
+								<div class="col-md-4">
+									<i class="fa fa-fw fa-stop" style="color: #001f3f; width: 15px; height: 15px;" /> <span
+										class="color-hint">Хийгдэх</span>
+								</div>
+
+								<div class="col-md-4">
+									<i class="fa fa-fw fa-stop" style="color: #ff851b; width: 15px; height: 15px;" /> <span
+										class="color-hint">Түр хадгалсан</span>
+								</div>
+
+
+								<div class="col-md-4">
+									<i class="fa fa-fw fa-stop" style="color: #3d9970; width: 15px; height: 15px; " /> <span
+										class="color-hint">Баталгаажсан</span>
+								</div>
+							</div>
+							<p:panel styleClass="no-style-panel" id="exaSection">
+								<ui:repeat var="e" value="#{examinationController.exaList1}">
+									<div class="row">
+										<div class="col-md-7">
+											<p:outputLabel value="#{e.name}"></p:outputLabel>
+										</div>
+										<div class="col-md-5">
+											<div class="btn-group">
+												<p:commandLink value="#{e.countActiveRequest}"
+													styleClass="btn bg-navy"
+													actionListener="#{examinationController.setFilters('1', e.pkId)}"
+													action="#{examinationController.refreshDrequest()}" />
+												<p:commandLink value="#{e.countTempRequest}"
+													styleClass="btn bg-orange"
+													actionListener="#{examinationController.setFilters('2', e.pkId)}"
+													action="#{examinationController.refreshDrequest()}" />
+												<p:commandLink value="#{e.countDoneRequest}"
+													styleClass="btn bg-olive "
+													actionListener="#{examinationController.setFilters('3', e.pkId)}"
+													action="#{examinationController.refreshDrequest()}" />
+											</div>
+										</div>
+									</div>
+								</ui:repeat>
+							</p:panel>
+						</div>
+
+						<div class="col-md-7 flex-center-self">
+							<div class="row">
+							
+								<center>
+									<p:outputLabel id="title"
+										value="#{examinationController.drequestTitle} шинжилгээний жагсаалт"></p:outputLabel>
+								</center>
+							</div>
+							<p:remoteCommand name="filter"
+								action="#{examinationController.refreshDrequest()}"></p:remoteCommand>
+							<p:inputText id="srch" onkeyup="filter();"
+								value="#{examinationController.filterDkey}" style="width:100%" />
+							<p:watermark for="form:srch"
+								value="Картын№ , овог, нэр , регистер" />
+							<p:dataTable id="drequests" styleClass="myTable"
+								rowIndexVar="index" emptyMessage="Хоосон байна"
+								value="#{examinationController.exaRequest}" var="er">
+								<p:column styleClass="index" headerText="№"> #{index + 1}</p:column>
+								<p:column styleClass="id" headerText="Картын №"> 
+						#{er.customer.cardNumber}
+						</p:column>
+								<p:column styleClass="text" headerText="Овог">
+						#{er.customer.lastName}
+						</p:column>
+								<p:column styleClass="text" headerText="Нэр">
+						#{er.customer.firstName}	
+						</p:column>
+								<p:column styleClass="id" headerText="РД">
+									<p:commandLink onclick="PF('leExa').show();"
+										actionListener="#{examinationController.setChosenDrequest(er)}"
+										action="#{examinationController.refreshQuestionDetail(er)}"
+										update="@(.examinationSection)" oncomplete="fixHeader();">
+										<u>#{er.customer.regNumber} </u>
+									</p:commandLink>
+								</p:column>
+								<p:column styleClass="short-number" headerText="Нас">
+						#{er.customer.age}
+						</p:column>
+								<p:column styleClass="short-text" headerText="Хүйс">
+							#{er.customer.genderString}
+						</p:column>
+								<p:column styleClass="text" headerText="Илгээсэн огноо">
+						#{er.getDateString(er.requestDate)}
+						</p:column>
+
+
+							</p:dataTable>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="leExa" modal="true"
+			header="Шинжилгээний хариу бүртгэл"
+			onShow="fixHeader();" resizable="false" styleClass="dh dialog-scroll"
+			width="600" height="350" id="leExa" closeOnEscape="true" >
+			<p:panel id="exaValueSection"
+				styleClass="no-style-panel examinationSection">
+				<div class="margin-vertical"
+					style="border-bottom: 1px solid #DADADA">
+					<i class="fa fa-fw fa-info-circle color-blue"
+						style="font-size: 16px;" /> <span class="color-hint"
+						style="font-weight: 600; font-size: 14px;">Ерөнхий мэдээлэл</span>
+				</div>
+				<p:panelGrid styleClass="form-table margin-vertical">
+					<p:row>
+						<p:column> Картын дугаар: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.cardNumber} </p:column>
+						<p:column> Овог: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.lastName} </p:column>
+						<p:column> Нэр: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.firstName} </p:column>
+					</p:row>
+					<p:row>
+						<p:column> РД: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.regNumber} </p:column>
+						<p:column> Нас: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.age} </p:column>
+						<p:column> Хүйс: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.genderString} </p:column>
+					</p:row>
+					<p:row>
+						<p:column> Утас: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.phoneNumber} </p:column>
+						<p:column> И-Мэйл: </p:column>
+						<p:column> #{examinationController.chosenDrequest.customer.email} </p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<div class="col-md-12">
+					<div class="row">
+						<div class="margin-vertical col-md-12"
+							style="border-bottom: 1px solid #DADADA">
+							<i class="fa fa-fw fa-edit color-blue" style="font-size: 16px;" />
+							<span class="color-hint"
+								style="font-weight: 600; font-size: 14px;">Шинжилгээний
+								хариу</span>
+						</div>
+					</div>
+					<div class="row margin-vertical">
+						<div class="col-md-12">
+							<table style="width: 100%;">
+								<tr>
+									<td > <p style = "font-weight:700">Шинжилгээний нэр</p></td>
+									<td > <p style = "font-weight:700">Лавлах хэмжээ</p></td>
+									<td > <p style = "font-weight:700">Нэгж</p></td>
+									<td > <p style = "font-weight:700">Хариу </p></td>
+
+								</tr>
+								<ui:repeat var="q" value="#{examinationController.questions}"
+									varStatus="index">
+									<tr>
+										<td style="width: 150px;"><p:outputLabel
+												value="#{q.name}" /></td>
+										<td style="width: 150px;"><p:outputLabel
+												value="#{q.getReference()}" /></td>
+
+										<ui:repeat var="aq" value="#{q.answers}">
+											<div style="display: none;" size="#{q.answers.size()}" />
+											<div class="field-header" style="font-size: 12px">
+												#{aq.headerLabel}</div>
+											<div class="field-header" style="font-size: 12px">
+												#{aq.headerLabel}</div>
+										</ui:repeat>
+
+										<ui:repeat var="a" value="#{q.answers}" varStatus="qq">
+										<td><p:outputLabel value="#{a.measurement}"
+													rendered="#{a.isInputNumber()}" /> <p:outputLabel
+													value="#{a.measurement}" rendered="#{a.isRadio()}" /> <p:outputLabel
+													value="#{a.measurement}" rendered="#{a.isMulti()}" /> <p:outputLabel
+													value="#{a.measurement}" rendered="#{a.isSelectable()}" />
+												<p:outputLabel value="#{a.measurement}"
+													rendered="#{a.isInput()}" /> <p:outputLabel
+													value="#{a.measurement}" rendered="#{a.isTextArea()}" /></td>
+											<td style="width: 90px">
+												<!-- InputText Section --> <p:inputText style="width:100%"
+													rendered="#{a.isInput()}" disabled="#{a.disabled}"
+													value="#{a.value}" onchange="a#{q.pkId}#{a.pkId}();" /> <p:remoteCommand
+													name="a#{q.pkId}#{a.pkId}"
+													actionListener="#{examinationController.valueChanged(a)}" />
+
+												<!-- SelectOneMenu Section --> <p:selectOneMenu
+													rendered="#{a.isSelectable()}" value="#{a.value}"
+													onchange="a#{q.pkId}#{a.pkId}();" disabled="#{a.disabled}"
+													style="width:100%">
+													<f:selectItems var="o" value="#{a.options}"
+														itemValue="#{o.name}" itemLabel="#{o.name}" />
+												</p:selectOneMenu> <!-- RadioSection Section --> <p:selectOneRadio
+													rendered="#{a.isRadio()}" value="#{a.value}"
+													onchange="a#{q.pkId}#{a.pkId}();" disabled="#{a.disabled}">
+													<f:selectItems var="op" value="#{a.options}"
+														itemValue="#{op.name}" itemLabel="#{op.name}" />
+													<p:ajax event="change"
+														listener="#{examinationController.valueChanged()}" />
+												</p:selectOneRadio> <!-- CheckBox Section --> <p:outputLabel
+													rendered="#{a.isBoolean()}" value="#{a.answerLabel}" /> <p:selectBooleanCheckbox
+													rendered="#{a.isBoolean()}" value="#{a.booleanValue}"
+													onchange="a#{q.pkId}#{a.pkId}();" disabled="#{a.disabled}" />
+												<p:outputLabel value="#{a.measurement}"
+													rendered="#{a.isBoolean()}" /> <!-- MultiSelect Section -->
+												<p:selectCheckboxMenu rendered="#{a.isMulti()}"
+													id="multiSelect" label="#{a.headerLabel}"
+													style="width: 100%;" onchange="a#{q.pkId}#{a.pkId}();"
+													filter="true" filterMatchMode="startsWith"
+													panelStyle="width:200px" value="#{a.values}"
+													disabled="#{a.disabled}">
+													<f:selectItems value="#{a.options}" var="opt"
+														itemLabel="#{opt.name}" itemValue="#{opt.name}" />
+												</p:selectCheckboxMenu> <!-- OutPutLabel Section --> <p:outputLabel
+													rendered="#{a.isLabel()}" value="#{a.answerLabel}" /> <!-- TextArea Section -->
+												<p:inputTextarea rendered="#{a.isTextArea()}"
+													style="width:100%" disabled="#{a.disabled}"
+													value="#{a.value}" onchange="a#{q.pkId}#{a.pkId}();" /> <!-- InputNumber Section -->
+												<p:inputText rendered="#{a.isInputNumber()}"
+													disabled="#{a.disabled}" value="#{a.numberValue}"
+													onchange="a#{q.pkId}#{a.pkId}();" style="width:100%"
+													type="number" />
+
+											</td>
+											
+										</ui:repeat>
+									</tr>
+								</ui:repeat>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="margin-vertical">
+					<div class="col-md-12">
+						<label> <p:commandLink styleClass="btn"
+								actionListener="#{examinationController.saveDrequest('1')}"
+								oncomplete="PF('leExa').hide();"
+								disabled="#{examinationController.chosenDrequest.mood == 3}">
+								<i class="fa fa-fw fa-rotate-left" /> Түр хадгалах</p:commandLink>
+						</label> <label> <p:commandLink styleClass="btn"
+								actionListener="#{examinationController.saveDrequest('2')}"
+								oncomplete="PF('leExa').hide();"
+								disabled="#{examinationController.isExaDoctor() or examinationController.chosenDrequest.mood == 3 }">
+								<i class="fa fa-fw fa-check" /> Баталгаажуулах
+							</p:commandLink>
+						</label> <label> <p:commandLink styleClass="btn"
+								actionListener="#{examinationController.printExaminationHdr(examinationController.chosenDrequest)}"
+								oncomplete="PF('printDialog').show(); " >
+								<i class="fa fa-fw fa-check" /> Хэвлэх
+							</p:commandLink>
+						</label>
+							
+					</div>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<p:dialog id="printDialog" widgetVar="printDialog"
+			styleClass="dialog-scroll" height="400px" width="550px" modal="true"
+			resizable="false" header="" closeOnEscape="true">
+			<p:panel styleClass="no-style-panel" id = "dubu">
+			<table id="tablePrint" style="width: 100%;">
+				<tr> <td colspan="4" style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;"> АШУҮИС-ийн "ИХ СУРГУУЛИЙН НЭГДСЭН ЭМНЭЛЭГ" </td> </tr>
+				<tr> <td colspan="2" style="font-size: 13px; font-family: Times New Roman; text-align: left; vertical-align: middle; padding: 12px 0px;"> 
+						Овог, Нэр :  #{examinationController.chosenDrequest.customer.lastName} , #{examinationController.chosenDrequest.customer.firstName} </td>
+						<td colspan="2" style="font-size: 13px; font-family: Times New Roman; text-align: right; vertical-align: middle; padding: 12px 0px;">
+						Нас, Хүйс :  #{examinationController.chosenDrequest.customer.age} , #{examinationController.chosenDrequest.customer.genderString}			
+					</td> </tr>
+					<tr> <td colspan="4" style="font-size: 13px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;"> #{examinationController.chosenDrequest.examinationName} </td> </tr>
+
+				<tr>
+					<td colspan="4"
+						style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; padding-top: 12px;">
+						<table style="border: 0.1px solid black; width: 100%" cellpadding="0" cellspacing="0">
+							<tr>
+								<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+									№</td>
+								<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Шинжилгээний нэр</td>
+								<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Лавлах хэмжээ</td>
+									<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;"> Нэгж</td>
+								<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;"> Хариу</td>
+							</tr>
+							<ui:repeat value="#{examinationController.resultsForPrint}" var = "r" varStatus="index">
+							<tr>
+								<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+									#{index.index+1}</td>
+									<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+									#{r.evqName}</td>
+									<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+									#{r.range}</td>
+									<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+									#{r.measurement}</td>
+									<td 
+									style="border: 0.1px solid black; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+									#{r.value} </td>
+									
+							</tr>
+							</ui:repeat>
+
+						</table>
+
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="4"
+						style="font-size: 12px; font-family: Times New Roman; text-align:left; padding: 12px 0px;">
+						Дүгнэлт: </td>
+				</tr>
+
+				<tr>
+					<td colspan="2" style="font-size: 12px; font-family: Times New Roman; padding: 12px 0px; text-align: left; ">Эмч:  </td>
+					<td colspan="2" style="font-size: 12px; font-family: Times New Roman; padding: 12px 60px 0px 0px;  text-align: right;">Лаборант: </td>
+				</tr>
+				<tr>
+					<td colspan="4" style="font-size: 12px; font-family: Times New Roman; padding: 12px 0px; text-align: center; ">
+						Хэвлэсэн огноо: #{customerController.getDateString(customerController.currentDate)}
+					</td>
+					
+				</tr>
+			
+			</table>
+			</p:panel>
+			<a class="btn btn-app" href="javascript:void(0)"
+				onclick="print1('tablePrint');"> <i class="fa fa-print color-blue"></i>
+				Хэвлэх
+			</a>
+			<a class="btn btn-app" onclick="printPdf();"
+				href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+				PDF <p:remoteCommand process="@this" name="printToPDF" />
+			</a>
+			<a class="btn btn-app"
+				onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+
+
+		<p:remoteCommand name="loadData"
+			actionListener="#{examinationController.loadDataDrequest()}" />
+		<p:remoteCommand name="filterList"
+			actionListener="#{examinationController.refreshDrequest()}" />
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$(document).ready(function() {
+				loadData();
+			});
+			function uploadImage(id) {
+				$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();
+			}
+			var fixHeader = function(){				
+				if($("[size]") && $("[size]").length){
+					var size = $("[size]")[0].getAttribute("size");
+					for(var i = 0; i < parseInt(size); i++){
+						var appendElem = $(".header-position")[i];
+						var elem = $(".field-header")[i];
+						$(elem).removeClass("field-header");
+						$(elem).appendTo(appendElem);
+					}
+					$(".field-header").remove();
+				}
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

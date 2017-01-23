@@ -1,0 +1,760 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="emr.xhtml">
+	<ui:define name="inspection">
+		<p:tab title="Арьс - Одоогийн өвчний түүх">
+			<p:accordionPanel id="skin" multiple="true">
+				<p:tab title="Зовиур" id="distress">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:selectBooleanCheckbox id="skin_lesion"
+								value="#{inspectionController.customerSkin.tmpskin_lesion}"
+								itemLabel="Тууралт гарна" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="itching"
+								value="#{inspectionController.customerSkin.tmpitching}"
+								itemLabel="Загатнана" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="burning"
+								value="#{inspectionController.customerSkin.tmpburning}"
+								itemLabel="Халуу оргино" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="stinging"
+								value="#{inspectionController.customerSkin.tmpstinging}"
+								itemLabel="Хорсоно" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="tingling"
+								value="#{inspectionController.customerSkin.tmptingling}"
+								itemLabel="Чимчигнэнэ" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="smarting"
+								value="#{inspectionController.customerSkin.tmpsmarting}"
+								itemLabel="Дарвигнана" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="dull_pain"
+								value="#{inspectionController.customerSkin.tmpdull_pain}"
+								itemLabel="Чинэрнэ" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="pain_tenderness"
+								value="#{inspectionController.customerSkin.tmppain_tenderness}"
+								itemLabel="Ѳвдѳнѳ" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="oozing"
+								value="#{inspectionController.customerSkin.tmpoozing}"
+								itemLabel="Ус, шүүс гарна" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="vesicle_bullae"
+								value="#{inspectionController.customerSkin.tmpvesicle_bullae}"
+								itemLabel="Цэврүүтнэ" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="pus"
+								value="#{inspectionController.customerSkin.tmppus}"
+								itemLabel="Идээ гарна" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="dry_skin"
+								value="#{inspectionController.customerSkin.tmpdry_skin}"
+								itemLabel="Хуурайшина" style="margin-right: 5px;" />
+							<p:selectBooleanCheckbox id="scaling"
+								value="#{inspectionController.customerSkin.tmpscaling}"
+								itemLabel="Хогжруутна" style="margin-right: 5px;" />
+						</div>
+					</div>
+					<div class="col-md-12">
+							<p:inputTextarea rows="3" autoResize="false" style="width: 100%;"
+								value="#{inspectionController.customerSkin.skinStressPainText}" placeholder="Бусад зовиур">
+							</p:inputTextarea>
+					</div>
+				</p:tab>
+				<p:tab title="Асуумж">
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="when">Өвчин анх эхэлсэн:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="when"
+								value="#{inspectionController.customerSkin.when}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="thisTime">Энэ удаагийн сэдрэл :</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="thisTime"
+								value="#{inspectionController.customerSkin.thisTime}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="thisTimeReason">Сэдрэлийн шалтгаан:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="thisTimeReason"
+								value="#{inspectionController.customerSkin.thisTimeReason}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="changed">Хувирч, өөрчлөгдсөн байдал:</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="changed"
+								value="#{inspectionController.customerSkin.changed}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row margin-bottom">
+						<div class="col-md-2">
+							<p:outputLabel for="usedThings">Хийсэн эмчилгээ</p:outputLabel>
+						</div>
+						<div class="col-md-10">
+							<p:inputText id="usedThings"
+								value="#{inspectionController.customerSkin.usedThings}"
+								style="width: 100%;" />
+						</div>
+					</div>
+					
+				</p:tab>
+				<p:tab title="Бодит үзлэг">
+				<div class="row margin-bottom">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<p:panelGrid columns="2" styleClass="form-table">
+									<p:outputLabel value="Зураг:" style="width: 60px;" />
+									<p:commandLink styleClass="btn" onclick="uploadImage();"
+										actionListener="#{inspectionController.setImageType('skin')}">
+										<i class="fa fa-fw fa-upload" /> Зураг сонгох
+											</p:commandLink>
+								</p:panelGrid>
+							</div>
+							<p:panel id="qo" styleClass="no-style-panel">
+							<div class="col-md-12 margin-top">
+								<ui:repeat var="attachment"
+									value="#{inspectionController.listSkinAttachment}">
+									<div style="float:left;text-align: center;position: relative;">
+										<p:graphicImage
+											value="#{inspectionController.getDynamicNoseImage(inspectionController.getListSkinAttachment().indexOf(attachment), inspectionController.getListSkinAttachment())}"
+											cache="false" height="50" onclick="showModalImage(this);"
+											style="margin-right: 5px;" styleClass="zoom">
+											<f:param name="image_id"
+												value="#{inspectionController.getListSkinAttachment().indexOf(attachment)}" />
+										</p:graphicImage><br/>
+										<p:commandLink actionListener="#{inspectionController.setAttachment(attachment)}" oncomplete="PF('attachment-name').show();">
+											<i class="fa fa-edit color-blue" data-toggle="tooltip" data-placement="bottom" title="Зурганд нэр өгөх"/>
+										</p:commandLink>
+										<p:commandLink actionListener="#{inspectionController.deleteFile(inspectionController.listSkinAttachment, attachment)}"
+											oncomplete="updateSkin()">
+											<i class="fa fa-trash color-red" data-toggle="tooltip" data-placement="bottom" title="Устгах"/>
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+							</div>
+							</p:panel>
+						</div>
+					</div>
+					<p:remoteCommand name="updateSkin" update="qo"></p:remoteCommand>
+					<p:remoteCommand name="updateForev" update="forev"/>
+					<p:panel id="forev" styleClass="no-style-panel forev" >
+					<div class="row">
+						<div class="col-md-12" style="cursor:pointer;" onclick="toggleRash('Тууралт')">
+							<div class="form-title">
+								Тууралт
+								<i id="rash-chevron" class="pull-right fa fa-chevron-left"/>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="rash" style="display:none">
+					<div class="col-md-6 margin-bottom">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-title" style="border:none;">Анхдагч</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.spot}" 
+									itemLabel="Толбо" >
+									 <p:ajax  event="change"  update="@(.spotPanel)" />
+									 </p:selectBooleanCheckbox>
+							</div>
+							<p:panel styleClass="no-style-panel spotPanel" >
+							<c:if test="#{inspectionController.customerSkin.spot=='true'}">
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.agePigmentRemain}" itemLabel="Нөсөө алдагдлын" style="padding-left: 10px;"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.agePigmentOver}" itemLabel="Хэт нөсөөжлийн" style="padding-left: 10px;"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.bloody}" itemLabel="Цусархаг" style="padding-left: 10px;"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.veinWide}" itemLabel="Судас өргөслийн" style="padding-left: 10px;"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.bluish}" itemLabel="Хөхөлбий" style="padding-left: 10px;"/>
+								</div>
+								</c:if>
+							</p:panel>
+						</div>
+						<div class="row">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.leafSpot}" itemLabel="Навчин толбо" onchange="updateForev()"/>
+							</div>
+							<p:panel styleClass="no-style-panel" rendered="#{inspectionController.customerSkin.leafSpot}">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.agePigmentRemainLeaf}" itemLabel="Нөсөө алдагдлын" style="padding-left: 10px;"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.agePigmentOverLeaf}" itemLabel="Хэт нөсөөжлийн" style="padding-left: 10px;"/>
+							</div>
+							</p:panel>
+						</div>
+						<div class="row">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.hives}" itemLabel="Гүвдрүү"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.aclasia}" itemLabel="Хөрзөн"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.node}" itemLabel="Зангилаа"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.bleb}" itemLabel="Бэлцрүү"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.lilBulla}" itemLabel="Цэврүүнцэр"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.bulla}" itemLabel="Цэврүү"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.pusBulla}" itemLabel="Идээт цэврүүнцэр"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.ger}" itemLabel="Гэр"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.growth}" itemLabel="Хавдар"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 margin-bottom">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-title" style="border:none;">Хоёрдагч</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.flake}" itemLabel="Хайрс"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.scab}" itemLabel="Тав"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.scratch}" itemLabel="Зулгархай"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.shirshil}" itemLabel="Ширшил"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.abrasion}" itemLabel="Шалбархай"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.wound}" itemLabel="Шарх"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.cranny}" itemLabel="Цууралт"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.scar}" itemLabel="Сорив" onchange="updateForev()"/>
+							</div>
+							<p:panel styleClass="no-style-panel" rendered="#{inspectionController.customerSkin.scar}">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.overGrowth}" itemLabel="Хэт ургалтат" style="padding-left: 10px;"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.scarAtrophy}" itemLabel="Хатингаршилт" style="padding-left: 10px;"/>
+							</div>
+							</p:panel>
+						</div>
+						<div class="row">
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.atrophy}" itemLabel="Атропи"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.spotTwo}" itemLabel="Толбо (II)"/>
+							</div>
+							<div class="col-md-12 margin-bottom">
+								<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.fossilization}" itemLabel="Эвэр, чулуужилт"/>
+							</div>
+						</div>
+					</div>
+					</div>
+					<p:panel id="skin-location" styleClass="no-style-panel">
+					<div class="row">
+						<div class="col-md-12" style="cursor:pointer;" onclick="toggleDistribution('Тархац')">
+							<div class="form-title">
+							Тархац
+							<i id="distribution-chevron" class="pull-right fa fa-chevron-left"/>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom" id="distribution" style="display:none">
+<!-- 						<div class="col-md-2">Байрлал :</div> -->
+						<div class="col-md-6">
+							<div class="row">
+								<p:panel styleClass="no-style-panel">
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.widespread}" itemLabel="Тархмал"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.symmetric}" itemLabel="Харалдаа"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.intertriginous}" itemLabel="Нугалаат хэсэг"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.sunExposed}" itemLabel="Наранд ѳртѳмхий хэсэгт"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.senseFollow}" itemLabel="Мэдрэгжүүлэлт дагаж"/>
+								</div>
+								</p:panel>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row">
+								<p:panel styleClass="no-style-panel">
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.isolated}" itemLabel="Ганц нэг"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.asymmetric}" itemLabel="Харалдаа бус"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.extertriginous}" itemLabel="Тэнийлгэгч хэсгээр"/>
+								</div>
+								<div class="col-md-12 margin-bottom">
+									<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.limbEnds}" itemLabel="Мөчдийн төгсгөлөөр"/>
+								</div>
+								</p:panel>
+							</div>
+						</div>
+					</div>
+					</p:panel>
+					<div class="row">
+						<div class="col-md-12" >
+							<div class="form-title" style="cursor:pointer;" onclick="toggleLocation('Байрлал')">
+							Байрлал
+							<i id="location-chevron" class="pull-right fa fa-chevron-down"/>
+							</div>
+						</div>
+					</div>
+					<div class="row margin-bottom" id="location">
+						<div style="height: 331px;width: 154px;display:inline-block;float:left;">
+							<img src="#{applicationController.path}images/homunculus.gif" style="position: absolute;display:#{inspectionController.selectedCustomer.gender == 1 and inspectionController.selectedCustomer.getAge() gt 1 ? 'block' : 'none'}"/>
+							<img src="#{applicationController.path}images/homunculus_fm.gif" style="position: absolute;display:#{inspectionController.selectedCustomer.gender == 0 and inspectionController.selectedCustomer.getAge() gt 1 ? 'block' : 'none'}"/>
+							<img src="#{applicationController.path}images/homunculus_kid.gif" style="position: absolute;display:#{inspectionController.selectedCustomer.getAge() lt 2 ? 'block' : 'none'}"/>
+							<svg id="svg" height="331" width="154" style="position: absolute;background-color: rgba(0, 0, 0, 0);display:#{inspectionController.selectedCustomer.getAge() gt 1 ? 'block' : 'none'}" 
+								class="non-selectable skin-model">
+<!-- 								Баруун хөл -->
+								<polygon class="leg" onclick="toggleSkin(this, 'leg')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="81,153, 85,149, 90,142, 102,131, 103,131, 105,142, 105,152, 106,164, 106,177, 105,188, 103,200, 102,201, 103,225, 104,230, 105,234, 105,249, 102,263, 100,276, 97,287, 97,295, 86,295, 85,295, 87,280, 87,267, 86,259, 85,257, 85,242, 87,236, 86,230, 83,218, 82,210, 81,189, 80,184, 79,178, 78,175, 78,167, 80,165, 82,163, 83,161, 83,157" 
+									style="fill:#{inspectionController.customerSkin.leg ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Их бие -->
+								<polygon onclick="toggleSkin(this, 'body')" points="50,57, 53,57, 54,58, 66,58, 67,59, 85,59, 86,58, 97,58, 98,57, 103,57, 103,58, 102,59, 102,60, 101,61, 101,67, 102,68, 102,70, 103,71, 103,78, 104,79, 104,87, 103,88, 103,89, 102,90, 102,92, 101,93, 101,96, 100,97, 100,115, 101,116, 101,121, 102,122, 102,126, 103,127, 102,128, 101,128, 100,129, 99,129, 98,130, 97,130, 91,136, 90,136, 88,138, 87,138, 86,139, 85,139, 84,140, 82,140, 81,141, 80,141, 79,142, 74,142, 73,141, 71,141, 70,140, 68,140, 67,139, 66,139, 65,138, 64,138, 59,133, 58,133, 57,132, 56,131, 55,130, 54,129, 53,129, 52,128, 50,128, 50,124, 51,123, 51,119, 52,118, 52,95, 51,94, 51,92, 50,91, 50,89, 49,88, 49,79, 50,78, 50,76, 49,75, 49,72, 50,71, 50,69, 51,68, 51,60, 50,58" 
+									style="fill:#{inspectionController.customerSkin.body ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Бэлэг эрхтэн -->
+								<polygon onclick="toggleSkin(this, 'anogenital')" points="50,127, 52,127, 53,128, 54,128, 55,129, 56,129, 59,132, 60,132, 65,137, 66,137, 67,138, 68,138, 69,139, 70,139, 71,140, 73,140, 74,141, 78,141, 79,140, 81,140, 82,139, 83,139, 84,138, 85,138, 86,137, 87,137, 88,136, 89,135, 90,134, 91,133, 92,132, 93,132, 94,131, 95,130, 96,129, 97,129, 98,128, 99,128, 100,127, 103,127, 103,132, 102,132, 89,145, 89,146, 88,147, 87,148, 86,149, 86,150, 83,153, 83,156, 84,157, 84,160, 83,161, 83,164, 79,168, 73,168, 70,165, 70,164, 69,163, 69,153, 66,150, 66,149, 63,146, 63,145, 49,131, 49,130, 49,129, 50,128" 
+									style="fill:#{inspectionController.customerSkin.anogenital ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Зүүн тавхай -->
+								<polygon class="foot" onclick="toggleSkin(this, 'foot')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="60,295, 66,295, 66,297, 67,298, 67,304, 66,305, 66,308, 65,309, 65,311, 66,312, 66,316, 65,317, 65,320, 64,321, 64,322, 61,325, 61,327, 58,330, 52,330, 48,326, 48,325, 47,324, 47,318, 48,317, 48,315, 49,314, 49,313, 50,312, 50,310, 51,309, 51,308, 52,307, 52,305, 53,304, 53,299, 54,298, 54,296, 59,296" 
+									style="fill:#{inspectionController.customerSkin.foot ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Баруун тавхай -->
+								<polygon class="foot" onclick="toggleSkin(this, 'foot')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="84,295, 91,295, 92,296, 97,296, 97,301, 98,302, 98,305, 99,306, 99,308, 100,309, 100,310, 101,311, 101,313, 102,314, 102,315, 103,316, 103,319, 104,320, 104,323, 103,324, 103,325, 100,328, 100,329, 99,329, 98,330, 92,330, 90,328, 90,326, 89,325, 89,324, 86,321, 86,320, 85,319, 85,307, 84,306, 84,296" 
+									style="fill:#{inspectionController.customerSkin.foot ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Зүүн хөл -->
+								<polygon class="leg" onclick="toggleSkin(this, 'leg')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="54,296, 66,296, 64,276, 65,265, 65,259, 67,256, 67,245, 65,233, 67,228, 69,215, 70,211, 71,201, 71,189, 72,187, 74,178, 75,175, 75,167, 73,166, 70,161, 70,157, 71,152, 67,148, 62,142, 51,131, 50,131, 48,137, 48,158, 47,163, 46,174, 47,186, 50,201, 50,219, 47,229, 46,241, 46,247, 50,270, 52,280, 54,287" 
+									style="fill:#{inspectionController.customerSkin.leg ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Хүзүү -->
+								<polygon onclick="toggleSkin(this, 'neck')" points="87,40, 87,42, 90,45, 91,45, 92,46, 93,46, 94,47, 95,47, 96,48, 97,48, 99,50, 100,50, 101,51, 102,51, 103,52, 104,52, 106,54, 107,54, 108,55, 109,55, 110,56, 109,57, 105,57, 104,58, 98,58, 97,59, 81,59, 80,60, 72,60, 71,59, 55,59, 54,58, 48,58, 47,57, 43,57, 42,56, 43,55, 44,55, 46,53, 47,53, 48,52, 49,52, 50,51, 51,51, 52,50, 53,50, 55,48, 56,48, 57,47, 58,47, 59,46, 60,46, 62,44, 63,44, 65,42, 65,40, 73,43, 82,43" 
+									style="fill:#{inspectionController.customerSkin.neck ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Нүүр -->
+								<polygon onclick="toggleSkin(this, 'face')" points="72,8, 80,8, 81,9, 83,9, 85,11, 86,11, 90,15, 90,16, 91,17, 91,18, 92,19, 92,22, 93,23, 93,29, 92,30, 92,33, 91,34, 91,35, 90,36, 90,37, 87,40, 82,43, 73,43, 65,40, 62,37, 62,36, 61,35, 61,34, 60,33, 60,31, 59,30, 59,22, 60,21, 60,19, 61,18, 61,17, 62,16, 62,15, 67,10, 68,10, 69,9, 71,9" 
+									style="fill:#{inspectionController.customerSkin.face ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Хуйх -->
+								<polygon onclick="toggleSkin(this, 'scalp')" points="71,1, 81,1, 82,2, 83,2, 84,3, 85,3, 89,7, 89,8, 90,9, 90,10, 91,11, 91,19, 90,18, 89,17, 89,16, 84,11, 83,11, 82,10, 80,10, 79,9, 73,9, 72,10, 70,10, 69,11, 68,11, 63,16, 63,17, 61,19, 61,11, 62,10, 62,9, 63,8, 63,7, 67,3, 68,3, 69,2, 70,2" 
+									style="fill: #{inspectionController.customerSkin.scalp ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Дээд зүүн мөч -->
+								<polygon class="arm" onclick="toggleSkin(this, 'arm')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="42,56, 47,56, 48,57, 50,57, 51,58, 51,59, 52,60, 52,68, 51,69, 51,71, 50,72, 50,75, 51,76, 51,78, 50,79, 50,81, 49,82, 49,86, 48,87, 48,89, 47,90, 47,92, 46,93, 46,95, 45,96, 45,98, 43,100, 43,101, 41,103, 41,104, 40,105, 40,106, 39,107, 39,109, 38,110, 38,112, 37,113, 37,115, 36,116, 36,117, 35,118, 35,119, 34,120, 34,121, 33,122, 33,123, 32,124, 32,125, 31,126, 30,127, 30,128, 29,129, 29,130, 28,131, 28,132, 27,133, 27,134, 26,135, 26,136, 25,137, 25,138, 24,139, 24,140, 23,141, 23,142, 22,143, 22,144, 21,145, 21,146, 18,146, 17,145, 16,145, 15,144, 14,144, 13,143, 12,143, 11,142, 11,140, 12,139, 12,138, 13,137, 13,135, 14,134, 14,133, 15,132, 15,129, 16,128, 16,125, 17,124, 17,121, 18,120, 18,117, 19,116, 19,114, 20,113, 20,111, 21,110, 21,109, 22,108, 22,107, 23,106, 24,105, 24,104, 25,103, 25,102, 26,101, 26,100, 27,99, 28,98, 28,97, 29,96, 29,95, 30,94, 30,92, 31,91, 31,89, 32,88, 32,86, 33,85, 34,84, 34,83, 35,82, 35,74, 36,73, 36,65, 37,64, 37,61, 38,60, 39,59, 39,58, 40,57, 41,57" 
+									style="fill:#{inspectionController.customerSkin.arm ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Дээд баруун мөч -->
+								<polygon class="arm" onclick="toggleSkin(this, 'arm')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="106,56, 110,56, 111,57, 112,58, 113,59, 113,60, 114,61, 114,62, 115,63, 115,65, 116,66, 116,68, 117,69, 117,81, 118,82, 118,83, 119,84, 119,85, 120,86, 120,87, 121,88, 121,89, 122,90, 122,92, 123,93, 123,95, 124,96, 124,97, 125,98, 126,99, 126,100, 127,101, 128,102, 129,103, 129,104, 130,105, 130,106, 131,107, 131,108, 132,109, 132,111, 133,112, 133,114, 134,115, 134,117, 135,118, 135,121, 136,122, 136,124, 137,125, 137,127, 138,128, 138,130, 139,131, 139,133, 140,134, 140,136, 141,137, 141,139, 142,140, 142,142, 141,143, 139,143, 138,144, 137,144, 136,145, 135,145, 134,146, 133,146, 132,146, 132,145, 131,144, 131,142, 130,141, 130,140, 129,139, 129,138, 128,137, 128,136, 127,135, 127,134, 126,133, 126,132, 125,131, 124,130, 124,129, 123,128, 123,127, 122,126, 121,125, 121,124, 120,123, 120,122, 119,121, 118,120, 118,119, 117,118, 117,117, 116,116, 116,115, 115,114, 115,113, 114,112, 114,110, 113,109, 113,108, 112,107, 112,106, 111,105, 111,103, 110,102, 110,101, 109,100, 109,99,  107,97, 107,96, 106,95, 106,93, 105,92, 105,90, 104,89, 104,83, 103,82, 103,79, 102,78, 102,71, 101,70, 101,68, 100,67, 100,61, 101,60, 101,58, 102,57, 105,57" 
+									style="fill:#{inspectionController.customerSkin.arm ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Зүүн гар -->
+								<polygon class="hand" onclick="toggleSkin(this, 'hand')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="11,141, 12,141, 13,142, 14,142, 15,143, 16,143, 17,144, 18,144, 19,145, 20,145, 20,146, 21,147, 21,149, 22,150, 22,156, 21,157, 21,160, 20,161, 20,163, 19,164, 19,168, 18,169, 18,170, 14,174, 13,174, 12,175, 9,175, 8,176, 7,176, 5,174, 5,173, 4,172, 3,172, 2,172, 1,172, 1,170, 0,169, 0,156, 1,155, 1,153, 2,152, 2,151, 3,150, 5,147, 5,146, 6,145, 7,145, 10,142" 
+									style="fill:#{inspectionController.customerSkin.hand ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Баруун гар -->
+								<polygon class="hand" onclick="toggleSkin(this, 'hand')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="139,142, 143,142, 149,148, 149,149, 151,151, 151,153, 152,154, 152,156, 153,157, 153,168, 152,169, 152,171, 151,172, 149,172, 148,173, 148,174, 147,174, 146,175, 142,175, 141,174, 140,174, 136,170, 136,169, 135,168, 135,166, 134,165, 134,162, 133,161, 133,158, 132,157, 132,145, 133,145, 134,144, 135,144, 136,143, 138,143" 
+									style="fill:#{inspectionController.customerSkin.hand ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+								  Sorry, your browser does not support inline SVG.
+							</svg>
+							<svg id="svg" height="331" width="154" style="position: absolute;background-color: rgba(0, 0, 0, 0);display:#{inspectionController.selectedCustomer.getAge() lt 2 ? 'block' : 'none'}" 
+								class="non-selectable skin-model">
+<!-- 								Баруун хөл -->
+								<polygon class="leg" onclick="toggleSkin(this, 'leg')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')"
+									points="106,208,100,216,95,229,90,234,94,235,112,219,114,213,118,211,118,206,126,199,121,199" 
+									style="fill:#{inspectionController.customerSkin.leg ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+                				<polygon class="leg" onclick="toggleSkin(this, 'leg')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+                					points="151,216,146,219,131,217,128,219,126,234,122,239,128,239,142,232,152,223" 
+									style="fill:#{inspectionController.customerSkin.leg ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Их бие -->
+								<polygon onclick="toggleSkin(this, 'body')" points="72,138,80,128,87,130,105,131,132,129,132,144,131,165,129,183,121,199,106,208,87,208,66,200" 
+									style="fill:#{inspectionController.customerSkin.body ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Бэлэг эрхтэн -->
+								<polygon onclick="toggleSkin(this, 'anogenital')" points="87,208,90,220,90,234,95,229,100,216,106,208" 
+									style="fill:#{inspectionController.customerSkin.anogenital ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Зүүн тавхай -->
+								<polygon class="foot" onclick="toggleSkin(this, 'foot')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="22,247,14,252,2,258,2,265,4,267,10,264,18,264,21,265,33,265,39,261,38,253" 
+									style="fill:#{inspectionController.customerSkin.foot ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Баруун тавхай -->
+								<polygon class="foot" onclick="toggleSkin(this, 'foot')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="94,235,100,245,109,246,122,239,126,234,128,219,131,217,126,210,122,210,118,211,114,213,112,219" 
+									style="fill:#{inspectionController.customerSkin.foot ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Зүүн хөл -->
+								<polygon class="leg" onclick="toggleSkin(this, 'leg')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="22,247,34,214,50,204,66,200,87,208,90,220,90,234,82,240,72,240,52,234,49,242,38,253" 
+									style="fill:#{inspectionController.customerSkin.leg ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Хүзүү -->
+								<polygon onclick="toggleSkin(this, 'neck')" points="80,128,80,121,77,117,86,113,96,120,106,121,115,120,122,116,132,120,132,129,119,130,105,131,87,130" 
+									style="fill:#{inspectionController.customerSkin.neck ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Нүүр -->
+								<polygon onclick="toggleSkin(this, 'face')" points="74,78,77,74,82,69,86,65,94,60,104,58,118,61,126,66,135,75,134,86,136,87,139,89,137,98,130,104,122,116,115,120,106,122,97,120,86,113,80,105,73,97,72,92,73,89,75,89" 
+									style="fill:#{inspectionController.customerSkin.face ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Хуйх -->
+								<polygon onclick="toggleSkin(this, 'scalp')" points="105,43,119,47,128,54,134,62,136,71,135,75,126,66,118,61,104,58,94,60,86,65,82,69,77,74,74,78,73,70,75,62,79,55,86,50,93,46,98,45" 
+									style="fill: #{inspectionController.customerSkin.scalp ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Дээд зүүн мөч -->
+								<polygon class="arm" onclick="toggleSkin(this, 'arm')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="44,167,59,156,72,138,80,128,80,121,77,117,66,120,59,127,57,131,43,144,34,140,30,144,20,149,39,167" 
+									style="fill:#{inspectionController.customerSkin.arm ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Дээд баруун мөч -->
+								<polygon class="arm" onclick="toggleSkin(this, 'arm')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="132,120,141,126,147,136,146,141,146,151,150,172,150,185,146,197,138,194,132,194,133,171,131,165,132,144,132,129" 
+									style="fill:#{inspectionController.customerSkin.arm ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Зүүн гар -->
+								<polygon class="hand" onclick="toggleSkin(this, 'hand')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="5,122,17,118,29,128,34,136,34,140,30,144,20,149,2,138,2,132" 
+									style="fill:#{inspectionController.customerSkin.hand ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+<!-- 								Баруун гар -->
+								<polygon class="hand" onclick="toggleSkin(this, 'hand')" onmouseover="changeColor(this, 'hover')" onmouseout="changeColor(this, 'out')" 
+									points="132,194,138,194,146,197,151,216,146,219,131,217,125,210,118,210,118,206" 
+									style="fill:#{inspectionController.customerSkin.hand ? 'rgba(0, 255, 0, 0.3) !important' : 'rgba(0, 0, 0, 0)'};"/>
+								  Sorry, your browser does not support inline SVG.
+							</svg>
+						</div>
+						<p:remoteCommand name="toggleSkinCheckBox" actionListener="#{inspectionController.toggleSkinCheckBox}"/>
+						<p:remoteCommand name="toggleRashValue"  actionListener="#{inspectionController.toggleSkinValue}"/>
+						<p:remoteCommand name="toggleDistributionValue" actionListener="#{inspectionController.toggleDistribution}"/>
+						<p:remoteCommand name="toggleLocationValue" actionListener="#{inspectionController.toggleLocationValue}"/>
+						<div class="margin-bottom" style="display:inline-block;width:calc(100% - 155px);">
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-12 margin-bottom">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.scalp}" itemLabel="Хуйх" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12 margin-bottom">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.hair}" itemLabel="Үс" style="padding-left: 10px;"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.face}" itemLabel="Нүүр" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.eye}" itemLabel="Нүд" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.eyelid}" itemLabel="Зовхи" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.mouth}" itemLabel="Ам" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.lips}" itemLabel="Уруул" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.ear}" itemLabel="Чих" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.cheek}" itemLabel="Хацар" style="padding-left: 10px;"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.neck}" itemLabel="Хүзүү" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.nape}" itemLabel="Шил" style="padding-left: 10px;"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.body}" itemLabel="Их бие" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.chest}" itemLabel="Цээж" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.back}" itemLabel="Нуруу" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.nipples}" itemLabel="Хөхний толгой" style="padding-left: 10px;"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.arm}" itemLabel="Гар" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.shoulder}" itemLabel="Буглага" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.armpit}" itemLabel="Суга" style="padding-left: 10px;"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.hand}" itemLabel="Сарвуу" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.nail}" itemLabel="Хумс" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.handFork}" itemLabel="Гарын салаа" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.palm}" itemLabel="Алга" style="padding-left: 10px;"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.anogenital}" itemLabel="Бэлэг эрхтэн"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.leg}" itemLabel="Хөл" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.ham}" itemLabel="Гуя" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.groin}" itemLabel="Цавь" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.shin}" itemLabel="Шилбэ" style="padding-left: 10px;"/>
+									</div>
+								</div>
+								<div class="row margin-bottom">
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.foot}" itemLabel="Тавхай" onchange="updateForev()"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.footNail}" itemLabel="Хумс" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.footFork}" itemLabel="Хурууны салаа" style="padding-left: 10px;"/>
+									</div>
+									<div class="col-md-12">
+										<p:selectBooleanCheckbox value="#{inspectionController.customerSkin.sole}" itemLabel="Ул" style="padding-left: 10px;"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+							</div>
+						</div>
+					</div>
+					</p:panel>
+					<div class="row margin-bottom">
+					 <div class="col-md-12">
+					  <p:inputTextarea  rows="3" style="width:100%" placeholder="Бусад үзлэг" value="#{inspectionController.customerSkin.cotherPain}"/>
+					  </div>
+					 </div>
+				</p:tab>
+				<p:tab title="Онош">
+					<p:panel id="dubu" styleClass="no-style-panel">
+						<div class="row margin-bottom">
+							<div class="col-md-3">Үндсэн онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.skinAppDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'skin',1,'false');"
+											onkeyup="callRefreshList(this,'skin',1,'false')" />
+										<p:inputText
+											value="#{inspectionController.skinAppDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'skin',1,'true');"
+											onkeyup="callRefreshList(this,'skin',1,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'skin',1,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-3">Урьдчилсан онош:</div>
+							<div class="col-md-9">
+								<div class="display-table" style="width: 100%;">
+									<div class="display-table-row">
+										<p:inputText style="width: 70px;"
+											value="#{inspectionController.preDiagnose.id}"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'skin',0,'false');"
+											onkeyup="callRefreshList(this,'skin',0,'false')" />
+										<p:inputText
+											value="#{inspectionController.preDiagnose.nameMn}"
+											style="width: calc(100% - 72px);"
+											styleClass="display-table-cell"
+											onfocus="showDiagnosePick(this,'skin',0,'true');"
+											onkeyup="callRefreshList(this,'skin',0,'true');" />
+										<p:commandLink styleClass="btn display-table-cell"
+											onclick="callRefreshList(this,'skin',0,'true');PF('all-diagnose-dialog').show()"
+											value="Онош" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row margin-bottom">
+							<div class="col-md-12">
+								<div class="col-md-12 margin-top">
+									<p:dataTable value="#{inspectionController.skinPreDiagnose}"
+										var="diagnose" style="width: 100%;" styleClass="myTable"
+										emptyMessage="#{i18n['empty']}">
+										<p:column headerText="№" styleClass="id" width="50">
+										#{diagnose.id}
+									</p:column>
+										<p:column headerText="Онош" styleClass="text">
+										#{diagnose.nameEn}
+									</p:column>
+										<p:column headerText="Төрөл" styleClass="short-text">
+											<h:outputText rendered="#{diagnose.type eq 1}" value="PRI"></h:outputText>
+											<h:outputText rendered="#{diagnose.type eq 0}" value="IMP"></h:outputText>
+										</p:column>
+										<p:column styleClass="button-icon">
+											<p:commandLink
+												actionListener="#{inspectionController.skinPreDiagnose.remove(diagnose)}"
+												oncomplete="updateSkinDubu();">
+												<p:confirm header="Баталгаажуулах"
+													message="Та устгахдаа итгэлтэй байна уу ?"
+													icon="ui-icon-alert" />
+												<i class="fa fa-remove" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<p:remoteCommand name="updateSkinDubu" update="dubu" />
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea rows="5" autoResize="false" style="width: 100%;"
+								id = "rateText"
+								value="#{inspectionController.customerSkin.skinRateText}" placeholder="Хүндрэл">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+				<p:tab title="Тѳлѳвлѳгѳѳ">
+					<div class="row margin-bottom">
+						<div class="col-md-12">
+							<p:inputTextarea  rows="3" autoResize="false" style="width: 100%;" value="#{inspectionController.customerSkin.advice}" placeholder="Зөвлөгөө бичих">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</p:tab>
+		
+	</ui:define>
+	
+	<ui:define name="additional-script">
+		<script>
+			//<![CDATA[
+			$(document).ready(function(){
+				$('[data-toggle="tooltip"]').tooltip();
+			})
+			var toggleSkin = function(elem, skinType){
+				debugger;
+				if($(elem).css('fill') == 'rgba(0, 255, 0, 0.298039)'){
+					$(elem).css('fill','rgba(0, 0, 0, 0)');
+					toggleSkinCheckBox([{name: 'skin', value: skinType}, {name: 'check', value: false}]);
+				} else {
+					$(elem).css('fill','rgba(0, 255, 0, 0.3)');
+					toggleSkinCheckBox([{name: 'skin', value: skinType}, {name: 'check', value: true}]);
+				}	
+			}
+			var changeColor = function(elem, color){
+// 				var styleClass = $(elem).attr('class');
+// 				if(styleClass != null && styleClass != '')
+// 					if(color == 'hover'){
+// 						$('.' + styleClass).css('fill','rgba(0, 0, 255, 0.3)');
+// 					} else {
+// 						$('.' + styleClass).css('fill','rgba(0, 0, 0, 0)');
+// 					}
+			}
+			var toggleRash = function(elem){
+				$('#rash').toggle('fast','swing');
+				if($('#rash-chevron').hasClass('fa-chevron-left')){
+					toggleRashValue([{name:'skinsValue',value:elem}]);
+					$('#rash-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+				}
+				else{
+					
+					$('#rash-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				}
+			}
+			var toggleDistribution = function(el){
+				$('#distribution').toggle('fast','swing');
+				if($('#distribution-chevron').hasClass('fa-chevron-left'))
+					{
+					toggleDistributionValue([{name:'skinsDistribution',value:el}]);
+					$('#distribution-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+				else {
+					$('#distribution-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+				}
+			}
+			var toggleLocation = function(element){
+				$('#location').toggle('fast','swing');
+				if($('#location-chevron').hasClass('fa-chevron-down'))
+					{
+					toggleLocationValue([{name:'skinLocation',value:element}]);
+					$('#location-chevron').switchClass( "fa-chevron-down", "fa-chevron-left", 200, "easeInOutQuad" );
+					}
+				else
+					{
+					$('#location-chevron').switchClass( "fa-chevron-left", "fa-chevron-down", 200, "easeInOutQuad" );
+					}
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

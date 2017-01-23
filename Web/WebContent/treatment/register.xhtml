@@ -1,0 +1,702 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Эмчилгээний бүртгэл</h1>
+		<ol class="breadcrumb">
+			<li><p:commandLink
+					action="#{userController.url('treatment_list')}" value="Эмчилгээ">
+					<i class="fa fa-circle-o"></i>
+				</p:commandLink></li>
+			<li class="active">Бүртгэл</li>
+		</ol>
+		</section>
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:ttname">#{i18n['treatment_type']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectOneMenu id="ttname" styleClass="pull-left"
+							value="#{treatmentController.currentTreatment.treatmentTypePkId}"
+							style="width: calc(100% - 82px);display: inline-block">
+							<f:selectItems value="#{treatmentController.allTreatmentTypes}"
+								var="treatmentType" itemLabel="#{treatmentType.name}"
+								itemValue="#{treatmentType.pkId}"></f:selectItems>
+						</p:selectOneMenu>
+						<p:commandLink styleClass="btn pull-left"
+							style="margin-left: 5px;padding:5px 9px !important;"
+							update = "form:ttLists"
+							oncomplete="PF('treatmentTypeList').show();" id="ttList">
+							<i class="fa fa fa-list"></i>
+						</p:commandLink>
+						<p:tooltip for="form:ttList"
+							value="Эмчилгээний төрлийн жагсаалт харах"></p:tooltip>
+						<p:commandLink styleClass="btn pull-left"
+							action="#{treatmentController.newTreatmentType}" update="rtt"
+							style="margin-left: 5px;padding:5px 9px !important;" id="ttReg"
+							oncomplete="PF('registerTreatmentType').show();">
+							<i class="fa fa fa-plus"></i>
+						</p:commandLink>
+						<p:tooltip for="form:ttReg" value="Эмчилгээний төрөл нэмэх"></p:tooltip>
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:name">#{i18n['treatment_name']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText id="name"
+							value="#{treatmentController.currentTreatment.name}"
+							style="min-width: 100%;" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:price">#{i18n['treatment_price']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText styleClass="number-control" id="price"
+							value="#{treatmentController.currentTreatment.price}"
+							style="min-width: 100%;">
+							<p:ajax event="change"
+								listener="#{treatmentController.updateTreatmentCost()}"
+								update="form:cost" />
+						</p:inputText>
+
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label style="" for="form:usageDate">#{i18n['price_use_date']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:calendar id="usageDate" styleClass="date-control" pattern="yyyy-MM-dd" 
+							value="#{treatmentController.currentTreatment.usageDate}" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:active">#{i18n['treatment_number']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:inputText value="#{treatmentController.currentTreatment.id}" />
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:active">#{i18n['make_inactive']}:</label>
+					</div>
+					<div class="col-md-1 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectBooleanCheckbox id="active"
+							value="#{treatmentController.currentTreatment.active}"
+							styleClass="minimal" style="float: left;" />
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:discount">#{i18n['is_sale_service']}:</label>
+					</div>
+					<div class="col-md-1 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectBooleanCheckbox id="discount"
+							value="#{treatmentController.currentTreatment.discount}"
+							styleClass="minimal" style="float: left;" />
+					</div>
+				</div>
+				<div class="row flex-container">
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:hasDtl">#{i18n['is_use_item']}:</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectBooleanCheckbox id="hasDtl"
+							value="#{treatmentController.currentTreatment.hasDtl}"
+							styleClass="minimal" style="float: left;"
+							onchange="changeHasDtl()" />
+						<p:remoteCommand name="changeHasDtl" process="form:hasDtl"
+							update="@(.tablePanel)"></p:remoteCommand>
+					</div>
+					<div class="col-md-2 col-xs-12 col-sm-12 flex-center-self">
+						<label for="form:icdMap">PCS код нэмэх :</label>
+					</div>
+					<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectBooleanCheckbox id="icdMap" 
+							value="#{treatmentController.currentTreatment.icdMap}"
+							styleClass="minimal" style="float:left;"
+							onchange="changeIcdMap()" />
+						<p:remoteCommand name="changeIcdMap" process="form:icdMap"
+							update="@(.tablePanel)"></p:remoteCommand>
+					</div>
+				</div>
+				<div class="clearfix" />
+				<p:panel styleClass="tablePanel"
+					style="margin: 0px; padding: 0px; border: 0px;   background-color: rgb(236, 240, 245) !important; min-height: 0px !important;">
+					<p:panel rendered="#{treatmentController.currentTreatment.hasDtl}">
+						<div>
+							<div class="col-md-4">
+								<label for="aimag">#{i18n['materials']}:</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable id="tableadasd" styleClass="myTable"
+									value="#{treatmentController.tableItems}" var="item"
+									rowIndexVar="index">
+									<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+									<p:column headerText="#{i18n['item_name']}">
+										<p:inputText value="#{item.name}"
+											onclick="blablabla#{index + 1}();" styleClass="hoverInput" />
+										<p:remoteCommand process="@this" name="blablabla#{index + 1}"
+											oncomplete="PF('registerItem').show();"
+											actionListener="#{treatmentController.currentItem.setName(null)}"
+											update="@this @(.ppp)">
+											<f:setPropertyActionListener
+												target="#{treatmentController.cursorItem}" value="#{item}"></f:setPropertyActionListener>
+										</p:remoteCommand>
+									</p:column>
+									<p:column styleClass="short-text" headerText="#{i18n['measurement']}">#{item.measurementName}</p:column>
+									<p:column styleClass="amount" headerText="#{i18n['item_price']}">
+										<p:outputLabel value="#{item.entityPrice}">
+											<f:convertNumber pattern="###,###,###.00" />
+										</p:outputLabel>
+									</p:column>
+									<p:column styleClass="short-number" headerText="#{i18n['quantity']}">
+										<p:inputText styleClass="input text-align-right"
+											value="#{item.itemCount}" maxlength="7">
+											<p:ajax event="change"
+												listener="#{treatmentController.updateTreatmentCost()}"
+												update="@(.cost)" />
+										</p:inputText>
+									</p:column>
+									<p:column styleClass="amount" headerText="#{i18n['cost']}">
+										<p:inputText styleClass="input text-align-right"
+											disabled="true" id="cursorAmount" value="#{item.amount}">
+											<f:convertNumber pattern="###,###,###.00" />
+										</p:inputText>
+									</p:column>
+									<p:column styleClass="button-icon" headerText="#{i18n['delete']}">
+										<p:commandLink rendered="#{!item.status.equals('Last')}"
+											styleClass="glyphicon glyphicon-remove color-red"
+											onclick="delete#{index + 1}();"></p:commandLink>
+										<p:remoteCommand process="@this" name="delete#{index + 1}"
+											oncomplete="PF('confirmDialogDelete').show();"
+											update="@(.confirmDialog)">
+											<f:setPropertyActionListener
+												target="#{treatmentController.cursorItem}" value="#{item}"></f:setPropertyActionListener>
+										</p:remoteCommand>
+									</p:column>
+									<p:summaryRow>
+										<p:column colspan="5" style="text-align:right">
+											<h:outputText value="#{i18n['total_cost']}:" />
+										</p:column>
+									</p:summaryRow>
+								</p:dataTable>
+							</div>
+						</div>
+						<div class="row margin-vertical flex-container">
+							<div class="col-md-8"></div>
+							<div
+								class="col-md-2 text-right col-sm-12 col-xs-12 flex-center-self">
+								<label for="form:insurance">#{i18n['total_cost']}:</label>
+							</div>
+							<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+								<p:inputText disabled="true"
+									styleClass="form-control cost number-control" id="cost"
+									value="#{treatmentController.currentTreatment.cost}"
+									style="min-width: 100%;">
+									<f:convertNumber type="currency" currencySymbol="₮" />
+								</p:inputText>
+								<p:remoteCommand name="calculateCost"
+									actionListener="#{treatmentController.updateTreatmentCost}"></p:remoteCommand>
+							</div>
+						</div>
+					</p:panel>
+					<p:panel styleClass="tablePanel tablePanel1" rendered="#{treatmentController.currentTreatment.icdMap}" id="pcsPanel">
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable styleClass="myTable myTableIct19" id="dataTableIct"
+									value="#{treatmentController.tableICT}"
+									rowIndexVar="index" var="items" emptyMessage="#{i18n['empty']}">
+									<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+									<p:column headerText="PCS код">
+										<p:inputText styleClass="form-control input-sm" style="cursor:pointer; width:100%" 
+											onclick="ictId()" value="#{items.id}"/>
+										<p:remoteCommand name="ictId" oncomplete="PF('treatmentIctTable').show()" update=":form:pcsCodePanel"
+											actionListener="#{treatmentController.viewICT19()}" />
+									</p:column>
+									<p:column headerText="#{i18n['mongolian_name']}"><p:inputText styleClass="input" disabled="true" value="#{items.nameMn}" /></p:column>
+									<p:column headerText="#{i18n['english_name']}"><p:inputText styleClass="input" disabled="true" value="#{items.nameEn}" /></p:column>
+									<p:column styleClass="button-icon"
+										headerText="#{i18n['delete']}">
+										<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+											actionListener="#{treatmentController.removeIctIndex(index)}"
+											update=":form:dataTableIct" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</p:panel>
+				</p:panel>
+				<div class="row">
+					<div class="col-md-12 text-right">
+						<p:commandLink styleClass="btn"
+							oncomplete="PF('saveModel').show();" update="form:message">
+							<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="saveModel" id="saveModel" modal="true"
+			resizable="false" width="300" header="#{i18n['save_treatment']}" closeOnEscape="true">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-info-circle color-blue" /></td>
+					<td class="panel-confirm-dialog-text">#{i18n['save_treatment_as_template']}</td>
+				</tr>
+			</table>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-1" />
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn"
+							actionListener="#{treatmentController.setModel(true)}"
+							action="#{treatmentController.saveTreatment}"
+							update="form:message">
+							<i class="fa fa-fw fa-check" />#{i18n['yes']}</p:commandLink>
+					</div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn redBtn"
+							actionListener="#{treatmentController.setModel(false)}"
+							action="#{treatmentController.saveTreatment}"
+							update="form:message">
+							<i class="fa fa-fw fa-times" />#{i18n['no']}</p:commandLink>
+					</div>
+					<div class="col-md-1" />
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="registerTreatmentType"
+			header="#{i18n['register_treatment_type']}" modal="true" id="rtt"
+			resizable="false" width="350" closeOnEscape="true">
+			<p:panel styleClass="no-style-panel" id="treatmentTypeSection">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="form:subOrganizationName">#{i18n['suborganization_type']}</label>
+						<p:selectOneMenu id="subOrganizationName"
+							value="#{treatmentController.currentTreatmentType.subOrganizationTypePkId}"
+							style="width: 100%;">
+							<f:selectItems
+								value="#{treatmentController.subOrganizationTypee}" var="sot"
+								itemLabel="#{sot.name}" itemValue="#{sot.pkId}"></f:selectItems>
+							<p:ajax event="change"
+								listener="#{treatmentController.refreshEmployee()}">
+							</p:ajax>
+						</p:selectOneMenu>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="form:subOrganizationName">#{i18n['treatment_type']}</label>
+						<p:inputText id="treatmentTypeName"
+							value="#{treatmentController.currentTreatmentType.name}"
+							style="width: 100%;" />
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<p:selectCheckboxMenu id="laborant"
+							value="#{treatmentController.employeePkIds}" label="#{i18n['doctor']}"
+							style="width: 100%;" onchange="changed(event)" filter="true"
+							filterMatchMode="startsWith" panelStyle="width:250px">
+							<f:selectItems value="#{treatmentController.employees}"
+								var="employee" itemLabel="#{employee.firstName}"
+								itemValue="#{employee.pkId}" />
+						</p:selectCheckboxMenu>
+					</div>
+				</div>
+				<div class="col-md-12 text-right">
+					<p:commandLink styleClass="btn"
+						actionListener="#{treatmentController.saveTreatmentType()}"
+						update="form:message form:ttname"
+						oncomplete="PF('registerTreatmentType').hide();">
+						<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<p:dialog styleClass="ppp" widgetVar="registerItem"
+			header="#{i18n['register_item']}" modal="true" id="nii"
+			resizable="false" width="450" height="250" closeOnEscape="true">
+			<p:panel id="bigPanel" styleClass="borderlessPanel"
+				style="padding:0px; border:none; ">
+				<div class="row margin-bottom">
+					<div class="col-md-6">
+						<div class="flex-container">
+							<h:selectBooleanCheckbox id="oneByone"
+								value="#{treatmentController.check1}"
+								styleClass="flex-center-self" onchange="hideChooseModel();">
+								<p:remoteCommand name="hideChooseModel"
+									actionListener="#{treatmentController.hideChooseModel}"
+									process="oneByone" update="form:bigPanel">
+								</p:remoteCommand>
+							</h:selectBooleanCheckbox>
+							<label style="padding-left: 5px;" class="flex-center-self"
+								for="form:forModel">#{i18n['add_item']}</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="flex-container">
+							<h:selectBooleanCheckbox id="forModel"
+								value="#{treatmentController.check2}"
+								styleClass="flex-center-self" onchange="hideChooseItem();">
+								<p:remoteCommand name="hideChooseItem"
+									actionListener="#{treatmentController.hideChooseItem}"
+									process="forModel" update="form:bigPanel"></p:remoteCommand>
+							</h:selectBooleanCheckbox>
+							<label style="padding-left: 5px;" class="flex-center-self"
+								for="form:forModel">#{i18n['use_template']}</label>
+						</div>
+					</div>
+				</div>
+
+				<p:panel id="chooseModel" styleClass="borderlessPanel"
+					style="padding:0px; border:none; "
+					rendered="#{treatmentController.check2}">
+					<div class="row">
+						<p:dataTable styleClass="myTable" id="models"
+							value="#{treatmentController.treatmentModels}" var="model"
+							selectionMode="single"
+							selection="#{treatmentController.currentTreatmentModel}"
+							rowKey="#{model.pkId}">
+							<p:ajax event="rowSelect"
+								listener="#{treatmentController.selectModel()}"
+								update="@(.myTable)" />
+							<p:column styleClass="text" headerText="#{i18n['template_name']}">
+						#{model.name}
+					</p:column>
+						</p:dataTable>
+					</div>
+				</p:panel>
+
+				<p:panel id="chooseItem" styleClass="no-style-panel"
+					rendered="#{treatmentController.check1}">
+					<div class="row flex-container">
+						<div class="col-md-6 flex-center-self">
+							<label for="form:itemName">#{i18n['item_name']}</label>
+						</div>
+						<div class="col-xs-6 flex-center-self">
+							<p:inputText onchange="fill();" styleClass="form-control"
+								id="itemName" value="#{treatmentController.currentItem.name}"
+								style="min-width: 100%;">
+
+
+							</p:inputText>
+							<p:remoteCommand name="fill"
+								actionListener="#{treatmentController.fillItem()}"
+								update="form:itemMeasurement form:itemEntityPrice form:ggg" />
+							<datalist id="il"> <ui:repeat
+								value="#{treatmentController.items}" var="item">
+								<option>#{item.name}</option>
+							</ui:repeat> </datalist>
+						</div>
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-6 flex-center-self">
+							<label for="form:itemMeasurement">#{i18n['measurement']}</label>
+						</div>
+						<div class="col-xs-6 flex-center-self">
+							<p:selectOneMenu id="itemMeasurement"
+								value="#{treatmentController.currentItem.measurementPkId}"
+								style="width: 100%;">
+								<f:selectItems value="#{treatmentController.measurements}"
+									var="info" itemLabel="#{info.name}" itemValue="#{info.pkId}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-6 flex-center-self">
+							<label style="" for="form:itemEntityPrice">#{i18n['unit_price']}</label>
+						</div>
+						<div class="col-xs-6 flex-center-self">
+							<p:inputText styleClass="number-control" id="itemEntityPrice"
+								value="#{treatmentController.currentItem.entityPrice}"
+								style="min-width: 100%;" />
+						</div>
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-6 flex-center-self">
+							<label for="form:itemPriceUsageDate">#{i18n['price_use_date']}</label>
+						</div>
+						<div class="col-xs-6 flex-center-self">
+							<p:calendar id="ggg" styleClass="date-control"
+								value="#{treatmentController.currentItem.priceUsageDate}" />
+						</div>
+					</div>
+					<div class="row flex-container">
+						<div class="col-md-6 flex-center-self">
+							<p:commandLink styleClass="btn" style="color: #3c8dbc;"
+								actionListener="#{treatmentController.showPriceHistory()}"
+								update="@(.myTable)"
+								oncomplete="PF('priceHistoryTable').show();">
+								<i class="fa fa-fw fa-list-alt" />#{i18n['price_list']}</p:commandLink>
+						</div>
+						<div class="col-md-6 text-right">
+							<p:commandLink process="nii" styleClass="btn"
+								actionListener="#{treatmentController.saveItem()}"
+								oncomplete="PF('registerItem').hide();"
+								update="form:message @(.myTable) form:itemMeasurement form:itemEntityPrice form:ggg @this ">
+								<i class="fa fa-fw fa-check" />#{i18n['save']}</p:commandLink>
+						</div>
+					</div>
+				</p:panel>
+			</p:panel>
+		</p:dialog>
+		
+		<p:dialog id="registerDialog" header="PCS код нэмэх"
+			widgetVar="treatmentIctTable" modal="true" resizable="false"
+			height="500" width="900" closeOnEscape="true">
+			<p:panel id="modelPanel" styleClass="myTable">
+				<div class="row flex-container">
+					<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+						<p:selectBooleanCheckbox itemLabel="PCS код нэмэх"
+							value="#{treatmentController.pcsCodeinsertValue}">
+							<p:ajax event="change"
+								listener="#{treatmentController.hidePcsCodeCheck()}" />
+						</p:selectBooleanCheckbox>
+					</div>
+					<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+						<div class="col-md-7 ">
+						 <p:selectBooleanCheckbox itemLabel="Загвар ашиглах"
+							value="#{treatmentController.pcsCodeModelValue}" >
+							<p:ajax event="change"
+								listener="#{treatmentController.hideModelCheck()}" update="@(.modelClass)" />
+						</p:selectBooleanCheckbox>
+						 </div>
+					</div>
+				<p:panel id="pcsCodePanel" styleClass="no-style-panel">
+					<c:if test="#{treatmentController.pcsCodeinsertValue}">
+						<div class="row">
+							<div class="col-md-12">
+							<div class="col-md-8">
+								<p:dataTable styleClass="myTable" value="#{treatmentController.listICT19Dtl}"   var="listItem"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										paginatorPosition="bottom"  paginator="true" rows="10" rowKey="#{listItem.pkId}" selectionMode="single" selection="#{treatmentController.ictChosenSelect}"
+										rowsPerPageTemplate="5,10,20,30,40,50,60,100,1000" emptyMessage="#{i18n['empty']}">
+									<p:ajax event="rowDblselect"  listener="#{treatmentController.rowSelect()}" update="@(.groupIctId)" process="@this"/>
+									<p:column headerText="Код" filterBy="#{listItem.id}"> #{listItem.id} </p:column>
+									<p:column headerText="Англи нэр" filterBy="#{listItem.nameEn}"> #{listItem.nameEn} </p:column>
+									<p:column headerText="Монгол нэр" filterBy="#{listItem.nameMn}"> #{listItem.nameMn} </p:column>
+								</p:dataTable>
+							</div>
+							<div class="col-md-4">
+						    <div class="col-md-12">
+							    <p:dataTable id="groupIctId" styleClass="myTable groupIctId" value="#{treatmentController.listIct19Temp}" 
+							    var="temp" rowIndexVar="index"  emptyMessage="#{i18n['empty']}">
+							    	<p:column headerText="№">#{index+1}</p:column>
+							    	<p:column headerText="Код">#{temp.id}</p:column>
+							    	<p:column headerText="Англи Нэр">#{temp.nameEn}</p:column>
+									<p:column headerText="Устгах"> <p:commandLink styleClass="fa fa-fw fa-remove color-red" actionListener="#{treatmentController.removeIndex(index)}" update="@(.groupIctId)"/> </p:column>
+								</p:dataTable>
+						     </div>
+						    	<div class="col-md-12">
+						    		<p:commandLink  styleClass="btn btn-info pull-right" value="Сонгох"
+						    						 actionListener="#{treatmentController.insertChosen()}" update="@(.tablePanel1)"
+						    						 />
+						    		</div>
+							</div>
+							</div>
+						</div>
+					</c:if>
+				</p:panel>
+				<p:panel styleClass="modelClass no-style-panel" id="modelPanelCheck">
+					<c:if test="#{treatmentController.pcsCodeModelValue}">
+						<div class="col-md-12"></div>
+						<div class="col-md-8">
+							<p:dataTable value="#{treatmentController.listTreatmentModel}" var="modelItem" style="text-align:center"
+						  				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink}
+						  		 		{LastPageLink} {RowsPerPageDropdown}" rowKey="#{modelItem.surgeryName}" selectionMode="single" selection="#{treatmentController.selectionModelValue}"
+										paginatorPosition="bottom" paginator="true" rows="3" emptyMessage="#{i18n['empty']}">
+								<p:ajax event="rowDblselect" update="@(.modelClass)" listener="#{treatmentController.rowModelSelect()}" />
+						  		<p:column headerText="Загварын нэр" filterBy="#{modelItem.surgeryName}">#{modelItem.surgeryName}</p:column>
+						  	</p:dataTable>
+						</div>
+						<div class="col-md-4">
+							<div class="col-md-12">
+								<p:dataTable value="#{treatmentController.listTreatmentModelTemp}" var="model" emptyMessage="#{i18n['empty']}" rowIndexVar="index">
+									<p:column headerText="№">{index+1}</p:column>
+									<p:column headerText="Код" >#{model.ict19.id}</p:column>
+					 				<p:column headerText="Англи нэр">#{model.ict19.nameEn}</p:column>
+								</p:dataTable>
+							</div>
+							<div class="col-md-12">
+						    	<p:commandLink  styleClass="btn btn-info pull-right" value="Сонгох"
+						    		 actionListener="#{treatmentController.insertChosen()}" update="@(.tablePanel1)"
+						    		 />
+						    </div>
+						</div>
+					</c:if>
+				</p:panel>
+				</div>
+			</p:panel>
+		</p:dialog>
+
+		<p:dialog styleClass="confirmDialog" id="confirmDialog"
+			widgetVar="confirmDialogDelete" modal="true" resizable="false"
+			width="300" closeOnEscape="true">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">
+						#{treatmentController.cursorItem.name} - Материалыг хасахдаа
+						итгэлтэй байна уу?</td>
+				</tr>
+			</table>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-1" />
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn"
+							actionListener="#{treatmentController.removeItem}"
+							process="@this" update="@(.myTable)"
+							oncomplete="PF('confirmDialogDelete').hide();">
+							<i class="fa fa-fw fa-check" />#{i18n['delete']}</p:commandLink>
+					</div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn redBtn"
+							oncomplete="PF('confirmDialogDelete').hide();">
+							<i class="fa fa-fw fa-times" />#{i18n['cancel']}</p:commandLink>
+					</div>
+					<div class="col-md-1" />
+				</div>
+			</div>
+		</p:dialog>
+		
+		<p:dialog styleClass="confirmDialog" id="confirmDialog1"
+			widgetVar="confirmDialogDelete1" modal="true" resizable="false"
+			width="300" closeOnEscape="true">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon"><i
+						class="fa fa-fw fa-warning color-orange" /></td>
+					<td class="panel-confirm-dialog-text">
+						#{treatmentController.currentTreatmentType.name} - Эмчилгээний төрлийг хасахдаа
+						итгэлтэй байна уу?</td>
+				</tr>
+			</table>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-1" />
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn"
+							actionListener="#{treatmentController.deleteTreatmentType()}"
+							process="@this" update="@(.myTable)"
+							oncomplete="PF('confirmDialogDelete1').hide();">
+							<i class="fa fa-fw fa-check" />#{i18n['delete']}</p:commandLink>
+					</div>
+					<div class="col-md-5">
+						<p:commandLink styleClass="btn redBtn"
+							oncomplete="PF('confirmDialogDelete1').hide();">
+							<i class="fa fa-fw fa-times" />#{i18n['cancel']}</p:commandLink>
+					</div>
+					<div class="col-md-1" />
+				</div>
+			</div>
+		</p:dialog>
+		
+		<p:dialog widgetVar="treatmentTypeList" header="#{i18n['treatment_type']}"
+			modal="true" styleClass="dialog-scroll" id="ttLists"
+			resizable="false" width="500" height="350" closeOnEscape="true">
+			<div class = "col-md-12">
+				<p:dataTable styleClass="myTable" id="tList"
+					value="#{treatmentController.allTreatmentTypes}" var="tt"
+					emptyMessage="Хоосон байна">
+					<p:column headerText="#{i18n['suborganization_type']}" styleClass="text"
+						width="30%">
+				#{tt.subOrganizationTypeName}
+				</p:column>
+					<p:column headerText="#{i18n['treatment_type']}" styleClass="text"
+						width="30%">
+				#{tt.name}
+				</p:column>
+					<p:column headerText="#{i18n['employees']}" styleClass="text" width="30%">
+						<ui:repeat var="m" value="#{tt.maps}">
+							<div class="col-md-12">#{m.employeeName}</div>
+						</ui:repeat>
+					</p:column>
+					<p:column headerText="#{i18n['edit']}" styleClass="button-icon" width="5%">
+						<p:commandLink
+							actionListener="#{treatmentController.modifiedTreatmentType(tt)}"
+							oncomplete="PF('registerTreatmentType').show();">
+							<i class="fa fa fa-edit color-blue"> </i>
+						</p:commandLink>
+					</p:column>
+					<p:column headerText="#{i18n['delete']}" styleClass="button-icon" width="5%">
+						<p:commandLink
+							actionListener="#{treatmentController.deleteTreatmentType(tt)}"
+							oncomplete="PF('confirmDialogDelete1').show();">
+							<i class="fa fa fa-remove color-red"> </i>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</p:dialog>
+
+		<p:dialog widgetVar="priceHistoryTable" header="#{i18n['price_history_list']}"
+			modal="true" styleClass="dialog-scroll" id="pht" resizable="false"
+			width="450" height="250" closeOnEscape="true"> 
+			<div class="content">
+				<p:dataTable id="subOrganizationList" styleClass="myTable"
+					value="#{treatmentController.priceHistorys}" var="info"
+					rowIndexVar="index">
+					<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+					<p:column styleClass="date" headerText="#{i18n['price_used_date']}">#{info.puds}</p:column>
+					<p:column styleClass="text" headerText="#{i18n['item_name']}">#{info.itemName}</p:column>
+					<p:column styleClass="short-number" headerText="#{i18n['measurement']}">#{info.measurementName}</p:column>
+					<p:column styleClass="amount" headerText="#{i18n['price']}">
+						<h:outputLabel value="#{info.price}">
+							<f:convertNumber type="currency" currencySymbol="₮" />
+						</h:outputLabel>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</p:dialog>
+		<p:remoteCommand name="loadData"
+			actionListener="#{treatmentController.loadData()}" />
+	</ui:define>
+	<ui:define name="script">
+		<script>
+     	//<![CDATA[
+     	           
+		$(document).ready(function () {
+			//document.getElementById('form:itemName').setAttribute("list", "il");
+			document.getElementById('ui-datepicker-div').className = document.getElementById('ui-datepicker-div').className + ' clendar';
+			document.getElementById('form:price').setAttribute('type', 'number');
+			loadData();
+		});
+		
+		var fillinItemList = function (){
+			document.getElementById('form:itemName').setAttribute('list', 'il');
+		}
+			$('body').on('keydown', 'input, select, textarea', function(e) {
+			    var self = $(this)
+			      , form = self.parents('form:eq(0)')
+			      , focusable
+			      , next
+			      ;
+			    if (e.keyCode == 13) {
+			        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+			        next = focusable.eq(focusable.index(this)+1);
+			        if (next.length) {
+			            next.focus();
+			        } else {
+			            form.submit();
+			        }
+			        return false;
+			    }
+			});
+		//]]>
+		</script>
+	</ui:define>
+</ui:composition>

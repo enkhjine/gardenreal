@@ -1,0 +1,17 @@
+eclipse.preferences.version=1
+encoding//WebContent/resource/css/style.css=UTF-8
+encoding//WebContent/resource/dist/js/pages/dashboard2.js=UTF-8
+encoding//WebContent/resource/js/jquery-ui.min.js=UTF-8
+encoding//WebContent/resource/js/moment.min.js=UTF-8
+encoding//src/hospital/web/controller/ApplicationController.java=UTF-8
+encoding//src/hospital/web/controller/ConditionalPrescriptionController.java=UTF-8
+encoding//src/hospital/web/controller/DoctorMenuController.java=UTF-8
+encoding//src/hospital/web/controller/EmployeeRequestController.java=UTF-8
+encoding//src/hospital/web/controller/HomeController.java=UTF-8
+encoding//src/hospital/web/controller/InfoController.java=UTF-8
+encoding//src/hospital/web/controller/InspectionController.java=UTF-8
+encoding//src/hospital/web/controller/PlanController.java=UTF-8
+encoding//src/hospital/web/controller/PlanControllerRequest.java=UTF-8
+encoding//src/hospital/web/controller/ReportController.java=UTF-8
+encoding//src/hospital/web/controller/TwoController.java=UTF-8
+encoding//src/hospital/web/controller/UserSessionController.java=UTF-8

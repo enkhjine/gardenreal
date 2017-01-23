@@ -1,0 +1,964 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<p:outputLabel style="display: none;">#{requestController.sCustomer.pkId}</p:outputLabel>
+		<p:remoteCommand name="getEmployees" action="#{requestController.employees()}" />
+		<p:remoteCommand name="calculateCalendarItem" action="#{requestController.calculateCalendarItem()}" update="@(.no-style-panel)" />
+		<p:remoteCommand name="cashBill" process="@this" actionListener="#{cashController.cashBill()}" />
+		<link rel="stylesheet" href="#{applicationController.path}css/chosen.css" />
+		<p:remoteCommand name="newTab" onstart="document.getElementById('newTab').click();" />
+		<a id="newTab" style="display: none;" target="_blank" href="http://localhost:8080/Hospital/cash/register.html">s</a>
+		<section class="content-header">
+		<h1>Захиалга</h1>
+		</section>
+		<section class="content">
+			<div class="content">
+				<div class="box">
+					<div class="box-body">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="card-contianer">
+									<div class="flex-container">
+										<div class="card-picture">
+						               		<h:graphicImage id="image" width="100" height="100" value="#{requestController.selectedCustomer.customerImage}" />
+						                </div>
+						                <div class="card-info-container">
+						                	<div class="row card-info-row">
+						                  		<label class="card-info-label">Нийт  </label>
+						                  		<p:outputLabel id="daa1" styleClass="card-info-value"
+						                  			value="#{requestController.selectedCustomer.requestCount}"  />
+						                  	</div>
+						                  	<div class="row card-info-row">
+						                  		<label class="card-info-label" >Биелэгдээгүй</label>
+												<p:outputLabel id="daa3" styleClass="card-info-value" 
+						                 			value="#{requestController.selectedCustomer.unreliableCount}"   />
+						                  	</div>
+						                  	<div class="row card-info-row" >
+						                 		<label class="card-info-label" >Төлбрийн үлдэгдэл</label>
+						                 				                  		<p:outputLabel id="daa2" styleClass="card-info-value" style="    text-align: right;
+    width: 50px;
+    margin-left: -45px;" 
+						                  			value="#{requestController.selectedCustomer.executoryCount}"/>
+						                 	</div>
+							          	</div>
+							        </div>
+						            <center> 
+						            	<p>
+						            		<p:commandLink styleClass="small-box-footer card-info-payment" style="cursor: pointer;" 
+						            			 actionListener="#{requestController.refreshCustomerRequests}" onclick="PF('cRequests').show();">
+							                	<i class="fa fa-fw fa-info-circle"/>Захиалгын дэлгэрэнгүй
+							                </p:commandLink>
+						            	</p>
+						            </center>
+						    	</div>
+		
+							</div>
+							<div class="col-md-4">
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Регистрийн №: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+											<p:inputText onkeyup="fillCustomer();" styleClass="form-control" onchange="fillCustomer();" value="#{requestController.selectedCustomer.regNumber}" id="reg" style="min-width: 100%;" />
+											
+											<p:remoteCommand name="fillCustomer" actionListener="#{requestController.fillCustomer}" update="form:lastName form:firstName form:gender :form:registrrrrr :form:image :form:daa1 :form:daa2 :form:daa3 :form:lastName1 :form:lastName2 :form:lastName3 :form:lastName4 :form:incuranceAimag :form:incuranceSum "/>
+											<p:overlayPanel id="moviePanel" widgetVar="moviePanel" for="reg" hideEffect="fade" dynamic="true" style="width:600px">
+												<p:commandLink actionListener="#{requestController.cleanSelectedCustomer()}" process="@this" value="Цэвэрлэх" update=":form:lastName :form:firstName :form:gender :form:registrrrrr :form:image :form:daa1 :form:daa2 :form:daa3 :form:lastName1 :form:lastName2 :form:lastName3 :form:lastName4 :form:incuranceAimag :form:incuranceSum :form:reg" />
+												<p:dataTable id="fillTable" emptyMessage="Үйлчлүүлэгч бүртгээгүй байна." value="#{applicationController.lazyCustomerList1}" lazy="true" var="cus" selectionMode="single" selection="#{requestController.selCustomer}" rowKey="#{cus.pkId}" widgetVar="fillTable" rows="6" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15">
+													<p:ajax event="rowSelect" update=":form:lastName :form:firstName :form:gender :form:registrrrrr :form:image :form:daa1 :form:daa2 :form:daa3 :form:lastName1 :form:lastName2 :form:lastName3 :form:lastName4 :form:incuranceAimag :form:incuranceSum :form:reg " listener="#{requestController.refreshCustomerRequests()}" oncomplete="PF('moviePanel').hide();" />
+													<p:column filterBy="#{cus.lastName}" filterStyleClass="form-control" headerText="Овог">#{cus.lastName}</p:column>
+													<p:column filterBy="#{cus.firstName}" filterStyleClass="form-control" headerText="Нэр">#{cus.firstName}</p:column>
+													<p:column filterBy="#{cus.regNumber}" filterStyleClass="form-control" headerText="Регистрын дугаар">#{cus.regNumber}</p:column>
+													<p:column filterBy="#{cus.phoneNumber}" filterStyleClass="form-control" headerText="Утас">#{cus.phoneNumber}</p:column>
+												</p:dataTable>
+											</p:overlayPanel>
+									</div>
+								</div>
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Овог: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="lastname form-control" style="min-width: 100%;" id="lastName" value="#{requestController.selectedCustomer.lastName}" />
+									</div>
+								</div>
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Нэр: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="firstname form-control" style="min-width: 100%;" id="firstName" value="#{requestController.selectedCustomer.firstName}" />
+									</div>
+								</div>
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Хүйс: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="gender form-control" style="min-width: 100%;" id="gender" value="#{requestController.selectedCustomer.genderString}" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Картын дугаар: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="lastname number-control form-control" style="min-width: 100%;" id="lastName1" value="#{requestController.selectedCustomer.cardNumber}" />
+									</div>
+								</div>
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Утасны дугаар: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="number-control form-control" style="min-width: 100%;" id="lastName2" value="#{requestController.selectedCustomer.phoneNumber}" />
+									</div>
+								</div>
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Карт нээлгэсэн огноо: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="date-control form-control" id="lastName3" value="#{requestController.selectedCustomer.dateString}" />
+									</div>
+								</div>
+								<div class="row flex-container ">
+									<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+										<label style="font-weight: 100; font-size: 11px;">Нас: </label>
+									</div>
+									<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+										<p:inputText disabled="true" styleClass="gender form-control" style="min-width: 100%;" id="lastName4" value="#{requestController.selectedCustomer.age}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p:fieldset rendered="false" legend="Даатгалын харьяалал" toggleable="true" style="display: block;" toggleSpeed="100" styleClass="margin-bottom no-print">
+					<div class="row flex-container">	
+						<div class="col-md-1 col-xs-12 col-sm-12 flex-center-self">
+							<label style="" for="form:incuranceAimag">Аймаг/хот</label>
+						</div>
+						<div class="col-md-3 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectOneMenu id="incuranceAimag" disabled="true" value="#{requestController.selectedCustomer.incuranceAimagPkId}"
+								style="width: 100%;">
+								<f:selectItem itemLabel="Сонгох"></f:selectItem>
+								<f:selectItems id="aimag-list1" value="#{requestController.aimags}" var="aimag"
+									itemLabel="#{aimag.name}" itemValue="#{aimag.pkId}"></f:selectItems>
+							</p:selectOneMenu>
+						</div>
+						<div class="col-md-1 col-xs-12 col-sm-12 flex-center-self">
+							<label style="" for="form:incuranceSum">Сум/дүүрэг</label>
+						</div>
+						<div class="col-md-3 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectOneMenu disabled="true" id="incuranceSum"
+								value="#{requestController.selectedCustomer.incuranceSumPkId}"
+								style="width: 100%;">
+								<f:selectItem itemLabel="Сонгох"></f:selectItem>
+								<f:selectItems value="#{requestController.sums}" var="sum"
+									itemLabel="#{sum.name}" itemValue="#{sum.pkId}"></f:selectItems>
+							</p:selectOneMenu>
+						</div>
+						
+						<div class="col-md-1 col-xs-12 col-sm-12 flex-center-self">
+							<label style="" for="form:incuranceType">Даатгалын хэлбэр</label>
+						</div>
+						<div class="col-md-3 col-xs-12 col-sm-12 flex-center-self">
+							<p:selectOneMenu disabled="true" id="incuranceType"
+									value="#{requestController.selectedCustomer.incuranceType}"
+									style="width: 100%;">
+									<f:selectItem itemLabel="Сонгох"></f:selectItem>					
+							</p:selectOneMenu>
+						</div>	
+					</div>
+				</p:fieldset>
+				<div class="box">
+					<div class="box-body">
+						<div class="row margin-bottom">
+							<div class="col-md-2">
+								<div class="row" style="position: relative;">
+									<div class="lava"/>
+									<div class="col-md-2"/>
+									<div style="padding-top: 0px;" class="col-md-3 month-item #{requestController.currentYear == requestController.currentYearIndex ? 'activeBtn' : '' }">
+										<p:commandLink style="width: 100%;; font-weight: bold;" process="@this" 
+											action="#{userController.url('customerRequest')}"
+											value="#{requestController.currentYearIndex}">
+											<f:setPropertyActionListener target="#{requestController.currentYear}" value="#{requestController.currentYearIndex}"/>
+										</p:commandLink>
+									</div>
+									<div class="col-md-2"/>
+									<div style="padding-top: 0px;" class="col-md-3 month-item #{requestController.currentYear == requestController.currentYearIndex + 1 ? 'activeBtn' : '' }">
+										<p:commandLink style="font-weight: bold;" process="@this" 
+											action="#{userController.url('customerRequest')}"
+											value="#{requestController.currentYearIndex + 1}">
+											<f:setPropertyActionListener target="#{requestController.currentYear}" value="#{requestController.currentYearIndex + 1}"/>
+										</p:commandLink>
+									</div>
+									<div class="col-md-2"/>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<p:remoteCommand name="changeMonthMeth" action="#{userController.url('customerRequest')}" />
+								<p:selectOneMenu value="#{requestController.selectedMonth}" onchange="changeMonthMeth();">
+									<f:selectItems value="#{requestController.months}" var="mindex" itemLabel="#{mindex}-р сар" itemValue="#{mindex}" />
+								</p:selectOneMenu>
+							</div>
+							<div class="col-md-9">
+								<ui:repeat var="day" value="#{requestController.days}">
+									<div class="" style="40px;">
+										<div class="#{requestController.selectedDay == day ? 'activeBtn' : '' } month-item" style="width:40px;float: left;">
+											<p:commandLink style="margin:0px 10px;#{requestController.dateDayColor(day)}" process="@this"
+												action="#{userController.url('customerRequest')}" value="#{day}">
+													<f:setPropertyActionListener target="#{requestController.selectedDay}" value="#{day}"/>
+											</p:commandLink>
+										</div>
+									</div>
+								</ui:repeat>
+								<p class="text-muted well well-sm no-shadow" style="border: 0px;float: right;    background: none;margin-right: 30px;">#{requestController.customerRequestTitle}</p>
+							</div>
+						</div>
+						<div class="row" style="margin-top: -20px;">
+							<center class="col-md-12">
+								<ul class="customerRequestList">
+								<ui:repeat var="org" value="#{requestController.listSubOrganization}">
+									<li style="background-color: #{org.pkId == requestController.selectedSubOrganization.pkId ? 'rgb(60, 141, 188)' : '#33AFDE'} ; margin: 1px;" class="btn-sm"><p:commandLink process="@this" action="#{userController.url('customerRequest')}" value="#{org.name}" ><f:setPropertyActionListener target="#{requestController.selectedSubOrganization}" value="#{org}"></f:setPropertyActionListener> </p:commandLink></li>
+								</ui:repeat>
+								</ul>
+							</center>
+						</div>
+						<div class="row" style="margin-top: -11px;">
+							<p:panel styleClass="no-style-panel">
+							<center>
+								<ul class="customerRequestList">
+								<ui:repeat var="employee" value="#{requestController.employees}">
+									<li style="width: #{100/requestController.employees.size()}%;">
+										<p:commandLink process="@this"  oncomplete="PF('requestDtl').show();" value="#{employee.firstName} (#{employee.employeeRequestCount})" actionListener="#{requestController.fillRequests(employee.pkId)}" >
+										<f:setPropertyActionListener target="#{requestController.selectedEmployee}" value="#{employee}">
+										</f:setPropertyActionListener> 
+										</p:commandLink>
+									</li>
+								</ui:repeat>
+								</ul>
+							</center>
+							</p:panel>
+						</div>
+						<p:panel styleClass="no-style-panel">
+						<div class="row">
+							<ui:repeat var="employee" value="#{requestController.employees}">
+								<div style="min-height: 10px; display: block; float: left; width: #{100/requestController.employees.size()}%;">
+									<p:commandLink onclick="zahialga#{employee.pkId}()" style="width: 100%; height: #{item.getHeight()}px; background-color: rgb(234, 116, 32); text-align: center; font-weight: bold; color: #fff !important;" styleClass="calendarItem" value="Шууд захиалга (#{employee.requestCount})"  />
+									<p:remoteCommand name="zahialga#{employee.pkId}" action="#{requestController.newEmployeeRequest(employee.pkId)}" />
+									<ui:repeat var="item" value="#{requestController.customerRequestCalendarItems}">
+										<p:commandLink rendered="#{employee.pkId.compareTo(item.employeePkId) == 0}" 
+											onclick="showLoader();click#{item.beginHour}#{item.beginMinute}#{item.endHour}#{item.endMinute}#{item.employeePkId}#{item.employeeRequestPkId}()" 
+											style="width: 100%; height: #{item.getHeight()}px;" styleClass="#{item.classCss}" value="#{item.name}" >
+										</p:commandLink>
+										<p:remoteCommand rendered="#{employee.pkId.compareTo(item.employeePkId) == 0}" name="click#{item.beginHour}#{item.beginMinute}#{item.endHour}#{item.endMinute}#{item.employeePkId}#{item.employeeRequestPkId}"  process="@this" action="#{requestController.newEmployeeRequest(item.beginHour, item.beginMinute, item.endHour, item.endMinute, item.employeePkId, item.employeeRequestPkId)}" oncomplete="hideLoader();" />
+									</ui:repeat>
+								</div>
+							</ui:repeat>
+						</div>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</section>
+		<p:dialog width="800" header="Өвчтөн бүртгэх" widgetVar="newCustomer" id="newCustomer" styleClass="register" modal="true" resizable="false">
+			
+		</p:dialog>
+		<p:dialog width="450" widgetVar="register" id="register" styleClass="register" modal="true" resizable="false">
+				<div class="card-contianer">
+					<div class="flex-container">
+						<div class="card-picture">
+		               		<img width="100" height="100" src="#{requestController.selectedCustomer.customerImage}" />
+		                </div>
+		                <div class="card-info-container">
+		                	<div class="row card-info-row">
+		                  		<div class="card-info-label pull-left" style="width: initial">Кабинет </div>
+		                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: normal;">
+		                  			#{requestController.selectedEmployee.subOrganizationName}<span style="color: green;"> (#{requestController.selectedEmployee.subOrganizationInspectionCount})</span>
+		                  		</div>
+		                  	</div>
+		                	<div class="row card-info-row">
+		                  		<div class="card-info-label pull-left" style="width: initial">Эмч </div>
+		                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: normal;">
+		                  			#{requestController.selectedEmployee.firstName}<span style="color: green;"> (#{requestController.selectedEmployee.employeeInspectionCount})</span>
+		                  		</div>
+		                  	</div>
+		                  	<div class="row card-info-row">
+		                  		<div class="card-info-label pull-left" style="width: initial">Үйлчлүүлэгч</div>
+		                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: normal;">
+		                  			#{requestController.selectedCustomer.firstName}
+		                  		</div>
+		                  	</div>
+		                  	<div class="row card-info-row" >
+		                  		<div class="card-info-label pull-left" style="width: initial">Цаг </div>
+		                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: normal;">
+		                  			#{requestController.employeeRequest.requestDateStr}
+		                  		</div>
+		                 	</div>
+			          	</div>
+			        </div>
+		    	</div><br/>
+		    	<div class="row">
+		    		<div class="col-md-3">
+		    		<p:selectBooleanCheckbox onchange="isInsurance();" id="isInsurance" value="#{requestController.employeeRequest.hasInsurance}" />
+						<label for="form:isInsurance">Даатгал</label>
+						<p:remoteCommand name="isInsurance" process="form:isInsurance" update="form:isPayment " />
+					</div>
+					<div class="col-md-3"><p:selectBooleanCheckbox onchange="isPayment();" id="isPayment" value="#{requestController.employeeRequest.payment}" />
+						<label for="form:isPayment">Төлбөр</label>
+						<p:remoteCommand name="isPayment" process="form:isPayment" update="form:isInsurance " />
+					</div>
+ 					<div class="col-md-6"><p:selectBooleanCheckbox  onchange="isPaidPayment();" value="#{requestController.employeeRequest.freeInspection}" id="isPaidPayment" />
+ 						<label for="form:isPaidPayment">Төлбөргүй</label> 
+ 						<p:remoteCommand name="isPaidPayment" process="form:isPaidPayment"  />
+ 					</div> 
+		    	</div>
+				<div class="row margin-vertical">
+					
+					<div class="col-md-6">
+						<p:selectBooleanCheckbox id="yaraltai" value="#{requestController.employeeRequest.express}" />
+						<label for="form:yaraltai">Яаралтай</label>
+					</div>
+					<div class="col-md-6"></div>
+					<div class="col-md-6">
+						<p:selectOneMenu id="reInspectionId" value="#{requestController.employeeRequest.reInspection}">
+							<f:selectItem itemLabel="Шинэ үйлчлүүлэгч" itemValue="0" />
+							<f:selectItem itemLabel="Хуучин үйлчлүүлэгч" itemValue="1" />
+						</p:selectOneMenu>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<h:inputTextarea id = "erDescription" styleClass="textarea" style="width: 100%; height: 60px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px; margin-bottom: 10px;" value="#{requestController.employeeRequest.description}"></h:inputTextarea>
+					</div>
+					<p:watermark value="Тайлбар бичих" for = "form:erDescription"></p:watermark>
+				</div>
+				<div class="row">
+					<div class="col-md-12 text-right">
+						<p:commandLink onclick="showLoader();" styleClass="btn" 
+							action="#{requestController.saveEmployeeRequest}">
+							<i class="fa fa-fw fa-check"/> Захиалах
+						</p:commandLink>
+						<p:commandLink styleClass="btn redBtn" onclick="PF('register').hide();" 
+						><i class="fa fa-fw fa-times"/> Болих
+						</p:commandLink>
+					</div>
+				</div>
+		</p:dialog>
+		<p:dialog width="400" widgetVar="delete" id="delete" styleClass="delete" modal="true" resizable="false">
+			<div class="card-contianer">
+				<div class="flex-container">
+					<div class="card-picture">
+	               		<img width="100" height="100" src="#{requestController.selectedCustomer.customerImage}" />
+	                </div>
+	                <div class="card-info-container">
+	                	<div class="row card-info-row">
+	                  		<div class="card-info-label pull-left" style="width: initial">Эмч </div>
+	                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: bold;">
+	                  			#{requestController.selectedEmployee.firstName}
+	                  		</div>
+	                  	</div>
+	                  	<div class="row card-info-row">
+	                  		<div class="card-info-label pull-left" style="width: initial">Үйлчлүүлэгч</div>
+	                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: bold;">
+	                  			#{requestController.employeeRequest.customerFirstname}
+	                  		</div>
+	                  	</div>
+	                  	<div class="row card-info-row" >
+	                  		<div class="card-info-label pull-left" style="width: initial">Үзлэгийн өдөр </div>
+	                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: bold;">
+	                  			#{requestController.employeeRequest.requestDayStr}
+	                  		</div>
+	                 	</div>
+	                  	<div class="row card-info-row" >
+	                  		<div class="card-info-label pull-left" style="width: initial">Үзлэгийн цаг </div>
+	                  		<div class="pull-right card-info-value" style="width: initial;position: relative;padding: 0px 5px;font-weight: bold;">
+	                  			#{requestController.employeeRequest.requestDateStr}
+	                  		</div>
+	                 	</div>
+		          	</div>
+		        </div>
+	    	</div>
+			<div class="row margin-vertical">
+				<div class="col-md-12 text-right">
+					<p:commandLink styleClass="btn redBtn" action="#{requestController.saveEmployeeRequest}">
+					<i class="fa fa-fw fa-trash-o"/> Устгах
+					</p:commandLink>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog styleClass="confirmDialog" widgetVar="showNoneFilledCustomer" resizable="false" modal="true" width="400">
+			<table class="panel-confirm-dialog">
+				<tr>
+					<td class="panel-confirm-dialog-icon">
+						<i class="fa fa-fw fa-warning color-orange"/>
+					</td>
+					<td class="panel-confirm-dialog-text">
+						Та <h:outputLabel styleClass="filledReg" style="color: green;" value="#{requestController.selectedCustomerReg}" id="registrrrrr" /> регистртэй хэрэглэгч бүртгэхдээ итгэлтэй байна уу?
+					</td>
+				</tr>
+			</table>
+			<div class="col-xs-8" style="float: right;">
+				<div class="row">
+					<div class="col-xs-6">
+						<p:commandLink styleClass="btn"
+							action="#{userController.url('customer_register')}" actionListener="#{customerController.setSavePath('customerRequest')}" value="Бүртгэх"
+							style="font-size: 12px;color: white;"></p:commandLink>
+					</div>
+					<div class="col-xs-6">
+						<p:commandLink styleClass="btn redBtn"
+							oncomplete="PF('confirmDialogDelete').hide();" value="Болих"
+							style="font-size: 12px;color: white;    border: 1px solid;    background-color: #B7B4B4;"></p:commandLink>
+					</div>
+				</div>
+			</div>
+		</p:dialog>
+		<p:dialog styleClass="employeeDetail" widgetVar="employeeDetail" modal="true"
+			resizable="false" width="850" height="400">
+			<div class="row">
+				
+			</div>
+		</p:dialog>
+		<p:dialog widgetVar="printCashReportDialog" modal="true" id="printCashReportDialog" styleClass="dialog-scroll"
+			resizable="false" width="700" height="500" onHide="clearPayment();" onShow="hideLoader();">
+			<table id="print" style="width: 100%;">
+			    	<tr>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+			    			ТӨЛБӨРИЙН БАРИМТ
+			    		</td>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+			    			Байгууллагын нэр
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="7" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+			    			ТӨЛБӨРИЙН БАРИМТ
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Картын №: #{cashController.selectedCustomer.cardNumber}
+			    		</td>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Регистрийн №: #{cashController.selectedCustomer.regNumber}
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Овог: #{cashController.selectedCustomer.lastName}
+			    		</td>
+			    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Нэр: #{cashController.selectedCustomer.firstName}
+			    		</td>
+			    	</tr>
+			    	<tr>
+			    		<td colspan="7" style="font-size: 12px;font-weight: 100;font-family: Times New Roman;text-align:left;vertical-align: middle;padding-top: 10px;">
+			    			ҮЗЛЭГ
+			    		</td>
+			    	</tr>
+		            	<tr>
+			                <td style="width: 10px ;font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+			                	№
+			                </td>
+			                <td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+			                	Эмчийн нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+			                	Үзлэгийн дүн
+			                </td>
+			            </tr>
+						<!-- бүлэг эхлэл -->
+						<ui:repeat value="#{cashController.listRequestInspectionDtl}" var="it" varStatus="myVarStatus">
+							<tr>
+								<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+									#{myVarStatus.index + 1}
+								</td>
+								<td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+									#{it.name}
+								</td>
+								<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+									<h:outputText value="#{it.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+										<f:convertNumber pattern="###,###,###.00"/>
+									</h:outputText>
+								</td>
+							</tr>
+						</ui:repeat>
+					<!-- бүлэг төгсгөл -->
+					
+					<c:if test="#{cashController.listTreatmentInspectionDtl.size() > 0}">
+			    	<tr>
+			    		<td colspan="7" style="font-size: 12px;font-weight: 100;font-family: Times New Roman;text-align:left;vertical-align: middle;padding-top: 10px;">
+			    			ЭМЧИЛГЭЭ
+			    		</td>
+			    	</tr>
+		            	<tr>
+			                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+			                	№
+			                </td>
+			                <td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+			                	Эмчилгээний нэр
+			                </td>
+			                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+			                	Дүн
+			                </td>
+			            </tr>
+						<!-- бүлэг эхлэл -->
+						<ui:repeat value="#{cashController.listTreatmentInspectionDtl}" var="it" varStatus="myVarStatus">
+							<tr>
+								<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+									#{myVarStatus.index + 1}
+								</td>
+								<td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+									#{it.name}
+								</td>
+								<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+									<h:outputText value="#{it.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+										<f:convertNumber pattern="###,###,###.00"/>
+									</h:outputText>
+								</td>
+							</tr>
+						</ui:repeat>
+						<tr>
+							<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								Бүлгийн дүн: 
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+								<h:outputText value="#{cashController.cash.treatmentAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					<!-- бүлэг төгсгөл -->
+					</c:if>
+					<c:if test="#{cashController.listXrayInspectionDtl.size() > 0}">
+					<tr>
+			    		<td colspan="5" style="font-size: 12px;font-weight: 100;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			ОНОШИЛГОО
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	№
+		                </td>
+		                <td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	Оношилгооны нэр
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	Дүн
+		                </td>
+		            </tr>
+					<ui:repeat value="#{cashController.listXrayInspectionDtl}" var="item" varStatus="myVarStatus">
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{myVarStatus.index + 1}
+							</td>
+							<td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{item.name}
+							</td>
+							<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.xrayAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					</c:if>
+					<c:if test="#{cashController.listSurgeryInspectionDtl.size() > 0}">
+					<tr>
+			    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Мэс засал
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	№
+		                </td>
+		                <td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	Мэс засал
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	Дүн
+		                </td>
+		            </tr>
+					<ui:repeat value="#{cashController.listSurgeryInspectionDtl}" var="item" varStatus="myVarStatus">
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{myVarStatus.index + 1}
+							</td>
+							<td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{item.name}
+							</td>
+							<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.surgeryAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					</c:if>
+					<c:if test="#{cashController.listExamnationInspectionDtl.size() > 0}">
+					<tr>
+			    		<td colspan="6" style="font-size: 12px;font-weight: 100;font-family: Times New Roman;text-align:left;vertical-align: middle;">
+			    			Шинжилгээ
+			    		</td>
+			    	</tr>
+	            	<tr>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	№
+		                </td>
+		                <td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	Шинжилгээний нэр
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	Дүн
+		                </td>
+		            </tr>
+					<ui:repeat value="#{cashController.listExamnationInspectionDtl}" var="item" varStatus="myVarStatus">
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{myVarStatus.index + 1}
+							</td>
+							<td colspan="4" style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{item.name}
+							</td>
+							<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								<h:outputText value="#{item.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+									<f:convertNumber pattern="###,###,###.00"/>
+								</h:outputText>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.examnationAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					</c:if>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Нийт үнэ: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.basicAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Хөнгөлөлт: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.discountPercent} %" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Төлөх: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.amount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Төлсөн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.paidAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Үлдэгдэл: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputText value="#{cashController.cash.balanceAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;">
+								<f:convertNumber pattern="###,###,###.00"/>
+							</h:outputText>
+						</td>
+					</tr>
+					
+								<tr>
+									<td colspan="6">
+										<hr width="100%" style="color: peachpuff;" />
+									</td>
+								</tr>
+								<tr>
+									<td colspan="6" rowspan="8" style="width: 100px;">
+										<table class="print-table">
+											<tr>
+												<td style="padding: 5px;font-size: 12px;">
+													Сугалааны дугаар: 
+												</td>
+												<td style="padding: 5px;font-size: 12px;">
+													#{cashController.cash.lottery}
+												</td>
+											</tr>
+											<tr>
+												<td style="padding: 5px;font-size: 12px;">
+													ДДТД: 
+												</td>
+												<td style="padding: 5px;font-size: 12px;">
+													#{cashController.cash.billId}
+												</td>
+											</tr>
+											<tr>
+												<td style="padding: 5px;font-size: 12px;">
+													Сугалааны огноо: 
+												</td>
+												<td style="padding: 5px;font-size: 12px;">
+													#{cashController.cash.billDate}
+												</td>
+											</tr>
+											<tr>
+												<td style="padding: 5px;font-size: 12px;">
+													Дүн: 
+												</td>
+												<td style="padding: 5px;font-size: 12px;">
+													#{cashController.decimalConvertToString(cashController.cash.paidAmount)}
+												</td>
+											</tr>
+										</table>
+										<div class="print-img-container">
+												<p:graphicImage styleClass="print-image" style="margin: 0 auto;display: block;" value="#{cashController.getQrUrl(cashController.cash.qrData)}"></p:graphicImage>
+										</div>
+									</td>
+								</tr>
+			    </table>
+			<div id="print">
+				
+			</div>
+			<div id="editor"></div>
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print');">
+            	<i class="fa fa-print color-blue"></i> Хэвлэх
+            </a>
+            <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+            </a>
+            <a class="btn btn-app" onclick="tableToExcel('print','Төлбөрийн баримт');"  href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+            </a>
+		</p:dialog>
+		
+		<p:dialog widgetVar="requestDtl" id = "requestDtl" width="1200" height="400" styleClass="dialog-scroll" header="Захиалгын дэлгэрэнгүй">
+			<p:panel id = "rdtl" styleClass = "no-style-panel">
+			<div class="col-xs-12">
+			
+			<div class = "row" style = "margin-top:10px; margin-botton:10px;">
+				<div class = "col-md-4"><p style = "font-weight: 900; float:left;">Кабинет : </p> <p> #{requestController.selectedSubOrganization.name}</p></div>
+				
+				<div class = "col-md-4"><p style = "font-weight: 900; float:left;">Эмч : </p> <p>#{requestController.selectedEmployee.firstName} </p></div>
+				
+				<div class = "col-md-4"><p style = "font-weight: 900; float:left;">Огноо :  </p> <p>#{requestController.getDateString(requestController.selectedDate)} </p></div>
+				
+					
+			</div>
+			<div class = "col-md-12"/>
+			<div class = "row">
+					<div class = "col-md-12"/>
+						<div class = "col-md-1"><div style="width: 13px; height: 13px; background: red; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">Яаралтай</p></div>
+						<div class = "col-md-1"><div style="width: 13px; height: 13px; background: yellow; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">Шууд</p></div>
+						<div class = "col-md-2"><div style="width: 13px; height: 13px; background: green; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">Урьдчилсан Захиалга</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px"   class = "fa fa-fw fa-warning color-blue"> </i><p style = "font-size:13px; margin-left: 30px;" >Төлбөрийн үлдэгдэлтэй</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-check-square color-blue"></i><p style = "font-size:13px;   margin-left: 30px;" >Төлбөрийн үлдэгдэлгүй</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-fw fa-plus color-blue"> </i><p style = "font-size:13px;    margin-left: 30px;" >Төлбөр төлсөн</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-minus color-blue"></i><p style = "font-size:13px;          margin-left: 30px;" >Төлбөр төлөөгүй</p></div>
+					</div>
+			
+			<p:dataTable id="doctorInspection" styleClass="myTable col-md-12" value="#{requestController.crs}" var="info" rowIndexVar="index" emptyMessage="#{i18n['empty']}" editable="true">
+						
+						<p:column styleClass="index" headerText="№"  width="5%"><div style="width: 100%;height: 100v; background: #{info.employeeRequest.bgColor};color:#fff;">#{index + 1}</div></p:column>
+						<p:column styleClass="date" headerText = "#{i18n['order_date']}" width="7%" sortBy="#{info.employeeRequest.dateString}" >#{info.employeeRequest.dateString}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['time']}"  width="7%" sortBy="#{info.employeeRequest.requestDateStr}">#{info.employeeRequest.requestDateStr}</p:column>
+						<p:column styleClass="id" headerText="#{i18n['card_number']}"  width="5%" sortBy="#{info.customer.cardNumber}" >#{info.customer.cardNumber}</p:column>
+						<p:column styleClass="text" headerText="#{i18n['last_name']}"  width="9%" sortBy="#{info.customer.lastName}" >#{info.customer.lastName}</p:column>
+						<p:column styleClass="text" headerText="#{i18n['first_name']}" width="9%" sortBy="#{info.customer.firstName}" >#{info.customer.firstName}</p:column>
+						<p:column styleClass="id" headerText="#{i18n['register_number']}" width="9%" sortBy="#{info.customer.regNumber}" >#{info.customer.regNumber}</p:column>
+						<p:column styleClass="short-number" headerText="#{i18n['age']}" width="4%" sortBy="#{info.customer.age}" >#{info.customer.age}</p:column>
+						<p:column styleClass="short-text" headerText="#{i18n['gender']}" width="7%" sortBy="#{info.customer.getGenderString()}" >#{info.customer.getGenderString()}</p:column>
+						<p:column styleClass="button-icon" headerText="#{i18n['remain']}" > <i style = "font-size: 16px;" class="#{info.customer.uldegdelStatus eq 'yes' ? 'fa fa-fw fa-warning color-blue' : 'fa fa-check-square color-blue'}"> </i> </p:column>
+						<p:column styleClass="text" headerText="#{i18n['status']}" sortBy="#{info.employeeRequest.getInspectionStatus()}" >#{info.employeeRequest.getInspectionStatus()}</p:column>
+						<p:column styleClass="text" headerText = "#{i18n['description']}" sortBy="#{info.employeeRequest.description}" >#{info.employeeRequest.description}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['inspection_time']}" sortBy="#{info.inspection.inspectionDate}">#{info.inspection.inspectionDate}</p:column>
+						<p:column styleClass="button-icon" headerText="Төлбөр төлсөн" > <i style = " font-size: 16px " class="#{info.employeeRequest.payment ? 'fa fa-plus color-blue' : 'fa fa-fw fa-minus color-blue'}"> </i> </p:column>
+						<p:column styleClass="button-icon" headerText="Устгах" > <p:commandLink styleClass="fa fa-fw fa-remove color-red" rendered="#{info.employeeRequest.mood != 2}" actionListener="#{requestController.removeRequest(info)}" oncomplete="PF('delete').show();" > </p:commandLink> </p:column>
+						<p:column headerText="Эмнэлэгт ирсэн эсэх"  style="width:16px;text-align:center">
+						<p:selectBooleanCheckbox value="#{info.selected}" id="checkbox1" disabled="#{info.employeeRequest.bgColor == 'red' or info.employeeRequest.bgColor == 'yellow'}" >
+						  	<p:ajax event = "change" listener="#{requestController.guestUpdate(info.employeeRequest)}"></p:ajax>
+						</p:selectBooleanCheckbox>
+						  </p:column>
+					</p:dataTable>
+					</div>
+					</p:panel>
+		</p:dialog>
+		
+		<p:dialog widgetVar="cRequests" id = "cRequests" width="1200" height="400" styleClass="dialog-scroll" header="Захиалгын дэлгэрэнгүй">
+			<p:panel id = "updatePanel" styleClass = "no-style-panel">
+			<div class="col-xs-12">
+			<div class = "row">
+					<div class = "col-md-4">
+						<div class="flex-container">
+							<label class="flex-center-self">#{i18n['date']}:</label>
+							<p:calendar pattern="yyyy-MM-dd" style="display:inline-block;margin-left:10px !important;" styleClass="flex-center-self date-control" id = "bDate" value = "#{requestController.beginDate}" onchange = "changeDate(); " update = ":form:crss"
+								navigator="true"> 
+								<p:ajax event="dateSelect" listener="#{requestController.refreshCustomerRequests()}" update = ":form:crss"  />
+							</p:calendar>
+							<label class="flex-center-self" style="margin-right: 10px !important;">-</label>
+							<p:calendar pattern="yyyy-MM-dd" style="display:inline-block" id = "eDate" styleClass="flex-center-self date-control" value = "#{requestController.endDate}" onchange = "changeDate(); " update = ":form:crss"> 
+						 		<p:ajax event="dateSelect" listener="#{requestController.refreshCustomerRequests()}" update = ":form:crss" />
+						 	</p:calendar>
+					 	</div>
+					 </div>
+					<div class = "col-md-3"> </div>
+					<div class = "col-md-2"> </div>
+					<div class = "col-md-2"> </div>
+					<div class = "col-md-1"> </div>
+					<p:remoteCommand name = "changeDate" actionListener = "#{requestController.refreshCustomerRequests()}" update = ":form:crss"></p:remoteCommand>					
+					</div>
+			
+			
+			<div class = "row" style = "margin-top:10px; margin-botton:10px;">
+				<div class = "col-md-4"><p style = "font-weight: 900; float:left;">Овог, Нэр : </p> <p> #{requestController.selectedCustomer.lastName} , #{requestController.selectedCustomer.firstName}</p></div>
+				
+				<div class = "col-md-4"><p style = "font-weight: 900; float:left;">Нас, Хүйс : </p> <p>#{requestController.selectedCustomer.age} , #{requestController.selectedCustomer.genderString}</p></div>
+				
+				<div class = "col-md-4"><p style = "font-weight: 900; float:left;">Регистрийн дугаар :  </p> <p>#{requestController.selectedCustomer.regNumber} </p></div>
+				
+					
+			</div>
+			<div class = "col-md-12"/>
+			<div class = "row">
+					<div class = "col-md-12"/>
+						<div class = "col-md-1"><div style="width: 13px; height: 13px; background: red; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">Яаралтай</p></div>
+						<div class = "col-md-1"><div style="width: 13px; height: 13px; background: yellow; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">Шууд</p></div>
+						<div class = "col-md-2"><div style="width: 13px; height: 13px; background: green; float: left;margin-right: 10px;"></div><p style="float: left; font-size:13px;">Урьдчилсан Захиалга</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px"   class = "fa fa-fw fa-warning color-blue"> </i><p style = "font-size:13px; margin-left: 30px;" >Төлбөрийн үлдэгдэлтэй</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-check-square color-blue"></i><p style = "font-size:13px;   margin-left: 30px;" >Төлбөрийн үлдэгдэлгүй</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-fw fa-plus color-blue"> </i><p style = "font-size:13px;    margin-left: 30px;" >Төлбөр төлсөн</p></div>
+						<div class = "col-md-2"><i  style = "float:left; font-size:15px" class = "fa fa-minus color-blue"></i><p style = "font-size:13px;          margin-left: 30px;" >Төлбөр төлөөгүй</p></div>
+					</div>
+			
+			<p:dataTable id="crss" styleClass="myTable col-md-12" value="#{requestController.customerRequests}" var="info" rowIndexVar="index" emptyMessage="#{i18n['empty']}">
+						<p:column styleClass="index" headerText="№"  width="5%"><div style="width: 100%;height: 100%; background: #{info.employeeRequest.bgColor};color:#4f4f4f;">#{index + 1}</div></p:column>
+						<p:column styleClass="text" headerText="Кабинетийн нэр" sortBy="#{info.employee.subOrganizationName}" >#{info.employee.subOrganizationName}</p:column>
+						<p:column styleClass="text" headerText="Эмчийн нэр" sortBy="#{info.employee.firstName}" >#{info.employee.firstName}</p:column>
+						<p:column styleClass="date" headerText = "#{i18n['order_date']}" width="7%" sortBy="#{info.employeeRequest.dateString}" >#{info.employeeRequest.dateString}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['time']}"  width="7%" sortBy="#{info.employeeRequest.requestDateStr}">#{info.employeeRequest.requestDateStr}</p:column>
+						<p:column styleClass="text" headerText = "#{i18n['description']}" sortBy="#{info.employeeRequest.description}" >#{info.employeeRequest.description}</p:column>
+						<p:column styleClass="date" headerText="#{i18n['inspection_time']}" sortBy="#{info.inspection.inspectionDate}">#{info.inspection.inspectionDate}</p:column>
+						<p:column styleClass="date" headerText="Захиалсан огноо" sortBy="#{requestController.getDateString(info.employeeRequest.createdDate)}">#{requestController.getDateString(info.employeeRequest.createdDate)}</p:column>
+						<p:column styleClass="text" headerText = "Захиалсан ажилтан" sortBy="#{info.employeeRequest.description}" >#{info.employeeRequest.ceName}</p:column>
+						<p:column styleClass="button-icon" headerText="#{i18n['remain']}" > <i style = "font-size: 16px;" class="#{info.customer.uldegdelStatus eq 'yes' ? 'fa fa-fw fa-warning color-blue' : 'fa fa-check-square color-blue'}"> </i> </p:column>
+						<p:column styleClass="button-icon" headerText="Төлбөр төлсөн" > <i style = " font-size: 16px; " class="#{info.employeeRequest.payment ? 'fa fa-plus color-blue' : 'fa fa-fw fa-minus color-blue'}"> </i> </p:column>
+						<p:column styleClass="button-icon" headerText="Устгах" > <p:commandLink styleClass="fa fa-fw fa-remove color-red" rendered="#{info.employeeRequest.beginDate.after(requestController.orderDate)}" actionListener="#{requestController.removeRequest(info)}" oncomplete="PF('delete').show();" > </p:commandLink> </p:column>
+					 </p:dataTable>
+					</div>
+					
+					</p:panel>
+		</p:dialog>
+		
+		
+	</ui:define>
+	<ui:define name="script">
+		<script>
+		//<![CDATA[
+			$("[data-mask]").inputmask();
+			
+			$(document).ready(function(){
+				
+				document.getElementById('newTab').href = window.location.href+'/../../cash/register.html';
+				getEmployees();
+				calculateCalendarItem();
+				fillCustomer();
+				var isPrint = #{cashController.isReportCashier()};				
+		    	if(isPrint){
+		    		cashBill();
+		    	}else {
+		    		//PF('printCashReportDialog').show();
+		    	}
+			});
+			function print1(){
+				var contents = document.getElementById("print").innerHTML;
+	            var frame1 = document.createElement('iframe');
+	            frame1.name = "frame1";
+	            frame1.style.position = "absolute";
+	            frame1.style.top = "-1000000px";
+	            document.body.appendChild(frame1);
+	            var frameDoc = frame1.contentWindow ? frame1.contentWindow : frame1.contentDocument.document ? frame1.contentDocument.document : frame1.contentDocument;
+	            frameDoc.document.open();
+	            frameDoc.document.write('<html><head><title>DIV Contents</title>');
+	            frameDoc.document.write('</head><body>');
+	            frameDoc.document.write(contents);
+	            frameDoc.document.write('</body></html>');
+	            frameDoc.document.close();
+	            setTimeout(function () {
+	                window.frames["frame1"].focus();
+	                window.frames["frame1"].print();
+	                document.body.removeChild(frame1);
+	            }, 500);
+	            return false;
+			}
+			
+			$('.month-item-position,.month-item').mouseover(function () {
+				//scroll the lava to current item position
+				var elem = $(this);
+				elem.parent().children('.lava').width( parseInt(elem.width()) + parseInt(elem.css("padding-left").replace("px", ""))*2);
+				elem.parent().children('.lava').stop().
+					animate({
+						left: parseInt(elem.css("margin-left").replace("px", "")) == 0 ? elem.position()['left'] : elem.position()['left'] + parseInt(elem.css("margin-left").replace("px", "") - 1),
+						opacity:1,
+						top: parseInt(elem.css("margin-top").replace("px", "")) == 0 ? elem.position()['top'] : elem.position()['top'] + parseInt(elem.css("margin-top").replace("px", ""))
+						}, {duration:200});
+			});
+			$('.month-item-position, .month-item').mouseout(function () {
+				//scroll the lava to current item position
+				$('.lava').stop().animate({opacity:0}, {duration:200});
+			});
+			//data-mask
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

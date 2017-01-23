@@ -1,0 +1,772 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Касс бүртгэл</h1>
+		<ol class="breadcrumb">
+			<li><p:commandLink
+					action="#{userController.url('cash_list')}" value="Касс">
+					<i class="fa fa-circle-o"></i>
+				</p:commandLink>
+			</li>
+			<li class="active">Бүртгэл</li>
+		</ol>
+		</section>
+		
+		<section class="content table-title-border" id="cash">
+			<div class="content">
+				<div class="row no-print">
+					<div class="col-md-4">
+						<div class="card-contianer">
+							<div class="flex-container">
+								<div class="card-picture">
+				               		<h:graphicImage id="image" width="100" height="100" value="#{cashController.selectedCashCustomer.customerImage}" />
+				                </div>
+				                <div class="card-info-container">
+				                	<div class="row card-info-row">
+				                  		<p:commandLink id="ssssss" process="@this" onclick="showLoader();" 
+		                  					style="color:#333;" 
+		                  					value="Төлбөрийн үлдэгдэл" styleClass="card-info-label" />
+		                  				<p:outputLabel id="loanPayment" style="color: #{BigDecimal.ZERO.compareTo(cashController.selectedCashCustomer.executoryCount) == 0 ? '#333' : 'red'} ;float: right;" value="#{cashController.selectedCashCustomer.executoryCount}" />	
+				                  	</div>
+				                  	<div class="row card-info-row">
+				                  		<p:commandLink process="@this" onclick="showLoader();" actionListener="#{cashController.requestHistory}" 
+				                  			value="Захиалгын түүх" styleClass="card-info-label"/>
+				                  	</div>
+				                  	<div class="row card-info-row">
+				                 		<p:commandLink onclick="showHistoryDialog();" 
+				                 			value="Үзлэгийн түүх" styleClass="card-info-label"/>
+				                 	</div>
+					          	</div>
+					        </div>
+				    	</div>
+					</div>
+					<p:remoteCommand name="showHistoryDialog" process="@this" action="#{cashController.showCustomerInspectionHistory()}" />
+					<p:dialog widgetVar="inspectionHistoryDialog" id="inspectionHDialog" modal="true" resizable="false"
+					width="700" height="500" header="Эмчилгээний түүх" onShow="hideLoader();">
+						<p:dataTable value="#{cashController.inspections}" var="item">
+							<p:column headerText="Үзсэн эмч">#{item.employeeName}</p:column>
+							<p:column headerText="Огноо">#{item.getInspectionDate()}</p:column>
+							<p:column headerText=""><p:commandLink process="@this" action="#{cashController.selectedEmployeeRequest(item.requestPkId)}" value="Сонгох" /></p:column>
+						</p:dataTable>
+					</p:dialog>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Регистрийн №: </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control lastname" style="min-width: 100%;" id="reg" value="#{cashController.selectedCashCustomer.regNumber}" />
+							</div>
+						</div>
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Овог: </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control lastname" style="min-width: 100%;" id="lastName" value="#{cashController.selectedCashCustomer.lastName}" />
+							</div>
+						</div>
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Нэр: </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control firstname" style="min-width: 100%;" id="firstName" value="#{cashController.selectedCashCustomer.firstName}" />
+							</div>
+						</div>
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Нас хүйс: </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control gender" style="min-width: 100%;" id="gender" value="#{cashController.selectedCashCustomer.genderStr}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Картын дугаар: </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control lastname" style="min-width: 100%;" id="lastName1" value="#{cashController.selectedCashCustomer.cardNumber}" />
+							</div>
+						</div>
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Утасны дугаар : </label>
+							</div>
+							<div class="col-md-8">
+								<p:inputText disabled="true" styleClass="form-control lastname" style="min-width: 100%;" id="lastName2" value="#{cashController.selectedCashCustomer.phoneNumber}" />
+							</div>
+						</div>
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Карт нээлгэсэн огноо : </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control firstname" style="min-width: 100%;" id="lastName3" value="#{cashController.selectedCashCustomer.dateString}" ></p:inputText>
+							</div>
+						</div>
+						<div class="row flex-container">
+							<div class="col-md-4 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Нас: </label>
+							</div>
+							<div class="col-md-8 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText disabled="true" styleClass="form-control gender" style="min-width: 100%;" id="lastName4" value="#{cashController.selectedCashCustomer.age}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<p:remoteCommand name="xaxaxa" action="#{reportController.InspectionHistoryByCash()}" />
+				<div class="row no-print" style="display: none;">
+					<div class="col-md-12">
+						<p:dataTable styleClass="myTable" value="#{cashController.listEmployee}" var="info" rowIndexVar="index">
+							<p:column headerText="№">#{index + 1}</p:column>
+							<p:column headerText="Эмчийн нэр"><h:outputText styleClass="form-control selectioninput" value="#{info.firstName}" /></p:column>
+							<p:column width="15%" style="text-align: center;" headerText=""></p:column>
+							<p:column headerText="Үзлэгийн үнэ"><h:outputLabel value="#{info.price}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+						</p:dataTable>
+					</div>
+				</div><br/>
+				<div class="row no-print" style="display: none;">
+					<div class="col-md-4"></div>
+					<div class="col-md-4"></div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-5"><label style="font-weight: 100; font-size: 11px; margin-top: 5px;">Нийт дүн :</label></div>
+							<div class="col-md-7"><p:inputText disabled="true" style="min-width: 100%;" styleClass="form-control gender" value="#{cashController.payment.balanceAmount}" ><f:convertNumber pattern="###,###,###.00"></f:convertNumber></p:inputText></div>
+						</div>
+					</div>
+				</div><br/>
+				<div class="row no-print">
+					<p:remoteCommand name="calculatePayment" process="@this :form:myTable :form:myTable1 :form:myTable2 :form:myTable3 :form:myTable4" action="#{cashController.calculatePayment2()}" update=":form:payment1 :form:payment2 :form:payment3 :form:payment4 :form:payment5 :form:payment6 :form:payment7 :form:payment8 :form:payment9 :form:payment10 :form:payment11 :form:myTable" />
+					<div class="col-md-12">
+						<p:dataTable id="myTable" emptyMessage="хоосон байна" styleClass="myTable" value="#{cashController.listTreatmentCashByInspectionDtl}" var="info" rowIndexVar="index">
+							<p:columnGroup type="header">
+								<p:row>
+									<p:column width="5%" rowspan="2" styleClass="index" headerText="№" />
+									<p:column width="20%" rowspan="2" headerText="Эмчилгээний нэр" />
+									<p:column rowspan="1" colspan="5" headerText="Эмчилгээний мэдээлэл" />
+									<p:column rowspan="1" headerText="Төлөх дүн" />	
+								</p:row>
+								<p:row>
+									<p:column width="12%" rowspan="1" headerText="Нэгж/үнэ" />
+									<p:column width="15%" rowspan="1" headerText="Тоо" />
+									<p:column width="12%" rowspan="1" headerText="Нийт үнэ" />
+									<p:column width="12%" rowspan="1" headerText="Хийлгэсэн тоо" />
+									<p:column width="12%" rowspan="1" headerText="Хийлгэх тоо" />
+									<p:column width="12%" rowspan="1" headerText="" />
+								</p:row>
+							</p:columnGroup>
+						
+							<p:column styleClass="index">#{index + 1}</p:column>
+							<p:column>
+								<p:outputLabel rendered="#{info.status ne 'Last'}" value="#{info.name}" />
+								<p:autoComplete rendered="#{info.status eq 'Last'}" style="width: 100% !important;" value="#{info.name}" completeMethod="#{cashController.getLstTreatmentStr}">
+									<p:ajax event="itemSelect" listener="#{cashController.onLstTreatmentStr}" update="@(.myTable)" oncomplete="calculatePayment();" />
+								</p:autoComplete>
+							</p:column>
+							<p:column><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.price}" /></p:column>
+							<p:column>
+								<pe:inputNumber rendered="#{info.status ne 'Added' and info.status ne 'Last'}" disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.dayLength}" />
+								<p:outputLabel rendered="#{info.status eq 'Added' or info.status eq 'Last'}" value="~" style="width: 100%; text-align: center;" />
+							</p:column>
+							<p:column><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.allAmount}" /></p:column>
+							<p:column><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.userCount}" /></p:column>
+							<p:column><pe:inputNumber style="min-width: 100%; text-align: right;" minValue="0" maxValue="#{info.dayLength - info.userCount}" styleClass="form-control number-control" value="#{info.treatmentCount}" onchange="calculatePayment();" /></p:column>
+							<p:column><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" symbol="₮" symbolPosition="s" styleClass="form-control number-control" value="#{info.amount}" /></p:column>
+						</p:dataTable>
+					</div>
+				</div><br/>
+				<div class="row no-print">
+					<div class="col-md-8"></div>
+					<div class="col-md-4" style="display: none;">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Хөнгөлөлттөй дүн:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText id="payment2" disabled="true" style="min-width: 100%;" styleClass="form-control number-control" value="#{cashController.payment.balanceAmount}" ><f:convertNumber pattern="###,###,###.00"></f:convertNumber></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Тарифийн дүн:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="form-control number-control" id="payment1" disabled="true" symbol="₮" symbolPosition="s" value="#{cashController.payment.treatmentAmount}" />
+							</div>
+						</div>
+					</div>
+				</div><br/>
+				<div class="row no-print">
+					<div class="col-md-6">
+						<p:dataTable id="myTable1" emptyMessage="хоосон байна" styleClass="myTable" value="#{cashController.listXrayCashByInspectionDtl}" var="info" rowIndexVar="index">
+							<p:column styleClass="index" headerText="№" width="5%">#{index + 1}</p:column>
+							<p:column headerText="Оншилгоо нэр">
+								<p:inputText onclick="addXray#{index + 1}();" style="width: 100%;" value="#{info.name}" />
+								<p:remoteCommand name="addXray#{index + 1}" process="@this" actionListener="#{cashController.addXray(info)}" />
+							</p:column>
+							<p:column width="12%" headerText="Үндсэн үнэ"><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.price}" /></p:column>
+							<p:column headerText="Эмч">
+								<p:selectOneMenu style="width: 100%;" value="#{info.xrayEmployeePkId}">
+									<f:selectItems value="#{cashController.xrayEmployeeList}" var="xem" itemLabel="#{xem.firstName}" itemValue="#{xem.pkId}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column width="5%" headerText=""><p:selectBooleanCheckbox disabled="#{info.status == 'Added' || info.status == 'Unchanged'}" style="width: 100%; text-align: center;" value="#{info.selected}" onchange="calculatePayment();" /></p:column>
+						</p:dataTable>
+					</div>
+					<div class="col-md-6">
+						<p:dataTable id="myTable2" emptyMessage="хоосон байна" styleClass="myTable" value="#{cashController.listExamnationCashByInspectionDtl}" var="info" rowIndexVar="index">
+							<p:column styleClass="index" headerText="№" width="5%">#{index + 1}</p:column>
+							<p:column headerText="Шинжилгээ нэр">
+								<p:inputText onclick="addExamination#{index + 1}();" style="width: 100%;" value="#{info.name}" />
+								<p:remoteCommand name="addExamination#{index + 1}" process="@this" actionListener="#{cashController.addExamination(info)}" />
+							</p:column>
+							<p:column width="12%" headerText="Үндсэн үнэ"><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.price}" /></p:column>
+							<p:column width="5%" headerText=""><p:selectBooleanCheckbox disabled="#{info.status == 'Added' || info.status == 'Unchanged'}" style="width: 100%; text-align: center;" value="#{info.selected}" onchange="calculatePayment();" /></p:column>
+						</p:dataTable>
+					</div>
+				</div><br/>
+				<div class="row no-print">
+					<div class="col-md-6">
+						<div class="row flex-container ">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px; float: right;">Тарифийн дүн:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right; float: right;" styleClass="form-control number-control" id="payment3" disabled="true" symbol="₮" symbolPosition="s" value="#{cashController.payment.xrayAmount}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px; float: right;">Тарифийн дүн:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right; float: right;" styleClass="form-control number-control" id="payment4" disabled="true" symbol="₮" symbolPosition="s" value="#{cashController.payment.examnationAmount}" />
+							</div>
+						</div>
+					</div>
+					
+				</div><br/>
+				<div class="row no-print">
+					<div class="col-md-6">
+						<p:dataTable id="myTable3" emptyMessage="хоосон байна" styleClass="myTable" value="#{cashController.listSurgeryCashByInspectionDtl}" var="info" rowIndexVar="index">
+							<p:column styleClass="index" headerText="№" width="5%">#{index + 1}</p:column>
+							<p:column headerText="Мэс засал">
+								<p:outputLabel rendered="#{info.status ne 'Last'}" value="#{info.name}" />
+								<p:inputText style="width: 100%;" onclick="PF('surgeryChosen').show();" rendered="#{info.status eq 'Last'}" />
+							</p:column>
+							<p:column headerText="Үндсэн үнэ" width="12%"><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" styleClass="form-control number-control" value="#{info.price}" /></p:column>
+							<p:column width="5%" headerText=""><p:selectBooleanCheckbox disabled="#{info.status == 'Added' || info.status == 'Unchanged'}" style="width: 100%; text-align: center;" value="#{info.selected}" onchange="calculatePayment();" /></p:column>
+						</p:dataTable>
+					</div>
+					<div class="col-md-6">
+						<p:dataTable styleClass="myTable" id="myTable4" emptyMessage="хоосон байна" value="#{cashController.listRequestByInspectionDtl}" var="info" rowIndexVar="index">
+							<p:column styleClass="index" headerText="№" width="5%">#{index + 1}</p:column>
+							<p:column headerText="Эмчийн нэр">#{info.name}</p:column>
+							<p:column width="15%" style="text-align: center;" headerText="">#{info.inspectionStatus}</p:column>
+							<p:column width="20%" headerText="Үзлэгийн үнэ"><pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" minValue="0" styleClass="form-control number-control" symbol="₮" symbolPosition="s" value="#{info.price}" /></p:column>
+							<p:column width="15%" headerText="Үзлэгийн огноо" style="text-align: center;">#{info.requestDateStr}</p:column>
+							<p:column width="5%" headerText=""><p:selectBooleanCheckbox style="width: 100%; text-align: center;" value="#{info.selected}" onchange="calculatePayment();" /></p:column>							
+						</p:dataTable>
+					</div>
+				</div><br/>
+				<div class="row no-print">
+					<div class="col-md-6">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px; float: right;">Тарифийн дүн:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right; float: right;" styleClass="form-control number-control" id="payment11" disabled="true" symbol="₮" symbolPosition="s" value="#{cashController.payment.surgeryAmount}" />
+							</div>
+						</div>
+					</div>
+				</div><br/>
+				<div class="row no-print">
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Нийт дүн:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="form-control number-control" id="payment5" disabled="true" symbol="₮" symbolPosition="s" value="#{cashController.payment.basicAmount}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Хөнгөлөлт:</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="form-control number-control" id="payment6" minValue="0" maxValue="100" symbol="%" symbolPosition="s" value="#{cashController.payment.discountPercent}" onchange="onChangeDiscountAmount();" />
+								<p:remoteCommand name="onChangeDiscountAmount" process="@this form:payment6" actionListener="#{cashController.discountPayment()}" update=":form:payment7 :form:payment8 :form:payment9 :form:payment10" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px; margin-top: 5px;">Төлөгдөх дүн :</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber style="min-width: 100%; text-align: right;" disabled="true" styleClass="form-control number-control" id="payment7" symbol="₮" symbolPosition="s" value="#{cashController.payment.amount}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-print">
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Тайлбар бичих бол :</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<p:inputText id="payment8" style="min-width: 100%;" styleClass="form-control number-control payment-controll" value="#{cashController.payment.description}" onchange="changeInAmount();" ></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Одоо төлөх :</label>
+							</div>
+							<div class="col-md-7 col-xs-12 col-sm-12 flex-center-self">
+								<pe:inputNumber disabled="true" style="min-width: 100%; text-align: right;" minValue="0" maxValue="#{cashController.payment.amount}" styleClass="form-control number-control" id="payment9" symbol="₮" symbolPosition="s" value="#{cashController.payment.paidAmount}" onchange="changeInAmount();" />
+							</div>
+							<p:remoteCommand name="changeInAmount" process=":form:payment9" update=":form:payment10" />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row flex-container">
+							<div class="col-md-5 col-xs-12 col-sm-12 flex-center-self">
+								<label style="font-weight: 100; font-size: 11px;">Үлдэгдэл :</label>
+							</div>
+							<div class="col-md-7">
+								<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="form-control number-control" id="payment10" symbol="₮" symbolPosition="s" value="#{cashController.payment.balanceAmount}" disabled="true" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-print">
+					<div class="col-md-12 text-align-right">
+						<p:commandLink onclick="showLoader();" process="@this" style="margin-top: 10px;" action="#{cashController.savePaymentByManyRequest}" 
+							styleClass="btn" update=":form:message">
+							<i class="fa fa-fw fa-check"/> Хадгалах
+						</p:commandLink>
+					</div>
+				</div>
+				<p:remoteCommand name="inspectionHistory123" actionListener="#{cashController.inspectionHistory()}" process="@this" />
+					
+				<p:dialog widgetVar="selectionXray" id="xrayList" modal="true" resizable="false"  width="450" height="250" header="Оношилгоо сонгох">
+					
+				</p:dialog>
+				<p:dialog id="xraySelectDialog" widgetVar="xraySelectDialog" modal="true" width="600" height="400" header="Шинжилгээ сонгох" resizable="false">
+					<div class="row">
+						<div class="col-md-4" style="display: block; overflow: auto; height: 400px; overflow-x: hidden;">
+							<ui:repeat value="#{cashController.xrayTypes}" var="xrayType">
+								<p:commandLink process="@this" actionListener="#{cashController.setSelectXrayType(xrayType)}" value="#{xrayType.name}" update=":form:xrays" styleClass="ui-commandlink ui-widget btn btn-block bg-olive btn-xs" style="width: 100%;" />
+							</ui:repeat>
+						</div>
+						<div class="col-md-8">
+							<p:dataTable id="xrays" value="#{cashController.xrays}" var="xray" style="display: block; overflow: auto; height: 400px; overflow-x: hidden;" selectionMode="single" selection="#{cashController.selectXray}" rowKey="#{xray.pkId}">
+								<p:ajax event="rowSelect" listener="#{cashController.addXray()}" />
+								<p:column headerText="Нэр">#{xray.name}</p:column>
+								<p:column headerText="Үнэ"><pe:inputNumber disabled="true" value="#{xray.priceIn}" style="text-align: right;" symbol="₮" symbolPosition="s" /></p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:dialog>
+				<!-- Эмчилгээний түүхийг хугацаагаар шүүж харах -->
+				<p:dialog id="examinationSelectDialog" widgetVar="examinationSelectDialog" modal="true" width="1000" onHide="calculatePayment();" height="400" header="Шинжилгээ сонгох" resizable="false">
+					<div class="row" style="height: 400px; display: block; overflow: auto;" >
+						<div class="col-md-4" style="display: block; overflow: auto; height: 400px; overflow-x: hidden;">
+							<ui:repeat value="#{cashController.examinationTypes}" var="examinationType">
+								<p:commandLink process="@this" actionListener="#{cashController.setSelectedExaminationType(examinationType)}" value="#{examinationType.name}" update=":form:examinationsT :form:examinationsTmp" styleClass="ui-commandlink ui-widget btn btn-block bg-olive btn-xs" style="width: 100%;" />
+							</ui:repeat>
+						</div>
+						<div class="col-md-4">
+							<p:treeTable id="examinationsT" value="#{cashController.examinationTreeNode}" var="examination" style="width: 300px !important;">
+								<p:column headerText="Нэр"><p:outputLabel value="#{examination.name}" style="width: 100px !important;" /></p:column>
+								<p:column headerText="Үнэ"><pe:inputNumber disabled="true" value="#{examination.price}" style="width: 100px !important;text-align: right;" symbol="₮" symbolPosition="s" /></p:column>
+								<p:column style="width: 20px !important"><p:commandLink styleClass="fa fa-arrow-circle-right" action="#{cashController.examinationChosen(examination)}" process=":form:examinationsT" update=":form:examinationsTmp"></p:commandLink></p:column>
+							</p:treeTable>
+						</div>
+						<div class="col-md-4">
+							<p:treeTable id="examinationsTmp" value="#{cashController.examinationTmpTreeNode}" var="exa">
+								<p:column headerText="Нэр"><p:outputLabel value="#{exa.name}" style="width: 100px !important;" /></p:column>
+								<p:column headerText="Үнэ"><pe:inputNumber disabled="true" value="#{exa.price}" style="width: 100px !important;text-align: right;" symbol="₮" symbolPosition="s" /></p:column>
+								<p:column style="width: 20px !important"><p:commandLink styleClass="fa fa-fw fa-remove color-red" action="#{cashController.examinationDelete(exa)}" process=":form:examinationsTmp" update=":form:examinationsTmp"></p:commandLink></p:column>
+							</p:treeTable>
+							<p:commandLink value="Сонгох" styleClass="btn pull-right margin-top" process="@this" action="#{cashController.examinationTmpToListInspectionDtl()}" oncomplete="PF('examinationSelectDialog').hide();" update=":form:myTable2" />
+						</div>
+					</div>
+				</p:dialog>
+				<p:dialog onShow="calendarStyleChange();" 
+				widgetVar="inspectionHistoryFilter" id="inspectionHistoryFilter" modal="true" width="400" height="120" header="Эмчилгээний түүх" resizable="false">
+					<div class="row">
+						<div class="col-md-5">
+							<h:selectOneMenu styleClass="form-control" value="#{reportController.reportFillter.filteredType}" onchange="reportFilteredTypeChange();">
+								<f:selectItem itemLabel="Хугацаа хооронд" itemValue="between" />
+								<f:selectItem itemLabel="Хойш" itemValue="after" />
+								<f:selectItem itemLabel="Өмнөх" itemValue="before" />
+								<f:selectItem itemLabel="Өдөр" itemValue="equals" />
+							</h:selectOneMenu>
+							<p:remoteCommand name="reportFilteredTypeChange" update=":form:reportFilteredType :form:js" />
+						</div>
+						<div class="col-md-7">
+							<p:panel id="reportFilteredType" style="border: 0px; margin: -0.5em -1em; !important; padding: 0px 0px 0px 0px !important;">
+								<p:panel id="reportFilteredType1" rendered="#{reportController.reportFillter.filteredType eq 'between'}" style="border: 0px; margin: -0.5em -1em; !important; padding: 0px 0px 0px 0px !important;">
+									<div class="row">
+										<div class="col-md-5">
+											<p:calendar styleClass="clendar" value="#{reportController.reportFillter.beginDate}" style="width: 100%; background-color: white; border-radius: 0;" />
+										</div>
+										<div class="col-md-2"><center> - </center></div>
+										<div class="col-md-5">
+											<p:calendar styleClass="clendar" value="#{reportController.reportFillter.endDate}" style="width: 100%; background-color: white; border-radius: 0;" />
+										</div>
+									</div>
+								</p:panel>
+								<p:panel id="reportFilteredType2" rendered="#{reportController.reportFillter.filteredType eq 'after'}" style="border: 0px; margin: -0.5em -1em; !important; padding: 0px 0px 0px 0px !important;">
+									<div class="row">
+										<div class="col-md-10">
+											<p:calendar styleClass="clendar" value="#{reportController.reportFillter.beginDate}" style="width: 100%; background-color: white; border-radius: 0;" />
+										</div>
+										<div class="col-md-2"><center> - </center></div>
+									</div>
+								</p:panel>
+								<p:panel id="reportFilteredType3" rendered="#{reportController.reportFillter.filteredType eq 'before'}" style="border: 0px; margin: -0.5em -1em; !important; padding: 0px 0px 0px 0px !important;">
+									<div class="row">
+										<div class="col-md-2"><center> - </center></div>
+										<div class="col-md-10">
+											<p:calendar styleClass="clendar" value="#{reportController.reportFillter.endDate}" style="width: 100%; background-color: white; border-radius: 0;" />
+										</div>
+									</div>
+								</p:panel>
+								<p:panel id="reportFilteredType4" rendered="#{reportController.reportFillter.filteredType eq 'equals'}" style="border: 0px; margin: -0.5em -1em; !important; padding: 0px 0px 0px 0px !important;">
+									<div class="row">
+										<div class="col-md-12">
+											<p:calendar styleClass="clendar" value="#{reportController.reportFillter.endDate}" style="width: 100%; background-color: white; border-radius: 0;" />
+										</div>
+									</div>
+								</p:panel>
+							</p:panel>
+						</div>
+					</div><br/><br/>
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<center><p:commandLink style="width: 100%;" styleClass="btn btn-primary" value="Хэвлэх" /></center>
+						</div>
+						<div class="col-md-4">
+							<center><p:commandLink style="width: 100%;" styleClass="btn btn-primary" value="Харах" /></center>
+						</div>
+					</div>
+				</p:dialog>
+				<p:dialog styleClass="confirmDialog" widgetVar="confirmDialogDelete" modal="true"
+					resizable="false" width="300">
+					<table class="panel-confirm-dialog">
+						<tr>
+							<td class="panel-confirm-dialog-icon">
+								<i class="fa fa-fw fa-warning color-orange"/>
+							</td>
+							<td class="panel-confirm-dialog-text">
+								Та устгахдаа итгэлтэй байна уу?
+							</td>
+						</tr>
+					</table>
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-md-1"></div>
+							<div class="col-md-5">
+								<h:inputHidden id="deleteIndexOfList" value="#{cashController.deleteIndexOfList}" />
+									<p:commandLink styleClass="medit-btn medit-btn-primary" process="@this"
+										action="#{cashController.deleteIndexOfList()}"
+										style="font-size: 12px;color: white;"><i class="fa fa-fw fa-check"/>Устгах</p:commandLink>
+							</div>
+							<div class="col-md-5">
+								<p:commandLink styleClass="medit-btn medit-btn-danger"
+									oncomplete="PF('confirmDialogDelete').hide();" style="font-size: 12px;color: white;">
+									<i class="fa fa-fw fa-times"/> Болих</p:commandLink>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</div>
+				</p:dialog>
+				
+				<p:dialog widgetVar="inspectionHistoryDateSelect" onShow="hideLoader();" modal="true" resizable="false" 
+					width="400" header="Огноо сонгох">
+						<div class="col-xs-12 margin-bottom">
+							<div class="flex-container">
+								<label class="flex-center-self">Огноо:</label>
+								<p:calendar id="beginFilterBeginDate" styleClass="date-control flex-center-self" 
+									style="margin:0px 10px !important" value="#{cashController.beginFilterBeginDate}" />
+								<label class="flex-center-self">-</label>
+								<p:calendar id="beginFilterEndDate" styleClass="date-control flex-center-self" 
+									style="margin:0px 10px !important" value="#{cashController.beginFilterEndDate}" />
+							</div>
+						</div>
+						<div class="col-xs-12 text-align-right">
+							<p:commandLink onclick="showLoader();" styleClass="medit-btn medit-btn-primary" process=":form:beginFilterBeginDate :form:beginFilterEndDate" 
+								oncomplete="PF('inspectionHistoryDateSelect').hide();inspectionHistory123();" value="Сонгох"></p:commandLink>
+							<p:commandLink styleClass="medit-btn medit-btn-danger" oncomplete="PF('inspectionHistoryDateSelect').hide();" 
+								style="margin-left: 10px;" value="Болих"  />
+						</div>
+				</p:dialog>
+				
+				<!-- Эмчилгээний түүх -->
+				<p:dialog widgetVar="inspectionHistory" id="inspectionHistoryDialog" modal="true" resizable="false" styleClass="dialog-scroll"
+					width="720" height="500" header="Эмчилгээний түүх" onShow="hideLoader();">
+					<p:outputPanel>
+						<table id="print" style="width: 100%;">
+					    	<tr>
+					    		<td style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+					    			Эмчилгээний түүх
+					    		</td>
+					    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+					    			Байгууллагын нэр
+					    		</td>
+					    	</tr>
+					    	<tr>
+					    		<td colspan="3" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+					    			Эмчилгээний түүх
+					    		</td>
+					    	</tr>
+					    	<tr>
+					    		<td style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+					    			Овог: #{cashController.selectedCashCustomer.lastName}
+					    		</td>
+					    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+					    			Нэр: #{cashController.selectedCashCustomer.firstName}
+					    		</td>
+					    	</tr>
+					    	<tr>
+					    		<td style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+					    			Регитрийн дугаар: #{cashController.selectedCashCustomer.regNumber}
+					    		</td>
+					    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+					    			Нас, хүйс: #{cashController.selectedCashCustomer.age}, #{cashController.selectedCashCustomer.gender}
+					    		</td>
+					    	</tr>
+					    	<tr>
+					    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:right;vertical-align: middle;">
+					    			Хугацаа : 
+					    			<h:outputLabel value="#{cashController.beginFilterBeginDate}" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;">
+					    				<f:convertDateTime pattern="yyyy/MM/dd" />
+					    			</h:outputLabel> 
+					    				-
+					    			<h:outputLabel value="#{cashController.beginFilterEndDate}" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;">
+					    				<f:convertDateTime pattern="yyyy/MM/dd"/>
+					    			</h:outputLabel> 
+					    		</td>
+					    	</tr>
+				            <tr>
+				                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+				                	Эмчилгээ
+				                </td>
+				                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+				                	Тоо хэмжээ
+				                </td>
+				                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+				                	Дүн
+				                </td>
+				            </tr>
+				            <ui:repeat value="#{cashController.listEmployeeRequests}" var="item">
+				            	<tr>
+				            		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;padding:5px;">
+				            			Огноо: #{item.inspection.inspectionDate}                           Эмч: #{item.employee.firstName}
+				            		</td>
+				            	</tr>
+							<!-- бүлэг эхлэл -->
+								<ui:repeat value="#{item.treatments}" var="tr">
+									<tr>
+										<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+											#{tr.name}
+										</td>
+										<td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+											1
+										</td>
+										<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+											<h:outputLabel value="#{tr.price}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+												<f:convertNumber type="currency" currencySymbol=" "/>
+											</h:outputLabel>
+										</td>
+									</tr>
+								</ui:repeat>
+								<tr>
+									<td colspan="2" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+										Бүлгийн дүн: 
+									</td>
+									<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+										<h:outputLabel value="#{item.sumAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+											<f:convertNumber type="currency" currencySymbol=" "/>
+										</h:outputLabel>
+									</td>
+								</tr>
+							<!-- бүлэг төгсгөл -->
+							</ui:repeat>
+							<tr>
+								<td colspan="2" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+									НИЙТ ДҮН:
+								</td>
+								<td style="text-align: right;vertical-align: middle;padding:5px;">
+									<h:outputLabel value="#{cashController.getSumAmountInspectionHistory()}" style="font-size: 12px;font-family: Times New Roman;font-weight: bold;margin-bottom:0px;"> 
+											<f:convertNumber type="currency" currencySymbol=" "/>
+									</h:outputLabel>
+								</td>
+							</tr>
+							<tr>
+								<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+									Тайлан гаргасан:
+								</td>
+								<td colspan="2" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+									......................................./ #{userController.loggedInfo.user.name} /
+								</td>
+							</tr>
+							<tr>
+								<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+									Хянасан:
+								</td>
+								<td colspan="2" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+									......................................./......................................./
+								</td>
+							</tr>
+					    </table>
+					</p:outputPanel>
+						<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print');">
+		                	<i class="fa fa-print color-blue"></i> Хэвлэх
+		                </a>
+		                <a class="btn btn-app" href="javascript:void(0)" onclick="printToPDF();">
+		                	<i class="fa fa-file-pdf-o color-red"></i> PDF
+		                	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+		                </a>
+		                <a class="btn btn-app" href="javascript:void(0)" onclick="tableToExcel('print','Эмчилгээний түүх');">
+		                	<i class="fa fa-file-excel-o color-green"></i> XLS
+		                </a>
+				</p:dialog>
+				
+				<!-- Захиалгын түүх -->
+				<p:dialog widgetVar="requestHistory" id="requestHistoryDialog" modal="true"
+					resizable="false" width="600" height="400" header="Захиалгын түүх" onShow="hideLoader();">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable styleClass="myTable" value="#{cashController.listEmployeeRequest}" var="info" rowIndexVar="index" scrollable="true" scrollHeight="350">
+								<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+								<p:column styleClass="text" headerText="Эмчийн нэр">#{info.employee.firstName}</p:column>
+								<p:column styleClass="text" headerText="Төлбөрийн мэдээлэл">#{info.paymentTypeString}</p:column>
+								<p:column styleClass="date" headerText="Захиалсан огноо"><h:outputLabel value="#{info.beginDate}"><f:convertDateTime pattern="yyyy-MM-dd hh:mm"></f:convertDateTime> </h:outputLabel></p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:dialog>
+				
+				<p:dialog widgetVar="surgeryChosen" id="surgeryChosen" modal="true" resizable="false"
+					width="700" height="500" header="Мэс засал сонгох" onShow="hideLoader();" onHide="calculatePayment();">
+					<div class="row">
+						<div class="col-xs-4">
+							<p:remoteCommand process="@this" name="listSurgeryTable" update="@(.listSurgeryTable)" />
+							<p:dataTable value="#{cashController.surgeryTypes}" var="surgeryType" selectionMode="single" rowKey="#{surgeryType.pkId}" selection="#{cashController.selectedSurgeryType}">
+								<p:ajax event="rowSelect" oncomplete="listSurgeryTable();" />
+								<p:column headerText="Төрөл">#{surgeryType.name}</p:column>
+							</p:dataTable>
+						</div>
+						<div class="col-xs-4">
+							<p:remoteCommand name="chosenSurgery" process="@this" action="#{cashController.chosenSurgery()}" update="@(.listChosenSurgeryTable)" />
+							<p:dataTable styleClass="listSurgeryTable" value="#{cashController.listSurgery}" var="sur" rowKey="#{sur.pkId}" selectionMode="single" selection="#{cashController.selectedSurgery}" scrollable="true" scrollHeight="450">
+								<p:ajax event="rowDblselect" oncomplete="chosenSurgery();" />
+								<p:column headerText="Нэр">#{sur.name}</p:column>
+								<p:column headerText="Үнэ">#{sur.price}</p:column>
+							</p:dataTable>
+						</div>
+						<div class="col-xs-4">
+							<p:dataTable styleClass="listChosenSurgeryTable" value="#{cashController.listChosenSurgery}" var="surgery" scrollable="true" scrollHeight="450">
+								<p:column headerText="Нэр">#{surgery.name}</p:column>
+								<p:column headerText="Үнэ">#{surgery.price}</p:column>
+							</p:dataTable>
+							<p:commandLink styleClass="btn pull-right margin-top" process="@this" action="#{cashController.insertSurgery()}" value="Сонгох" />
+						</div>
+					</div>
+				</p:dialog>
+				
+				<p:dialog styleClass="confirmDialog" widgetVar="showNoneFilledCustomer" modal="true"
+					resizable="false" width="300" height="100">
+					<table class="panel-confirm-dialog">
+						<tr>
+							<td class="panel-confirm-dialog-icon">
+								<i class="fa fa-fw fa-warning color-orange"/>
+							</td>
+							<td class="panel-confirm-dialog-text">
+								Та <h:outputLabel styleClass="filledReg" style="color: green;" value="#{cashController.selectedCustomerReg}" id="registrrrrr" /> регистртэй хэрэглэгч бүртгэхдээ итгэлтэй байна уу?
+							</td>
+						</tr>
+					</table>
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-md-1"></div>
+							<div class="col-md-5">
+								<p:commandLink styleClass="medit-btn medit-btn-primary"
+									action="#{userController.url('customer_register')}">
+									<i class="fa fa-fw fa-check"/> Бүртгэх</p:commandLink>
+							</div>
+							<div class="col-md-5">
+								<p:commandLink styleClass="medit-btn medit-btn-danger"
+									oncomplete="PF('confirmDialogDelete').hide();">
+									<i class="fa fa-fw fa-check"/> Болих</p:commandLink>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</div>
+				</p:dialog>
+				
+				<p:dialog widgetVar="paymentHistory" id="paymentHistoryDialog" modal="true" resizable="false"
+					width="700" height="500" header="Эмчилгээний түүх" onShow="hideLoader();">
+					
+					<p:dataTable id="organizationList" emptyMessage="Хоосон байна" styleClass="myTable" value="#{cashController.customerPaymentList}" var="info" rowIndexVar="index">
+						<p:column styleClass="index" headerText="№">#{index + 1}</p:column>
+						<p:column styleClass="amount" headerText="Нийт дүн"><h:outputLabel value="#{info.amount}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+						<p:column headerText="Төлөх дүн"><h:outputLabel value="#{info.cost}"><f:convertNumber pattern="###,###,###.00"></f:convertNumber> </h:outputLabel></p:column>
+						<p:column headerText="" width="10%">
+							<div onclick="click#{index + 1}();" class="progress progress-xs progress-striped active">
+	                          <div class="progress-bar progress-bar-success" style="width: #{info.amountPercent}%"></div>
+	                        </div>
+	                        <span onclick="click#{index + 1}();" class="badge bg-green" style="margin-top: -20px;">#{info.amountPercent}%</span>
+	                        <p:remoteCommand onstart="showLoader();" process="@this" name="click#{index + 1}" actionListener="#{cashController.showHistory}">
+	                        	<f:setPropertyActionListener target="#{cashController.selectedHistory}" value="#{info}"></f:setPropertyActionListener>
+	                        </p:remoteCommand>
+						</p:column>
+						<p:column headerText="">
+							<p:commandLink rendered="#{info.type == 'Unchanged'}" styleClass="fa fa-fw fa-cc-mastercard" action="#{cashController.selectedCashCustomer(info.customerPkId)}" />
+						</p:column>
+					</p:dataTable>
+					
+				</p:dialog>
+				<p:dialog onShow="hideLoader();" widgetVar="historyDialog" id="historyDialog" modal="true" resizable="false" width="450" height="200" header="Төлбөр төлөх">
+					
+						
+				</p:dialog>
+			</div>
+		</section>
+		<p:panel style="display: none;" id="js">
+		<script>
+		//<![CDATA[
+			
+			//]]>
+		</script>
+		</p:panel>
+	</ui:define>
+</ui:composition>

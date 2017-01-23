@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Оношилгооны жагсаалт</h1>
+
+		<ol class="breadcrumb">
+			<li class="active">Оношилгоо</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row flex-container">
+					<div class="col-md-4 flex-center-self">
+						<div class="flex-container">
+							<label class="flex-center-self">#{i18n['filter']}: </label>
+							<p:calendar id="beginDate" pattern="yyyy-MM-dd" mask="true"
+								value="#{xrayController.filterDate1}" style="margin: 0px 10px;"
+								styleClass="date-control" onchange="changeDate(); "
+								update=":form:doctorInspection" navigator="true">
+								<p:ajax event="dateSelect"
+									listener="#{xrayController.refreshXrayRequests()}"
+									update=":form:xrayRequests" />
+							</p:calendar>
+							<label class="flex-center-self">-</label>
+							<p:calendar id="endDate" pattern="yyyy-MM-dd" mask="true"
+								value="#{xrayController.filterDate2}" style="margin: 0px 10px;"
+								styleClass="date-control" onchange="changeDate(); "
+								update=":form:doctorInspection" navigator="true">
+								<p:ajax event="dateSelect"
+									listener="#{xrayController.refreshXrayRequests()}"
+									update=":form:xrayRequests" />
+							</p:calendar>
+						</div>
+					</div>
+					<div class="col-md-1 col-sm-12 col-xs-12 flex-center-self">
+						<label class="flex-center-self">#{i18n['search']}: </label>
+					</div>
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<p:inputText id="srch" value="#{xrayController.searchKey}"
+							onkeyup="changeDate();">
+						</p:inputText>
+						<p:watermark for="form:srch"
+							value="#{i18n['card_number']}, #{i18n['last_name']}, #{i18n['first_name']}, #{i18n['register_number']}" />
+					</div>
+
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<p:inputText id="srch1" value="#{xrayController.searchKey1}"
+							onkeyup="changeDate();">
+						</p:inputText>
+						<p:watermark for="form:srch1" value="#{i18n['by_doctor_name']}" />
+					</div>
+
+					<div
+						class="col-md-1 col-sm-12 col-xs-12 flex-center-self text-right">
+						<p:selectBooleanCheckbox value="#{xrayController.done}"
+							onchange="changeDate();" />
+					</div>
+					<div class="col-md-2 col-sm-12 col-xs-12 flex-center-self">
+						<label class="flex-center-self">#{i18n['distinct_unacted_xray']}</label>
+					</div>
+				</div>
+				<p:remoteCommand name="changeDate"
+					actionListener="#{xrayController.refreshXrayRequests()}"
+					update=":form:xrayRequests"></p:remoteCommand>
+				<p:remoteCommand name="expandModule"
+					action="#{xrayController.expandModule}" />
+				<p:dataTable id="xrayRequests" styleClass="myTable"
+					value="#{xrayController.xrayRequests}" var="info"
+					rowIndexVar="index" emptyMessage="#{i18n['empty']}"
+					selection="#{xrayController.currentXrayRequest}"
+					selectionMode="single" rowKey="#{info.pkId}">
+					<p:ajax event="rowDblselect" onstart="expandModule();" />
+					<p:column styleClass="index" headerText="№"> #{index + 1}</p:column>
+					<p:column styleClass="id" headerText="#{i18n['card_number']}"> #{info.customer.cardNumber}</p:column>
+					<p:column styleClass="text" headerText="#{i18n['last_name']}  #{i18n['first_name']}">#{info.customer.lastName} #{info.customer.firstName}</p:column>
+					<p:column styleClass="id" headerText="#{i18n['register_number']}">#{info.customer.regNumber} </p:column>
+					<p:column styleClass="short-text" headerText="#{i18n['age']}/#{i18n['gender']}">#{info.customer.age} / #{info.customer.gender == 0 ? 'Эм' : 'Эр'} </p:column>
+					<p:column styleClass="date" headerText="#{i18n['sent_by_doctor']} / #{i18n['date']}">#{info.dateString} <br /> #{info.employeeName}  </p:column>
+					<p:column styleClass="id" headerText="Заалт"> #{info.note} </p:column>
+					<p:column styleClass="text" headerText="Онош">
+						<ui:repeat var="d" value="#{info.diagnoseList}">
+							<h:outputLink id="diagnose">
+								<h:outputText value="#{d.id}"></h:outputText>
+							</h:outputLink>
+							<p:tooltip for="diagnose" value="#{d.nameMn}" position="top">
+							</p:tooltip>
+						</ui:repeat>
+					</p:column>
+					<p:column styleClass="button-icon" headerText="Шинжилгээний хариу">
+						<p:commandLink styleClass="fa fa-list color-blue"
+							actionListener="#{xrayController.fillCustomerExamination(info.customerPkId)}">
+						</p:commandLink>
+					</p:column>
+					<p:column styleClass="short-text" headerText="#{i18n['xray_name']}">#{info.xrayName} </p:column>
+					<p:column styleClass="text" headerText="#{i18n['description']}">
+						<p:panel id="editDescription" styleClass="no-style-panel">
+							<p:commandLink value="#{info.description}"
+								style="display: #{info.edit != true ? 'block' : 'none'} "
+								action="#{xrayController.setEditable(info)}">
+							</p:commandLink>
+							<p:commandLink action="#{xrayController.setEditable(info)}"
+								style="width:100%;display: #{info.edit != true &amp;&amp; (info.description == null || info.description.trim() == '' )? 'block' : 'none'} ">
+								Тайлбар бичих
+							</p:commandLink>
+							<p:inputTextarea rows="2" value="#{info.descriptionTemp}"
+								autoResize="false"
+								style="width:100%;display: #{info.edit == true ? 'block' : 'none'};font-size: 1em !important;">
+							</p:inputTextarea>
+							<p:commandLink
+								style="font-size: 18px;display: #{info.edit == true ? 'block' : 'none'} "
+								styleClass="pull-right"
+								action="#{xrayController.cancelEditDescription(info)}">
+								<i class="fa fa-remove color-red" />
+							</p:commandLink>
+							<p:commandLink
+								style="margin-right: 5px;font-size: 18px;display: #{info.edit == true ? 'block' : 'none'} "
+								styleClass="pull-right"
+								action="#{xrayController.editDesc(info)}">
+								<i class="fa fa-check color-green" />
+							</p:commandLink>
+						</p:panel>
+					</p:column>
+					<p:column styleClass="button-icon" headerText="#{i18n['image']}">
+						<ui:repeat value="#{info.imgList}" var="il" varStatus="index">
+							<h:commandLink value="#{il}" rendered="#{info.image != null}"
+								actionListener="#{xrayController.showSelectedImage(info, il)}"
+								 >
+								 <p:fileDownload value="#{xrayController.imageRentgen}" />
+								</h:commandLink>
+							<p:commandLink styleClass="fa fa-fw fa-remove color-red"
+								onstart="showLoader();"
+								actionListener="#{xrayController.deleteSelectedImage(info, il)}"
+								update="@(.myTable)" oncomplete="hideLoader();" />
+							<br />
+						</ui:repeat>
+
+					</p:column>
+					<p:column styleClass="button-icon"
+						headerText="#{i18n['choose_image']}" width="80">
+						<p:commandLink styleClass="fa fa-fw fa-upload color-blue"
+							actionListener="#{xrayController.setCurrentXrayRequest(info)}"
+							onclick="uploadImage();" />
+					</p:column>
+
+					<p:remoteCommand name="updateImage"
+						actionListener="#{xrayController.setCurrentXrayRequest(info)}"
+						update="form:dddd" />
+				</p:dataTable>
+				<p:fileUpload id="fileUpload"
+					fileUploadListener="#{xrayController.upload}"
+					oncomplete="changeDate();" style="display:none;" mode="advanced"
+					sizeLimit="100000000" multiple="true" auto="true"
+					description="#{i18n['choose_image']}" />
+			</div>
+		</div>
+		</section>
+		<p:dialog widgetVar="showImage" modal="false"
+			header="#{i18n['xray_image']}" resizable="true"
+			styleClass="dialog-scroll" width="800" height="550" id="showImage"
+			closeOnEscape="true">
+			<div class="row">
+				<p:graphicImage id="pppp"
+					style="max-width:100%; max-height:100v; position:absolute;"
+					value="#{xrayController.imageRentgen}" cache="false" />
+			</div>
+		</p:dialog>
+
+		<p:dialog widgetVar="exaRequestList" id="exaRequestList"
+			resizable="false" closeOnEscape="true" width="800" height="500"
+			header="Шинжилгээний жагсаалт" styleClass="dialog-scroll">
+			<div class="row"></div>
+
+			<div class="row" style="margin-top: 20px">
+				<p:dataTable id="exarList" styleClass="myTable col-md-12"
+					value="#{xrayController.requestList}" var="r" rowIndexVar="index"
+					emptyMessage="#{i18n['empty']}" selectionMode="single"
+					selection="#{menuController.cursorErc}" rowKey="#{r.pkId}">
+					<p:column styleClass="index" headerText="№" width="5%">#{index + 1}</p:column>
+					<p:column headerText="Овог" styleClass="text"> #{r.customer.lastName} </p:column>
+					<p:column headerText="Нэр" styleClass="text"> #{r.customer.firstName} </p:column>
+					<p:column headerText="Картын дугаар" styleClass="id"> #{r.customer.cardNumber} </p:column>
+					<p:column headerText="Шинжилгээний нэр" styleClass="text"> #{r.examinationName} </p:column>
+					<p:column styleClass="button-icon" headerText="#{i18n['watch']}">
+						<p:commandLink styleClass="fa fa-fw fa-edit color-blue"
+							actionListener="#{menuController.fillExmaination(r)}"
+							process="@this" onclick="PF('printDialog').show();"></p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</div>
+
+		</p:dialog>
+
+		<p:dialog id="printDialog" widgetVar="printDialog"
+			styleClass="dialog-scroll" height="400px" width="550px" modal="true"
+			resizable="false" header="" closeOnEscape="true">
+			<p:panel id="dubu" styleClass="no-style-panel">
+				<table id="tablePrint" style="width: 100%;">
+					<tr>
+						<td
+							style="font-size: 12px; font-family: Times New Roman; padding: 12px 0px;">
+							Эмнэлгийн нэр : Эрхэс</td>
+					</tr>
+
+					<tr>
+						<td colspan="4"
+							style="font-size: 14px; font-family: Times New Roman; font-weight: 700; text-align: center; vertical-align: middle; padding: 12px 0px;">
+							#{menuController.chosenDrequest.customer.lastName} овогтой
+							#{menuController.chosenDrequest.customer.firstName} - н
+							#{menuController.chosenDrequest.examinationName} шинжилгээний
+							хариу</td>
+					</tr>
+
+					<tr>
+						<td colspan="4"
+							style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; padding-top: 12px;">
+							<table style="border: 0.1px solid; width: 100%">
+								<tr>
+									<td
+										style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+										№</td>
+									<td
+										style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Шинжилгээний
+										нэр</td>
+									<td
+										style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Ныэгж</td>
+									<td
+										style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">Лавлах
+										хэмжээ</td>
+									<td
+										style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+										Хариу</td>
+								</tr>
+								<ui:repeat value="#{examinationController.resultsForPrint}"
+									var="r" varStatus="index">
+									<tr>
+										<td
+											style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											#{index.index+1}</td>
+										<td
+											style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											#{r.evqName}</td>
+										<td
+											style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											#{r.measurement}</td>
+										<td
+											style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											#{r.range}</td>
+										<td
+											style="border: 0.1px solid; text-align: center; font-size: 12px; font-family: Times New Roman; vertical-align: middle;">
+											#{r.value}</td>
+									</tr>
+								</ui:repeat>
+							</table>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="4"
+							style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; text-align: center; padding: 12px 0px;">
+							Ерөнхий эмч (эмнэлэг эрхэлсэн орлогч)-ийн дүгнэлт шийдвэр:
+							___________________________________________________________</td>
+					</tr>
+
+					<tr>
+						<td colspan="4"
+							style="font-size: 12px; font-family: Times New Roman; vertical-align: middle; text-align: center;">
+							Дүгнэлт, шийдвэр гаргасан _________он_____сар_____ өдөр</td>
+					</tr>
+
+				</table>
+			</p:panel>
+			<a class="btn btn-app" href="javascript:void(0)"
+				onclick="print1('tablePrint');"> <i
+				class="fa fa-print color-blue"></i> Хэвлэх
+			</a>
+
+			<a class="btn btn-app" onclick="printPdf();"
+				href="javascript:void(0)"> <i class="fa fa-file-pdf-o color-red"></i>
+				PDF <p:remoteCommand process="@this" name="printToPDF" />
+			</a>
+
+			<a class="btn btn-app"
+				onclick="tableToExcel('tablePrint','Шинжилгээний хариу');"
+				href="javascript:void(0)"> <i
+				class="fa fa-file-excel-o color-green"></i> XLS
+			</a>
+		</p:dialog>
+		<p:remoteCommand name="base64toFileJutsu"
+			action="#{xrayController.base64toFile()}" />
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$(document).ready(function() {
+				changeDate();
+			});
+			function uploadImage(id) {
+				$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();
+			}
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

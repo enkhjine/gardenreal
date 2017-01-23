@@ -1,0 +1,1404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<link href="#{applicationController.path}css/reportStyle.css"
+		rel="stylesheet" type="text/css" />
+		<section class="content-header">
+		<h1>Тайлан</h1>
+		</section>
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row">
+					<div class="col-xs-4">
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog1').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan1.PNG');">Эмчийн үйлчилгээний тайлан /Шинжилгээ/</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog2').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan2.PNG');">Үзлэгийн тайлан</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog3').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan3.PNG');">Кассын сарын мэдээ</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog4').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan4.PNG');">Эмчилгээний түүх</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog5').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan4.PNG');">Бараа материалын тайлан</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog6').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan4.PNG');">Хөнгөлөлтийн тайлан</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog7').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan4.PNG');">Эмчийн үзлэгийн тайлан (АМ-1Б)</a>
+						<a href="javascript:void(0)" ondblclick="showLoader();PF('dialog8').show();" class="btn btn-default btn-block" onclick="changeImage('#{applicationController.path}report/tailan4.PNG');">Үйл ажиллагааны тайлан</a>
+					</div>
+					<div class="col-xs-8">				
+						<img id="image" src="#{applicationController.path}report/tailan1.PNG" style="width: 80%;" />					
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Doctor Service Report  -->
+		<p:dialog widgetVar="dialog1" onShow="chosen();hideLoader();chosen();" width="450px" modal="true" resizable="false" header="Эмчийн үйлчилгээний тайлан /Шинжилгээ/">
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Тасаг : </div>
+				<div class="col-xs-4 flex-center-self">
+					<h:selectOneMenu id="subOrganPkId" style="width: 258px;" styleClass="form-control chosen-select" 
+					value="#{reportController.filter.subOrganizationPkId}">
+						<p:ajax event="change" process="form:subOrganPkId" update="form:empPkId" oncomplete="chosen();" />
+						<f:selectItem itemLabel="Бүх" itemValue="0" />
+						<f:selectItems value="#{reportController.subOrganizations}" var="item" itemLabel="#{item.name}" itemValue="#{item.pkId}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Эмч : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:panel styleClass="no-style-panel" id="empPkId">
+					<h:selectOneMenu style="    margin-top: -5px;    width: 258px;"
+					styleClass="form-control chosen-select" value="#{reportController.filter.employeePkId}">
+						<f:selectItem itemLabel="Бүх" itemValue="0" />
+						<f:selectItems value="#{reportController.filteredEmployees}" var="item" itemLabel="#{item.firstName}" 
+						itemValue="#{item.pkId}" />
+					</h:selectOneMenu>
+					</p:panel>
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Эхлэх огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog1BeginDate"  
+						value="#{reportController.filter.beginDate}" />
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Дуусах огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog1EndDate" 
+						value="#{reportController.filter.endDate}"/>
+				</div>
+			</div>
+			<p:commandLink process="@this form:subOrganPkId form:empPkId form:dialog1BeginDate form:dialog1EndDate" 
+				onclick="showLoader();" styleClass="btn" 
+				actionListener="#{reportController.doctorServiceReport}" style="float: right;">
+				
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		
+		<p:dialog id="doctorServiceReport" widgetVar="doctorServiceReport" onShow="chosen();hideLoader();" 
+				styleClass="dialog-scroll" width="720px" height="500px" modal="true" resizable="false" header="Эмчийн үйлчилгээний тайлан /Шинжилгээ/">
+		    <table id="print1" style="width: 100%;" class="report-table">
+		    	<tr>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+		    			Эмчийн үйлчилгээний тайлан Шинжилгээ
+		    		</td>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			Байгууллагын нэр
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="4" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+		    			Эмчийн үйлчилгээний тайлан Шинжилгээ
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:right;vertical-align: middle;">
+		    			Хугацаа : #{reportController.filter.beginDateStr}-#{reportController.filter.endDateStr}
+		    		</td>
+		    	</tr>
+	            <tr class="report-header">
+	                <td style="text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Нэр</td>
+	                <td style="text-align:center;width: 70px;">Нийт тоо</td>
+	                <td style="text-align:center;width: 100px;">Үйлчлүүлсэн тоо</td>
+	                <td style="text-align:center;width: 100px;">Дүн</td>
+	            </tr>
+	            <ui:repeat value="#{reportController.doctorServices}" var="item">
+	            	<tr>
+	            		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;padding:5px;">
+	            			Тасаг: #{item.subOrganizationName}, Эмч: #{item.employeeName}
+	            		</td>
+	            	</tr>
+				<!-- бүлэг эхлэл -->
+					<ui:repeat value="#{item.doctorServiceDtls}" var="dtl">
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.name}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.allCount}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.serviceCount}
+							</td>
+							<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								<h:outputLabel value="#{dtl.amount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+									<f:convertNumber type="currency" currencySymbol=" "/>
+								</h:outputLabel>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Эмчийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							#{item.allCount}
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							#{item.serviceCount}
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputLabel value="#{item.sumAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+									<f:convertNumber type="currency" currencySymbol=" "/>
+							</h:outputLabel>
+						</td>
+					</tr>
+				<!-- бүлэг төгсгөл -->
+				</ui:repeat>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						НИЙТ ДҮН:
+					</td>
+					<td colspan="3" style="text-align: right;vertical-align: middle;padding:5px;">
+						<h:outputLabel value="#{reportController.filter.allAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: bold;margin-bottom:0px;"> 
+								<f:convertNumber type="currency" currencySymbol=" "/>
+						</h:outputLabel>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+						Тайлан гаргасан:
+					</td>
+					<td colspan="3" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						......................................./ Администратор /
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+						Хянасан:
+					</td>
+					<td colspan="3" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						......................................./......................................./
+					</td>
+				</tr>
+		      </table>
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print1');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('print1','Эмчийн үйлчилгээний тайлан шинжилгээ');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>
+		</p:dialog>
+		<!-- Doctor Service Report End  -->
+		<!--  doctorMedicalExaminationReport Begin -->
+		<p:dialog widgetVar="dialog2" onShow="chosen();hideLoader();" width="450px" modal="true" header="Үзлэгийн тайлан">
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Тасаг : </div>
+				<div class="col-xs-4 flex-center-self">
+					<h:selectOneMenu id="subOrganizationPkId" style="    margin-top: -5px;    width: 258px;" 
+					styleClass="form-control chosen-select" value="#{reportController.filter.subOrganizationPkId}">
+						<f:selectItem itemLabel="Бүх" itemValue="0" />
+						<f:selectItems value="#{reportController.subOrganizations}" var="item" itemLabel="#{item.name}" itemValue="#{item.pkId}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Эхлэх огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog2BeginDate" value="#{reportController.filter.beginDate}" pattern="yyyy-MM-dd"/>
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Дуусах огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" style="width: 260px;" id="dialog2EndDate" value="#{reportController.filter.endDate}" pattern="yyyy-MM-dd" />
+				</div>
+			</div>
+			<p:commandLink process="@this form:subOrganizationPkId form:dialog2BeginDate form:dialog2EndDate" 
+				onclick="showLoader();" styleClass="btn" 
+				actionListener="#{reportController.doctorMedicalExaminationReport}" style="float: right;">
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		
+		<p:dialog id="doctorMedicalExaminationReport" widgetVar="doctorMedicalExaminationReport" onShow="chosen();hideLoader();" 
+					width="750px" height="400px" modal="true" styleClass="dialog-scroll" resizable="false" 
+					header="Үзлэгийн тайлан">
+					<table width="700" height="100" style="border:none;" id="print2">
+	<tr style="height:35px;" class="noborder">
+    	<td colspan="13" style="text-align: right;padding-left: 20px;">Тайлант үе: #{reportController.filter.beginDateStr} - #{reportController.filter.endDateStr}</td>
+    </tr>
+	<tr>
+    	<td rowspan="2" width="150" style="text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эмч</td>
+    	<td colspan="4" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Шинэ үзлэг</td>
+    	<td colspan="4" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Давтан үзлэг</td>
+    	<td colspan="4" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Нийт</td>
+    </tr>
+	<tr>
+    	<td style="text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эр</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эм</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Нийт</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эр</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эм</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Нийт</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эр</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эм</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Нийт</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    </tr>
+    <ui:repeat value="#{reportController.examinationReports}" var="item">
+	<tr style="border:none; height:35px;">
+    	<td colspan="13" style="text-align: left;">Огноо: #{item.dateStr}</td>
+    </tr>
+    <ui:repeat value="#{item.subOrganizationReports}" var="it">
+	<tr style="border:none; height:35px;">
+    	<td colspan="13" style="text-align: left;padding-left: 20px;">Тасаг: #{it.subOrganizationName}</td>
+    </tr>
+    <ui:repeat var="em" value="#{it.examinationReports}">
+	<tr>
+    	<td style="text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.employeeName}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.genderCount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.genderCount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.sumGenderCount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.sumAmount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.genderCount3}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.genderCount4}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.sumGenderCount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.sumAmount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.genderCount5}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.genderCount6}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.sumGenderCount3}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{em.sumAmount3}</td>
+    </tr>
+    </ui:repeat>
+	<tr style="border:none; height:35px;" class="noborder">
+    	<td colspan="4" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">Тасгийн дүн:</td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">420.000</td>
+        <td colspan="3" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;"></td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">65.000</td>
+        <td colspan="3" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;"></td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">65.000</td>
+    </tr>
+	<tr style="border:none; height:35px;" class="noborder">
+    	<td colspan="4" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">Бүлгийн дүн:</td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">420.000</td>
+        <td colspan="3" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;"></td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">65.000</td>
+        <td colspan="3" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;"></td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">65.000</td>
+    </tr>
+    </ui:repeat>
+    </ui:repeat>
+	<tr style="border:none; height:35px;">
+    	<td colspan="4" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">Нийт дүн:</td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">#{reportController.meAllAmount1}</td>
+        <td colspan="3" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;"></td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">#{reportController.meAllAmount2}</td>
+        <td colspan="3" style="text-align: right;font-size: 8.5px;font-family: Times New Roman;"></td>
+        <td style="text-align: right;font-size: 8.5px;font-family: Times New Roman;">#{reportController.meAllAmount3}</td>
+    </tr>
+	</table>
+		<div style="height: 15px;">
+		</div>
+			
+			 <a class="btn btn-app" href="javascript:void(0)" onclick="print1('print2');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('print2','Эмчийн үйлчилгээний тайлан шинжилгээ');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>		
+		</p:dialog>
+		
+		
+		<!-- doctorMedicalExaminationReport End  -->
+		<!-- cashierMothReport Begin -->
+		<p:dialog widgetVar="dialog3" onShow="chosen();hideLoader();" width="450px" modal="true" resizable="false" header="Кассын сарын мэдээ">
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Эхлэх огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog3BeginDate" value="#{reportController.filter.beginDate}" pattern="yyyy-MM-dd" />
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Дуусах огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog3EndDate" value="#{reportController.filter.endDate}" pattern="yyyy-MM-dd" />
+				</div>
+			</div>
+			<p:commandLink onclick="showLoader();" process="@this form:dialog3BeginDate  form:dialog3EndDate" 
+			styleClass="btn" style="float:right;" 
+				actionListener="#{reportController.cashierMothReport}" >
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		<!--  -->
+		<p:dialog widgetVar="cashierMothReport" id="cashierMothReport" onShow="chosen();hideLoader();" styleClass="dialog-scroll" 
+			width="1100px" height="500px" modal="true" resizable="false" header="">
+			<table width="1024" id="cashierMothReportPrint">
+	<tr class="noborder">
+    	<td colspan="15"><h3 style="float: left;">Кассын сарын мэдээ</h3>Байгууллагын нэр: #{userController.loggedInfo.organization.name}</td>
+    </tr>
+	<tr class="noborder">
+    	<td colspan="15" style="text-align: right;"> Хугацаа: #{reportController.filter.beginDateStr} - #{reportController.filter.endDateStr}</td>
+    </tr>
+	<tr class="report-header">
+    	<td rowspan="3" width="3%" style="text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">№</td>
+    	<td rowspan="3" width="11%" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Огноо</td>
+    	<td rowspan="3" width="13%" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Нийт орлого</td>
+    	<td colspan="4" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Үзлэг</td>
+    	<td colspan="2" rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Шинжилгээ</td>
+    	<td colspan="2" rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Эмчилгээ</td>
+    	<td colspan="2" rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Оношлогоо</td>
+    	<td colspan="2" rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хагалгаа</td>
+    </tr>
+	<tr class="report-header">
+    	<td colspan="2" style="font-size: 8.5px;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Шинэ үзлэг</td>
+    	<td colspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Давтан үзлэг</td>
+    </tr>
+	<tr class="report-header">
+    	<td style="font-size: 8.5px;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хүний тоо</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хүний тоо</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хүний тоо</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хүний тоо</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хүний тоо</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Хүний тоо</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Орлого</td>
+    </tr>
+				<ui:repeat value="#{reportController.reportMonths}" var="item" rowIndexVar="index" >
+					
+	<tr height="30">
+    	<td style="font-size: 8.5px;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.index}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.dateStr}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.sumAmount}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.customerCount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.inAmount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.customerCount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.inAmount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.customerCount3}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.inAmount3}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.customerCount4}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.inAmount4}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.customerCount5}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.inAmount5}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.customerCount6}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{item.inAmount6}</td>
+    </tr>
+	</ui:repeat>
+	<tr class="report-header">
+    	<td colspan="2" style="font-size: 8.5px;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">Дүн</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allAmount}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allCustomerCount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allInAmount1}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allCustomerCount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allInAmount2}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allCustomerCount3}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allInAmount3}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allCustomerCount4}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allInAmount4}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allCustomerCount5}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allInAmount5}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allCustomerCount6}</td>
+    	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">#{reportController.filter.allInAmount6}</td>
+    </tr>
+    <tr class="noborder">
+    	<td colspan="15" height="10"></td>
+    </tr>
+	<tr class="noborder">
+    	<td colspan="6" style="text-align:right;">Тайлан гаргасан:</td>
+        <td colspan="9" style="text-align:left;"> &nbsp; ................................./#{userController.loggedInfo.username}/</td>
+    </tr>
+	<tr class="noborder">
+    	<td colspan="6" style="text-align:right;">Хянасан:</td>
+        <td colspan="9" style="text-align:left;"> &nbsp; ................................./&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</td>
+    </tr>
+</table>
+		      <div style="height: 21px;"></div>
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('cashierMothReportPrint');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('cashierMothReportPrint','Кассын сарын мэдээ');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>
+		</p:dialog>
+		<!-- cashierMothReport End -->
+		<p:dialog widgetVar="dialog4" onShow="chosen();hideLoader();" width="450px" modal="true" resizable="false" 
+		header="Эмчилгээний түүх">
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Харилцагч сонгох : </div>
+				<div class="col-xs-4 flex-center-self">
+					<h:selectOneMenu style="width: 258px;" styleClass="form-control chosen-select" 
+					value="#{reportController.filter.customerPkId}">
+						<f:selectItems value="#{reportController.customers}" var="emp" 
+						itemLabel="#{emp.lastName} #{emp.firstName}" itemValue="#{emp.pkId}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Эхлэх огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog4BeginDate" value="#{reportController.filter.beginDate}" />
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Дуусах огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="date-control" id="dialog4EndDate" value="#{reportController.filter.endDate}" />
+				</div>
+			</div>
+			<p:commandLink onclick="showLoader();" styleClass="btn" 
+				actionListener="#{reportController.doctorInspectionHistory}" 
+				style="float: right;">
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		<p:dialog id="doctorInspectionHistory" widgetVar="doctorInspectionHistory" onShow="chosen();hideLoader();" 
+			styleClass="dialog-scroll" width="720px" height="500px" modal="true" resizable="false" header="">
+			<table id="print4" style="width: 100%;">
+		    	<tr>
+		    		<td style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+		    			Эмчилгээний түүх
+		    		</td>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			Байгууллагын нэр
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="3" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+		    			Эмчилгээний түүх
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+		    			Овог: #{reportController.filter.customer.lastName}
+		    		</td>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+		    			Нэр: #{reportController.filter.customer.firstName}
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+		    			Регитрийн дугаар: #{reportController.filter.customer.regNumber}
+		    		</td>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;padding-bottom:5px;vertical-align: middle;">
+		    			Нас, хүйс: #{reportController.filter.customer.age}, #{reportController.filter.customer.gender}
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:right;vertical-align: middle;">
+		    			Хугацаа : #{reportController.filter.beginDateStr}-#{reportController.filter.endDateStr}
+		    		</td>
+		    	</tr>
+	            <tr>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Эмчилгээ
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Тоо хэмжээ
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Дүн
+	                </td>
+	            </tr>
+	            <ui:repeat value="#{reportController.doctorServices}" var="item">
+	            	<tr>
+	            		<td colspan="3" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;padding:5px;">
+	            			Огноо: #{item.dateStr}                           Эмч: #{item.employeeName}
+	            		</td>
+	            	</tr>
+				<!-- бүлэг эхлэл -->
+					<ui:repeat value="#{item.doctorServiceDtls}" var="dtl">
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.name}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.allCount}
+							</td>
+							<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								<h:outputLabel value="#{dtl.amount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+									<f:convertNumber type="currency" currencySymbol=" "/>
+								</h:outputLabel>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="2" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Бүлгийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							<h:outputLabel value="#{item.sumAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+								<f:convertNumber type="currency" currencySymbol=" "/>
+							</h:outputLabel>
+						</td>
+					</tr>
+				<!-- бүлэг төгсгөл -->
+				</ui:repeat>
+				<tr>
+					<td colspan="2" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						НИЙТ ДҮН:
+					</td>
+					<td style="text-align: right;vertical-align: middle;padding:5px;">
+						<h:outputLabel value="#{reportController.filter.allAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: bold;margin-bottom:0px;"> 
+								<f:convertNumber type="currency" currencySymbol=" "/>
+						</h:outputLabel>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+						Тайлан гаргасан:
+					</td>
+					<td colspan="2" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						......................................./ Администратор /
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+						Хянасан:
+					</td>
+					<td colspan="2" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						......................................./......................................./
+					</td>
+				</tr>
+		    </table>
+		    <a class="btn btn-app" href="javascript:void(0)" onclick="print1('print4');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('print4','Эмчилгээний түүх');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>
+		</p:dialog>
+		<p:dialog widgetVar="dialog5" onShow="chosen();hideLoader();" width="450px" modal="true" resizable="false" header="Бараа материалын тайлан">
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Бараа сонгох : </div>
+				<div class="col-xs-4 flex-center-self">
+					<h:selectOneMenu id="itemPkId" style="width: 258px;" styleClass="form-control chosen-select" value="#{reportController.filter.customerPkId}">
+						<f:selectItem itemLabel="Бүх бараа" itemValue="0" />
+						<f:selectItems value="#{reportController.items}" var="item" itemLabel="#{item.name}" itemValue="#{item.pkId}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Эхлэх огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="dialog2BeginDate date-control" id="dialog5BeginDate"
+					value="#{reportController.filter.beginDate}" />
+				</div>
+			</div>
+			<div class="row flex-container">
+				<div class="col-xs-4 flex-center-self">Дуусах огноо : </div>
+				<div class="col-xs-4 flex-center-self">
+					<p:calendar styleClass="dialog2BeginDate date-control" id="dialog5EndDate" 
+						value="#{reportController.filter.endDate}" />
+				</div>
+			</div>
+			<p:commandLink onclick="showLoader();" process="@this form:itemPkId form:dialog5BeginDate  form:dialog5EndDate" 
+				styleClass="btn" actionListener="#{reportController.itemReport}" 
+				style="float: right;">
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		<p:dialog id="itemReport" widgetVar="itemReport" onShow="chosen();hideLoader();" 
+			styleClass="dialog-scroll" height="500px" width="720px" modal="true" resizable="false" header="">
+			<table id="print5" style="width: 100%;">
+		    	<tr>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+		    			Бараа материалын тайлан
+		    		</td>
+		    		<td colspan="2" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			Байгууллагын нэр
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="4" style="font-size: 14px;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+		    			Бараа материалын тайлан
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:right;vertical-align: middle;">
+		    			Хугацаа : #{reportController.filter.beginDateStr}-#{reportController.filter.endDateStr}
+		    		</td>
+		    	</tr>
+	            <tr>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Нэр
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Хэмжих нэгж
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Нийт тоо
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Дүн
+	                </td>
+	            </tr>
+	            <ui:repeat value="#{reportController.reportHdrs}" var="item">
+	            	<tr>
+	            		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;text-align:left;vertical-align: middle;padding:5px;">
+	            			Тасаг: #{item.subOrganizationName}, Эмч: #{item.employeeFirstName}
+	            		</td>
+	            	</tr>
+				<!-- бүлэг эхлэл -->
+					<ui:repeat value="#{item.itemReportDtls}" var="dtl">
+						<tr>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.itemName}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.measurement}
+							</td>
+							<td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								#{dtl.itemCount}
+							</td>
+							<td style="text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+								<h:outputLabel value="#{dtl.sumAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: normal;margin-bottom:0px;"> 
+									<f:convertNumber type="currency" currencySymbol=" "/>
+								</h:outputLabel>
+							</td>
+						</tr>
+					</ui:repeat>
+					<tr>
+						<td colspan="2" style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							Эмчийн дүн: 
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							123
+						</td>
+						<td style="font-size: 12px;font-family: Times New Roman;text-align:right;vertical-align: middle;padding:5px;">
+							321
+						</td>
+					</tr>
+				<!-- бүлэг төгсгөл -->
+				</ui:repeat>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						НИЙТ ДҮН:
+					</td>
+					<td colspan="3" style="text-align: right;vertical-align: middle;padding:5px;">
+						<h:outputLabel value="#{reportController.filter.allAmount}" style="font-size: 12px;font-family: Times New Roman;font-weight: bold;margin-bottom:0px;"> 
+								<f:convertNumber type="currency" currencySymbol=" "/>
+						</h:outputLabel>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+						Тайлан гаргасан:
+					</td>
+					<td colspan="3" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						......................................./ Администратор /
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family: Times New Roman; font-size: 12px;text-align: left;vertical-align: middle;padding:5px;">
+						Хянасан:
+					</td>
+					<td colspan="3" style="font-family: Times New Roman; font-size: 12px;text-align: right; font-weight: bold;vertical-align: middle;padding:5px;">
+						......................................./......................................./
+					</td>
+				</tr>
+		    </table>
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print5');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('print5','Бараа материалын тайлан');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>
+		</p:dialog>
+		
+		<!-- DiscountPrice Report Here  -->
+		
+		<p:dialog widgetVar="dialog6" onShow="chosen();hideLoader();" width="450px" modal="true" resizable="false" 
+			header="Хөнгөлөлтийн тайлан" actionListener="reportController.discountReport">
+			<p:calendar styleClass="dialog2BeginDate date-control" id="dialog6BeginDate" 
+				value="#{reportController.filter.beginDate}" />
+			 - 
+			<p:calendar styleClass="dialog2BeginDate date-control" id="dialog6EndDate" 
+				value="#{reportController.filter.endDate}" />
+			<p:commandLink onclick="showLoader();" process="@this form:dialog3BeginDate  form:dialog3EndDate" 
+				styleClass="btn" actionListener="#{reportController.discountPriceReport}" 
+				style="float: right;">
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		<p:dialog widgetVar="discountPriceReport" onShow="chosen();hideLoader();" id="discountPriceReport"
+			styleClass="dialog-scroll" height="500px" width="720px" modal="true" resizable="false" header="">
+			<table id="print9" cellspacing="0" cellpadding="0" style="width: 600px;">
+				<tr class="report-header" height="30">
+					<td width="5%">№</td>
+					<td>Нэр</td>
+					<td>Үнэ</td>
+				</tr>
+				
+					<ui:repeat value="#{reportController.discountPriceReports}" var="dtl" rowIndexVar="index" >
+						<tr>
+							<td>#{index+1}</td>
+							<td>#{dtl.itemName}</td>
+							<td>#{dtl.price}</td>
+						</tr>
+					</ui:repeat>
+			</table>
+			<div style="height: 20px;"></div>
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print9');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('print9','Бараа материалын тайлан');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dialog7" onShow="chosen();hideLoader();" width="450px" modal="true" 
+			resizable="false" header="Эмчийн үзлэгийн тайлан (АМ-1Б)">
+			<p:calendar styleClass="dialog2BeginDate date-control" id="dialog7BeginDate" 
+				value="#{reportController.filter.beginDate}" pattern="yyyy-MM-dd" />
+			 - 
+			<p:calendar styleClass="dialog2BeginDate date-control" id="dialog7EndDate" 
+				value="#{reportController.filter.endDate}" pattern="yyyy-MM-dd" />
+			<p:commandLink onclick="showLoader(); PF('inspectionTypeReport').show();"
+				actionListener="#{reportController.fillInspectionType()}"
+				styleClass="btn" 
+				style="float: right;">
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		<p:dialog widgetVar="dialog8" onShow="chosen();hideLoader();" width="450px" modal="true" 
+			resizable="false" header="Үйл ажиллагааны тайлан">
+			<p:selectOneMenu value="#{reportController.filter.year}">
+				<f:selectItem itemValue="2015" itemLabel="2015 он" />
+				<f:selectItem itemValue="2016" itemLabel="2016 он" />
+				<f:selectItem itemValue="2017" itemLabel="2017 он" />
+				<f:selectItem itemValue="2018" itemLabel="2018 он" />
+				<f:selectItem itemValue="2019" itemLabel="2019 он" />
+				<f:selectItem itemValue="2020" itemLabel="2020 он" />
+			</p:selectOneMenu>
+			<p:selectOneMenu value="#{reportController.filter.month}">
+				<f:selectItem itemValue="1" itemLabel="1-сар" />
+				<f:selectItem itemValue="2" itemLabel="2-сар" />
+				<f:selectItem itemValue="3" itemLabel="3-сар" />
+				<f:selectItem itemValue="4" itemLabel="4-сар" />
+				<f:selectItem itemValue="5" itemLabel="5-сар" />
+				<f:selectItem itemValue="6" itemLabel="6-сар" />
+				<f:selectItem itemValue="7" itemLabel="7-сар" />
+				<f:selectItem itemValue="8" itemLabel="8-сар" />
+				<f:selectItem itemValue="9" itemLabel="9-сар" />
+				<f:selectItem itemValue="10" itemLabel="10-сар" />
+				<f:selectItem itemValue="11" itemLabel="11-сар" />
+				<f:selectItem itemValue="12" itemLabel="12-сар" />
+			</p:selectOneMenu>
+			<p:selectOneMenu value="#{reportController.filter.week}">
+				<f:selectItem itemValue="1" itemLabel="1-долоо хоног" />
+				<f:selectItem itemValue="2" itemLabel="2-долоо хоног" />
+				<f:selectItem itemValue="3" itemLabel="3-долоо хоног" />
+				<f:selectItem itemValue="4" itemLabel="4-долоо хоног" />
+				<f:selectItem itemValue="5" itemLabel="5-долоо хоног" />
+				<f:selectItem itemValue="6" itemLabel="6-долоо хоног" />
+			</p:selectOneMenu>
+			<p:commandLink onclick="showLoader();"
+				actionListener="#{reportController.report8()}"
+				styleClass="btn" 
+				style="float: right;">
+				<i class="fa fa-fw fa-search" /> Шүүх
+			</p:commandLink>
+		</p:dialog>
+		<p:dialog id="report8Dialog" widgetVar="report8Dialog"  onShow="chosen();hideLoader();" 
+			styleClass="dialog-scroll" height="500px" width="720px" modal="true" resizable="false" header="">
+			
+			<table id="print4" style="width: 100%;">
+		    	<tr>
+		    		<td colspan="5" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;padding-bottom:5px;">
+		    			Үйл ажиллагааны тайлан
+		    		</td>
+		    		<td colspan="4" style="font-size: 12px;font-weight: 700;font-family: Times New Roman;border-bottom: 1px solid black;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			Байгууллагын нэр
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="9" style="font-size: 14px;font-family: Times New Roman;text-align:left;vertical-align: middle;padding:12px 0px;">
+		    			ИСНЭ-ийн #{reportController.filter.year} оны #{reportController.filter.month} сарын #{reportController.filter.week}-р 7 хоногийн үйл ажиллагааны тайлан
+		    		</td>
+		    	</tr>
+	            <tr>
+	            	<td rowspan="3" style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	№
+	                </td>
+	                <td rowspan="2" style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Үзүүлэлт
+	                </td>
+	                <td rowspan="2" style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Бүгд
+	                </td>
+	                <td rowspan="2" style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Орлого
+	                </td>
+	                <td colspan="5" style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Үзсэн хүний тоо
+	                </td>
+	            </tr>
+	            <tr>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.reportDateStr1}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.reportDateStr2}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.reportDateStr3}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.reportDateStr4}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.reportDateStr5}
+	                </td>
+	            </tr>
+	            <tr>
+	            	<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	НИЙТ
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.sumCount}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.sumAmount}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.value1Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.value2Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.value3Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.value4Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{reportController.report8.value5Count}
+	                </td>
+	            </tr>
+	            <ui:repeat value="#{reportController.report8List}" var="rl" varStatus="stat">
+	            <tr>
+	            	<td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	${stat.index+1}
+	                </td>
+	            	<td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.subOrganizationName}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.sumCount}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.sumAmount}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.value1Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.value2Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.value3Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.value4Count}
+	                </td>
+	                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	#{rl.value5Count}
+	                </td>
+	            </tr>
+	            <ui:repeat value="#{rl.employees}" var="em">
+	            	<tr>
+	            		<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	
+		                </td>
+		            	<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.firstName}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.sumCount}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.sumAmount}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.value1Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.value2Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.value3Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.value4Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{em.value5Count}
+		                </td>
+		            </tr>
+		            <ui:repeat value="#{em.listReportTreatment}" var="tr">
+		            <tr>
+	            		<td style="font-size: 12px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	
+		                </td>
+		            	<td style="font-size: 12px;font-family: Times New Roman;text-align:left;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	<span style="width: 90%;margin-left: 10%;min-width: 10px;display: block;">#{tr.treatmentName}</span>
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.sumCount}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;background-color: peachpuff;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.sumAmount}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.value1Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.value2Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.value3Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;width: 70px;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.value4Count}
+		                </td>
+		                <td style="font-size: 12px;font-family: Times New Roman;text-align:right;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+		                	#{tr.value5Count}
+		                </td>
+		            </tr>
+		            </ui:repeat>
+	            </ui:repeat>
+	            </ui:repeat>
+		    </table>
+			
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print7');">
+            	<i class="fa fa-print color-blue"></i> Хэвлэх
+            </a>
+            <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+            	<i class="fa fa-file-pdf-o color-red"></i> PDF
+            	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+            </a>
+            <a class="btn btn-app" onclick="tableToExcel('print7','Эмчийн үзлэгийн тайлан');" href="javascript:void(0)">
+            	<i class="fa fa-file-excel-o color-green"></i> XLS
+            </a>
+		</p:dialog>
+		<p:dialog id="inspectionTypeReport" widgetVar="inspectionTypeReport" onShow="chosen();hideLoader();" 
+			styleClass="dialog-scroll" height="500px" width="720px" modal="true" resizable="false" header="">
+			<table id="print7" style="width: 100%;" cellpadding="0" cellspacing="0">
+		    	<tr>
+		    		<td colspan="40" style="font-size: 8.5px;font-weight: 100;font-family: Times New Roman;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			ЭМСайдын 2013 оны 11 сарын 450 тоот тушаалаар батлав.
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="40" style="font-size: 8.5px;font-weight: 700;font-family: Times New Roman;text-align:right;font-family: Times New Roman;padding-bottom:5px;">
+		    			Эрүүл мэндийн бүртгэлийн маягт АМ-1Б
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="40" style="font-size: 11px;font-weight: 700;font-family: Times New Roman;text-align:center;vertical-align: middle;padding:12px 0px;">
+		    			ЭМЧИЙН ҮЗЛЭГИЙН БҮРТГЭЛ
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="40" style="font-size: 8.5px;font-weight: 100;font-family: Times New Roman;text-align:left;font-family: Times New Roman;padding-bottom:5px;">
+		    			Кабинетийн нэр:
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td colspan="40" style="font-size: 8.5px;font-weight: 100;font-family: Times New Roman;text-align:left;font-family: Times New Roman;padding-bottom:5px;">
+		    			Эмчийн нэр:
+		    		</td>
+		    	</tr>
+	            <tr>
+	                <td rowspan="3" style="text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;height: 180px;">
+	                	<div style="-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+	                		Сар/өдөр
+	                	</div>
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	№
+	                </td>
+	                <td rowspan="3" colspan="10" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                			Эцэг /эх/-ийн нэр,
+								Нэр
+								Регистрийн дугаар		
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Тогтмол хаяг
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;margin: 0px -15px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+	                		Мэргэжил
+	                	</div>
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;margin: 0px -15px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Боловсрол
+	                	</div>
+	                </td>
+	                <td rowspan="3" colspan="10" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Ажлын газрын хаяг, /хүүхэд бол гэрт, цэцэрлэгт, сургуульд/ ЭМД-ын дугаар
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Нас
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Хүйс
+	                </td>
+	                <td colspan="5" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Үзлэгийн төрөл
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Үндсэн онош /ӨОУА-10/
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -50px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Осол гэмтлийн шалтгаан V00-V99, W00-W99, X00-X99, Y00-Y99
+	                	</div>
+	                </td>
+	                <td colspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Өвчлөл
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width:130px;margin: 0px -50px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	АМ13А маягт илгээсэн эсэх тийм-(+),үгүй(-)
+	                	</div>
+	                </td>
+	                <td colspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	Хийгдсэн эмчилгээ
+	                </td>
+	                <td rowspan="3" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -50px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Цочмог сул саа сажилттай эсэх тийм-(+),үгүй(-)
+	                	</div>
+	                </td>
+	            </tr>
+	            <tr>
+	            	<td colspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	            		<div style="font-size: 8.5px;font-family: Times New Roman;width: 90px;margin: 0px -35px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Өвчний учир	амбулаторид
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Урьдчилан сэргийлэх үзлэг
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Идэвхитэй хяналт
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Дуудлагаар гэрийн үзлэг
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -50px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Шинэ
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Хуучин
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Эмийн эмчилгээ
+	                	</div>
+	                </td>
+	                <td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;width: 130px;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	Мэс ажилбар
+	                	</div>
+	                </td>
+	            </tr>
+	            <tr>
+	            	<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	            		<div style="font-size: 8.5px;font-family: Times New Roman;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	анх
+	                	</div>
+	                </td>
+	                <td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;width: 100px;background-color: peachpuff;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+	                	<div style="font-size: 8.5px;font-family: Times New Roman;margin: 0px -60px;-moz-transform: rotate(270deg);-webkit-transform: rotate(270deg);-o-transform: rotate(270deg);-ms-transform: rotate(270deg);transform: rotate(270deg);font-size: 8.5px;font-family: Times New Roman;">
+		                	давтан
+	                	</div>
+	                </td>
+	            </tr>
+	            <tr>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						1
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						2
+					</td>
+					<td  colspan="10" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						3
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						4
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						5
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						6
+					</td>
+					<td  colspan="10" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						7
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						8
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						9
+					</td>
+					<td  colspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						10
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						11
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						12
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						13
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						14
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						15
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						16
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						17
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						18
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						19
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						20
+					</td>
+					<td  style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						21
+					</td>
+				</tr>
+				<!-- бүлэг эхлэл -->
+				<ui:repeat value = "#{reportController.inspectionTypeReports}" var = "info" varStatus="index">
+				<tr>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.dateString}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{index.index + 1}
+					</td>
+					<td colspan="10" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerLastName} #{info.customerFirstName} 
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerAddress}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.educationStatus}
+						 
+					</td>
+					<td colspan="10" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.professionStatus} #{info.workPlace}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.age}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.gender}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">						
+						#{info.getStr(1)}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.getStr(2)}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.getStr(3)}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.getStr(4)}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.getStr(5)}
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td rowspan="2" style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+						
+					</td>
+				</tr>
+				<tr>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(0,1)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(1,2)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(2,3)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(3,4)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(4,5)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(5,6)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(6,7)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(7,8)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(8,9)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						#{info.customerRegNumber.substring(9,10)}
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+					<td style="font-size: 8.5px;font-family: Times New Roman;text-align:center;border: 1px solid #F4CEA8;vertical-align: middle;padding:5px;">
+						
+					</td>
+				</tr>
+				</ui:repeat>
+				<!-- бүлэг төгсгөл -->
+		    </table>
+			<a class="btn btn-app" href="javascript:void(0)" onclick="print1('print7');">
+             	<i class="fa fa-print color-blue"></i> Хэвлэх
+             </a>
+             <a class="btn btn-app" onclick="printPdf();" href="javascript:void(0)">
+             	<i class="fa fa-file-pdf-o color-red"></i> PDF
+             	<p:remoteCommand process="@this" name="printToPDF" actionListener="#{reportController.inspectionHistory}" />
+             </a>
+             <a class="btn btn-app" onclick="tableToExcel('print7','Эмчийн үзлэгийн тайлан');" href="javascript:void(0)">
+             	<i class="fa fa-file-excel-o color-green"></i> XLS
+             </a>
+		</p:dialog>
+		</section>
+		<p:remoteCommand  name = "fillInspectionType" actionListener = "#{reportController.fillInspectionType()}"/>
+	</ui:define>
+	<ui:define name="script">
+				<script>
+		//<![CDATA[
+		           
+		    $('document').ready(function(){
+		    	chosen();
+			});
+			function chosen(){
+				var config = {
+			      '.chosen-select'           : {},
+			      '.chosen-select-deselect'  : {allow_single_deselect:true},
+			      '.chosen-select-no-single' : {disable_search_threshold:10},
+			      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+			      '.chosen-select-width'     : {width:"95%"}
+			    }
+			    for (var selector in config) {
+			      	$(selector).chosen(config[selector]);
+			    }
+			}
+		           
+			function changeImage(img){
+				document.getElementById('image').src = img;
+				return false;
+			}
+			
+			function calendarControl(){
+			}
+			
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>

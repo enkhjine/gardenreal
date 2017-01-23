@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/template.xhtml">
+	<ui:define name="content">
+		<section class="content-header">
+		<h1>Эмчилгээний жагсаалт</h1>
+		<ol class="breadcrumb">
+			<li class="active">Эмчилгээний</li>
+			<li class="active">Жагсаалт</li>
+		</ol>
+		</section>
+		<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row flex-container">
+
+					<div
+						class="col-md-1 col-sm-12 col-xs-12 flex-center-self text-right">
+						<label class="flex-center-self">#{i18n['search']}: </label>
+					</div>
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+						<p:inputText id="srch" value="#{trController.filterKey1}"
+							style="width:100%" onkeyup="changeDate();">
+						</p:inputText>
+						<p:watermark for="form:srch"
+							value="#{i18n['card_number']}, #{i18n['last_name']}, #{i18n['first_name']}, #{i18n['register_number']}" />
+					</div>
+
+					<div class="col-md-4 col-sm-12 col-xs-12 flex-center-self">
+						<p:inputText id="srch1" value="#{trController.filterKey2}"
+							style="width:100%" onkeyup="changeDate();">
+						</p:inputText>
+						<p:watermark for="form:srch1" value="#{i18n['by_doctor_name']}" />
+					</div>
+					<div class="col-md-2 flex-center-self"></div>
+				</div>
+
+				<p:dataTable id="treatmentRequests" styleClass="myTable myTableq"
+					emptyMessage="#{i18n['empty']}" value="#{trController.requests}"
+					var="info" rowIndexVar="index" style="padding:0px !important; ">
+					<p:column styleClass="text-center" width="5%" headerText="№"> #{index + 1} </p:column>
+					<p:column styleClass="text-center" width="7%"
+						headerText="#{i18n['card_number']}"> #{info.customer.cardNumber}</p:column>
+					<p:column styleClass="text-center" width="8%"
+						headerText="#{i18n['last_name']}">#{info.customer.lastName}</p:column>
+					<p:column styleClass="text-center" width="8%"
+						headerText="#{i18n['first_name']}">#{info.customer.firstName}</p:column>
+					<p:column styleClass="text-center" width="8%"
+						headerText="#{i18n['register_number']}">#{info.customer.regNumber}</p:column>
+					<p:column styleClass="text-center" width="7%"
+						headerText="#{i18n['age']}/#{i18n['gender']}">#{info.customer.age} #{info.customer.genderString} </p:column>
+					<p:column styleClass="text-center" width="7%"
+						headerText="Утас">#{info.customer.phoneNumber}</p:column>
+					<p:column styleClass="text-center" width="45%"
+						headerText="#{i18n['treatment_will']}" id="appender">
+						<p:dataTable value="#{info.customerTreatments}" var="q"
+							id="smallTable" styleClass="smallTableq updateable">
+							<p:column headerText="#{i18n['treatment']}"
+								styleClass="text-center"
+								style="width:115px; word-break: break-all;"> #{q.treatmentName} </p:column>
+							<p:column headerText="#{i18n['sent_by_doctor']}"
+								styleClass="text-center"
+								style="width:115px; word-break: break-all;">#{q.employeeName} </p:column>
+							<p:column headerText="#{i18n['requested_number']}"
+								styleClass="text-center"
+								style="width:76px; word-break: break-all;"> #{q.times}</p:column>
+							<p:column headerText="#{i18n['done_number']}"
+								styleClass="text-center"
+								style="width:69px; word-break: break-all;"> #{q.doneCount}</p:column>
+							<p:column headerText="#{i18n['last_done_date']}"
+								style="width:117px;"> #{q.getDateString(q.updatedDate)}</p:column>
+							<p:column headerText="#{i18n['done']}" width="15%"
+								styleClass="text-center"
+								style="width:86px; word-break: break-all; ">
+								<p:selectBooleanCheckbox value="#{q.done}" >
+									<p:ajax event="change" listener="#{q.changer}" update="@(.smallTableq)" process="@this"></p:ajax>
+								</p:selectBooleanCheckbox>
+							</p:column>
+						</p:dataTable>
+					</p:column>
+					<p:column styleClass="button-icon" width="5%"
+						headerText="#{i18n['save']}">
+						<p:commandLink styleClass="fa fa-fw fa-save color-blue"
+							actionListener="#{trController.showDialog(info)}" />
+					</p:column>
+				</p:dataTable>
+
+			</div>
+		</div>
+		</section>
+		<p:remoteCommand name="changeDate"
+			actionListener="#{trController.refreshRequests()}"
+			oncomplete="$('#form\\:treatmentRequests\\:0\\:smallTable_head').appendTo($('#form\\:treatmentRequests\\:appender'));" />
+		<p:dialog header="Оноо" height="100" width="300" widgetVar="score"
+			id="score" closeOnEscape="true">
+			<div class="row">
+				<div class="col-md-3">
+					<p style="color: #4f4f4f; font-weight: 700; font-size: 12px;">Үнэлгээ:</p>
+				</div>
+				<div class="col-md-5">
+					<p:inputText style="max-width:100%" />
+				</div>
+				<div class="col-md-4">
+					<p:commandLink value="Хадагалах" styleClass="btn"
+						action="#{trController.saveRequest(trController.currentTreatmentRequest)}"
+						 />
+				</div>
+			</div>
+		</p:dialog>
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$(document)
+					.ready(
+							function() {
+								changeDate();
+								$(
+										'#form\\:treatmentRequests\\:0\\:smallTable_head')
+										.appendTo(
+												$('#form\\:treatmentRequests\\:appender'));
+							});
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>
