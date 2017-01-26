@@ -13,14 +13,28 @@
     <link href="#{applicationController.path}assets/css/icons.css" rel="stylesheet" type="text/css"/>
     <link href="#{applicationController.path}assets/css/components.css" rel="stylesheet" type="text/css"/>
     <link href="#{applicationController.path}assets/css/pages.css" rel="stylesheet" type="text/css"/>
-    <link href="#{applicationController.path}assets/css/menu.css" rel="stylesheet" type="text/css"/>
+    <link href="#{applicationController.path}assets/css/menu.css" rel="stylesheet" type="text/css"/>	
     <link href="#{applicationController.path}assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="#{applicationController.path}css/style.css" rel="stylesheet" type="text/css"/>
+    
+    <link  href="#{applicationController.path}Source/css/MooDialog.css" rel="stylesheet" />
+   	<script src="#{applicationController.path}Source/mootools-core.js"></script>
+	<script src="#{applicationController.path}Source/Overlay.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.Fx.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.Alert.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.Confirm.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.Error.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.Prompt.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.IFrame.js"></script>
+	<script src="#{applicationController.path}Source/MooDialog.Request.js"></script>
+	
+	
 	<title>Garden Login</title>
 </h:head>
 <h:body styleClass="login-page">
 	<h:form id="form">
 		<div class="wrapper-page">
-
             <div class="text-center">
                 <a href="index-2.html" class="logo-lg"><i class="md md-equalizer"></i> <span>Minton</span> </a>
             </div>
@@ -88,6 +102,62 @@
         <!-- Custom main Js -->
         <script src="#{applicationController.path}assets/js/jquery.core.js"></script>
         <script src="#{applicationController.path}assets/js/jquery.app.js"></script>
+        
+        
+        <p:remoteCommand name="showMessage" update="showMessage" />
+		<p:panel id="showMessage" style="display:none;">
+			<script>
+		//<![CDATA[
+			$('document').ready(function(){
+				updateMessage();
+			});
+			
+			function updateMessage(){
+				var message = '#{userController.showMessage}';
+				var warningmessage = '#{userController.warningMessage}';
+				var errormessage = '#{userController.errorMessage}';
+				
+				if(message != '') new MooDialog.Prompt(message);
+				if(warningmessage != '') {
+					new MooDialog.Alert(warningmessage,{
+						title: 'Анхааруулга',
+						onInitialize: function(wrapper){
+							wrapper.setStyle('opacity', 0);
+							this.fx = new Fx.Morph(wrapper, {
+								duration: 600,
+								transition: Fx.Transitions.Bounce.easeOut
+							});
+							this.overlay = new Overlay(this.options.inject, {
+								duration: this.options.duration
+							});
+							if (this.options.closeOnOverlayClick) this.overlay.addEvent('click', this.close.bind(this));
+						},
+						onBeforeOpen: function(){
+							this.overlay.open();
+							this.fx.start({
+								'margin-top': [-200, -100],
+								opacity: [0, 1]
+							}).chain(function(){
+								this.fireEvent('show');
+							}.bind(this));
+						},
+						onBeforeClose: function(){
+							this.fx.start({
+								'margin-top': [-100, 0],
+								opacity: 0
+							}).chain(function(){
+								this.fireEvent('hide');
+							}.bind(this));
+							this.overlay.close();
+						},
+						okText: 'Хаах'
+					});
+				}
+				if(errormessage != '') new MooDialog.Error(errormessage);
+			}
+			//]]>
+		</script>
+		</p:panel>
 	</h:form>
 </h:body>
 </html>

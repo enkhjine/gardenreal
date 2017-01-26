@@ -66,15 +66,6 @@ public class UserSessionController implements Serializable {
 		}
 	}
 	
-	public void daa(){
-		System.out.println("Daa");
-		try{
-			
-		}catch(Exception ex){
-			
-		}
-	}
-	
 	public void showErrorMessage(String message){
 		setWarningMessage(message);
 		RequestContext context = RequestContext.getCurrentInstance();
