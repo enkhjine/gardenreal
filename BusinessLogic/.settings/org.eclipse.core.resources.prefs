@@ -1,15 +1,3 @@
 eclipse.preferences.version=1
-encoding//ejbModule/hospital/businesslogic/ExaminationLogic.java=UTF-8
 encoding//ejbModule/hospital/businesslogic/InfoLogic.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicCustomer.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicDashboard.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicHome.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicInspection.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicReport.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicRequest.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicStickyNote.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicSurgery.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicTreatment.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicTwo.java=UTF-8
-encoding//ejbModule/hospital/businesslogic/LogicXray.java=UTF-8
 encoding//ejbModule/hospital/businesslogic/UserLogic.java=UTF-8

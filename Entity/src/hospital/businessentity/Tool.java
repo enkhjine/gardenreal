@@ -431,20 +431,6 @@ public class Tool {
 		return date.compareTo(date2) == -1;
 	}
 	
-	public static int isAfterLTime(LTime b, LTime e){
-		if(e.getHour() > b.getHour()) return 1;
-		if(e.getHour() == b.getHour() && e.getMinute() > b.getMinute()) return 1;
-		if(e.getHour() == b.getHour() && e.getMinute() == b.getMinute()) return 0;
-		return -1;
-	}
-	
-	public static int isAfterTime(LTime b, LTime e){
-		if(e.getHour() > b.getHour()) return 1;
-		if(e.getHour() == b.getHour() && e.getMinute() > b.getMinute()) return 1;
-		if(e.getHour() == b.getHour() && e.getMinute() == b.getMinute()) return 1;
-		return -1;
-	}
-	
 	public static String MD5(String args) throws Exception
     {
 		MessageDigest m = MessageDigest.getInstance("MD5");
