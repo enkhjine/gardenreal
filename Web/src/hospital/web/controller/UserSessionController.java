@@ -15,6 +15,8 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 
+import garden.businessentity.LoggedInfo;
+
 @SessionScoped
 @ManagedBean(name = "userController")
 public class UserSessionController implements Serializable {
@@ -43,6 +45,8 @@ public class UserSessionController implements Serializable {
 	
 	@ManagedProperty(value="#{applicationController}")
 	private ApplicationController applicationController;
+	
+	private LoggedInfo loggedInfo;
 	
 	@PostConstruct
 	public void postConstruct(){
@@ -193,6 +197,15 @@ public class UserSessionController implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public LoggedInfo getLoggedInfo() {
+		if(loggedInfo == null) loggedInfo = new LoggedInfo();
+		return loggedInfo;
+	}
+
+	public void setLoggedInfo(LoggedInfo loggedInfo) {
+		this.loggedInfo = loggedInfo;
 	}
 	
 }

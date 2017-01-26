@@ -48,7 +48,7 @@ public class OrtsOrderItem implements Serializable{
 	@Column(name = "DoneSize")
 	private BigDecimal doneSize;
 	
-	@Column(name = "CreatedBy")
+	@Column(name = "CreatedDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
 
@@ -181,7 +181,5 @@ public class OrtsOrderItem implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }

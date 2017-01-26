@@ -3,6 +3,7 @@ package hospital.web.controller;
 import hospital.businesslogic.interfaces.IInfoLogicLocal;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -11,9 +12,8 @@ import javax.faces.bean.SessionScoped;
 
 import org.primefaces.context.RequestContext;
 
-import com.lowagie.toolbox.plugins.Concat;
-
 import garden.entity.Company;
+import garden.entity.OrtsCategory;
 
 @SessionScoped
 @ManagedBean(name = "infoController")
@@ -28,11 +28,28 @@ public class InfoController {
 	@ManagedProperty(value = "#{applicationController}")
 	private ApplicationController applicationController;
 	
-	//Company
 	private Company currentCompany;
+	private OrtsCategory currentOrtsCategory;
+	private List<OrtsCategory> listOrtsCategory;
 
 	public InfoController() {
 
+	}
+	
+	public void saveCurrentOrtsCategory(){
+		try{
+			System.out.println("saveCurrentOrtsCategory");
+			if(getCurrentOrtsCategory().getName().isEmpty()) {
+				getUserSessionController().showWarningMessage("Орцны нэр оруулаагүй байна.");
+				return;
+			}
+			infoLogic.saveOrtsCategory(getCurrentOrtsCategory(), getUserSessionController().getLoggedInfo());
+			listOrtsCategory = null;
+			getUserSessionController().showSuccessMessage("Амжилттай хадгаллаа.");
+			RequestContext.getCurrentInstance().update("@(.listOrtsCategory)");
+		}catch(Exception ex){
+			getUserSessionController().showErrorMessage(ex.getMessage());
+		}
 	}
 	
 	public void newCompany(){
@@ -71,6 +88,33 @@ public class InfoController {
 
 	public void setCurrentCompany(Company currentCompany) {
 		this.currentCompany = currentCompany;
+	}
+	
+	public OrtsCategory getCurrentOrtsCategory() {
+		if(currentOrtsCategory == null) {
+			currentOrtsCategory = new OrtsCategory();
+			currentOrtsCategory.setPkId(BigDecimal.ZERO);
+		}
+		return currentOrtsCategory;
+	}
+	
+	public void setCurrentOrtsCategory(OrtsCategory currentOrtsCategory) {
+		this.currentOrtsCategory = currentOrtsCategory;
+	}
+
+	public List<OrtsCategory> getListOrtsCategory() {
+		if(listOrtsCategory == null) {
+			try{
+				listOrtsCategory = infoLogic.getListOrtsCategory();
+			}catch(Exception ex){
+				getUserSessionController().showErrorMessage(ex.getMessage());
+			}
+		}
+		return listOrtsCategory;
+	}
+
+	public void setListOrtsCategory(List<OrtsCategory> listOrtsCategory) {
+		this.listOrtsCategory = listOrtsCategory;
 	}
 
 }
