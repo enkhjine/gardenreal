@@ -1,6 +1,7 @@
 package hospital.web.controller;
 
 import hospital.businesslogic.interfaces.IInfoLogicLocal;
+import mondrian.rolap.BitKey.Big;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,8 +13,10 @@ import javax.faces.bean.SessionScoped;
 
 import org.primefaces.context.RequestContext;
 
+import garden.businessentity.Tool;
 import garden.entity.Company;
 import garden.entity.OrtsCategory;
+import garden.entity.OrtsSize;
 
 @SessionScoped
 @ManagedBean(name = "infoController")
@@ -31,6 +34,8 @@ public class InfoController {
 	private Company currentCompany;
 	private OrtsCategory currentOrtsCategory;
 	private List<OrtsCategory> listOrtsCategory;
+	private OrtsSize currentOrtsSize;
+	private List<OrtsSize> listOrtsSize;
 
 	public InfoController() {
 
@@ -43,10 +48,26 @@ public class InfoController {
 				getUserSessionController().showWarningMessage("Орцны нэр оруулаагүй байна.");
 				return;
 			}
+			String status = getCurrentOrtsCategory().getStatus();
 			infoLogic.saveOrtsCategory(getCurrentOrtsCategory(), getUserSessionController().getLoggedInfo());
 			listOrtsCategory = null;
-			getUserSessionController().showSuccessMessage("Амжилттай хадгаллаа.");
-			RequestContext.getCurrentInstance().update("@(.listOrtsCategory)");
+			currentOrtsCategory = null;
+			if(Tool.ADDED.equals(status)) getUserSessionController().showSuccessMessage("Амжилттай хадгаллаа.");
+			if(Tool.MODIFIED.equals(status)) getUserSessionController().showSuccessMessage("Амжилттай заслаа.");
+			if(Tool.DELETE.equals(status)) getUserSessionController().showSuccessMessage("Амжилттай устаглаа.");
+		}catch(Exception ex){
+			getUserSessionController().showErrorMessage(ex.getMessage());
+		}
+	}
+	
+	public void setCurrentOrtsCategoryByPkId(BigDecimal ortsCategoryPkId, String status){
+		System.out.println(ortsCategoryPkId + " -> " + status);
+		try{
+			currentOrtsCategory = infoLogic.getOrtsCategory(ortsCategoryPkId);
+			currentOrtsCategory.setStatus(status);
+			if(Tool.DELETE.equals(status)){
+				saveCurrentOrtsCategory();
+			}
 		}catch(Exception ex){
 			getUserSessionController().showErrorMessage(ex.getMessage());
 		}
@@ -91,10 +112,7 @@ public class InfoController {
 	}
 	
 	public OrtsCategory getCurrentOrtsCategory() {
-		if(currentOrtsCategory == null) {
-			currentOrtsCategory = new OrtsCategory();
-			currentOrtsCategory.setPkId(BigDecimal.ZERO);
-		}
+		if(currentOrtsCategory == null) currentOrtsCategory = new OrtsCategory();
 		return currentOrtsCategory;
 	}
 	
@@ -115,6 +133,30 @@ public class InfoController {
 
 	public void setListOrtsCategory(List<OrtsCategory> listOrtsCategory) {
 		this.listOrtsCategory = listOrtsCategory;
+	}
+	
+	public OrtsSize getCurrentOrtsSize() {
+		if(currentOrtsSize == null) currentOrtsSize = new OrtsSize();
+		return currentOrtsSize;
+	}
+	
+	public void setCurrentOrtsSize(OrtsSize currentOrtsSize) {
+		this.currentOrtsSize = currentOrtsSize;
+	}
+	
+	public List<OrtsSize> getListOrtsSize() {
+		if(listOrtsSize == null) {
+			try{
+				
+			}catch(Exception ex){
+				getUserSessionController().showErrorMessage(ex.getMessage());
+			}
+		}
+		return listOrtsSize;
+	}
+	
+	public void setListOrtsSize(List<OrtsSize> listOrtsSize) {
+		this.listOrtsSize = listOrtsSize;
 	}
 
 }

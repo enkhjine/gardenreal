@@ -24,6 +24,7 @@
 		<class>garden.entity.GardenUser</class>
 		<class>garden.entity.OrderUlMur</class>
 		<class>garden.entity.Orts</class>
+		<class>garden.entity.OrtsSize</class>
 		<class>garden.entity.OrtsCategory</class>
 		<class>garden.entity.OrtsOrder</class>
 		<class>garden.entity.OrtsOrderChat</class>
