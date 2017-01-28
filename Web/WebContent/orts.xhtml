@@ -71,51 +71,32 @@
 
 								<div class="form-group">
 									<label for="exampleInputEmail1">Нэр</label> 
-									<p:inputText styleClass="form-control listOrtsSize" />
+									<p:inputText styleClass="form-control listOrtsSize" value="#{infoController.currentOrtsSize.name}" />
 								</div>
 								<div class="form-group">
 									<label for="size">Хэмжээс</label>
-									<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="listOrtsSize" />
+									<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="listOrtsSize" value="#{infoController.currentOrtsSize.size}" />
 								</div>
 								<div class="form-group">
 									<label for="orts_negj">Нэгж</label><br/>
-									<p:selectOneMenu>
-										<f:selectItems></f:selectItems>
+									<p:selectOneMenu styleClass="form-control listOrtsSize" style="width: 100%" value="#{infoController.currentOrtsSize.parentPkId}">
+										<f:selectItem itemLabel="Сонгох" itemValue="0" />
+										<f:selectItems value="#{infoController.listOrtsSize}" var="ortsSize" itemLabel="#{ortsSize.parentNamesStr}" itemValue="#{ortsSize.pkId}" />
 									</p:selectOneMenu>
 								</div>
-								<button type="submit"
-									class="btn btn-purple waves-effect waves-light">Submit</button>
+								<p:commandLink action="#{infoController.saveCurrentOrtsSize()}" styleClass="btn" value="Хадгалах" update="@(.listOrtsSize)" />
 
 							</div>
 							<div class="col-lg-12">
-								<table class="table">
-									<tr>
-										<th>
-										#
-										</th>
-										<th>
-										Нэр
-										</th>
-										<th>
-										Хамаарал
-										</th>
-										<th>
-										Хэмжээс
-										</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>кг</td>
-										<td></td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>гр</td>
-										<td>кг</td>
-										<td>1000</td>
-									</tr>
-								</table>
+								<p:dataTable styleClass="table myTable listOrtsSize" value="#{infoController.listOrtsSize}" var="ortsSize">
+									<p:column headerText="Нэр">#{ortsSize.pStr} #{ortsSize.name}</p:column>
+									<p:column width="5%"><p:commandButton action="#{infoController.setCurrentOrtsSizeByPkId(ortsSize.pkId, 'Modified')}" value="Засах" update="@(.listOrtsSize)" /></p:column>
+									<p:column width="5%">
+										<p:commandButton actionListener="#{infoController.setCurrentOrtsSizeByPkId(ortsSize.pkId, 'Delete')}" value="Устгах" update="@(.listOrtsSize)">
+											<p:confirm header="Confirmation" message="Та устгахдаа итгэлтэй байна уу?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
 								
 							</div>
 						</div>
@@ -135,65 +116,50 @@
 								<form role="form">
 
 									<div class="form-group">
-										<label for="name">Нэр</label> <input type="test"
-											class="form-control" id="name" placeholder="Нэр" />
+										<label for="name">Нэр</label><br/>
+										<p:inputText styleClass="form-control" value="#{infoController.currentOrts.name}" />
 									</div>
 									<div class="form-group">
-										<label for="orts_negj">Нэгж</label> <select
-											class="form-control" placeholder="Нэгж" name="orts[negj]"
-											id="orts_negj">
-											<option value="1" selected="selected">кг</option>
-											<option value="2">литр</option>
-											<option value="3">ширхэг</option>
-										</select>
-
+										<label for="orts_negj">Нэгж</label><br/>
+										<p:selectOneMenu style="width: 100%;" styleClass="listOrtsSize form-control" value="#{infoController.currentOrts.size}">
+											<f:selectItems value="#{infoController.listOrtsSize}" var="ortsSize" itemLabel="#{ortsSize.parentNamesStr}" itemValue="#{ortsSize.pkId}" />
+										</p:selectOneMenu>
 									</div>
 									<div class="form-group">
-										<label for="desc">Тайлбар</label>
-										<textarea class="form-control" id="desc" rows="4" cols="30"> </textarea>
+										<label for="desc">Тайлбар</label><br/>
+										<p:inputTextarea styleClass="form-control" value="#{infoController.currentOrts.description}" />
 									</div>
 									<div class="form-group">
 										<label for="type">Төрөл</label><br/>
-										<p:selectOneMenu styleClass="listOrtsCategory form-control">
+										<p:selectOneMenu style="width: 100%;" styleClass="listOrtsCategory form-control" value="#{infoController.currentOrts.categoryPkId}">
 											<f:selectItems value="#{infoController.listOrtsCategory}" var="ortsCategory" itemLabel="#{ortsCategory.name}" itemValue="#{ortsCategory.pkId}" />
 										</p:selectOneMenu>
 
 									</div>
 									<div class="form-group">
-										<label for="uurag">Уураг</label> <input type="number"
-											step="any" class="form-control" id="uurag"
-											placeholder="Уураг" />
+										<div class="col-lg-3">
+											<label for="uurag">Уураг</label>
+											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.uurag}" />
+										</div>
+										<div class="col-lg-3">
+											<label for="uuhtos">Өөх тос</label>
+											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.uuhtos}" />
+										</div>
+										<div class="col-lg-3">
+											<label for="uurag">Нүүрс ус</label>
+											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.nuursus}" />
+										</div>
+										<div class="col-lg-3">
+											<label for="uuhtos">Илчлэг</label>
+											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.ilchleg}" />
+										</div>
 									</div>
 									<div class="form-group">
-										<label for="uuhtos">Өөх тос</label> <input type="number"
-											step="any" class="form-control" id="uuhtos"
-											placeholder="Өөх тос" />
+										<label for="shinjilgee">Шинжилгээний бичиг</label>
+										<p:fileUpload mode="simple" skinSimple="true" styleClass="form-control" value="#{infoController.ortsFile}" />
 									</div>
-									<div class="form-group">
-										<label for="nuursus">Нүүрс ус</label> <input type="number"
-											step="any" class="form-control" id="nuursus"
-											placeholder="Нүүрс ус" />
-									</div>
-									<div class="form-group">
-										<label for="ilchleg">Илчлэг</label> <input type="number"
-											step="any" class="form-control" id="ilchleg"
-											placeholder="Илчлэг" />
-									</div>
-									<div class="form-group">
-										<label for="shinjilgee">Шинжилгээний бичиг</label> <input
-											type="file" class="form-control" id="shinjilgee"
-											placeholder="Нэр" />
-									</div>
-
-
-
-
 									<div class=" form-group ">
-										<a href="/index.php/food/orts" class="btn btn-warning">Шинээр
-											эхлэх</a>
-										<button type="submit" class="btn btn-primary">
-											Хадгалах <i class="icon-arrow-right14 position-right"></i>
-										</button>
+										<p:commandLink action="#{infoController.saveCurrentOrts()}" styleClass="btn" value="Хадгалах" />
 									</div>
 								</form>
 							</div>

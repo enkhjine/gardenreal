@@ -12,6 +12,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import garden.businessentity.Tool;
+
 @Entity
 @Table(name = "Orts")
 public class Orts implements Serializable{	
@@ -90,8 +92,12 @@ public class Orts implements Serializable{
 	@Transient
 	private boolean plus;
 	
+	@Transient
+	private String status;
+	
 	public Orts(){
 		super();
+		this.status = Tool.ADDED;
 	}
 
 	public BigDecimal getPkId() {
@@ -284,6 +290,12 @@ public class Orts implements Serializable{
 		return serialVersionUID;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
 	
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }

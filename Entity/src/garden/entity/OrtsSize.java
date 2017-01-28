@@ -2,7 +2,9 @@ package garden.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +17,7 @@ import javax.persistence.Transient;
 import garden.businessentity.Tool;
 
 @Entity
-@Table(name = "OrtsCategory")
+@Table(name = "OrtsSize")
 public class OrtsSize implements Serializable{	
 	
 	private static final long serialVersionUID = 1L;
@@ -52,6 +54,18 @@ public class OrtsSize implements Serializable{
 	
 	@Transient
 	private String status;
+	
+	@Transient
+	private String pStr;
+	
+	@Transient
+	private List<BigDecimal> parentPkIds;
+	
+	@Transient
+	private List<String> parentNames;
+	
+	@Transient
+	private String parentNamesStr;
 	
 	public OrtsSize(){
 		super();
@@ -142,6 +156,58 @@ public class OrtsSize implements Serializable{
 		return serialVersionUID;
 	}
 	
+	public String getpStr() {
+		if(pStr == null || pStr.length() < 1){
+			pStr = "";
+			int len = this.orderStr.length() - 3;
+			while(len > 0){
+				//pStr += "&nbsp;&nbsp;&nbsp;";
+				pStr += "---";
+				len -= 3;
+			}
+		}
+		return pStr;
+	}
 	
+	public void setpStr(String pStr) {
+		this.pStr = pStr;
+	}
+	
+	public List<BigDecimal> getParentPkIds() {
+		if(parentPkIds == null) {
+			parentPkIds = new ArrayList<>();
+		}
+		return parentPkIds;
+	}
+	
+	public void setParentPkIds(List<BigDecimal> parentPkIds) {
+		this.parentPkIds = parentPkIds;
+	}
+	
+	public List<String> getParentNames() {
+		if(parentNames == null) {
+			parentNames = new ArrayList<>();
+		}
+		return parentNames;
+	}
+	
+	public void setParentNames(List<String> parentNames) {
+		this.parentNames = parentNames;
+	}
+	
+	public String getParentNamesStr() {
+		if(parentNamesStr == null || parentNamesStr.length() < 1) {
+			parentNamesStr = "";
+			for (String name : getParentNames()) {
+				parentNamesStr += name + " -> ";
+			}
+			parentNamesStr += this.name;
+		}
+		return parentNamesStr;
+	}
+	
+	public void setParentNamesStr(String parentNamesStr) {
+		this.parentNamesStr = parentNamesStr;
+	}
 
 }
