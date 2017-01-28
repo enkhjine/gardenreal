@@ -155,8 +155,12 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="shinjilgee">Шинжилгээний бичиг</label>
-										<p:fileUpload mode="simple" skinSimple="true" styleClass="form-control" value="#{infoController.ortsFile}" />
+										<label for="shinjilgee">Шинжилгээний бичиг</label><br/>
+										<p:commandLink styleClass="btn" onclick="$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();" value="Хуулах" />
+										<p:inputText styleClass="file" disabled="true" value="#{infoController.currentOrts.shinjilgeeStatus}" />
+										<p:remoteCommand name="updateStatus" update="@(.file)" />
+										<p:fileUpload id="fileUpload" oncomplete="updateStatus();" onerror="updateStatus();" style="display:none;" fileUploadListener="#{infoController.ortsFileUpload}"
+											sizeLimit="100000000" auto="true" />
 									</div>
 									<div class=" form-group ">
 										<p:commandLink action="#{infoController.saveCurrentOrts()}" styleClass="btn" value="Хадгалах" />

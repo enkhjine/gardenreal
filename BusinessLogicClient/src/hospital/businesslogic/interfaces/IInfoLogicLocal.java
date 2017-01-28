@@ -19,4 +19,5 @@ public interface IInfoLogicLocal {
 	public List<OrtsSize> getListOrtsSize() throws Exception;
 	public OrtsSize getOrtsSize(BigDecimal ortsSizePkId) throws Exception;
 	public void saveOrts(Orts orts, LoggedInfo loggedInfo) throws Exception;
+	public List<Orts> getListOrts() throws Exception;
 }

@@ -1,10 +1,15 @@
 package hospital.web.controller;
 
 import hospital.businesslogic.interfaces.IInfoLogicLocal;
-import mondrian.rolap.BitKey.Big;
+import logic.data.Tools;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,11 +17,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.io.FilenameUtils;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import garden.businessentity.Tool;
 import garden.entity.Company;
+import garden.entity.FoodOrts;
 import garden.entity.Orts;
 import garden.entity.OrtsCategory;
 import garden.entity.OrtsSize;
@@ -43,6 +51,11 @@ public class InfoController implements Serializable {
 	private List<OrtsSize> listOrtsSize;
 	private Orts currentOrts;
 	private UploadedFile ortsFile;
+	
+	private List<FoodOrts> listFoodOrts;
+	private List<FoodOrts> listFoodOrtsTmp;
+	private List<Orts> listOrts;
+	private Orts selOrts;
 
 	public InfoController() {
 
@@ -78,10 +91,10 @@ public class InfoController implements Serializable {
 			getUserSessionController().showWarningMessage("Илчлэг оруулаагүй байна.");
 			return "";
 		}
-//		if(ortsFile == null){
-//			getUserSessionController().showWarningMessage("Шинэжилгээний бичиг оруулаагүй байна.");
-//			return "";
-//		}
+		if(getCurrentOrts().getShinjilgee().isEmpty()){
+			getUserSessionController().showWarningMessage("Шинэжилгээний бичиг оруулаагүй байна.");
+			return "";
+		}
 		
 		try{
 			infoLogic.saveOrts(getCurrentOrts(), getUserSessionController().getLoggedInfo());
@@ -122,6 +135,41 @@ public class InfoController implements Serializable {
 			}
 		}catch(Exception ex){
 			getUserSessionController().showErrorMessage(ex.getMessage());
+		}
+	}
+	
+	private String buildAttachmentFileName(String pkId, String fileName) {
+		String path = applicationController.getFile();
+		File file = new File(path);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+
+		return path + pkId + "." + FilenameUtils.getExtension(fileName);
+	}
+	
+	public void ortsFileUpload(FileUploadEvent event) {
+		try {
+			String fileName = buildAttachmentFileName(Tools.newPkId().toString(), event.getFile().getFileName());
+			
+			OutputStream out;
+			InputStream in = event.getFile().getInputstream();
+
+			out = new FileOutputStream(new File(fileName));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			while ((read = in.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			
+			getCurrentOrts().setShinjilgee(fileName);
+
+			in.close();
+			out.flush();
+			out.close();
+		} catch (Exception ex) {
+			userSessionController.showErrorMessage(ex.getMessage());
 		}
 	}
 	
@@ -283,6 +331,73 @@ public class InfoController implements Serializable {
 
 	public void setOrtsFile(UploadedFile ortsFile) {
 		this.ortsFile = ortsFile;
+	}
+	
+	public List<FoodOrts> getListFoodOrts() {
+		if(listFoodOrts == null) listFoodOrts = new ArrayList<>();
+		return listFoodOrts;
+	}
+	
+	public void setListFoodOrts(List<FoodOrts> listFoodOrts) {
+		this.listFoodOrts = listFoodOrts;
+	}
+	
+	public List<FoodOrts> getListFoodOrtsTmp() {
+		listFoodOrtsTmp = new ArrayList<>();
+		for (FoodOrts foodOrts : getListFoodOrts()) {
+			listFoodOrtsTmp.add(foodOrts);
+		}
+		FoodOrts foodOrts = new FoodOrts();
+		listFoodOrtsTmp.add(foodOrts);
+		return listFoodOrtsTmp;
+	}
+	
+	public void setListFoodOrtsTmp(List<FoodOrts> listFoodOrtsTmp) {
+		this.listFoodOrtsTmp = listFoodOrtsTmp;
+	}
+	
+	public List<Orts> getListOrts() {
+		if(listOrts == null) {
+			try{
+				listOrts = infoLogic.getListOrts();
+			}catch(Exception ex){
+				getUserSessionController().showErrorMessage(ex.getMessage());
+			}
+		}
+		return listOrts;
+	}
+	
+	public void setListOrts(List<Orts> listOrts) {
+		this.listOrts = listOrts;
+	}
+	
+	public Orts getSelOrts() {
+		return selOrts;
+	}
+	
+	public void setSelOrts(Orts selOrts) {
+		this.selOrts = selOrts;
+	}
+	
+	public void chosenOrts(){
+		if(selOrts != null) {
+			for (FoodOrts foodOrts : getListFoodOrts()) {
+				if(selOrts.getPkId().compareTo(foodOrts.getOrtsPkId()) == 0) {
+					getUserSessionController().showWarningMessage("Сонгосон орц байна.");					
+					return;
+				}
+			}
+			FoodOrts foodOrts = new FoodOrts();
+			foodOrts.setStatus(Tool.ADDED);
+			foodOrts.setOrtsPkId(selOrts.getPkId());
+			foodOrts.setName(selOrts.getName());
+			foodOrts.setIlchleg(selOrts.getIlchleg());
+			foodOrts.setUurag(selOrts.getUurag());
+			foodOrts.setUuhtos(selOrts.getUuhtos());
+			foodOrts.setNuursus(foodOrts.getNuursus());
+			foodOrts.setSize(BigDecimal.ZERO);
+			getListFoodOrts().add(foodOrts);
+		}
 	}
 
 }

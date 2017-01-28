@@ -179,17 +179,12 @@ public class InfoLogic extends logic.SuperBusinessLogic implements
 			orts.setCreatedDate(dte);
 			//orts.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
 			//orts.setUpdatedDate(dte);
-			Orts orts2 = new Orts();
-			orts2.setPkId(Tools.newPkId());
-			orts2.setSize(orts.getSize());
-			orts2.setDescription("");
-			orts2.setCategoryPkId(orts.getCategoryPkId());
-			orts2.setUurag(orts.getUurag());
-			orts2.setUuhtos(orts.getUuhtos());
-			orts2.setNuursus(orts.getNuursus());
-			orts2.setIlchleg(orts.getIlchleg());
-			insert(orts2);
+			insert(orts);
 		}
+	}
+	
+	public List<Orts> getListOrts() throws Exception{
+		return getAll(Orts.class);
 	}
 	
 	

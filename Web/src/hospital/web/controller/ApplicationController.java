@@ -26,8 +26,7 @@ public class ApplicationController implements Serializable {
 	private String cssPath = "/resource/css/source/";
 	private String jsPath = "/resource/js/source/";
 	private String path = "/resource/js/source/";
-	private String imagePath = "D:/MedITm/Rentgen/";
-	private String inspectionImagePath = "D:/MedITm/";
+	private String file = "D:/GARDEN/FILE/";
 	
 	public ApplicationController() {
 
@@ -89,20 +88,12 @@ public class ApplicationController implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	public String getImagePath() {
-		return imagePath;
+	
+	public String getFile() {
+		return file;
 	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-
-	public String getInspectionImagePath() {
-		return inspectionImagePath;
-	}
-
-	public void setInspectionImagePath(String inspectionImagePath) {
-		this.inspectionImagePath = inspectionImagePath;
+	
+	public void setFile(String file) {
+		this.file = file;
 	}
 }

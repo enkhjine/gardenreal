@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import garden.businessentity.Tool;
 
 @Entity
 @Table(name = "FoodOrts")
@@ -56,8 +59,15 @@ public class FoodOrts implements Serializable{
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
 	
+	@Transient
+	private String name;
+	
+	@Transient
+	private String status;
+	
 	public FoodOrts(){
 		super();
+		this.status = Tool.LAST;
 	}
 
 	public BigDecimal getPkId() {
@@ -93,6 +103,7 @@ public class FoodOrts implements Serializable{
 	}
 
 	public BigDecimal getUurag() {
+		if(uurag == null) uurag = BigDecimal.ZERO;
 		return uurag;
 	}
 
@@ -101,6 +112,7 @@ public class FoodOrts implements Serializable{
 	}
 
 	public BigDecimal getUuhtos() {
+		if(uuhtos == null) uuhtos = BigDecimal.ZERO;
 		return uuhtos;
 	}
 
@@ -109,6 +121,7 @@ public class FoodOrts implements Serializable{
 	}
 
 	public BigDecimal getNuursus() {
+		if(nuursus == null) nuursus = BigDecimal.ZERO;
 		return nuursus;
 	}
 
@@ -159,7 +172,27 @@ public class FoodOrts implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
-	
+	public void calcInch(){
+		this.ilchleg = getUurag().multiply(new BigDecimal(4));
+		this.ilchleg = this.ilchleg.add(getUuhtos().multiply(new BigDecimal(9)));
+		this.ilchleg = this.ilchleg.add(getNuursus().multiply(new BigDecimal(4)));
+	}
 
 }

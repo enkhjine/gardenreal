@@ -95,6 +95,9 @@ public class Orts implements Serializable{
 	@Transient
 	private String status;
 	
+	@Transient
+	private String shinjilgeeStatus;
+	
 	public Orts(){
 		super();
 		this.status = Tool.ADDED;
@@ -296,6 +299,16 @@ public class Orts implements Serializable{
 	
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public String getShinjilgeeStatus() {
+		shinjilgeeStatus = "оруулаагүй байна.";
+		if(this.shinjilgee != null && this.shinjilgee.length() > 1) shinjilgeeStatus = "хуулсан"; 
+		return shinjilgeeStatus;
+	}
+	
+	public void setShinjilgeeStatus(String shinjilgeeStatus) {
+		this.shinjilgeeStatus = shinjilgeeStatus;
 	}
 
 }
