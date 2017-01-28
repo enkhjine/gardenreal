@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="template/garden_template.xhtml">
+	<ui:define name="content">
+		<div class="container">
+
+			<!-- Page-Title -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="page-title-box">
+
+						<h4 class="m-t-0 header-title">
+							<b>Хэрэглэгчийн бүртгэлийн хуудас</b>
+						</h4>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-md-12">
+
+					<div class="card-box">
+						<div class="row">
+							<div class="col-lg-12">
+								<ul class="nav nav-tabs tabs" style="width: 100%;">
+									<li class="tab active" style="width: 25%;"><a
+										href="#home-12" data-toggle="tab" aria-expanded="true"
+										class="active"> <span class="visible-xs"><i
+												class="fa fa-home"></i></span> <span class="hidden-xs">Хүнс
+												ханган нийлүүлэгчид</span>
+									</a></li>
+									<li class="tab" style="width: 25%;"><a href="#profile-12"
+										data-toggle="tab" aria-expanded="false" class=""> <span
+											class="visible-xs"><i class="fa fa-user"></i></span> <span
+											class="hidden-xs">Цэцэрлэгүүд</span>
+									</a></li>
+									<li class="tab" style="width: 50%;"><a href="#messages-12"
+										data-toggle="tab" aria-expanded="false" class=""> <span
+											class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span
+											class="hidden-xs">Системд нэвтрэх эрхтэй хэрэглэгчид</span>
+									</a></li>
+									<div class="indicator" style="right: 390px; left: 0px;"></div>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="home-12"
+										style="display: block;">
+
+										<table class="table">
+											<tr>
+												<th>#</th>
+												<th>Нэр</th>
+												<th>Хамааралтай цэцэрлэгүүд</th>
+												<th>Системийн хэрэглэгч</th>
+												<th>Үйлдэл</th>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td>Асгат</td>
+												<td><p:commandLink value="13" /></td>
+												<td><p:commandLink value="Энхжин" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>Хүнс Хангамж</td>
+												<td><p:commandLink value="32" /></td>
+												<td><p:commandLink value="Даваадорж" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+										</table>
+
+										<p:commandButton value="Нэмэх" id="withIcon"
+											icon="ui-icon-plus"
+											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+									</div>
+									<div class="tab-pane" id="profile-12" style="display: none;">
+
+										<table class="table">
+											<tr>
+												<th>#</th>
+												<th>Хамааралтай нийлүүлэгч</th>
+												<th>Нэр</th>
+												<th>Хүүхдийн тоо</th>
+												<th>Системийн хэрэглэгч</th>
+												<th>Үйлдэл</th>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td>Хүнс Хангамж</td>
+												<td>11-р цэцэрлэг</td>
+												<td>1300</td>
+
+												<td><p:commandLink value="Энх-Оргил" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+													<p:commandButton id="withIcon" icon="ui-icon-marker"
+														styleClass="btn btn-success btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>Хүнс Хангамж</td>
+												<td>13-р цэцэрлэг</td>
+												<td>850</td>
+												<td><p:commandLink value="Ганаа" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+													<p:commandButton id="withIcon" icon="ui-icon-map-marker"
+														styleClass="btn btn-success btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>Асгат</td>
+												<td>136-р цэцэрлэг</td>
+												<td>970</td>
+												<td><p:commandLink value="Болдоо" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+													<p:commandButton id="withIcon" icon="ui-icon-map-marker"
+														styleClass="btn btn-success btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+										</table>
+										<p:commandButton value="Нэмэх" id="withIcon"
+											icon="ui-icon-plus"
+											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+
+									</div>
+									<div class="tab-pane" id="messages-12" style="display: none;">
+										<table class="table">
+											<tr>
+												<th>#</th>
+												<th>Нэр</th>
+												<th>Нэвтрэх нэр</th>
+												<th>Цэцэрлэг/Байгууллага</th>
+												<th>Үйлдэл</th>
+											</tr>
+											<tr>
+												<td>1</td>
+												<td>Хүнс Хангамж</td>
+												<td>huns_hangamj</td>
+												<td><p:commandLink value="Хүнс Хангамж" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>Асгат</td>
+												<td>asgat</td>
+												<td><p:commandLink value="136-р цэцэрлэг" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>Болормаа</td>
+												<td>bolormaa</td>
+												<td><p:commandLink value="Хүнс Хангамж" /></td>
+												<td><p:commandButton value="Өөрчлөх" id="withIcon"
+														icon="ui-icon-pencil"
+														styleClass="btn btn-warning btn-xs ui-priority-warning" />
+													<p:commandButton value="Устгах" id="withIcon"
+														icon="ui-icon-trash"
+														styleClass="btn btn-danger btn-xs ui-priority-danger" />
+
+												</td>
+											</tr>
+										</table>
+										<p:commandButton value="Нэмэх" id="withIcon"
+											icon="ui-icon-plus"
+											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12"></div>
+						</div>
+					</div>
+
+
+				</div>
+				<!--  -->
+				<div class="col-md-12">
+
+					<div class="card-box">
+						<div class="row">
+							<div class="col-lg-12">
+								<h4 class="m-t-0 header-title">
+									<b>Хүнс ханган нийлүүлэгчид</b>
+								</h4>
+								<p class="text-muted font-13 m-b-30">Хүнс ханган
+									нийлүүлэгчид</p>
+
+								<form role="form">
+
+									<div class="form-group">
+										<label for="name">Нэр</label>
+										<p:inputText styleClass="form-control" id="name"
+											placeholder="Нэр" />
+
+									</div>
+
+									<div class="form-group">
+										<label for="desc">Тайлбар</label>
+										<p:inputTextarea styleClass="form-control" id="desc" rows="4"
+											cols="30">
+										</p:inputTextarea>
+									</div>
+
+									<div class=" form-group ">
+
+										<button type="submit" class="btn btn-primary">
+											Хадгалах <i class="icon-arrow-right14 position-right"></i>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+
+					<div class="card-box">
+						<div class="row">
+							<div class="col-lg-12">
+								<h4 class="m-t-0 header-title">
+									<b>Цэцэрлэг</b>
+								</h4>
+								<p class="text-muted font-13 m-b-30">Цэцэрлэг</p>
+
+								<form role="form">
+
+									<div class="form-group">
+										<label for="namegard">Нэр</label>
+										<p:inputText styleClass="form-control" id="namegard"
+											placeholder="Нэр" />
+
+									</div>
+
+									<div class="form-group">
+										<label for="descgard">Тайлбар</label>
+										<p:inputTextarea styleClass="form-control" id="descgard"
+											rows="4" cols="30">
+										</p:inputTextarea>
+									</div>
+									<div class="form-group">
+										<label for="compgard">Тайлбар</label>
+										<p:selectOneMenu id="compgard" styleClass="form-control"
+											value="#{selectOneMenuView.console}" style="width:125px">
+											<f:selectItem itemLabel="Select One" itemValue="" />
+											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+											<f:selectItem itemLabel="PS4" itemValue="PS4" />
+											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+										</p:selectOneMenu>
+									</div>
+									<div class=" form-group ">
+
+										<button type="submit" class="btn btn-primary">
+											Хадгалах <i class="icon-arrow-right14 position-right"></i>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+
+					<div class="card-box">
+						<div class="row">
+							<div class="col-lg-12">
+								<h4 class="m-t-0 header-title">
+									<b>Системийн хэрэглэгч</b>
+								</h4>
+								<p class="text-muted font-13 m-b-30">
+								Системд нэвтрэх эрхтэй хэрэглэгч нэмэх болон өөрчлөх
+
+								</p>
+
+								<form role="form">
+
+									<div class="form-group">
+										<label for="name">Овог</label>
+										<p:inputText styleClass="form-control" id="username"
+											placeholder="Овог" />
+									</div>
+									<div class="form-group">
+										<label for="name">Нэр</label>
+										<p:inputText styleClass="form-control" id="username"
+											placeholder="Нэр" />
+									</div>
+									<div class="form-group">
+										<label for="name">хэрэглэгчийн нэр </label>
+										<p:inputText styleClass="form-control" id="username"
+											placeholder="хэрэглэгчийн нэр " />
+									</div>
+									<div class="form-group">
+										<label for="name">Email</label>
+										<p:inputText styleClass="form-control" id="username"
+											placeholder="Email" />
+									</div>
+									<div class="form-group">
+										<label for="name">Password</label>
+										<p:inputText styleClass="form-control" id="username"
+											placeholder="Password" />
+									</div>
+									<div class="form-group">
+										<label for="name">Зураг</label>
+										<p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
+									</div>
+									<div class="form-group">
+										<label for="name">Role</label>
+										<p:inputText styleClass="form-control" id="username"
+											placeholder="Role" />
+									</div>
+									<div class="form-group">
+										<label for="compgard">Garden</label>
+										<p:selectOneMenu id="compgard" styleClass="form-control"
+											value="#{selectOneMenuView.console}" style="width:125px">
+											<f:selectItem itemLabel="Select One" itemValue="" />
+											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+											<f:selectItem itemLabel="PS4" itemValue="PS4" />
+											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+										</p:selectOneMenu>
+									</div>
+									<div class="form-group">
+										<label for="compgard">Company</label>
+										<p:selectOneMenu id="compgard" styleClass="form-control"
+											value="#{selectOneMenuView.console}" style="width:125px">
+											<f:selectItem itemLabel="Select One" itemValue="" />
+											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+											<f:selectItem itemLabel="PS4" itemValue="PS4" />
+											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+										</p:selectOneMenu>
+									</div>
+									
+									<div class=" form-group ">
+
+										<button type="submit" class="btn btn-primary">
+											Хадгалах <i class="icon-arrow-right14 position-right"></i>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- end container -->
+	</ui:define>
+	<ui:define name="script">
+		<script>
+			//<![CDATA[
+			$(document).ready(function() {
+			});
+
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>
+
