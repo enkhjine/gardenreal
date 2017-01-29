@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Java EE 6"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/MedIT_BusinessLogic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Hospital.Entity"/>
+	<classpathentry kind="lib" path="D:/MedIT/bin/Java/javax.ejb-3.1.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

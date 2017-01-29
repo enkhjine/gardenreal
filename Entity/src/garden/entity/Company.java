@@ -13,20 +13,20 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "CustomerPlan")
-public class Company implements Serializable{	
-	
+public class Company implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "PkId", length = 18, nullable = false)
 	private BigDecimal pkId;
-	
+
 	@Column(name = "Name")
 	private String name;
-	
+
 	@Column(name = "Description")
 	private String description;
-	
+
 	@Column(name = "CreatedDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
@@ -40,8 +40,8 @@ public class Company implements Serializable{
 
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
-	
-	public Company(){
+
+	public Company() {
 		super();
 	}
 
@@ -104,7 +104,5 @@ public class Company implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }
