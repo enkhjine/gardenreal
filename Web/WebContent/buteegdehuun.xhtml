@@ -7,241 +7,71 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="template/garden_template.xhtml">
 	<ui:define name="content">
-<div class="container">
+		<div class="container">
 
-	<!-- Page-Title -->
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="page-title-box">
-				Хэрэв та хүнсний <strong>бүтээгдэхүүний төрөл</strong> болон <strong>шинэ
-					бүтээгдэхүүн</strong> нэмэх бол
-				<div class="btn-group">
-					<p:commandLink styleClass="btn btn-danger dropdown-toggle waves-effect waves-light" action="orts" value="Нэмэх" />
+			<!-- Page-Title -->
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="page-title-box">
+						Хэрэв та хүнсний <strong>бүтээгдэхүүний төрөл</strong> болон <strong>шинэ
+							бүтээгдэхүүн</strong> нэмэх бол
+						<div class="btn-group">
+							<p:commandLink
+								styleClass="btn btn-danger dropdown-toggle waves-effect waves-light"
+								action="orts" value="Нэмэх" />
+						</div>
+						товч дарна уу
+					</div>
 				</div>
-				товч дарна уу
 			</div>
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-sm-12">
-			<!-- <div class="card-box">
-								Хэрэв та хүнсний <strong>бүтээгдэхүүний төрөл</strong> болон <strong>шинэ бүтээгдэхүүн</strong> нэмэх бол <div class="btn-group">
-                                        <button type="button" class="btn btn-danger dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> Нэмэх <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#">Төрөл нэмэх</a></li>
-                                            <li><a href="#">Бүтээгдэхүүн нэмэх</a></li>
-                                        </ul>
-                                    </div> товч дарна уу
-								
-                                 </div> -->
+			<div class="row">
+				<div class="col-sm-12">
 
-			<div class="card-box table-responsive">
-				<h4 class="m-t-0 header-title">
-					<b>Хүнсний ногооны жагсаалт</b>
-				</h4>
-				<p class="text-muted font-13 m-b-30">Хүнсний ногоо нь хүүхдийн
-					биед хэрэгтэй витамин амин дэмээр баялаг бүтээгдэхүүн юм</p>
 
-				<table id="datatable" class="table table-striped table-bordered">
-					<thead>
-						<tr>
-							<th>№</th>
-							<th>Нэр</th>
-							<th>Код</th>
-							<th>Нэгж</th>
-							<th>Төрөл</th>
-							<th>Тайлбар</th>
-							<th>Үйлдэл</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>Шар лууван</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>Улаан лууван</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>Цагаан лууван</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>Шар манжин</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>5</td>
-							<td>Хүрэн манжин</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>6</td>
-							<td>Бөөрөнхий байцаа</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>7</td>
-							<td>Брокколи</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>8</td>
-							<td>Буйцай</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>9</td>
-							<td>Юуцай</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>10</td>
-							<td>Яншуй</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-						<tr>
-							<td>11</td>
-							<td>Амтат чинжүү</td>
-							<td></td>
-							<td>гр</td>
-							<td>Хүнсний ногоо</td>
-							<td></td>
-							<td><button
-									class="btn btn-icon waves-effect waves-light btn-danger m-b-5">
-									<i class="fa fa-remove"></i>
-								</button>
-								<button
-									class="btn btn-icon waves-effect waves-light btn-success m-b-5">
-									<i class="fa fa-wrench"></i>
-								</button></td>
-						</tr>
-					</tbody>
-				</table>
+					<div class="card-box table-responsive">
+						<h4 class="m-t-0 header-title">
+							<b>Хүнсний ногооны жагсаалт</b>
+						</h4>
+						<p class="text-muted font-13 m-b-30">Хүнсний ногоо нь хүүхдийн
+							биед хэрэгтэй витамин амин дэмээр баялаг бүтээгдэхүүн юм</p>
+
+						<!-- listOrts -->
+
+						<p:dataTable styleClass="table en-table listOrtsCategory" 
+							tableStyleClass="table table-striped table-bordered"
+							value="#{infoController.ortsListWithJoins}" var="orts"
+							rowIndexVar="rowIndex">
+
+							<p:column headerText="№">#{rowIndex+1}</p:column>
+							<p:column headerText="Нэр">#{orts.name}</p:column>
+							<p:column headerText="Нэгж">#{orts.sizename}</p:column>
+							<p:column headerText="Төрөл">#{orts.category}</p:column>
+							<p:column headerText="Тайлбар">#{orts.description}</p:column>
+							<p:column headerText="">
+								<p:commandButton value="Засах"
+									action="#{infoController.editOrtsByPkId(orts.pkId)}"
+									styleClass="btn-warning" update="@(.listOrtsCategory)" />
+								<p:commandButton value="Устгах"
+									action="#{infoController.deleteOrtsByPkId(orts.pkId)}"
+									styleClass="btn-danger">
+									<p:confirm header="Confirmation"
+										message="Та устгахдаа итгэлтэй байна уу?" icon="ui-icon-alert" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Тийм" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="Үгүй" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				    </p:confirmDialog>
+
+					</div>
+				</div>
 			</div>
+
 		</div>
-	</div>
-
-
-</div>
-<!-- end container -->
-</ui:define>
+		<!-- end container -->
+	</ui:define>
 	<ui:define name="script">
 		<script>
 			//<![CDATA[

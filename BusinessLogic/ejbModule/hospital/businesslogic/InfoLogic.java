@@ -179,12 +179,21 @@ public class InfoLogic extends logic.SuperBusinessLogic implements
 			orts.setPkId(Tools.newPkId());
 			orts.setCreatedBy(loggedInfo.getGardenUser().getPkId());
 			orts.setCreatedDate(dte);
-			//orts.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
-			//orts.setUpdatedDate(dte);
 			insert(orts);
 		}
+		else if(Tool.DELETE.equals(orts.getStatus())){
+			delete(orts);
+		}
+		else if(Tool.MODIFIED.equals(orts.getStatus())){
+			orts.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
+			orts.setUpdatedDate(dte);
+			update(orts);
+		}
 	}
-	
+	public Orts getOrtsByPkId(BigDecimal pkId) throws Exception{
+		return getByPkId(Orts.class, pkId);
+		
+	}
 	public List<Orts> getListOrts() throws Exception{
 		return getAll(Orts.class);
 	}
@@ -248,5 +257,29 @@ public class InfoLogic extends logic.SuperBusinessLogic implements
 		
 		List<Food> foods = getByQuery(Food.class, jpql.toString(), parameters);
 		return foods;
+	}
+	
+	public List<Orts> getOrtsList() throws Exception{
+		StringBuilder jpql = new StringBuilder();
+		jpql.append("Select New garden.entity.Orts(o,c.name, s.name) from Orts o ");
+		jpql.append("left join OrtsCategory c on o.categoryPkId = c.pkId ");
+		jpql.append("left join OrtsSize s on o.size = s.pkId");
+		
+		List<Orts> ortss = getByQuery(Orts.class, jpql.toString(), null);
+		return ortss;
+	}
+	public List<FoodOrts> getFoodOrtsByFoodPkId(BigDecimal foodPkId) throws Exception{
+		StringBuilder jpql = new StringBuilder();
+		CustomHashMap parameters = new CustomHashMap();
+		parameters.put("foodPkId", foodPkId);
+		jpql.append("SELECT NEW garden.entity.FoodOrts(a, b) FROM FoodOrts a ");
+		jpql.append("INNER JOIN Orts b ON a.ortsPkId = b.pkId ");
+		jpql.append("WHERE a.foodPkId = :foodPkId ");
+		List<FoodOrts> foodOrts = getByQuery(FoodOrts.class, jpql.toString(), parameters);
+		return foodOrts;
+	}
+	
+	public Food getFood(BigDecimal foodPkId) throws Exception{
+		return getByPkId(Food.class, foodPkId);
 	}
 }

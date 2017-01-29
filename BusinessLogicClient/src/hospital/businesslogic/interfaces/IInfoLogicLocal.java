@@ -26,4 +26,8 @@ public interface IInfoLogicLocal {
 	public List<FoodCategory> getListFoodCategory() throws Exception;
 	public void saveFood(Food food, List<FoodOrts> foodOrts, LoggedInfo loggedInfo) throws Exception;
 	public List<Food> getFoodTmp(BigDecimal foodCategoryPkId) throws Exception;
+	public List<FoodOrts> getFoodOrtsByFoodPkId(BigDecimal foodPkId) throws Exception;
+	public Food getFood(BigDecimal foodPkId) throws Exception;
+	public List<Orts> getOrtsList() throws Exception;
+	public Orts getOrtsByPkId(BigDecimal pkId) throws Exception;
 }
