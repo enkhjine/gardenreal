@@ -98,11 +98,42 @@ public class Orts implements Serializable{
 	@Transient
 	private String shinjilgeeStatus;
 	
+	@Transient
+	private String category;
+	
+	@Transient
+	private String sizename;
+	
 	public Orts(){
 		super();
 		this.status = Tool.ADDED;
 	}
-
+	
+	public Orts(Orts orts, String category, String size ){
+		this.categoryPkId = orts.categoryPkId;
+		this.category = category;
+		this.sizename = size;
+		this.pkId = orts.pkId;
+		this.ilchleg = orts.ilchleg;
+		this.uurag = orts.uurag;
+		this.uuhtos = orts.uuhtos;
+		this.nuursus = orts.nuursus;
+		this.image = orts.image;
+		this.name = orts.name;
+		this.description = orts.description;
+	}
+	
+//	public FoodOrts(FoodOrts foodOrts, Orts orts){
+//		this.pkId = foodOrts.getPkId();
+//		this.name = orts.getName();
+//		this.foodPkId = foodOrts.getFoodPkId();
+//		this.ortsPkId = foodOrts.getOrtsPkId();
+//		this.ilchleg = foodOrts.getIlchleg();
+//		this.uurag = foodOrts.getUurag();
+//		this.uuhtos = foodOrts.getUuhtos();
+//		this.nuursus = foodOrts.getNuursus();
+//		this.size = foodOrts.getSize();
+//	}
 	public BigDecimal getPkId() {
 		return pkId;
 	}
@@ -310,5 +341,24 @@ public class Orts implements Serializable{
 	public void setShinjilgeeStatus(String shinjilgeeStatus) {
 		this.shinjilgeeStatus = shinjilgeeStatus;
 	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getSizename() {
+		return sizename;
+	}
+
+	public void setSizename(String sizename) {
+		this.sizename = sizename;
+	}
+	
+	
+	
 
 }

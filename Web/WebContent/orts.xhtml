@@ -35,30 +35,45 @@
 								<p class="text-muted font-13 m-b-30">Хүнсний ногооны төрөл</p>
 
 								<div class="form-group">
-									<label for="form:ortsCategoryName">Нэр</label> 
-									<p:inputText id="ortsCategoryName" styleClass="form-control listOrtsCategory" value="#{infoController.currentOrtsCategory.name}" />
+									<label for="form:ortsCategoryName">Нэр</label>
+									<p:inputText id="ortsCategoryName"
+										styleClass="form-control listOrtsCategory"
+										value="#{infoController.currentOrtsCategory.name}" />
 								</div>
 
-								<p:commandLink action="#{infoController.saveCurrentOrtsCategory()}" styleClass="btn" value="Хадгалах" update="@(.listOrtsCategory)" />
+								<p:commandLink
+									action="#{infoController.saveCurrentOrtsCategory()}"
+									styleClass="btn" value="Хадгалах" update="@(.listOrtsCategory)" />
 							</div>
 							<div class="col-lg-12">
-								<p:dataTable styleClass="table myTable listOrtsCategory" value="#{infoController.listOrtsCategory}" var="ortsCat">
+								<p:dataTable styleClass="table myTable listOrtsCategory"
+									value="#{infoController.listOrtsCategory}" var="ortsCat">
 									<p:column headerText="Нэр">#{ortsCat.name}</p:column>
-									<p:column width="5%"><p:commandButton action="#{infoController.setCurrentOrtsCategoryByPkId(ortsCat.pkId, 'Modified')}" value="Засах" update="@(.listOrtsCategory)" /></p:column>
 									<p:column width="5%">
-										<p:commandButton actionListener="#{infoController.setCurrentOrtsCategoryByPkId(ortsCat.pkId, 'Delete')}" value="Устгах" update="@(.listOrtsCategory)">
-											<p:confirm header="Confirmation" message="Та устгахдаа итгэлтэй байна уу?" icon="ui-icon-alert" />
+										<p:commandButton
+											action="#{infoController.setCurrentOrtsCategoryByPkId(ortsCat.pkId, 'Modified')}"
+											value="Засах" update="@(.listOrtsCategory)" />
+									</p:column>
+									<p:column width="5%">
+										<p:commandButton
+											actionListener="#{infoController.setCurrentOrtsCategoryByPkId(ortsCat.pkId, 'Delete')}"
+											value="Устгах" update="@(.listOrtsCategory)">
+											<p:confirm header="Confirmation"
+												message="Та устгахдаа итгэлтэй байна уу?"
+												icon="ui-icon-alert" />
 										</p:commandButton>
 									</p:column>
 								</p:dataTable>
-								
+
 							</div>
 						</div>
 					</div>
 					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-				        <p:commandButton value="Тийм" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-				        <p:commandButton value="Үгүй" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-				    </p:confirmDialog>
+						<p:commandButton value="Тийм" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="Үгүй" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
 
 					<div class="card-box">
 						<div class="row">
@@ -70,34 +85,51 @@
 									нэгж</p>
 
 								<div class="form-group">
-									<label for="exampleInputEmail1">Нэр</label> 
-									<p:inputText styleClass="form-control listOrtsSize" value="#{infoController.currentOrtsSize.name}" />
+									<label for="exampleInputEmail1">Нэр</label>
+									<p:inputText styleClass="form-control listOrtsSize"
+										value="#{infoController.currentOrtsSize.name}" />
 								</div>
 								<div class="form-group">
 									<label for="size">Хэмжээс</label>
-									<pe:inputNumber style="min-width: 100%; text-align: right;" styleClass="listOrtsSize" value="#{infoController.currentOrtsSize.size}" />
+									<pe:inputNumber style="min-width: 100%; text-align: right;"
+										styleClass="listOrtsSize"
+										value="#{infoController.currentOrtsSize.size}" />
 								</div>
 								<div class="form-group">
-									<label for="orts_negj">Нэгж</label><br/>
-									<p:selectOneMenu styleClass="form-control listOrtsSize" style="width: 100%" value="#{infoController.currentOrtsSize.parentPkId}">
+									<label for="orts_negj">Нэгж</label><br />
+									<p:selectOneMenu styleClass="form-control listOrtsSize"
+										style="width: 100%"
+										value="#{infoController.currentOrtsSize.parentPkId}">
 										<f:selectItem itemLabel="Сонгох" itemValue="0" />
-										<f:selectItems value="#{infoController.listOrtsSize}" var="ortsSize" itemLabel="#{ortsSize.parentNamesStr}" itemValue="#{ortsSize.pkId}" />
+										<f:selectItems value="#{infoController.listOrtsSize}"
+											var="ortsSize" itemLabel="#{ortsSize.parentNamesStr}"
+											itemValue="#{ortsSize.pkId}" />
 									</p:selectOneMenu>
 								</div>
-								<p:commandLink action="#{infoController.saveCurrentOrtsSize()}" styleClass="btn" value="Хадгалах" update="@(.listOrtsSize)" />
+								<p:commandLink action="#{infoController.saveCurrentOrtsSize()}"
+									styleClass="btn" value="Хадгалах" update="@(.listOrtsSize)" />
 
 							</div>
 							<div class="col-lg-12">
-								<p:dataTable styleClass="table myTable listOrtsSize" value="#{infoController.listOrtsSize}" var="ortsSize">
+								<p:dataTable styleClass="table myTable listOrtsSize"
+									value="#{infoController.listOrtsSize}" var="ortsSize">
 									<p:column headerText="Нэр">#{ortsSize.pStr} #{ortsSize.name}</p:column>
-									<p:column width="5%"><p:commandButton action="#{infoController.setCurrentOrtsSizeByPkId(ortsSize.pkId, 'Modified')}" value="Засах" update="@(.listOrtsSize)" /></p:column>
 									<p:column width="5%">
-										<p:commandButton actionListener="#{infoController.setCurrentOrtsSizeByPkId(ortsSize.pkId, 'Delete')}" value="Устгах" update="@(.listOrtsSize)">
-											<p:confirm header="Confirmation" message="Та устгахдаа итгэлтэй байна уу?" icon="ui-icon-alert" />
+										<p:commandButton
+											action="#{infoController.setCurrentOrtsSizeByPkId(ortsSize.pkId, 'Modified')}"
+											value="Засах" update="@(.listOrtsSize)" />
+									</p:column>
+									<p:column width="5%">
+										<p:commandButton
+											actionListener="#{infoController.setCurrentOrtsSizeByPkId(ortsSize.pkId, 'Delete')}"
+											value="Устгах" update="@(.listOrtsSize)">
+											<p:confirm header="Confirmation"
+												message="Та устгахдаа итгэлтэй байна уу?"
+												icon="ui-icon-alert" />
 										</p:commandButton>
 									</p:column>
 								</p:dataTable>
-								
+
 							</div>
 						</div>
 					</div>
@@ -109,63 +141,104 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<h4 class="m-t-0 header-title">
-									<b>Хүнсний ногоо</b>
+									<b>Хүнсний бүтээгдэхүүн</b>
 								</h4>
-								<p class="text-muted font-13 m-b-30">Хүнсний ногоо</p>
 
-								<form role="form">
+								<p class="text-muted font-13 m-b-30 ">
+									<p:outputLabel style="color: red; font-size:14px"
+										rendered="#{infoController.currentOrts.status eq 'Modified'}"
+										value="#{infoController.currentOrts.name} Хүнсний ногоог өөрчлөх гэж байна" />
+									<p:outputLabel
+										rendered="#{infoController.currentOrts.status eq 'Added'}"
+										value="Хүнсний ногоо" />
+								</p>
 
-									<div class="form-group">
-										<label for="name">Нэр</label><br/>
-										<p:inputText styleClass="form-control" value="#{infoController.currentOrts.name}" />
-									</div>
-									<div class="form-group">
-										<label for="orts_negj">Нэгж</label><br/>
-										<p:selectOneMenu style="width: 100%;" styleClass="listOrtsSize form-control" value="#{infoController.currentOrts.size}">
-											<f:selectItems value="#{infoController.listOrtsSize}" var="ortsSize" itemLabel="#{ortsSize.parentNamesStr}" itemValue="#{ortsSize.pkId}" />
-										</p:selectOneMenu>
-									</div>
-									<div class="form-group">
-										<label for="desc">Тайлбар</label><br/>
-										<p:inputTextarea styleClass="form-control" value="#{infoController.currentOrts.description}" />
-									</div>
-									<div class="form-group">
-										<label for="type">Төрөл</label><br/>
-										<p:selectOneMenu style="width: 100%;" styleClass="listOrtsCategory form-control" value="#{infoController.currentOrts.categoryPkId}">
-											<f:selectItems value="#{infoController.listOrtsCategory}" var="ortsCategory" itemLabel="#{ortsCategory.name}" itemValue="#{ortsCategory.pkId}" />
-										</p:selectOneMenu>
+								<div class="form-group">
+									<label for="name">Нэр</label><br />
+									<p:inputText styleClass="form-control"
+										value="#{infoController.currentOrts.name}" />
+								</div>
+								<div class="form-group">
+									<label for="orts_negj">Нэгж</label><br />
+									<p:selectOneMenu style="width: 100%;"
+										styleClass="listOrtsSize form-control"
+										value="#{infoController.currentOrts.size}">
+										<f:selectItems value="#{infoController.listOrtsSize}"
+											var="ortsSize" itemLabel="#{ortsSize.parentNamesStr}"
+											itemValue="#{ortsSize.pkId}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="form-group">
+									<label for="desc">Тайлбар</label><br />
+									<p:inputTextarea styleClass="form-control"
+										value="#{infoController.currentOrts.description}" />
+								</div>
+								<div class="form-group">
+									<label for="type">Төрөл</label><br />
+									<p:selectOneMenu style="width: 100%;"
+										styleClass="listOrtsCategory form-control"
+										value="#{infoController.currentOrts.categoryPkId}">
+										<f:selectItems value="#{infoController.listOrtsCategory}"
+											var="ortsCategory" itemLabel="#{ortsCategory.name}"
+											itemValue="#{ortsCategory.pkId}" />
+									</p:selectOneMenu>
 
+								</div>
+								<div class="form-group">
+									<div class="col-lg-3">
+										<label for="uurag">Уураг</label>
+										<pe:inputNumber style="min-width: 100%; text-align: right;"
+											value="#{infoController.currentOrts.uurag}" />
 									</div>
-									<div class="form-group">
-										<div class="col-lg-3">
-											<label for="uurag">Уураг</label>
-											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.uurag}" />
-										</div>
-										<div class="col-lg-3">
-											<label for="uuhtos">Өөх тос</label>
-											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.uuhtos}" />
-										</div>
-										<div class="col-lg-3">
-											<label for="uurag">Нүүрс ус</label>
-											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.nuursus}" />
-										</div>
-										<div class="col-lg-3">
-											<label for="uuhtos">Илчлэг</label>
-											<pe:inputNumber style="min-width: 100%; text-align: right;" value="#{infoController.currentOrts.ilchleg}" />
-										</div>
+									<div class="col-lg-3">
+										<label for="uuhtos">Өөх тос</label>
+										<pe:inputNumber style="min-width: 100%; text-align: right;"
+											value="#{infoController.currentOrts.uuhtos}" />
 									</div>
-									<div class="form-group">
-										<label for="shinjilgee">Шинжилгээний бичиг</label><br/>
-										<p:commandLink styleClass="btn" onclick="$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();" value="Хуулах" />
-										<p:inputText styleClass="file" disabled="true" value="#{infoController.currentOrts.shinjilgeeStatus}" />
-										<p:remoteCommand name="updateStatus" update="@(.file)" />
-										<p:fileUpload id="fileUpload" oncomplete="updateStatus();" onerror="updateStatus();" style="display:none;" fileUploadListener="#{infoController.ortsFileUpload}"
-											sizeLimit="100000000" auto="true" />
+									<div class="col-lg-3">
+										<label for="uurag">Нүүрс ус</label>
+										<pe:inputNumber style="min-width: 100%; text-align: right;"
+											value="#{infoController.currentOrts.nuursus}" />
 									</div>
-									<div class=" form-group ">
-										<p:commandLink action="#{infoController.saveCurrentOrts()}" styleClass="btn" value="Хадгалах" />
+									<div class="col-lg-3">
+										<label for="uuhtos">Илчлэг</label>
+										<pe:inputNumber style="min-width: 100%; text-align: right;"
+											value="#{infoController.currentOrts.ilchleg}" />
 									</div>
-								</form>
+								</div>
+								<div class="form-group">
+									<label for="shinjilgee">Шинжилгээний бичиг</label><br />
+									<p:commandLink styleClass="btn"
+										onclick="$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();"
+										value="Хуулах" />
+									<p:inputText styleClass="file" disabled="true"
+										value="#{infoController.currentOrts.shinjilgeeStatus}" />
+									<p:remoteCommand name="updateStatus" update="@(.file)" />
+									<p:fileUpload id="fileUpload" oncomplete="updateStatus();"
+										onerror="updateStatus();" style="display:none;"
+										fileUploadListener="#{infoController.ortsFileUpload}"
+										sizeLimit="100000000" auto="true" />
+								</div>
+								<div class=" form-group ">
+									<p:commandLink action="#{infoController.saveCurrentOrts()}"
+										styleClass="btn" value="Хадгалах" />
+
+									<p:commandLink value="Шинэчлэх"
+										action="#{infoController.newOrts()}"
+										styleClass=" btn btn-warning">
+										<p:confirm header="Confirmation"
+											message="Та Шинэчлэхдээ итгэлтэй байна уу?"
+											icon="ui-icon-alert" />
+									</p:commandLink>
+									<p:confirmDialog global="true" showEffect="fade"
+										hideEffect="fade">
+										<p:commandButton value="Тийм" type="button"
+											styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+										<p:commandButton value="Үгүй" type="button"
+											styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+									</p:confirmDialog>
+								</div>
+								<div class=" form-group "></div>
 							</div>
 						</div>
 					</div>

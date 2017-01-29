@@ -69,6 +69,18 @@ public class FoodOrts implements Serializable{
 		super();
 		this.status = Tool.LAST;
 	}
+	
+	public FoodOrts(FoodOrts foodOrts, Orts orts){
+		this.pkId = foodOrts.getPkId();
+		this.name = orts.getName();
+		this.foodPkId = foodOrts.getFoodPkId();
+		this.ortsPkId = foodOrts.getOrtsPkId();
+		this.ilchleg = foodOrts.getIlchleg();
+		this.uurag = foodOrts.getUurag();
+		this.uuhtos = foodOrts.getUuhtos();
+		this.nuursus = foodOrts.getNuursus();
+		this.size = foodOrts.getSize();
+	}
 
 	public BigDecimal getPkId() {
 		return pkId;

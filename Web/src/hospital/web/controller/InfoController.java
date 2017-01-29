@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -57,52 +58,67 @@ public class InfoController implements Serializable {
 	private List<FoodOrts> listFoodOrts;
 	private List<FoodOrts> listFoodOrtsTmp;
 	private List<Orts> listOrts;
+	private List<Orts> ortsListWithJoins;
 	private Orts selOrts;
 	private Food currentFood;
 	private List<FoodCategory> listFoodCategory;
 	private List<Food> listFoodTmp;
-
+	private String currentPageInfo;
+	
+	
 	public InfoController() {
 
 	}
 	
+	
+	public String getCurrentPageInfo() {
+		return currentPageInfo;
+	}
+	public void setCurrentPageInfo(String currentPageInfo) {
+		this.currentPageInfo = currentPageInfo;
+	}
 	public String saveCurrentOrts(){
 		String ret = "";
-		if(getCurrentOrts().getName().isEmpty()) {
-			getUserSessionController().showWarningMessage("Орцны нэр оруулаагүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getSize() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getSize()) == 0) {
-			getUserSessionController().showWarningMessage("Нэгж сонгоогүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getCategoryPkId() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getCategoryPkId()) == 0) {
-			getUserSessionController().showWarningMessage("Төрөл сонгоогүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getUurag() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getUurag()) == 0) {
-			getUserSessionController().showWarningMessage("Уураг оруулаагүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getUuhtos() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getUuhtos()) == 0) {
-			getUserSessionController().showWarningMessage("Өөх тос оруулаагүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getNuursus() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getNuursus()) == 0) {
-			getUserSessionController().showWarningMessage("Нүүрс ус оруулаагүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getIlchleg() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getIlchleg()) == 0) {
-			getUserSessionController().showWarningMessage("Илчлэг оруулаагүй байна.");
-			return "";
-		}
-		if(getCurrentOrts().getShinjilgee().isEmpty()){
-			getUserSessionController().showWarningMessage("Шинэжилгээний бичиг оруулаагүй байна.");
-			return "";
+		if(!Tool.DELETE.equals(getCurrentOrts().getStatus())){
+			if(getCurrentOrts().getName().isEmpty()) {
+				getUserSessionController().showWarningMessage("Орцны нэр оруулаагүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getSize() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getSize()) == 0) {
+				getUserSessionController().showWarningMessage("Нэгж сонгоогүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getCategoryPkId() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getCategoryPkId()) == 0) {
+				getUserSessionController().showWarningMessage("Төрөл сонгоогүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getUurag() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getUurag()) == 0) {
+				getUserSessionController().showWarningMessage("Уураг оруулаагүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getUuhtos() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getUuhtos()) == 0) {
+				getUserSessionController().showWarningMessage("Өөх тос оруулаагүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getNuursus() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getNuursus()) == 0) {
+				getUserSessionController().showWarningMessage("Нүүрс ус оруулаагүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getIlchleg() == null || BigDecimal.ZERO.compareTo(getCurrentOrts().getIlchleg()) == 0) {
+				getUserSessionController().showWarningMessage("Илчлэг оруулаагүй байна.");
+				return "";
+			}
+			if(getCurrentOrts().getShinjilgee().isEmpty()){
+				getUserSessionController().showWarningMessage("Шинэжилгээний бичиг оруулаагүй байна.");
+				return "";
+			}
 		}
 		
 		try{
 			infoLogic.saveOrts(getCurrentOrts(), getUserSessionController().getLoggedInfo());
+			setCurrentOrts(null);
+			listOrts = infoLogic.getOrtsList();
+			ortsListWithJoins  = infoLogic.getOrtsList();
 			ret = "buteegdehuun";
 		}catch(Exception ex){
 			getUserSessionController().showErrorMessage(ex.getMessage());
@@ -467,7 +483,10 @@ public class InfoController implements Serializable {
 				getUserSessionController().showErrorMessage(ex.getMessage());
 			}
 		}
-		if(listFoodCategory.size() > 0) listFoodCategory.get(0).setStatus("active");
+		if(listFoodCategory.size() > 0) {
+			setFoodCategoryByPkId(listFoodCategory.get(0).getPkId());
+			getListFoodTmp();
+		}
 		return listFoodCategory;
 	}
 	
@@ -492,4 +511,80 @@ public class InfoController implements Serializable {
 	public void setListFoodTmp(List<Food> listFoodTmp) {
 		this.listFoodTmp = listFoodTmp;
 	}
+	
+	public void setFoodCategoryByPkId(BigDecimal foodCategoryPkId){
+		for (FoodCategory foodCategory : listFoodCategory){
+			foodCategory.setStatus(foodCategoryPkId.compareTo(foodCategory.getPkId()) == 0 ? "active" : "");
+		}	
+	}
+	
+	public void setListFoodOrtsByFoodPkId(BigDecimal foodPkId) {
+		if(foodPkId != null){
+			try{
+				listFoodOrts = infoLogic.getFoodOrtsByFoodPkId(foodPkId);
+				currentFood = infoLogic.getFood(foodPkId);
+			}catch(Exception ex){
+				getUserSessionController().showErrorMessage(ex.getMessage());
+			}
+		}
+	}
+	
+	public String editListFoodOrtsByFoodPkId(BigDecimal foodPkId){
+		setListFoodOrtsByFoodPkId(foodPkId);
+		getCurrentFood().setStatus(Tool.MODIFIED);
+		return "food";
+	}
+	
+	public String editOrtsByPkId(BigDecimal pkId){
+		setOrtsByPkId(pkId);
+		getCurrentOrts().setStatus(Tool.MODIFIED);
+		return "orts";
+	}
+	
+	public String newOrts(){
+		setCurrentOrts(null);
+		return "orts";
+	}
+	public String deleteListFoodOrtsByFoodPkId(BigDecimal foodPkId){
+		setListFoodOrtsByFoodPkId(foodPkId);
+		getCurrentFood().setStatus(Tool.DELETE);
+		saveCurrentFood();
+		getUserSessionController().showWarningMessage("Амжилттай устаглаа.");
+		return "foodlist";
+	}
+	
+	public String deleteOrtsByPkId(BigDecimal pkId){
+		setOrtsByPkId(pkId);
+		getCurrentOrts().setStatus(Tool.DELETE);
+		saveCurrentOrts();
+		getUserSessionController().showWarningMessage("Амжилттай устаглаа.");
+		return "buteegdehuun";
+	}
+	
+	
+	public void setOrtsByPkId(BigDecimal pkId){
+		try {
+			this.currentOrts = infoLogic.getOrtsByPkId(pkId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public List<Orts> getOrtsListWithJoins() {
+		if(ortsListWithJoins == null){
+			try {
+				ortsListWithJoins = infoLogic.getOrtsList();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ortsListWithJoins;
+	}
+
+	public void setOrtsListWithJoins(List<Orts> ortsListWithJoins) {
+		this.ortsListWithJoins = ortsListWithJoins;
+	}
+	
+	
 }
