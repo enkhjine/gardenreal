@@ -43,42 +43,39 @@
 									<div class="form-group">
 										<label for="name">Нэр</label>
 										<p:inputText styleClass="form-control"
-											placeholder="Нэр" />
+											placeholder="Нэр" value="#{infoController.currentFood.name}" />
 									</div>
 									<div class="form-group">
 										<label for="name">Тайлбар </label>
 										<p:inputTextarea styleClass="form-control"
-											placeholder="Тайлбар" />
+											placeholder="Тайлбар" value="#{infoController.currentFood.description}" />
 									</div>
 									<div class="form-group">
 										<label for="name">Шинж чанар</label>
 										<p:inputText styleClass="form-control"
-											placeholder="Email" />
+											placeholder="Шинж чанар" value="#{infoController.currentFood.quality}" />
+									</div>
+									
+									<div class="form-group">
+										<label for="compgard">Төрөл</label><br/>
+										<p:selectOneMenu styleClass="form-control" value="#{infoController.currentFood.categoryPkId}" style="width:100%">
+											<f:selectItems value="#{infoController.listFoodCategory}" var="foodCategory" itemLabel="#{foodCategory.name}" itemValue="#{foodCategory.pkId}" />
+										</p:selectOneMenu>
 									</div>
 
 									<div class="form-group">
 										<label for="name">Зураг</label>
-										<p:fileUpload value="#{fileUploadView.file}" mode="simple"
-											skinSimple="true" />
-									</div>
-
-									<div class="form-group">
-										<label for="compgard">Төрөл</label>
-										<p:selectOneMenu styleClass="form-control"
-											value="#{selectOneMenuView.console}" style="width:125px">
-											<f:selectItem itemLabel="Select One" itemValue="" />
-											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
-											<f:selectItem itemLabel="PS4" itemValue="PS4" />
-											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
-										</p:selectOneMenu>
+										<p:commandLink styleClass="btn" onclick="$(PrimeFaces.escapeClientId('form:fileUpload_input')).click();" value="Хуулах" />
+										<p:inputText styleClass="file" disabled="true" value="#{infoController.currentFood.imageStatus}" />
+										<p:remoteCommand name="updateStatus" update="@(.file)" />
+										<p:fileUpload id="fileUpload" oncomplete="updateStatus();" onerror="updateStatus();" style="display:none;" fileUploadListener="#{infoController.foodFileUpload}"
+											sizeLimit="100000000" auto="true" />
 									</div>
 
 
 									<div class=" form-group ">
 
-										<button type="submit" class="btn btn-primary">
-											Хадгалах <i class="icon-arrow-right14 position-right"></i>
-										</button>
+										<p:commandLink action="#{infoController.saveCurrentFood()}" styleClass="btn" value="Хадгалах" />
 									</div>
 								</form>
 							</div>

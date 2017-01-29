@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "FoodCategory")
@@ -37,6 +38,9 @@ public class FoodCategory implements Serializable{
 
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
+	
+	@Transient
+	private String status;
 	
 	public FoodCategory(){
 		super();
@@ -94,6 +98,12 @@ public class FoodCategory implements Serializable{
 		return serialVersionUID;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
 	
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }
