@@ -24,7 +24,6 @@
 
 			<div class="row">
 				<div class="col-md-12">
-
 					<div class="card-box">
 						<div class="row">
 							<div class="col-lg-12">
@@ -48,175 +47,139 @@
 									<div class="indicator" style="right: 390px; left: 0px;"></div>
 								</ul>
 								<div class="tab-content">
-									<div class="tab-pane active" id="home-12"
-										style="display: block;">
+									<div class="tab-pane" id="home-12" style="display: block;">
+										<p:dataTable id="companies"
+											value="#{adminController.companies}" var="c"
+											emptyMessage="Хоосон байна" styleClass="myTable"
+											rowIndexVar="index">
+											<p:column headerText="#" sytleClass="id">
+												#{index + 1}
+											</p:column>
+											<p:column headerText="Нэр" styleClass="text">
+												#{c.name}
+											</p:column>
+											<p:column headerText="Хамааралтай цэцэрлэгүүд">
+											</p:column>
+											<p:column headerText="Системийн хэрэглэгч">
+											</p:column>
+											<p:column headerText="Үйлдэл">
+												<p:commandButton value="Өөрчлөх" icon="ui-icon-pencil"
+													styleClass="btn btn-warning btn-xs ui-priority-warning"
+													actionListener="#{adminController.setCursorCompany(c)}"
+													action="#{adminController.cursorCompany.setStatus('Modified')}"
+													oncomplete="PF('companyDialog').show();"
+													update="@(.companySection)" />
+												<p:commandButton value="Устгах" icon="ui-icon-trash"
+													styleClass="btn btn-danger btn-xs ui-priority-danger"
+													oncomplete="prepareDelete();"
+													actionListener="#{adminController.setCursorCompany(c)}">
+													<p:confirm header="Устгах"
+														message="Устгахдаа итгэлтэй бйна уу?" icon="ui-icon-alert" />
+												</p:commandButton>
+											</p:column>
+										</p:dataTable>
 
-										<table class="table">
-											<tr>
-												<th>#</th>
-												<th>Нэр</th>
-												<th>Хамааралтай цэцэрлэгүүд</th>
-												<th>Системийн хэрэглэгч</th>
-												<th>Үйлдэл</th>
-											</tr>
-											<tr>
-												<td>1</td>
-												<td>Асгат</td>
-												<td><p:commandLink value="13" /></td>
-												<td><p:commandLink value="Энхжин" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>Хүнс Хангамж</td>
-												<td><p:commandLink value="32" /></td>
-												<td><p:commandLink value="Даваадорж" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-										</table>
-
-										<p:commandButton value="Нэмэх" id="withIcon"
-											icon="ui-icon-plus"
-											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+										<p:remoteCommand name="prepareDelete"
+											actionListener="#{adminController.cursorCompany.setStatus('Delete')}"
+											action="#{adminController.saveCompany()}" />
+										<p:confirmDialog global="true" showEffect="fade"
+											hideEffect="fade">
+											<p:commandButton value="Yes" type="button"
+												styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+											<p:commandButton value="No" type="button"
+												styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+										</p:confirmDialog>
+										<p:commandButton value="Нэмэх" icon="ui-icon-plus"
+											styleClass="btn btn-primary btn-xs ui-priority-danger"
+											onclick="PF('companyDialog').show();"
+											actionListener="#{adminController.setCursorCompany(null)}"
+											action="#{adminController.cursorCompany.setStatus('Added')}"
+											update="form:companyPanel" />
 									</div>
 									<div class="tab-pane" id="profile-12" style="display: none;">
+										<p:dataTable value="#{adminController.gardens}" var="g"
+											emptyMessage="Хоосон байна" styleClass="myTable"
+											rowIndexVar="index" id="gardens">
+											<p:column headerText="#">
+												#{index + 1}
+											</p:column>
+											<p:column headerText="Хамааралтай нийлүүлэгч">
 
-										<table class="table">
-											<tr>
-												<th>#</th>
-												<th>Хамааралтай нийлүүлэгч</th>
-												<th>Нэр</th>
-												<th>Хүүхдийн тоо</th>
-												<th>Системийн хэрэглэгч</th>
-												<th>Үйлдэл</th>
-											</tr>
-											<tr>
-												<td>1</td>
-												<td>Хүнс Хангамж</td>
-												<td>11-р цэцэрлэг</td>
-												<td>1300</td>
-
-												<td><p:commandLink value="Энх-Оргил" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-marker"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>Хүнс Хангамж</td>
-												<td>13-р цэцэрлэг</td>
-												<td>850</td>
-												<td><p:commandLink value="Ганаа" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-map-marker"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-											<tr>
-												<td>3</td>
-												<td>Асгат</td>
-												<td>136-р цэцэрлэг</td>
-												<td>970</td>
-												<td><p:commandLink value="Болдоо" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-map-marker"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-										</table>
-										<p:commandButton value="Нэмэх" id="withIcon"
-											icon="ui-icon-plus"
-											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+											</p:column>
+											<p:column headerText="Нэр">
+												#{g.name}
+											</p:column>
+											<p:column headerText="Системийн хэрэглэгч">
+											</p:column>
+											<p:column headerText="Үйлдэл">
+												<p:commandButton value="Өөрчлөх" icon="ui-icon-pencil"
+													styleClass="btn btn-warning btn-xs ui-priority-warning"
+													actionListener="#{adminController.setCursorGarden(g)}"
+													action="#{adminController.cursorGarden.setStatus('Modified')}"
+													oncomplete="PF('gardenDialog').show();"
+													update="@(.gardenSection)" />
+												<p:commandButton value="Устгах" icon="ui-icon-trash"
+													styleClass="btn btn-danger btn-xs ui-priority-danger"
+													oncomplete="prepareDeleteGarden();"
+													actionListener="#{adminController.setCursorGarden(g)}">
+													<p:confirm header="Устгах"
+														message="Устгахдаа итгэлтэй бйна уу?" icon="ui-icon-alert" />
+												</p:commandButton>
+											</p:column>
+											
+										</p:dataTable>
+										<p:remoteCommand name="prepareDeleteGarden"
+											actionListener="#{adminController.cursorGarden.setStatus('Delete')}" 
+											action = "#{adminController.saveGarden()}"/>
+										<p:commandButton value="Нэмэх" icon="ui-icon-plus"
+											styleClass="btn btn-primary btn-xs ui-priority-danger"
+											onclick="PF('gardenDialog').show();"
+											actionListener="#{adminController.setCursorGarden(null)}"
+											action="#{adminController.cursorGarden.setStatus('Added')}"
+											update="@(.gardenSection)" />
 
 									</div>
 									<div class="tab-pane" id="messages-12" style="display: none;">
-										<table class="table">
-											<tr>
-												<th>#</th>
-												<th>Нэр</th>
-												<th>Нэвтрэх нэр</th>
-												<th>Цэцэрлэг/Байгууллага</th>
-												<th>Үйлдэл</th>
-											</tr>
-											<tr>
-												<td>1</td>
-												<td>Хүнс Хангамж</td>
-												<td>huns_hangamj</td>
-												<td><p:commandLink value="Хүнс Хангамж" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>Асгат</td>
-												<td>asgat</td>
-												<td><p:commandLink value="136-р цэцэрлэг" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-											<tr>
-												<td>3</td>
-												<td>Болормаа</td>
-												<td>bolormaa</td>
-												<td><p:commandLink value="Хүнс Хангамж" /></td>
-												<td><p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-
-												</td>
-											</tr>
-										</table>
-										<p:commandButton value="Нэмэх" id="withIcon"
-											icon="ui-icon-plus"
-											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+										<p:dataTable value="#{adminController.gardenUsers}" var="gu"
+											emptyMessage="Хоосон байна" styleClass="myTable"
+											id="gardenUsers" rowIndexVar="index">
+											<p:column headerText="#">
+												#{index +1}
+											</p:column>
+											<p:column headerText="Нэр">
+												#{gu.firstname}
+											</p:column>
+											<p:column headerText="Нэвтрэх нэр">
+												#{gu.username}
+											</p:column>
+											<p:column headerText="Цэцэрлэг/Байгууллага">
+											</p:column>
+											<p:column headerText="Үйлдэл">
+												<p:commandButton value="Өөрчлөх" icon="ui-icon-pencil"
+													styleClass="btn btn-warning btn-xs ui-priority-warning"
+													actionListener="#{adminController.setCursorGardenUser(gu)}"
+													action="#{adminController.cursorGardenUser.setStatus('Modified')}"
+													oncomplete="PF('gardenUserDialog').show();"
+													update="@(.gardenUserSection)" />
+												<p:commandButton value="Устгах" icon="ui-icon-trash"
+													styleClass="btn btn-danger btn-xs ui-priority-danger"
+													oncomplete="prepareDeleteGardenUser();"
+													actionListener="#{adminController.setCursorGardenUser(gu)}">
+													<p:confirm header="Устгах"
+														message="Устгахдаа итгэлтэй бйна уу?" icon="ui-icon-alert" />
+												</p:commandButton>
+											</p:column>
+											
+										</p:dataTable>
+										<p:remoteCommand name="prepareDeleteGardenUser"
+											actionListener="#{adminController.cursorGardenUser.setStatus('Delete')}" 
+											action = "#{adminController.saveGardenUser()}"/>
+										<p:commandButton value="Нэмэх" icon="ui-icon-plus"
+											styleClass="btn btn-primary btn-xs ui-priority-danger"
+											onclick="PF('gardenUserDialog').show();"
+											actionListener="#{adminController.setCursorGardenUser(null)}"
+											action="#{adminController.cursorGardenUser.setStatus('Added')}"
+											update="@(.gardenUserSection)" />
 									</div>
 								</div>
 							</div>
@@ -227,8 +190,14 @@
 
 				</div>
 				<!--  -->
-				<div class="col-md-12">
 
+			</div>
+		</div>
+
+		<p:dialog widgetVar="companyDialog" styleClass="dialog-scroll"
+			closeOnEscape="true">
+			<p:panel styleClass="no-style-panel companySection" id="companyPanel">
+				<div class="col-md-12">
 					<div class="card-box">
 						<div class="row">
 							<div class="col-lg-12">
@@ -238,35 +207,34 @@
 								<p class="text-muted font-13 m-b-30">Хүнс ханган
 									нийлүүлэгчид</p>
 
-								<form role="form">
+								<div class="form-group">
+									<label for="name">Нэр</label>
+									<p:inputText styleClass="form-control" id="companyName"
+										value="#{adminController.cursorCompany.name}"
+										placeholder="Нэр" />
+								</div>
+								<div class="form-group">
+									<label for="desc">Тайлбар</label>
+									<p:inputTextarea styleClass="form-control" id="companyDesc"
+										value="#{adminController.cursorCompany.description}" rows="4"
+										cols="30">
+									</p:inputTextarea>
+								</div>
+								<div class=" form-group ">
+									<p:commandLink value="Хадгалах " styleClass="btn btn-primary"
+										action="#{adminController.saveCompany()}" />
+								</div>
 
-									<div class="form-group">
-										<label for="name">Нэр</label>
-										<p:inputText styleClass="form-control" id="name"
-											placeholder="Нэр" />
-
-									</div>
-
-									<div class="form-group">
-										<label for="desc">Тайлбар</label>
-										<p:inputTextarea styleClass="form-control" id="desc" rows="4"
-											cols="30">
-										</p:inputTextarea>
-									</div>
-
-									<div class=" form-group ">
-
-										<button type="submit" class="btn btn-primary">
-											Хадгалах <i class="icon-arrow-right14 position-right"></i>
-										</button>
-									</div>
-								</form>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12">
+			</p:panel>
+		</p:dialog>
 
+		<p:dialog widgetVar="gardenDialog" styleClass="dialog-scroll">
+			<p:panel styleClass="no-style-panel gardenSection" id="gardenPanel">
+				<div class="col-md-12">
 					<div class="card-box">
 						<div class="row">
 							<div class="col-lg-12">
@@ -275,134 +243,122 @@
 								</h4>
 								<p class="text-muted font-13 m-b-30">Цэцэрлэг</p>
 
-								<form role="form">
+								<div class="form-group">
+									<label for="namegard">Нэр</label>
+									<p:inputText styleClass="form-control" id="gardenname"
+										placeholder="Нэр" value="#{adminController.cursorGarden.name}" />
 
-									<div class="form-group">
-										<label for="namegard">Нэр</label>
-										<p:inputText styleClass="form-control" id="namegard"
-											placeholder="Нэр" />
+								</div>
 
-									</div>
+								<div class="form-group">
+									<label for="descgard">Тайлбар</label>
+									<p:inputTextarea styleClass="form-control" id="gardenDesc"
+										rows="4" cols="30"
+										value="#{adminController.cursorGarden.description}">
+									</p:inputTextarea>
+								</div>
+								<div class="form-group">
+									<label for="compgard">Компани сонгох</label>
+									<p:selectOneMenu id="compgard" styleClass="form-control"
+										style="width:125px"
+										value="#{adminController.cursorGarden.companyPkId}">
+										<f:selectItems value="#{adminController.companies}" var="c"
+											itemLabel="#{c.name}" itemValue="#{c.pkId}" />
+									</p:selectOneMenu>
+								</div>
+								<div class=" form-group ">
 
-									<div class="form-group">
-										<label for="descgard">Тайлбар</label>
-										<p:inputTextarea styleClass="form-control" id="descgard"
-											rows="4" cols="30">
-										</p:inputTextarea>
-									</div>
-									<div class="form-group">
-										<label for="compgard">Тайлбар</label>
-										<p:selectOneMenu id="compgard" styleClass="form-control"
-											value="#{selectOneMenuView.console}" style="width:125px">
-											<f:selectItem itemLabel="Select One" itemValue="" />
-											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
-											<f:selectItem itemLabel="PS4" itemValue="PS4" />
-											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
-										</p:selectOneMenu>
-									</div>
-									<div class=" form-group ">
-
-										<button type="submit" class="btn btn-primary">
-											Хадгалах <i class="icon-arrow-right14 position-right"></i>
-										</button>
-									</div>
-								</form>
+									<p:commandLink value="Хадгалах " styleClass="btn btn-primary"
+										action="#{adminController.saveGarden()}" />
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12">
+			</p:panel>
+		</p:dialog>
 
+		<p:dialog widgetVar="gardenUserDialog" styleClass="dialog-scroll">
+			<p:panel styleClass="no-style-panel gardenUserSection" id="gardenUserPanel" >
+				<div class="col-md-12">
 					<div class="card-box">
 						<div class="row">
 							<div class="col-lg-12">
 								<h4 class="m-t-0 header-title">
 									<b>Системийн хэрэглэгч</b>
 								</h4>
-								<p class="text-muted font-13 m-b-30">
-								Системд нэвтрэх эрхтэй хэрэглэгч нэмэх болон өөрчлөх
+								<p class="text-muted font-13 m-b-30">Системд нэвтрэх эрхтэй
+									хэрэглэгч нэмэх болон өөрчлөх</p>
 
-								</p>
+								<div class="form-group">
+									<label for="name">Овог</label>
+									<p:inputText styleClass="form-control" placeholder="Овог" value = "#{adminController.cursorGardenUser.lastname}" />
+								</div>
+								<div class="form-group">
+									<label for="name">Нэр</label>
+									<p:inputText styleClass="form-control" placeholder="Нэр" value = "#{adminController.cursorGardenUser.firstname}" />
+								</div>
+								<div class="form-group">
+									<label for="name">Хэрэглэгчийн нэр </label>
+									<p:inputText styleClass="form-control"
+										placeholder="хэрэглэгчийн нэр " value = "#{adminController.cursorGardenUser.username}" />
+								</div>
+								<div class="form-group">
+									<label for="name">Email</label>
+									<p:inputText styleClass="form-control" placeholder="Email" value = "#{adminController.cursorGardenUser.email}" />
+								</div>
+								<div class="form-group">
+									<label for="name">Password</label>
+									<p:inputText styleClass="form-control" placeholder="Password" value = "#{adminController.cursorGardenUser.password}"/>
+								</div>
+								<div class="form-group">
+									<label for="name">Зураг</label>
+									<p:fileUpload mode="simple" skinSimple="true" />
+								</div>
+								<div class="form-group">
+									<label for="name">Role</label>
+									<p:inputText styleClass="form-control" placeholder="Role" />
+								</div>
+								<div class="form-group">
+									<label for="compgard">Garden</label>
+									<p:selectOneMenu styleClass="form-control" style="width:125px">
+										<f:selectItem itemLabel="Select One" />
+										<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+										<f:selectItem itemLabel="PS4" itemValue="PS4" />
+										<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+									</p:selectOneMenu>
+								</div>
+								<div class="form-group">
+									<label for="compgard">Company</label>
+									<p:selectOneMenu styleClass="form-control" style="width:125px">
+										<f:selectItem itemLabel="Select One" />
+										<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+										<f:selectItem itemLabel="PS4" itemValue="PS4" />
+										<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+									</p:selectOneMenu>
+								</div>
 
-								<form role="form">
-
-									<div class="form-group">
-										<label for="name">Овог</label>
-										<p:inputText styleClass="form-control" id="username"
-											placeholder="Овог" />
-									</div>
-									<div class="form-group">
-										<label for="name">Нэр</label>
-										<p:inputText styleClass="form-control" id="username"
-											placeholder="Нэр" />
-									</div>
-									<div class="form-group">
-										<label for="name">хэрэглэгчийн нэр </label>
-										<p:inputText styleClass="form-control" id="username"
-											placeholder="хэрэглэгчийн нэр " />
-									</div>
-									<div class="form-group">
-										<label for="name">Email</label>
-										<p:inputText styleClass="form-control" id="username"
-											placeholder="Email" />
-									</div>
-									<div class="form-group">
-										<label for="name">Password</label>
-										<p:inputText styleClass="form-control" id="username"
-											placeholder="Password" />
-									</div>
-									<div class="form-group">
-										<label for="name">Зураг</label>
-										<p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
-									</div>
-									<div class="form-group">
-										<label for="name">Role</label>
-										<p:inputText styleClass="form-control" id="username"
-											placeholder="Role" />
-									</div>
-									<div class="form-group">
-										<label for="compgard">Garden</label>
-										<p:selectOneMenu id="compgard" styleClass="form-control"
-											value="#{selectOneMenuView.console}" style="width:125px">
-											<f:selectItem itemLabel="Select One" itemValue="" />
-											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
-											<f:selectItem itemLabel="PS4" itemValue="PS4" />
-											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
-										</p:selectOneMenu>
-									</div>
-									<div class="form-group">
-										<label for="compgard">Company</label>
-										<p:selectOneMenu id="compgard" styleClass="form-control"
-											value="#{selectOneMenuView.console}" style="width:125px">
-											<f:selectItem itemLabel="Select One" itemValue="" />
-											<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
-											<f:selectItem itemLabel="PS4" itemValue="PS4" />
-											<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
-										</p:selectOneMenu>
-									</div>
-									
-									<div class=" form-group ">
-
-										<button type="submit" class="btn btn-primary">
-											Хадгалах <i class="icon-arrow-right14 position-right"></i>
-										</button>
-									</div>
-								</form>
+								<div class=" form-group ">
+									<button type="submit" class="btn btn-primary">
+										Хадгалах <i class="icon-arrow-right14 position-right"></i>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			</p:panel>
+		</p:dialog>
 
-
-
+		<p:remoteCommand name="loadData"
+			actionListener="#{adminController.loadData()}" />
 		<!-- end container -->
 	</ui:define>
 	<ui:define name="script">
 		<script>
 			//<![CDATA[
 			$(document).ready(function() {
+				loadData();
 			});
 
 			//]]>

@@ -10,50 +10,51 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "GardenUser")
-public class GardenUser implements Serializable{	
-	
+public class GardenUser implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "PkId", length = 18, nullable = false)
 	private BigDecimal pkId;
-	
+
 	@Column(name = "Firstname")
 	private String firstname;
-	
+
 	@Column(name = "Lastname")
 	private String lastname;
-	
+
 	@Column(name = "Username")
 	private String username;
-	
+
 	@Column(name = "Email")
 	private String email;
-	
+
 	@Column(name = "Password")
 	private String password;
-	
+
 	@Column(name = "ProfileImage")
 	private String profileImage;
-	
+
 	@Column(name = "Role")
 	private BigDecimal role;
-	
+
 	@Column(name = "GardenPkId")
 	private BigDecimal gardenPkId;
-	
+
 	@Column(name = "CompanyPkId")
 	private BigDecimal companyPkId;
-	
+
 	@Column(name = "T0")
 	private BigDecimal t0;
-	
+
 	@Column(name = "Quality")
 	private String quality;
-	
+
 	@Column(name = "CreatedDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
@@ -67,8 +68,11 @@ public class GardenUser implements Serializable{
 
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
-	
-	public GardenUser(){
+
+	@Transient
+	private String status;
+
+	public GardenUser() {
 		super();
 	}
 
@@ -200,10 +204,16 @@ public class GardenUser implements Serializable{
 		this.updatedBy = updatedBy;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }

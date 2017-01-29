@@ -10,9 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name = "CustomerPlan")
+@Table(name = "Company")
 public class Company implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -40,6 +41,15 @@ public class Company implements Serializable {
 
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
+
+	@Transient
+	private String status;
+
+	@Transient
+	private long gardenCount;
+
+	@Transient
+	private long userCount;
 
 	public Company() {
 		super();
@@ -101,8 +111,32 @@ public class Company implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public long getGardenCount() {
+		return gardenCount;
+	}
+
+	public void setGardenCount(long gardenCount) {
+		this.gardenCount = gardenCount;
+	}
+
+	public long getUserCount() {
+		return userCount;
+	}
+
+	public void setUserCount(long userCount) {
+		this.userCount = userCount;
 	}
 
 }

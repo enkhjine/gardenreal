@@ -10,32 +10,33 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Garden")
-public class Garden implements Serializable{	
-	
+public class Garden implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "PkId", length = 18, nullable = false)
 	private BigDecimal pkId;
-	
+
 	@Column(name = "Name")
 	private String name;
-	
+
 	@Column(name = "Description")
 	private String description;
-	
+
 	@Column(name = "CompanyPkId")
 	private BigDecimal companyPkId;
-	
+
 	@Column(name = "ChildrenCount")
 	private BigDecimal childrenCount;
-	
+
 	@Column(name = "Sch0")
 	private BigDecimal sch0;
-	
+
 	@Column(name = "CreatedDate")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
@@ -49,8 +50,11 @@ public class Garden implements Serializable{
 
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
-	
-	public Garden(){
+
+	@Transient
+	private String status;
+
+	public Garden() {
 		super();
 	}
 
@@ -134,10 +138,16 @@ public class Garden implements Serializable{
 		this.updatedBy = updatedBy;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }
