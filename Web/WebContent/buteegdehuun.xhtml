@@ -38,17 +38,17 @@
 
 						<!-- listOrts -->
 
-						<p:dataTable styleClass="table en-table listOrtsCategory" 
+						<p:dataTable styleClass="table en-table listOrtsCategory"
 							tableStyleClass="table table-striped table-bordered"
 							value="#{infoController.ortsListWithJoins}" var="orts"
 							rowIndexVar="rowIndex">
 
-							<p:column headerText="№">#{rowIndex+1}</p:column>
+							<p:column headerText="№" style="width: 40px; text-align:center">#{rowIndex+1}</p:column>
 							<p:column headerText="Нэр">#{orts.name}</p:column>
 							<p:column headerText="Нэгж">#{orts.sizename}</p:column>
 							<p:column headerText="Төрөл">#{orts.category}</p:column>
 							<p:column headerText="Тайлбар">#{orts.description}</p:column>
-							<p:column headerText="">
+							<p:column headerText="" style="width: 200px; text-align:center">
 								<p:commandButton value="Засах"
 									action="#{infoController.editOrtsByPkId(orts.pkId)}"
 									styleClass="btn-warning" update="@(.listOrtsCategory)" />
@@ -60,10 +60,12 @@
 								</p:commandButton>
 							</p:column>
 						</p:dataTable>
-<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-				        <p:commandButton value="Тийм" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-				        <p:commandButton value="Үгүй" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-				    </p:confirmDialog>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Тийм" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="Үгүй" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
 
 					</div>
 				</div>
