@@ -6,6 +6,9 @@ import java.util.List;
 import javax.ejb.Local;
 
 import garden.businessentity.LoggedInfo;
+import garden.entity.Food;
+import garden.entity.FoodCategory;
+import garden.entity.FoodOrts;
 import garden.entity.Orts;
 import garden.entity.OrtsCategory;
 import garden.entity.OrtsSize;
@@ -20,4 +23,11 @@ public interface IInfoLogicLocal {
 	public OrtsSize getOrtsSize(BigDecimal ortsSizePkId) throws Exception;
 	public void saveOrts(Orts orts, LoggedInfo loggedInfo) throws Exception;
 	public List<Orts> getListOrts() throws Exception;
+	public List<FoodCategory> getListFoodCategory() throws Exception;
+	public void saveFood(Food food, List<FoodOrts> foodOrts, LoggedInfo loggedInfo) throws Exception;
+	public List<Food> getFoodTmp(BigDecimal foodCategoryPkId) throws Exception;
+	public List<FoodOrts> getFoodOrtsByFoodPkId(BigDecimal foodPkId) throws Exception;
+	public Food getFood(BigDecimal foodPkId) throws Exception;
+	public List<Orts> getOrtsList() throws Exception;
+	public Orts getOrtsByPkId(BigDecimal pkId) throws Exception;
 }

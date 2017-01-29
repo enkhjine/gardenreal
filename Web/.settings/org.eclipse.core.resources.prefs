@@ -5,5 +5,6 @@ encoding//WebContent/template/common/rightbar.xhtml=UTF-8
 encoding//WebContent/template/common/topbar.xhtml=UTF-8
 encoding//src/hospital/web/controller/ApplicationController.java=UTF-8
 encoding//src/hospital/web/controller/InfoController.java=UTF-8
+encoding//src/hospital/web/controller/PlanController.java=UTF-8
 encoding//src/hospital/web/controller/UserSessionController.java=UTF-8
 encoding/<project>=UTF-8

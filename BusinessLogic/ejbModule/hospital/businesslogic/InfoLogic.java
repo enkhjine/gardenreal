@@ -14,9 +14,11 @@ import javax.ejb.Stateless;
 
 import garden.businessentity.LoggedInfo;
 import garden.businessentity.Tool;
+import garden.entity.Food;
+import garden.entity.FoodCategory;
+import garden.entity.FoodOrts;
 import garden.entity.Orts;
 import garden.entity.OrtsCategory;
-import garden.entity.OrtsOrder;
 import garden.entity.OrtsSize;
 
 @Stateless(name = "InfoLogic", mappedName = "hospital.businesslogic.InfoLogic")
@@ -177,15 +179,107 @@ public class InfoLogic extends logic.SuperBusinessLogic implements
 			orts.setPkId(Tools.newPkId());
 			orts.setCreatedBy(loggedInfo.getGardenUser().getPkId());
 			orts.setCreatedDate(dte);
-			//orts.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
-			//orts.setUpdatedDate(dte);
 			insert(orts);
 		}
+		else if(Tool.DELETE.equals(orts.getStatus())){
+			delete(orts);
+		}
+		else if(Tool.MODIFIED.equals(orts.getStatus())){
+			orts.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
+			orts.setUpdatedDate(dte);
+			update(orts);
+		}
 	}
-	
+	public Orts getOrtsByPkId(BigDecimal pkId) throws Exception{
+		return getByPkId(Orts.class, pkId);
+		
+	}
 	public List<Orts> getListOrts() throws Exception{
 		return getAll(Orts.class);
 	}
 	
+	public List<FoodCategory> getListFoodCategory() throws Exception{
+		return getAll(FoodCategory.class);
+	}
 	
+	public void saveFood(Food food, List<FoodOrts> foodOrts, LoggedInfo loggedInfo) throws Exception{
+		BigDecimal pkId = Tools.newPkId();
+		Date dte = new Date();
+		if(Tool.ADDED.equals(food.getStatus())){
+			food.setPkId(pkId);
+			food.setCreatedBy(loggedInfo.getGardenUser().getPkId());
+			food.setCreatedDate(dte);
+			
+			for (FoodOrts foodOrt : foodOrts) {
+				pkId = pkId.add(BigDecimal.ONE);
+				foodOrt.setPkId(pkId);
+				foodOrt.setFoodPkId(food.getPkId());
+				foodOrt.setCreatedBy(loggedInfo.getGardenUser().getPkId());
+				foodOrt.setCreatedDate(dte);
+				foodOrt.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
+				foodOrt.setUpdatedDate(dte);
+			}
+			
+			insert(food);
+			insert(foodOrts);
+		}
+		if(Tool.MODIFIED.equals(food.getStatus())){
+			food.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
+			food.setUpdatedDate(dte);
+			for (FoodOrts foodOrt : foodOrts) {
+				pkId = pkId.add(BigDecimal.ONE);
+				foodOrt.setPkId(pkId);
+				foodOrt.setFoodPkId(food.getPkId());
+				foodOrt.setCreatedBy(loggedInfo.getGardenUser().getPkId());
+				foodOrt.setCreatedDate(dte);
+				foodOrt.setUpdatedBy(loggedInfo.getGardenUser().getPkId());
+				foodOrt.setUpdatedDate(dte);
+			}
+			deleteByAnyField(FoodOrts.class, "foodPkId", food.getPkId());
+			update(food);
+			insert(foodOrts);
+		}
+		if(Tool.DELETE.equals(food.getPkId())){
+			deleteByAnyField(FoodOrts.class, "foodPkId", food.getPkId());
+			delete(food);
+		}
+	}
+	
+	public List<Food> getFoodTmp(BigDecimal foodCategoryPkId) throws Exception{
+		StringBuilder jpql = new StringBuilder();
+		CustomHashMap parameters = new CustomHashMap();
+		parameters.put("categoryPkId", foodCategoryPkId);
+		
+		jpql.append("SELECT NEW garden.entity.Food(a.pkId, a.name, SUM(b.ilchleg), SUM(b.uurag), SUM(b.uuhtos), SUM(b.nuursus), SUM(b.size)) FROM Food a ");
+		jpql.append("INNER JOIN FoodOrts b ON a.pkId = b.foodPkId ");
+		jpql.append("WHERE a.categoryPkId = :categoryPkId ");
+		jpql.append("GROUP BY a.pkId, a.name ");
+		
+		List<Food> foods = getByQuery(Food.class, jpql.toString(), parameters);
+		return foods;
+	}
+	
+	public List<Orts> getOrtsList() throws Exception{
+		StringBuilder jpql = new StringBuilder();
+		jpql.append("Select New garden.entity.Orts(o,c.name, s.name) from Orts o ");
+		jpql.append("left join OrtsCategory c on o.categoryPkId = c.pkId ");
+		jpql.append("left join OrtsSize s on o.size = s.pkId");
+		
+		List<Orts> ortss = getByQuery(Orts.class, jpql.toString(), null);
+		return ortss;
+	}
+	public List<FoodOrts> getFoodOrtsByFoodPkId(BigDecimal foodPkId) throws Exception{
+		StringBuilder jpql = new StringBuilder();
+		CustomHashMap parameters = new CustomHashMap();
+		parameters.put("foodPkId", foodPkId);
+		jpql.append("SELECT NEW garden.entity.FoodOrts(a, b) FROM FoodOrts a ");
+		jpql.append("INNER JOIN Orts b ON a.ortsPkId = b.pkId ");
+		jpql.append("WHERE a.foodPkId = :foodPkId ");
+		List<FoodOrts> foodOrts = getByQuery(FoodOrts.class, jpql.toString(), parameters);
+		return foodOrts;
+	}
+	
+	public Food getFood(BigDecimal foodPkId) throws Exception{
+		return getByPkId(Food.class, foodPkId);
+	}
 }

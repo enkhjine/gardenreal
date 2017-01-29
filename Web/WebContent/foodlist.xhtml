@@ -15,15 +15,25 @@
 					<div class="page-title-box">
 
 						<h4 class="m-t-0 header-title">
-							<b>Хоолны жагсаалт</b> 
-										<p:commandButton value="Нэмэх" id="withIcon"
-											icon="ui-icon-plus"
-											styleClass="btn btn-primary btn-xs ui-priority-danger" />
+							<b>Хоолны жагсаалт</b>
+							<p:commandButton value="Нэмэх" icon="ui-icon-plus" action="food"
+								styleClass="btn btn-primary btn-xs ui-priority-danger" />
 						</h4>
 					</div>
 				</div>
 			</div>
 
+			<p:dialog widgetVar="dialogFoorOrtsList" id="dialogFoorOrtsList" resizable="false" modal="true" width="500" height="400">
+				<p:dataTable styleClass="table myTable" value="#{infoController.listFoodOrts}" var="orts" rowIndexVar="index">
+					<p:column headerText="#">#{index + 1}</p:column>
+					<p:column headerText="Нэр">#{orts.name}</p:column>
+					<p:column headerText="Илчлэг">#{orts.ilchleg}</p:column>
+					<p:column headerText="Уураг">#{orts.uurag}</p:column>
+					<p:column headerText="Өөх тос">#{orts.uuhtos}</p:column>
+					<p:column headerText="Нүүрс ус">#{orts.nuursus}</p:column>
+					<p:column headerText="Хэмжээ">#{orts.size}</p:column>
+				</p:dataTable>
+			</p:dialog>
 
 			<div class="row">
 				<div class="col-md-12">
@@ -32,338 +42,46 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<ul class="nav nav-tabs tabs" style="width: 100%;">
-									<li class="tab active" style="width: 25%;"><a
-										href="#home-12" data-toggle="tab" aria-expanded="true"
-										class="active"> <span class="visible-xs"><i
-												class="fa fa-home"></i></span> <span class="hidden-xs">1-р
-												хоол</span>
-									</a></li>
-									<li class="tab" style="width: 25%;"><a href="#profile-12"
-										data-toggle="tab" aria-expanded="false" class=""> <span
-											class="visible-xs"><i class="fa fa-user"></i></span> <span
-											class="hidden-xs">2-р хоол</span>
-									</a></li>
-									<li class="tab" style="width: 50%;"><a href="#messages-12"
-										data-toggle="tab" aria-expanded="false" class=""> <span
-											class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span
-											class="hidden-xs">Зууш</span>
-									</a></li>
-									<div class="indicator" style="right: 390px; left: 0px;"></div>
+									<ui:repeat value="#{infoController.listFoodCategory}" var="cat">
+										<li class="tab #{cat.status}"><a onclick="changeTab#{cat.pkId}();" 
+											href="javascript:void(0);"
+											class="active"> <span class="visible-xs"><i
+													class="fa fa-home"></i></span> <span class="hidden-xs">#{cat.name}</span>
+										</a></li>
+										<p:remoteCommand name="changeTab#{cat.pkId}" actionListener="#{infoController.setFoodCategoryByPkId(cat.pkId)}" update="@(.myTable)" />
+									</ui:repeat>
 								</ul>
 								<div class="tab-content">
-									<div class="tab-pane active" id="home-12"
-										style="display: block;">
-
-										<table class="table ">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Нэр</th>
-													<th>Зураг</th>
-													<th>Хэмжээ</th>
-													<th>Илчлэг</th>
-													<th>Уураг</th>
-													<th>Нүүрс ус</th>
-													<th>Өөх тос</th>
-													<th class="text-center">Үйлдэл</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr class="" en-data-id="">
-													<td>1</td>
-													<td>Үхрийн мах</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>68.30</td>
-													<td>13.70</td>
-													<td>0.00</td>
-													<td>1.50</td>
-													<td class="text-center">
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-												<tr class="" en-data-id="">
-													<td>2</td>
-													<td>Хониний мах</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>99.10</td>
-													<td>12.10</td>
-													<td>3.00</td>
-													<td>4.30</td>
-													<td class="text-center">
-														
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-												<tr class="" en-data-id="">
-													<td>3</td>
-													<td>Будаа</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>78.80</td>
-													<td>13.20</td>
-													<td>1.10</td>
-													<td>2.40</td>
-													<td class="text-center">
-														
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-
-												
-											</tbody>
-											<tfoot>
-												<tr class="text-uppercase uppercase">
-													<td>-</td>
-													<td>Гарц</td>
-													<td>-</td>
-													<td>3</td>
-													<td>246.2</td>
-													<td>39</td>
-													<td>4.1</td>
-													<td>8.2</td>
-													<td>-</td>
-												</tr>
-											</tfoot>
-										</table>
-
-									</div>
-									<div class="tab-pane" id="profile-12" style="display: none;">
-<table class="table ">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Нэр</th>
-													<th>Зураг</th>
-													<th>Хэмжээ</th>
-													<th>Илчлэг</th>
-													<th>Уураг</th>
-													<th>Нүүрс ус</th>
-													<th>Өөх тос</th>
-													<th class="text-center">Үйлдэл</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr class="" en-data-id="">
-													<td>1</td>
-													<td>2р - Бантан</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>68.30</td>
-													<td>13.70</td>
-													<td>0.00</td>
-													<td>1.50</td>
-													<td class="text-center">
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-												<tr class="" en-data-id="">
-													<td>2</td>
-													<td>2р - Хониний мах</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>99.10</td>
-													<td>12.10</td>
-													<td>3.00</td>
-													<td>4.30</td>
-													<td class="text-center">
-														
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-												<tr class="" en-data-id="">
-													<td>3</td>
-													<td>2р - Будаа</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>78.80</td>
-													<td>13.20</td>
-													<td>1.10</td>
-													<td>2.40</td>
-													<td class="text-center">
-														
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-
-												
-											</tbody>
-											<tfoot>
-												<tr class="text-uppercase uppercase">
-													<td>-</td>
-													<td>Гарц</td>
-													<td>-</td>
-													<td>3</td>
-													<td>246.2</td>
-													<td>39</td>
-													<td>4.1</td>
-													<td>8.2</td>
-													<td>-</td>
-												</tr>
-											</tfoot>
-										</table>
-										
-
-									</div>
-									<div class="tab-pane" id="messages-12" style="display: none;">
-										<table class="table ">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Нэр</th>
-													<th>Зураг</th>
-													<th>Хэмжээ</th>
-													<th>Илчлэг</th>
-													<th>Уураг</th>
-													<th>Нүүрс ус</th>
-													<th>Өөх тос</th>
-													<th class="text-center">Үйлдэл</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr class="" en-data-id="">
-													<td>1</td>
-													<td>Зууш - Үхрийн мах</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>68.30</td>
-													<td>13.70</td>
-													<td>0.00</td>
-													<td>1.50</td>
-													<td class="text-center">
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-												<tr class="" en-data-id="">
-													<td>2</td>
-													<td>Зууш - Хониний мах</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>99.10</td>
-													<td>12.10</td>
-													<td>3.00</td>
-													<td>4.30</td>
-													<td class="text-center">
-														
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-												<tr class="" en-data-id="">
-													<td>3</td>
-													<td>Зууш - Будаа</td>
-													<td></td>
-													<td>1.00 гр</td>
-
-													<td>78.80</td>
-													<td>13.20</td>
-													<td>1.10</td>
-													<td>2.40</td>
-													<td class="text-center">
-														
-													<p:commandButton value="Өөрчлөх" id="withIcon"
-														icon="ui-icon-pencil"
-														styleClass="btn btn-warning btn-xs ui-priority-warning" />
-													<p:commandButton value="Устгах" id="withIcon"
-														icon="ui-icon-trash"
-														styleClass="btn btn-danger btn-xs ui-priority-danger" />
-													<p:commandButton id="withIcon" icon="ui-icon-eye"  value="орц харах"
-														styleClass="btn btn-success btn-xs ui-priority-danger" />
-													</td>
-												</tr>
-
-												
-											</tbody>
-											<tfoot>
-												<tr class="text-uppercase uppercase">
-													<td>-</td>
-													<td>Гарц</td>
-													<td>-</td>
-													<td>3</td>
-													<td>246.2</td>
-													<td>39</td>
-													<td>4.1</td>
-													<td>8.2</td>
-													<td>-</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
+									<p:dataTable value="#{infoController.listFoodTmp}" styleClass="table myTable" var="tmp" rowIndexVar="index">
+										<p:column width="1%" headerText="#">#{index+1}</p:column>
+										<p:column headerText="Нэр">#{tmp.name}</p:column>
+										<p:column width="10%" headerText="Илчлэг" style="text-align: right;">#{tmp.ilchleg}</p:column>
+										<p:column width="10%" headerText="Уураг" style="text-align: right;">#{tmp.uurag}</p:column>
+										<p:column width="10%" headerText="Өөх тос" style="text-align: right;">#{tmp.uuhtos}</p:column>
+										<p:column width="10%" headerText="Нүүрс ус" style="text-align: right;">#{tmp.nuursus}</p:column>
+										<p:column width="10%" headerText="Хэмжээ" style="text-align: right;">#{tmp.size}</p:column>
+										<p:column style="width: 231px;" headerText="">
+											<p:commandButton value="Орц харах" action="#{infoController.setListFoodOrtsByFoodPkId(tmp.pkId)}" oncomplete="PF('dialogFoorOrtsList').show();" styleClass="btn-success" update="@(.myTable)" />
+											<p:commandButton value="Засах" action="#{infoController.editListFoodOrtsByFoodPkId(tmp.pkId)}" styleClass="btn-warning" update="@(.myTable)" />
+											<p:commandButton value="Устгах" action="#{infoController.deleteListFoodOrtsByFoodPkId(tmp.pkId)}" styleClass="btn-danger">
+												<p:confirm header="Confirmation" message="Та устгахдаа итгэлтэй байна уу?" icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
 								</div>
 							</div>
 							<div class="col-lg-12"></div>
 						</div>
 					</div>
-
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Тийм" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="Үгүй" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				    </p:confirmDialog>
 
 				</div>
 				<!--  -->
-				
-				
+
+
 			</div>
 		</div>
 

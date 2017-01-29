@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import garden.businessentity.Tool;
 
 @Entity
 @Table(name = "Food")
@@ -28,7 +31,7 @@ public class Food implements Serializable{
 	private String description;
 	
 	@Column(name = "Quality")
-	private BigDecimal Quality;
+	private String quality;
 	
 	@Column(name = "Image")
 	private String image;
@@ -50,8 +53,41 @@ public class Food implements Serializable{
 	@Column(name = "UpdatedBy")
 	private BigDecimal updatedBy;
 	
+	@Transient
+	private String status;
+	
+	@Transient
+	private String imageStatus;
+	
+	@Transient
+	private BigDecimal ilchleg;
+	
+	@Transient
+	private BigDecimal uurag;
+	
+	@Transient
+	private BigDecimal uuhtos;
+	
+	@Transient
+	private BigDecimal nuursus;
+	
+	@Transient
+	private BigDecimal size;
+	
 	public Food(){
 		super();
+		this.status = Tool.ADDED;
+	}
+	
+	public Food(BigDecimal pkId, String name, BigDecimal ilchleg, BigDecimal uurag, BigDecimal uuhtos, BigDecimal nuursus, BigDecimal size){
+		super();
+		this.pkId = pkId;
+		this.name = name;
+		this.ilchleg = ilchleg;
+		this.uurag = uurag;
+		this.uuhtos = uuhtos;
+		this.nuursus = nuursus;
+		this.size = size;
 	}
 
 	public BigDecimal getPkId() {
@@ -78,12 +114,12 @@ public class Food implements Serializable{
 		this.description = description;
 	}
 
-	public BigDecimal getQuality() {
-		return Quality;
+	public String getQuality() {
+		return quality;
 	}
 
-	public void setQuality(BigDecimal quality) {
-		Quality = quality;
+	public void setQuality(String quality) {
+		this.quality = quality;
 	}
 
 	public String getImage() {
@@ -138,6 +174,62 @@ public class Food implements Serializable{
 		return serialVersionUID;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
 	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getImageStatus() {
+		imageStatus = "оруулаагүй байна.";
+		if(this.image != null && this.image.length() > 1) imageStatus = "хуулсан"; 
+		return imageStatus;
+	}
+	
+	public void setImageStatus(String imageStatus) {
+		this.imageStatus = imageStatus;
+	}
+
+	public BigDecimal getIlchleg() {
+		return ilchleg;
+	}
+
+	public void setIlchleg(BigDecimal ilchleg) {
+		this.ilchleg = ilchleg;
+	}
+
+	public BigDecimal getUurag() {
+		return uurag;
+	}
+
+	public void setUurag(BigDecimal uurag) {
+		this.uurag = uurag;
+	}
+
+	public BigDecimal getUuhtos() {
+		return uuhtos;
+	}
+
+	public void setUuhtos(BigDecimal uuhtos) {
+		this.uuhtos = uuhtos;
+	}
+
+	public BigDecimal getNuursus() {
+		return nuursus;
+	}
+
+	public void setNuursus(BigDecimal nuursus) {
+		this.nuursus = nuursus;
+	}
+
+	public BigDecimal getSize() {
+		return size;
+	}
+
+	public void setSize(BigDecimal size) {
+		this.size = size;
+	}
 
 }
