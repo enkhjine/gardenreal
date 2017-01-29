@@ -24,8 +24,6 @@ import org.primefaces.model.UploadedFile;
 
 import garden.businessentity.Tool;
 import garden.entity.Company;
-import garden.entity.Food;
-import garden.entity.FoodCategory;
 import garden.entity.FoodOrts;
 import garden.entity.Orts;
 import garden.entity.OrtsCategory;
@@ -58,9 +56,6 @@ public class InfoController implements Serializable {
 	private List<FoodOrts> listFoodOrtsTmp;
 	private List<Orts> listOrts;
 	private Orts selOrts;
-	private Food currentFood;
-	private List<FoodCategory> listFoodCategory;
-	private List<Food> listFoodTmp;
 
 	public InfoController() {
 
@@ -176,51 +171,6 @@ public class InfoController implements Serializable {
 		} catch (Exception ex) {
 			userSessionController.showErrorMessage(ex.getMessage());
 		}
-	}
-	
-	public void foodFileUpload(FileUploadEvent event) {
-		try {
-			String fileName = buildAttachmentFileName(Tools.newPkId().toString(), event.getFile().getFileName());
-			
-			OutputStream out;
-			InputStream in = event.getFile().getInputstream();
-
-			out = new FileOutputStream(new File(fileName));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			while ((read = in.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-			
-			getCurrentFood().setImage(fileName);
-
-			in.close();
-			out.flush();
-			out.close();
-		} catch (Exception ex) {
-			userSessionController.showErrorMessage(ex.getMessage());
-		}
-	}
-	
-	public String saveCurrentFood(){
-		if(getCurrentFood().getName().isEmpty()){
-			getUserSessionController().showWarningMessage("Хоолны нэр оруулаагүй байна !!!");
-			return "";
-		}
-		if(getListFoodOrts().size() < 1){
-			getUserSessionController().showWarningMessage("Хоолны орц оруулаагүй байна !!!");
-			return "";
-		}
-		try{
-			infoLogic.saveFood(getCurrentFood(), getListFoodOrts(), getUserSessionController().getLoggedInfo());
-			getUserSessionController().showSuccessMessage("Амжилттай хадгаллаа");
-			currentFood = null;
-			listFoodOrts = null;
-		}catch(Exception ex){
-			getUserSessionController().showErrorMessage(ex.getMessage());
-		}
-		return "foodlist";
 	}
 	
 	public void saveCurrentOrtsSize(){
@@ -433,7 +383,7 @@ public class InfoController implements Serializable {
 		if(selOrts != null) {
 			for (FoodOrts foodOrts : getListFoodOrts()) {
 				if(selOrts.getPkId().compareTo(foodOrts.getOrtsPkId()) == 0) {
-					getUserSessionController().showWarningMessage("Сонгосон орц байна.");	
+					getUserSessionController().showWarningMessage("Сонгосон орц байна.");					
 					return;
 				}
 			}
@@ -450,46 +400,4 @@ public class InfoController implements Serializable {
 		}
 	}
 
-	public Food getCurrentFood() {
-		if(currentFood == null) currentFood = new Food();
-		return currentFood;
-	}
-
-	public void setCurrentFood(Food currentFood) {
-		this.currentFood = currentFood;
-	}
-
-	public List<FoodCategory> getListFoodCategory() {
-		if(listFoodCategory == null) {
-			try{
-				listFoodCategory = infoLogic.getListFoodCategory();
-			}catch(Exception ex){
-				getUserSessionController().showErrorMessage(ex.getMessage());
-			}
-		}
-		if(listFoodCategory.size() > 0) listFoodCategory.get(0).setStatus("active");
-		return listFoodCategory;
-	}
-	
-	public void setListFoodCategory(List<FoodCategory> listFoodCategory) {
-		this.listFoodCategory = listFoodCategory;
-	}
-	
-	public List<Food> getListFoodTmp() {
-		listFoodTmp = new ArrayList<>();
-		for (FoodCategory foodCategory : listFoodCategory) {
-			if("active".equals(foodCategory.getStatus())){
-				try{
-					listFoodTmp = infoLogic.getFoodTmp(foodCategory.getPkId());
-				}catch (Exception ex) {
-					getUserSessionController().showErrorMessage(ex.getMessage());
-				}
-			}
-		}
-		return listFoodTmp;
-	}
-	
-	public void setListFoodTmp(List<Food> listFoodTmp) {
-		this.listFoodTmp = listFoodTmp;
-	}
 }
