@@ -74,9 +74,18 @@ public class Food implements Serializable{
 	@Transient
 	private BigDecimal size;
 	
+	@Transient
+	private String categoryName;
+	
 	public Food(){
 		super();
 		this.status = Tool.ADDED;
+	}
+	
+	public Food(Food food, FoodCategory category){
+		this.pkId = food.getPkId();
+		this.name = food.getName();
+		this.categoryName = category.getName();
 	}
 	
 	public Food(BigDecimal pkId, String name, BigDecimal ilchleg, BigDecimal uurag, BigDecimal uuhtos, BigDecimal nuursus, BigDecimal size){

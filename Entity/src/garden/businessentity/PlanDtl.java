@@ -13,14 +13,18 @@ public class PlanDtl {
 	private String dateStr;
 	private BigDecimal foodPkId;
 	private String foodName;
+	private String backGroundColor;
 	private String status;
+	private BigDecimal ilchleg;
 	
 	public PlanDtl(){
 		super();
 		this.status = Tool.UNCHANGED;
+		this.backGroundColor = "white";
 	}
 
 	public Date getDate() {
+		if(date == null) date = new Date();
 		return date;
 	}
 
@@ -62,7 +66,7 @@ public class PlanDtl {
 	
 	public String getDateStr() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		dateStr = sdf.format(date == null ? new Date() : date);
+		dateStr = sdf.format(getDate());
 		return dateStr;
 	}
 	
@@ -84,6 +88,23 @@ public class PlanDtl {
 
 	public void setFoodName(String foodName) {
 		this.foodName = foodName;
+	}
+
+	public String getBackGroundColor() {
+		return backGroundColor;
+	}
+
+	public void setBackGroundColor(String backGroundColor) {
+		this.backGroundColor = backGroundColor;
+	}
+	
+	public BigDecimal getIlchleg() {
+		if(ilchleg == null) ilchleg = BigDecimal.ZERO;
+		return ilchleg;
+	}
+	
+	public void setIlchleg(BigDecimal ilchleg) {
+		this.ilchleg = ilchleg;
 	}
 	
 }

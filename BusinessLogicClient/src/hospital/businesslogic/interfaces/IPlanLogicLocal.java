@@ -17,4 +17,6 @@ public interface IPlanLogicLocal {
 	public List<PlanCategory> getListPlanCategory(LoggedInfo loggedInfo) throws Exception;
 	public List<FoodCategory> getListFoodCategorys() throws Exception;
 	public List<Food> getListFood(BigDecimal categoryPkId) throws Exception;
+	public List<Food> getListFood() throws Exception;
+	public BigDecimal getIlchlegByFoodPkId(BigDecimal foodPkId) throws Exception;
 }

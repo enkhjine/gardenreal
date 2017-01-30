@@ -567,6 +567,17 @@ public class Tool {
         return (int)( (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));   
     }
     
+    public static boolean isFairDateByDay(Date beginDate, Date endDate){
+    	int yearBegin = beginDate.getYear();
+    	int monthBegin = beginDate.getMonth();
+    	int dayBegin = beginDate.getDate();
+    	int yearEnd = endDate.getYear();
+    	int monthEnd = endDate.getMonth();
+    	int dayEnd = endDate.getDate();
+    	if(yearBegin == yearEnd && monthBegin == monthEnd && dayBegin == dayEnd) return true;
+    	return false;
+    }
+    
     public static BigDecimal calculateDiscountAmount(BigDecimal amount, BigDecimal discountPercent){
     	BigDecimal discountAmount = amount;
     	if(discountPercent.compareTo(new BigDecimal(0)) == 1 && discountPercent.compareTo(new BigDecimal(100)) == -1){

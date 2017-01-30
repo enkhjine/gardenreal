@@ -1,5 +1,6 @@
 package garden.businessentity;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ public class Plan {
 	private String dateOfWeekStr;
 	private String cssStr;
 	private List<PlanDtl> dtls;
+	private BigDecimal sumIlchleg;
 	
 	public Plan(){
 		super();
@@ -70,6 +72,18 @@ public class Plan {
 
 	public void setDtls(List<PlanDtl> dtls) {
 		this.dtls = dtls;
+	}
+
+	public BigDecimal getSumIlchleg() {
+		this.sumIlchleg = BigDecimal.ZERO;
+		for (PlanDtl planDtl : dtls) {
+			sumIlchleg = sumIlchleg.add(planDtl.getIlchleg());
+		}
+		return sumIlchleg;
+	}
+
+	public void setSumIlchleg(BigDecimal sumIlchleg) {
+		this.sumIlchleg = sumIlchleg;
 	}
 	
 }
