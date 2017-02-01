@@ -35,6 +35,10 @@ public class FoodPlanPlanCategory implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	
+	/**
+	 * 0 - Batlaagui
+	 * 1 - batalsan
+	 * */
 	@Column(name = "IsConfirm")
 	private byte isConfirm;
 	
@@ -55,8 +59,30 @@ public class FoodPlanPlanCategory implements Serializable{
 	@Transient
 	private boolean confirm;
 	
+	@Transient
+	private String planCategoryName;
+	
+	@Transient
+	private String foodName;
+	
 	public FoodPlanPlanCategory(){
 		super();
+	}
+	
+	public FoodPlanPlanCategory(FoodPlanPlanCategory a, PlanCategory b, Food c){
+		super();
+		this.pkId = a.getPkId();
+		this.planCategoryPkId = a.getPlanCategoryPkId();
+		this.foodPkId = a.getFoodPkId();
+		this.gardenPkId = a.getGardenPkId();
+		this.date = a.getDate();
+		this.isConfirm = a.getIsConfirm();
+		this.createdDate = a.getCreatedDate();
+		this.createdBy = a.getCreatedBy();
+		this.updatedDate = a.getUpdatedDate();
+		this.updatedBy = a.getUpdatedBy();
+		this.planCategoryName = b.getName();
+		this.foodName = c.getName();
 	}
 
 	public BigDecimal getPkId() {
@@ -151,6 +177,22 @@ public class FoodPlanPlanCategory implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getFoodName() {
+		return foodName;
+	}
+
+	public void setFoodName(String foodName) {
+		this.foodName = foodName;
+	}
+
+	public String getPlanCategoryName() {
+		return planCategoryName;
+	}
+
+	public void setPlanCategoryName(String planCategoryName) {
+		this.planCategoryName = planCategoryName;
 	}
 	
 	

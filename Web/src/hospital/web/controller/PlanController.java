@@ -5,6 +5,7 @@ import garden.businessentity.PlanDtl;
 import garden.businessentity.Tool;
 import garden.entity.Food;
 import garden.entity.FoodCategory;
+import garden.entity.FoodPlanPlanCategory;
 import garden.entity.PlanCategory;
 import hospital.businesslogic.interfaces.IPlanLogicLocal;
 
@@ -56,10 +57,12 @@ public class PlanController implements Serializable {
 	private List<Food> listFood;
 	private FoodCategory category;
 	private BigDecimal categoryPkId;
+	private List<PlanDtl> listPlanDtlB;
 	private List<PlanDtl> listPlanDtl;
 	private List<PlanDtl> listPlanDtlTmp;
 	
 	public String changeDate(){
+		listPlanDtlB = null;
 		listPlanDtl = null;
 		listPlan = null;
 		beginDate = null;
@@ -72,6 +75,7 @@ public class PlanController implements Serializable {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(getDate());
 			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			cal.add(Calendar.DAY_OF_WEEK, -7);
 		    beginDate = cal.getTime();
 		}
 		return beginDate;
@@ -161,6 +165,12 @@ public class PlanController implements Serializable {
 							isAdd = true;
 						}
 					}
+			    	for(PlanDtl planDtl : getListPlanDtlB()){
+			    		if(category.getPkId().compareTo(planDtl.getPlanCategoryPkId()) == 0 && Tool.isFairDateByDay(planDtl.getDate(), plan.getDate())) {
+							plan.getDtls().add(planDtl);
+							isAdd = true;
+						}
+			    	}
 			    	if(!isAdd){
 			    		PlanDtl dtl = new PlanDtl();
 						dtl.setDate(plan.getDate());
@@ -302,6 +312,7 @@ public class PlanController implements Serializable {
 				planDtl.setFoodName(food.getName());
 				planDtl.setIlchleg(food.getIlchleg());
 				planDtl.setBackGroundColor("#00ffff");
+				planDtl.setColor("#337ab7");
 				planDtl.setStatus(Tool.ADDED);
 				
 				getListPlanDtl().add(planDtl);
@@ -320,5 +331,44 @@ public class PlanController implements Serializable {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	
+	public List<PlanDtl> getListPlanDtlB() {
+		if(listPlanDtlB == null) {
+			try{
+				listPlanDtlB = new ArrayList<>();
+				List<FoodPlanPlanCategory> categories = planLogic.getListFoodPlanPlanCategory(getBeginDate(), getEndDate(), getUserSessionController().getLoggedInfo());
+				for (FoodPlanPlanCategory foodPlanPlanCategory : categories) {
+					PlanDtl planDtl = new PlanDtl();
+					planDtl.setDate(foodPlanPlanCategory.getDate());
+					planDtl.setValue("\""+foodPlanPlanCategory.getFoodName()+"\""+" захиалсан");
+					planDtl.setPlanCategoryPkId(foodPlanPlanCategory.getPlanCategoryPkId());
+					planDtl.setPlanCategoryName(foodPlanPlanCategory.getPlanCategoryName());
+					planDtl.setFoodPkId(foodPlanPlanCategory.getFoodPkId());
+					planDtl.setFoodName(foodPlanPlanCategory.getFoodName());
+					planDtl.setBackGroundColor("GREEN");
+					planDtl.setColor("white");
+					planDtl.setStatus(Tool.BASIC);
+					planDtl.setIlchleg(BigDecimal.ZERO);
+					listPlanDtlB.add(planDtl);
+				}
+			}catch(Exception ex){
+				getUserSessionController().showErrorMessage(ex.getMessage());
+			}
+		}
+		return listPlanDtlB;
+	}
+	
+	public void setListPlanDtlB(List<PlanDtl> listPlanDtlB) {
+		this.listPlanDtlB = listPlanDtlB;
+	}
+	
+	public String saveFoodPlanPlanCategory(){
+		try{
+			planLogic.saveFoodPlanPlanCategory(getListPlanDtl(), getUserSessionController().getLoggedInfo());
+		}catch(Exception ex){
+			getUserSessionController().showErrorMessage(ex.getMessage());
+		}
+		return "";
 	}
 }

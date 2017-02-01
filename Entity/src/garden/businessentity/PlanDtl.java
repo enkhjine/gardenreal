@@ -14,6 +14,7 @@ public class PlanDtl {
 	private BigDecimal foodPkId;
 	private String foodName;
 	private String backGroundColor;
+	private String color;
 	private String status;
 	private BigDecimal ilchleg;
 	
@@ -105,6 +106,14 @@ public class PlanDtl {
 	
 	public void setIlchleg(BigDecimal ilchleg) {
 		this.ilchleg = ilchleg;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 	
 }

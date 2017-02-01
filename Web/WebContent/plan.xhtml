@@ -75,7 +75,7 @@
 											<td>#{plan.dateStr} (#{plan.dateOfWeekStr})</td>
 											<ui:repeat value="#{plan.dtls}" var="dtl">
 											<td style="padding: 0px !important;"><p:commandLink
-													action="#{planController.dtlDialogShow(dtl)}" style="width: calc(100%);height: 40px;display: block;background: #{dtl.backGroundColor}; padding: 5px;"
+													action="#{planController.dtlDialogShow(dtl)}" style="width: calc(100%);height: 40px;display: block;background: #{dtl.backGroundColor}; padding: 5px; color: #{dtl.color};"
 													value="#{dtl.value}" update="@(.dtlDialog)" /></td>
 											</ui:repeat>
 											<td>#{plan.sumIlchleg}</td>
@@ -145,6 +145,7 @@
 									<p:inputText disabled="true" rendered="#{tmp.status ne 'Last'}" style="width: 100%" value="#{tmp.ilchleg}" />
 								</p:column>
 							</p:dataTable>
+							<p:commandLink action="#{planController.saveFoodPlanPlanCategory()}" />
 						</div>
 					</div>
 					<div class="col-sm-6">
@@ -160,118 +161,11 @@
                                  </div> -->
 
 						<div class="card-box table-responsive">
-							<h4 class="m-t-0 header-title">
-								<b>Хүнсний ногооны жагсаалт</b>
-							</h4>
-							<p class="text-muted font-13 m-b-30">Хүнсний ногоо нь
-								хүүхдийн биед хэрэгтэй витамин амин дэмээр баялаг бүтээгдэхүүн
-								юм</p>
-
-							<table class="table table-bordered m-0">
-
-								<thead>
-									<tr>
-										<th>Гараг</th>
-
-										<th>Өглөөний цай</th>
-
-										<th>Бага үд</th>
-
-										<th>Өдрийн хоол</th>
-
-										<th>Оройн цай</th>
-										<th>Илчлэг</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Даваа</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-									<tr>
-										<td>Мягмар</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-									<tr>
-										<td>Лхагва</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-									<tr>
-										<td>Пүрэв</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-									<tr>
-										<td>Баасан</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-									<tr>
-										<td>Бямба</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-									<tr>
-										<td>Ням</td>
-
-										<td class="plan-category-1"></td>
-
-										<td class="plan-category-2"></td>
-
-										<td class="plan-category-3"></td>
-
-										<td class="plan-category-4"></td>
-										<td class="td-in-out"></td>
-									</tr>
-								</tbody>
-
-
-							</table>
+							<p:dataTable rendered="false" value="#{planController.listPlan}" styleClass="myTable" var="pl">
+								<p:column headerText="Огноо">#{pl.dateStr}</p:column>
+								<p:column headerText="Хоолнууд"></p:column>
+								<p:column headerText="Илчлэг">#{pl.sumIlchleg}</p:column>
+							</p:dataTable>
 						</div>
 					</div>
 				</div>
